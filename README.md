@@ -1,6 +1,6 @@
 # components-vue
 
-> A Vue.js project
+> A library of components write in vuejs
 
 ## Build Setup
 
