@@ -1,18 +1,23 @@
-# components-vue
+# Dgt Components Vue
 
-> A library of components write in vuejs
+> Biblioteca de componentes da Dígitro desenvolvida em Vue.
 
-## Build Setup
+## Instalação
 
 ``` bash
-# install dependencies
+# Instalar dependências
 npm install
 
-# serve with hot reload at localhost:8080
+# Executar a aplicação com  hot reload at localhost:8080
 npm run dev
 
-# build for production with minification
+# Rodar showcase para produção com código minificado
 npm run build
+
+# Gerar componentes para distribuição via npm interno
+
+npm run build-components
+
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
