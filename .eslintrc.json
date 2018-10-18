@@ -105,7 +105,7 @@
         "space-before-blocks": "error",
         "function-paren-newline": [
             "error",
-            "multiline"
+            "consistent"
         ],
         "no-useless-rename": "error",
         "no-duplicate-imports": [
