@@ -95,14 +95,14 @@
                 </li>
                 <li class="new-tag-input">
                     <input id="inputTag" class="tag-input" type="text" placeholder="Add Tag" 
-                    @keyup.down="busEmit('onArrowDown')" @keyup.up="busEmit('onArrowUp')"
+                    @keyup.down="arrowDown" @keyup.up="arrowUp"
                     v-on:keyup.enter="setTags()" v-model="newTag">
                 </li>
             </ul>
         </div>
         <!-- chamada do component de autocomplete -->
-        <dgt-autocomplete v-if="autocomplete" @tag-selected="setTagsAutocomplete" 
-        :existing-tags="objTag" :searchTag="newTag" :items="validsTags"></dgt-autocomplete>
+        <dgt-autocomplete v-if="autocomplete" @tag-selected="setTagsAutocomplete" ref="childAutocomplete" 
+        :existing-tags="tags" :searchTag="newTag" :items="validsTags"></dgt-autocomplete>
     </div>
 </template>
 
@@ -135,7 +135,7 @@ export default {
         };
     },
     watch: {
-        objTag: function() {
+        objTag() {
             this.tags = this.objTag;
         }
     },
@@ -160,16 +160,15 @@ export default {
                     this.tags.push(this.newTag);
                     this.newTag = null;
                     return;
-                } else {
-                    this.newTag = null;
-                    return;
                 }
+                this.newTag = null;
+                return;
             }
             this.tags.push(param);
             this.newTag = null;
         },
         checkDuplicate(tag) {
-            if(tag){
+            if (tag) {
                 const lowerTags = this.tags.map(item => {
                     return item.toLowerCase();
                 });
@@ -179,7 +178,7 @@ export default {
         },
         setTags() {
             if (this.autocomplete) {
-                this.busEmit('onEnter');
+                this.$refs.childAutocomplete.onEnter();
                 this.newTag = null;
             } else {
                 this.tags.push(this.newTag);
@@ -187,8 +186,11 @@ export default {
                 return;
             }
         },
-        busEmit(emit) {
-            this.$bus && this.$bus.$emit(emit);
+        arrowDown() {
+            this.$refs.childAutocomplete.onArrowDown();
+        },
+        arrowUp() {
+            this.$refs.childAutocomplete.onArrowUp();
         }
     }
 };

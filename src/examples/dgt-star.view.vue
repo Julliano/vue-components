@@ -1,3 +1,23 @@
+<style scoped>
+    .vue-star-rating-star {
+        display: inline-block;
+    }
+    .vue-star-rating-pointer {
+        cursor: pointer;
+    }
+    .vue-star-rating {
+        display: flex;
+        align-items: center;
+    }
+    .vue-star-rating-inline {
+        display: inline-flex;
+    }
+    .vue-star-rating-rating-text {
+        margin-top: 7px;
+        margin-left: 7px;
+    }
+</style>
+
 <template>
     <div id="vue-star-rating" :class="{'vue-star-rating-inline': inline}">
         <div @mouseleave="resetRating" class="vue-star-rating">
@@ -96,14 +116,15 @@ export default {
             if (!this.readOnly) {
                 const position = $event.position / 100;
                 this.currentRating = (($event.id + position) - 1).toFixed(2);
-                this.currentRating = (this.currentRating > this.maxRating) ? this.maxRating : this.currentRating;
+                this.currentRating = (this.currentRating > this.maxRating) ?
+                    this.maxRating : this.currentRating;
                 this.createStars();
                 if (persist) {
                     this.selectedRating = this.currentRating;
                     // informa o component pai que o rating foi alterado;
                     this.$emit('rating-selected', this.selectedRating);
                     this.ratingSelected = true;
-                } 
+                }
             }
         },
         resetRating() {
@@ -112,10 +133,8 @@ export default {
                 this.createStars(this.shouldRound);
             }
         },
-        createStars(round = true) {
-            if (round) {
-                this.round();
-            }
+        createStars() {
+            this.round();
             for (var i = 0; i < this.maxRating; i++) {
                 let level = 0;
                 if (i < this.currentRating) {
@@ -126,12 +145,14 @@ export default {
         },
         round() {
             var inv = 1.0 / this.increment;
-            this.currentRating = Math.min(this.maxRating, Math.ceil(this.currentRating * inv) / inv);
+            this.currentRating = Math.min(this.maxRating,
+                Math.ceil(this.currentRating * inv) / inv);
         }
     },
     computed: {
         formattedRating() {
-            return (this.fixedPoints === null) ? this.currentRating : this.currentRating.toFixed(this.fixedPoints);
+            return (this.fixedPoints === null) ? this.currentRating :
+                this.currentRating.toFixed(this.fixedPoints);
         },
         shouldRound() {
             return this.ratingSelected || this.roundStartRating;
@@ -158,24 +179,3 @@ export default {
     }
 };
 </script>
-
-<style scoped>
-.vue-star-rating-star {
-    display: inline-block;
-}
-.vue-star-rating-pointer {
-    cursor: pointer;
-}
-.vue-star-rating {
-    display: flex;
-    align-items: center;
-}
-.vue-star-rating-inline {
-    display: inline-flex;
-}
-.vue-star-rating-rating-text {
-    margin-top: 7px;
-    margin-left: 7px;
-}
-
-</style>

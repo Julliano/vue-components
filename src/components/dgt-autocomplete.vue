@@ -64,14 +64,13 @@ export default {
         };
     },
     watch: {
-        items: function(val, oldValue) {
-            // actually compare them
+        items(val, oldValue) {
             if (val.length !== oldValue.length) {
                 this.results = val;
                 this.isLoading = false;
             }
         },
-        searchTag: function() {
+        searchTag() {
             if (this.searchTag !== null) {
                 this.search = this.searchTag;
                 this.isOpen = false;
@@ -80,20 +79,6 @@ export default {
                 }
             }
         }
-    },
-    created: function() {
-        this.$bus.$on('onArrowDown', () => {
-            this.onArrowDown();
-            return;
-        });
-        this.$bus.$on('onArrowUp', () => {
-            this.onArrowUp();
-            return;
-        });
-        this.$bus.$on('onEnter', () => {
-            this.onEnter();
-            return;
-        });
     },
     mounted() {
         document.addEventListener('click', this.handleClickOutside);
@@ -108,15 +93,19 @@ export default {
             this.isOpen = true;
         },
         filterResults() {
-            // retorna os possíveis resultados (comparando todos em lowercase);
-            if(this.items){
+            // retorna os possíveis resultados;
+            if (this.items) {
                 const resultados = this.items.filter(item => {
                     return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                 });
-                this.results = resultados.filter(function(e) {
-                    return this.indexOf(e) < 0;
-                }, this.existingTags);
+                if (this.existingTags) {
+                    return this.results = resultados.filter(function(e) {
+                        return this.indexOf(e) < 0;
+                    }, this.existingTags);
+                }
+                this.results = resultados;
             }
+            return this.results;
             // garante que a tag que está sendo procurada já não está setada no component pai;
         },
         setTags(result) {

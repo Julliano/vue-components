@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import dgtDetails from './examples/dgt-email.view'
 
+import dgtDetails from './examples/dgt-card-list.view';
 export default {
     name: 'app',
     data() {
@@ -14,7 +14,9 @@ export default {
             msg: 'Welcome to Your Vue.js App'
         };
     },
-    components: { 
+    methods: {
+    },
+    components: {
         dgtDetails
     }
 };

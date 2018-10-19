@@ -71,15 +71,16 @@ export default {
             return this.starPoints.join(',');
         },
         getGradId() {
-            return 'url(#' + this.grad + ')';
+            return `url(#${this.grad})`;
         },
         getSize() {
-            // Adjust star size when rounded corners are set with no border, to account for the 'hidden' border
-            const size = (this.borderWidth <= 0) ? parseInt(this.size) - parseInt(this.border) : this.size;
+            // Adjust star size when rounded corners are set with no border
+            const size = (this.borderWidth <= 0) ? parseInt(this.size) -
+                parseInt(this.border) : this.size;
             return parseInt(size) + parseInt(this.border);
         },
         getFill() {
-            return this.fill + '%';
+            return `${this.fill}%`;
         },
         border() {
             return (this.borderWidth <= 0) ? 6 : this.borderWidth;
@@ -97,7 +98,7 @@ export default {
             });
         },
         viewBox() {
-            return '0 0 ' + this.maxSize + ' ' + this.maxSize;
+            return `0 0 ${this.maxSize} ${this.maxSize}`;
         }
     },
     methods: {

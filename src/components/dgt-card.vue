@@ -49,7 +49,7 @@
             data: Object
         },
         methods: {
-            goTo: function (url) {
+            goTo(url) {
                 console.log(url);
             }
         }
