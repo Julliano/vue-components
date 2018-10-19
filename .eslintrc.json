@@ -39,7 +39,7 @@
         "class-methods-use-this": "warn",
         "complexity": [
             "warn",
-            4
+            6
         ],
         "consistent-return": "warn",
         "no-caller": "error",
@@ -76,7 +76,7 @@
         "max-depth": "error",
         "max-lines-per-function": [
             "error",
-            20
+            50
         ],
         "no-unneeded-ternary": "error",
         "no-new-object": "error",
