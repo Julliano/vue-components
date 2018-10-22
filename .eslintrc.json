@@ -89,8 +89,11 @@
         "prefer-destructuring": [
             "warn",
             {
-                "object": true,
-                "array": false
+                "array": true,
+                "object": true
+            },
+            {
+                "enforceForRenamedProperties": false
             }
         ],
         "prefer-template": "error",

@@ -20,7 +20,10 @@
         "not ie <= 8"
     ],
     "devDependencies": {
+        "@babel/core": "^7.0.0",
+        "@vue/test-utils": "^1.0.0-beta.25",
         "babel-core": "^6.26.0",
+        "babel-jest": "^23.6.0",
         "babel-loader": "^7.1.2",
         "babel-preset-env": "^1.6.0",
         "babel-preset-stage-3": "^6.24.1",
@@ -30,20 +33,21 @@
         "eslint-loader": "^2.1.1",
         "eslint-plugin-html": "^4.0.6",
         "file-loader": "^1.1.4",
+        "gulp": "^3.9.1",
+        "gulp-vueify": "0.0.3",
         "jest": "^23.6.0",
+        "jsonfile": "^5.0.0",
         "node-sass": "^4.5.3",
+        "ramda": "^0.25.0",
         "sass-loader": "^6.0.6",
         "testcafe": "^0.22.0",
         "testcafe-vue-selectors": "^3.0.0",
+        "vue": "^2.5.11",
+        "vue-jest": "^3.0.0",
         "vue-loader": "^13.0.5",
         "vue-template-compiler": "^2.4.4",
         "webpack": "^3.6.0",
-        "webpack-dev-server": "^2.9.1",
-        "gulp": "^3.9.1",
-        "gulp-vueify": "0.0.3",
-        "jsonfile": "^5.0.0",
-        "ramda": "^0.25.0",
-        "vue": "^2.5.11"
+        "webpack-dev-server": "^2.9.1"
     },
     "jest": {
         "moduleNameMapper": {
@@ -51,7 +55,7 @@
         },
         "testPathIgnorePatterns": [
             "/node_modules/",
-            "/ui-tests/"
+            "/tests-e2e/"
         ],
         "moduleFileExtensions": [
             "js",
@@ -59,8 +63,8 @@
             "vue"
         ],
         "transform": {
-            ".*\\.(vue)$": "vue-jest",
-            "^.+\\.js$": "<rootDir>/node_modules/babel-jest"
+            "^.+\\.js$": "babel-jest",
+            "^.+\\.vue$": "vue-jest"
         }
     }
 }

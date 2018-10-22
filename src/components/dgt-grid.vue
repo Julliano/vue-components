@@ -7,7 +7,6 @@
     overflow-x: auto;
     width: 944px;
     .col {
-      grid-row: 1 / 9;
       min-width: 30px;
       overflow: hidden;
       .row {
@@ -73,7 +72,7 @@
     <div class="dgt-grid-component component">
         <slot name="top-bar" :data="data"></slot>
         <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-            <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)" @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in data.headers" :key=headerKey :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
+            <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)" @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in headers" :key=headerKey :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
                 <div class="row row-header">
                     <div class="header header-1" @click="sortBy($event)">
                         <div class="name-column" v-if="header.isCustomColumn">
@@ -95,21 +94,19 @@
                     </div>
                 </div>
             </div>
-            <slot :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)" @dragover="dragover($event)" :name="headerKeyC" v-for="(headerC, headerKeyC, headerIndexC) in data.headers.customColumn"></slot>
         </div>
-        <div class="pagination" v-if="data.pagination">
-            <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="data.pagination.page" :total="data.pagination.total" :data="data"></slot>
+        <div class="pagination" v-if="pagination">
+            <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="pagination.page" :total="pagination.total" :data="data"></slot>
             <div v-else>
-                <button class="prev" :disabled="isPagination('prev')" v-on:click.stop="emitGeneral('pagination', --data.pagination.page)">prev</button>
-                <span class="prev">{{data.pagination.page}} de {{data.pagination.total}}</span>
-                <button class="next" :disabled="isPagination('next')" v-on:click.stop="emitGeneral('pagination', ++data.pagination.page)">next</button>
+                <button class="prev" :disabled="isPagination('prev')" v-on:click.stop="paginate(--pagination.page)">prev</button>
+                <span class="prev">{{pagination.page}} de {{pagination.total}}</span>
+                <button class="next" :disabled="isPagination('next')" v-on:click.stop="paginate(++pagination.page)">next</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-/* TODO arrumar bug de ordenação quando acontece uma paginação */
 export default {
     name: 'dgtGrid',
     props: {
@@ -133,12 +130,19 @@ export default {
             selectedLine: {}
         };
     },
+    beforeMount() {
+        if (!this.data) return;
+
+        this.pagination = this.data.pagination;
+        this.headers = this.data.headers;
+    },
     mounted() {
-        if (this.data) {
+        if (this.data && this.headers) {
             this.init();
             this.gridTemplateColumns = this.templateColumns();
-            this.gridRow = `1 / ${Object.keys(this.data.headers).length}`;
+            this.gridRow = `1 / ${Object.keys(this.headers).length}`;
         }
+
     },
     updated() {
         let widthColumn = document.querySelector('.dgt-grid .col:nth-child(1)').offsetWidth;
@@ -149,15 +153,11 @@ export default {
             this.gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
         }
     },
-    watch: {
-        'data.data'() {
-            this.init();
-        }
-    },
     methods: {
         init() {
             this.originalState = this.data.data;
             this.filteredData = this.originalState;
+            this.filteredData = this.filter();
         },
         setMinWidthColumn(width) {
             if (this.minWidthColumn !== 10) return false;
@@ -168,9 +168,6 @@ export default {
             let nodes = Array.prototype.slice.call(container.children);
             return nodes.indexOf(child);
         },
-        invertValues(a, b) {
-            return [b, a];
-        },
         drop(event) {
             const columnDrop = event.target.closest('[class^="col"]');
             if (!columnDrop.draggable) return;
@@ -179,8 +176,7 @@ export default {
             const indexDrop = this.indexElement(grid, columnDrop);
             const indexDrag = this.indexElement(grid, this.columnDrag);
 
-            let gridTemplateColumns = grid.style.gridTemplateColumns;
-            gridTemplateColumns = gridTemplateColumns.split(' ');
+            let gridTemplateColumns = grid.style.gridTemplateColumns && grid.style.gridTemplateColumns.split(' ');
 
             [gridTemplateColumns[indexDrag], gridTemplateColumns[indexDrop]] =
                 [gridTemplateColumns[indexDrop], gridTemplateColumns[indexDrag]];
@@ -241,7 +237,7 @@ export default {
         },
         resizeColumn(event) {
             event.preventDefault();
-            const body = document.body;
+            const { body } = document;
             this.colWidthPos2 = event.clientX;
             let mouseMove = e => {
                 e.preventDefault();
@@ -276,7 +272,7 @@ export default {
             );
         },
         templateColumns(widthColumn = '1fr ') {
-            let cols = this.data.headers;
+            let cols = this.headers;
             let templateColumns = '';
 
             for (let col in cols) templateColumns +=
@@ -288,13 +284,16 @@ export default {
         isPagination(direction) {
             switch (direction) {
                 case 'prev':
-                    if (this.data.pagination.page === 1) return true;
+                    if (this.pagination.page === 1) return true;
                     break;
                 case 'next':
-                    if (this.data.pagination.page === this.data.pagination.total) return true;
+                    if (this.pagination.page === this.pagination.total) return true;
                     break;
             }
             return false;
+        },
+        paginate(page) {
+            this.emitGeneral('pagination', page);
         },
         selectedLineFunc(item) {
             this.selectedLine = this.selectedLine === item ? null : item;
@@ -302,6 +301,11 @@ export default {
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, ...args);
+        }
+    },
+    watch: {
+        'data.data'() {
+            this.init();
         }
     }
 };

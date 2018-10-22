@@ -26,16 +26,23 @@
             <i v-else class="material-icons arrow-sort ">compare_arrows</i>
         </template>
         <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <input type="checkbox" ref="checkbox" for="checkbox" v-model="slotProps.obj.checked" @change="toggleChecked($event)" @click="preventPropagation($event)"/>
+            <input type="checkbox" 
+                ref="checkbox" 
+                for="checkbox" 
+                v-model="slotProps.obj.checked" 
+                @change="toggleChecked($event)" 
+                @click="preventPropagation($event)"
+                :key="index"
+            >
         </template>
         <template :slot="`iconStorage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons">storage</i>
+            <i class="material-icons" :key="index">storage</i>
         </template>
         <template :slot="`iconAttach-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons">attach_file</i>
+            <i class="material-icons" :key="index">attach_file</i>
         </template>
             <template :slot="`iconMessage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons">message</i>
+            <i class="material-icons" :key="index">message</i>
         </template>
         <!-- <template slot="custom-pagination" slot-scope="slotProps">
             <button class="material-icons prev-all" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, 1)" style="background: none; border: none;">first_page</button>
@@ -50,101 +57,84 @@
 <script>
 import dgtGrid from '../components/dgt-grid.vue';
 
-let page2 = [
+const page2 = [
     {
-        customColumn: ['storage', 'attach_file', 'message'],
-        horario: 'horario1 page2',
-        conta: 'contaa',
-        url: 'urll',
-        localidade: 'localidadee',
-        data: 'data',
+        horario: 'horario3 page2',
+        conta: 'conta3 page2',
+        url: 'url3 page2',
+        localidade: 'localidade3 page2',
+        data: 'data3 page2',
         checked: false,
         storage: false,
         attach_file: false,
         message: true
     },
     {
-        customColumn: ['storage', 'attach_file', 'message'],
-        horario: 'horarioo2  page2',
-        conta: 'contaa1',
-        url: 'urll1',
-        data: 'data1',
+        horario: 'horario1  page2',
+        conta: 'conta1 page2',
+        url: 'url1 page2',
+        data: 'data1 page2',
         checked: false,
         storage: false,
         attach_file: false,
         message: true
     },
     {
-        customColumn: ['storage', 'attach_file', 'message'],
-        horario: 'horario3  page2',
-        conta: 'bontaa',
-        url: 'urll',
-        localidade: 'localidadee',
-        data: 'data',
+        horario: 'horario2 page2',
+        conta: 'conta2 page2',
+        url: 'url2 page2',
+        localidade: 'localidade2 page2',
+        data: 'data2 page2',
         checked: false,
         storage: false,
         attach_file: false,
         message: true
     }
 ];
-let page1 = [
+const page1 = [
     {
-        customColumn: ['storage', 'attach_file', 'message'],
-        rating: 1,
-        horario: 'horario1lkjnflanflanflakflanflakjnf',
-        conta: 'contaa',
-        url: 'urll',
-        localidade: 'localidadee',
-        data: 'data',
+        horario: 'horario3',
+        conta: 'conta3',
+        url: 'url3',
+        localidade: 'localidade3',
+        data: 'data3',
         checked: false,
         storage: false,
         attach_file: false,
         message: true,
-        comments: '',
-        tags: ['adas'],
         tipo: 'pesquisa'
     },
     {
-        customColumn: ['storage', 'attach_file', 'message'],
-        rating: 2,
-        horario: 'horarioo2',
-        conta: 'contaa1',
-        url: 'urll1',
+        horario: 'horario1',
+        conta: 'conta1',
+        url: 'url1',
         data: 'data1',
         checked: false,
         storage: false,
         attach_file: true,
         message: true,
         comments: '',
-        tags: [],
-        tipo: 'email',
-        body:
-            'Mussum Ipsum, cacilds vidis litro abertis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Per aumento de cachacis, eu reclamis. Diuretics paradis num copo é motivis de denguis. Sapien in monti palavris qui num significa nadis i pareci latim. Mussum Ipsum, cacilds vidis litro abertis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Per aumento de cachacis, eu reclamis. Diuretics paradis num copo é motivis de denguis. Sapien in monti palavris qui num significa nadis i pareci latim. Mussum Ipsum, cacilds vidis litro abertis. Nec orci ornare consequat. Praesent lacinia ultrices consectetur. Sed non ipsum felis. Per aumento de cachacis, eu reclamis. Diuretics paradis num copo é motivis de denguis. Sapien in monti palavris qui num significa nadis i pareci latim.',
-        files: ['file 1', 'file 2']
+        tipo: 'email'
     },
     {
-        customColumn: ['storage', 'attach_file', 'message'],
         rating: 3,
-        horario: 'horario3',
-        conta: 'bontaa',
-        url: 'urll',
-        localidade: 'localidadee',
-        data: 'data',
+        horario: 'horario2',
+        conta: 'conta2',
+        url: 'url2',
+        localidade: 'localidade2',
+        data: 'data2',
         checked: false,
         storage: false,
         attach_file: false,
         message: true,
-        comments: '',
-        tags: [],
         tipo: 'midia'
     }
 ];
-
-let dataDgtGrid = {
+const dataDgtGrid = {
     lineSelected: {},
     pagination: {
         page: 1,
-        total: 10
+        total: 2
     },
     headers: {
         checkBox: {
@@ -207,6 +197,9 @@ let dataDgtGrid = {
 
 export default {
     name: 'dgtGridView',
+    components: {
+        dgtGrid
+    },
     data() {
         return {
             dataDgtGrid
@@ -282,9 +275,6 @@ export default {
         resizeColumn(event) {
             this.$children[0].resizeColumn(event);
         }
-    },
-    components: {
-        dgtGrid
     }
 };
 </script>
