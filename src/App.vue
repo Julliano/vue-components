@@ -19,7 +19,7 @@
         <dgt-autocomplete></dgt-autocomplete>
         <hr>
         <h3> Dgt-Grid </h3>
-        <!-- <dgt-grid></dgt-grid> -->
+        <dgt-grid></dgt-grid>
         <hr>
         <h3> Dgt-Card </h3>
         <dgt-card></dgt-card>
