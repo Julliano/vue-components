@@ -10,6 +10,9 @@
             display: inline-flex;
             margin-bottom: 10px;
         }
+        .grid{
+            display: grid;
+        }
         .tag-input {
             min-width: 100px;
             border: none;
@@ -94,10 +97,12 @@
 
 <template>
     <div class="dgt-tag-input-component">
-        <h5> Autocomplete </h5>
-        <div class="inline">
-            <input type="radio" v-model="showComplete" :value="true"> True<br>
-            <input type="radio" v-model="showComplete" :value="false"> False<br>
+        <div class="grid">
+            <label>Autocomplete</label>
+            <div class="inline">
+                <input type="radio" v-model="showComplete" :value="true"> True<br>
+                <input type="radio" v-model="showComplete" :value="false"> False<br>
+            </div>
         </div>
         <div class="input">
             <ul>

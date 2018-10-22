@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dgt-card :data="{ icon: 'add', name: 'Nova pesquisa...' }" style="margin: 10px"></dgt-card>            
+        <dgt-card :data="newCard" style="margin: 10px"></dgt-card>            
     </div>
 </template>
 
@@ -10,6 +10,7 @@
     export default {
         data() {
             return {
+                newCard: { icon: 'add', name: 'Nova pesquisa...', url: 'New search' }
             };
         },
         components: {
