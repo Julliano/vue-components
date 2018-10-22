@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dgt-card-list :cards="listExample" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-card-list>
+        <dgt-card-list :list="listExample" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-card-list>
     </div>
 </template>
 

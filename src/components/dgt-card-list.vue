@@ -26,7 +26,7 @@
         <small v-if="subHeader">{{ subHeader }}</small>
         <hr>
         <div class="cards">
-            <dgt-card v-for="card in cards" :key="card.id" :data="card" :style="card.style"></dgt-card>
+            <dgt-card v-for="card in list" :key="card.id" :data="card" :style="card.style"></dgt-card>
         </div>
     </div>
 </template>
@@ -35,7 +35,7 @@
     export default {
         name: 'dgtCardList',
         props: {
-            cards: Array,
+            list: Array,
             header: String,
             subHeader: String
         },
