@@ -1,6 +1,6 @@
 <template>
     <div>
-        <dgt-card :data="{ icon: 'add', name: 'Nova pesquisa...' }" style="margin: 20px"></dgt-card>            
+        <dgt-card :data="{ icon: 'add', name: 'Nova pesquisa...' }" style="margin: 10px"></dgt-card>            
     </div>
 </template>
 

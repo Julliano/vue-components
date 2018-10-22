@@ -1,3 +1,40 @@
+<style lang="scss" scoped>
+    .dgt-autocomplete {
+        .autocomplete {
+            position: relative;
+        }
+        .autocomplete-results {
+            padding: 0;
+            position: absolute;
+            margin: 0;
+            border: 1px solid #eeeeee;
+            max-height: 100px;
+            overflow: auto;
+            width: 100%;
+            display: block;
+            z-index: 2;
+            background: white;
+        }
+        .autocomplete-result {
+            list-style: none;
+            text-align: left;
+            padding: 4px 2px;
+            cursor: pointer;
+        }
+        .autocomplete-result.is-active,
+        .autocomplete-result:hover {
+            background-color: #4aae9b;
+            color: white;
+        }
+        input{
+            border: 1px solid #9e9e9e;
+            padding: 6px 0px 6px 6px;
+            border-radius: 0.25rem;
+            width: 99%;
+        }
+    }
+</style>
+
 <template>
     <div class="dgt-autocomplete">
         <div class="autocomplete">
@@ -18,13 +55,22 @@ export default {
         event: 'tag-selected'
     },
     props: {
-        items: Array,
         searchTag: String,
-        showInput: Boolean,
         existingTags: Array
     },
     data() {
         return {
+            showInput: true,
+            items: [
+                'Batman',
+                'Super-Man',
+                'Lex Luthor',
+                'Lana Lang',
+                'Arqueiro-Verde',
+                'Aquaman',
+                'Flash',
+                'Mulher Maravilha'
+            ],
             isOpen: false,
             results: [],
             isLoading: false,
@@ -33,14 +79,23 @@ export default {
         };
     },
     watch: {
-        items: function(val, oldValue) {
+        items(val, oldValue) {
             // actually compare them
             if (val.length !== oldValue.length) {
-                this.results = val;
+                this.results = [
+                    'Batman',
+                    'Super-Man',
+                    'Lex Luthor',
+                    'Lana Lang',
+                    'Arqueiro-Verde',
+                    'Aquaman',
+                    'Flash',
+                    'Mulher Maravilha'
+                ];
                 this.isLoading = false;
             }
         },
-        searchTag: function() {
+        searchTag() {
             if (this.searchTag !== null) {
                 this.search = this.searchTag;
                 this.isOpen = false;
@@ -49,20 +104,6 @@ export default {
                 }
             }
         }
-    },
-    created: function() {
-        this.$bus.$on('onArrowDown', () => {
-            this.onArrowDown();
-            return;
-        });
-        this.$bus.$on('onArrowUp', () => {
-            this.onArrowUp();
-            return;
-        });
-        this.$bus.$on('onEnter', () => {
-            this.onEnter();
-            return;
-        });
     },
     mounted() {
         document.addEventListener('click', this.handleClickOutside);
@@ -82,14 +123,14 @@ export default {
                 return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
             });
             // garante que a tag que está sendo procurada já não está setada no component pai;
-            this.results = resultados.filter(function(e) {
-                return this.indexOf(e) < 0;
+            this.results = resultados.filter(item => {
+                return item.indexOf() < 0;
             }, this.existingTags);
         },
         setTags(result) {
             // Avisa o componente pai que a tag foi selecionada;
             this.$emit('tag-selected', result);
-            this.search = '';
+            this.search = result;
             this.isOpen = false;
         },
         onArrowDown() {

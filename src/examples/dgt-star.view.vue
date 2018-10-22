@@ -16,10 +16,67 @@
         margin-top: 7px;
         margin-left: 7px;
     }
+    .inline{
+        display: inline-flex;
+    }
+    .grid{
+        display: grid;
+        margin-right: 10px;
+    }
 </style>
 
 <template>
     <div id="vue-star-rating" :class="{'vue-star-rating-inline': inline}">
+        <div class="inline">
+            <div class="grid">
+                <label> Rating: </label>
+                <select v-model="rating">
+                    <option value="0"> 0 </option>
+                    <option value="1"> 1 </option>
+                    <option value="2"> 2 </option>
+                    <option value="3"> 3 </option>
+                    <option value="4"> 4 </option>
+                    <option value="5"> 5 </option>
+                </select>
+            </div>
+            <div class="grid">
+                <label> Increment: </label>
+                <select v-model="increment">
+                    <option value="0.1"> 0.1 </option>
+                    <option value="0.2"> 0.2 </option>
+                    <option value="0.3"> 0.3 </option>
+                    <option value="0.4"> 0.4 </option>
+                    <option value="0.5"> 0.5 </option>
+                    <option value="0.6"> 0.6 </option>
+                    <option value="0.7"> 0.7 </option>
+                    <option value="0.8"> 0.8 </option>                
+                    <option value="0.9"> 0.9 </option>
+                    <option value="1"> 1 </option>                
+                </select>
+            </div>
+            <div class="grid">
+                <label> Max Rating: </label>
+                <input v-model.number="maxRating" type="number" min="1" max="100">
+            </div>
+            <div class="grid">
+                <label> Active Color: </label>
+                <input v-model="activeColor">
+            </div>
+            <div class="grid">
+                <label> Read only: </label>
+                <div class="inline">
+                    <input type="radio" v-model="readOnly" :value="true"> True<br>
+                    <input type="radio" v-model="readOnly" :value="false"> False<br>
+                </div>
+            </div>
+            <div class="grid">
+                <label> Show Rating: </label>
+                <div class="inline">
+                    <input type="radio" v-model="showRating" :value="true"> True<br>
+                    <input type="radio" v-model="showRating" :value="false"> False<br>
+                </div>
+            </div>
+        </div>
         <div @mouseleave="resetRating" class="vue-star-rating">
             <span v-for="(n, index) in maxRating" :key="n" :class="['star-'+index,'vue-star-rating-pointer','vue-star-rating-star']" :style="{'margin-right': margin + 'px'}">
               <star :fill="fillLevel[n-1]" :size="starSize" :points="starPoints" :star-id="n" :step="step" :active-color="activeColor" :inactive-color="inactiveColor" :border-color="borderColor" :border-width="borderWidth" @star-selected="setRating($event, true)" @star-mouse-move="setRating"></star>
@@ -42,33 +99,17 @@ export default {
         event: 'rating-selected'
     },
     props: {
-        increment: {
-            type: Number,
-            default: 1
-        },
-        rating: {
-            type: Number,
-            default: 0
-        },
         roundStartRating: {
             type: Boolean,
             default: true
         },
-        activeColor: {
+        borderColor: {
             type: String,
-            default: '#ffd055'
+            default: '#999'
         },
         inactiveColor: {
             type: String,
             default: '#d8d8d8'
-        },
-        maxRating: {
-            type: Number,
-            default: 5
-        },
-        readOnly: {
-            type: Boolean,
-            default: false
         },
         starPoints: {
             type: Array,
@@ -80,17 +121,9 @@ export default {
             type: Number,
             default: 50
         },
-        showRating: {
-            type: Boolean,
-            default: true
-        },
         inline: {
             type: Boolean,
             default: false
-        },
-        borderColor: {
-            type: String,
-            default: '#999'
         },
         borderWidth: {
             type: Number,
@@ -104,6 +137,21 @@ export default {
             type: Number,
             default: null
         }
+    },
+    data() {
+        return {
+            increment: 1,
+            rating: 0,
+            activeColor: '#ffd055',
+            maxRating: 5,
+            readOnly: false,
+            showRating: false,
+            step: 0,
+            fillLevel: [],
+            currentRating: 0,
+            selectedRating: 0,
+            ratingSelected: false
+        };
     },
     created() {
         this.step = this.increment * 100;
@@ -167,15 +215,6 @@ export default {
             this.selectedRating = val;
             this.createStars();
         }
-    },
-    data() {
-        return {
-            step: 0,
-            fillLevel: [],
-            currentRating: 0,
-            selectedRating: 0,
-            ratingSelected: false
-        };
     }
 };
 </script>

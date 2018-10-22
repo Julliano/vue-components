@@ -95,7 +95,7 @@
                 </li>
                 <li class="new-tag-input">
                     <input id="inputTag" class="tag-input" type="text" placeholder="Add Tag" 
-                    @keyup.down="busEmit('onArrowDown')" @keyup.up="busEmit('onArrowUp')"
+                    @keyup.down="arrowDown" @keyup.up="arrowUp"
                     v-on:keyup.enter="setTags()" v-model="newTag">
                 </li>
             </ul>
@@ -149,6 +149,7 @@ export default {
     methods: {
         remove(index) {
             this.tags.splice(index, 1);
+            document.getElementById('inputTag').focus();
         },
         setTagsAutocomplete(param) {
             document.getElementById('inputTag').focus();
@@ -176,16 +177,29 @@ export default {
         },
         setTags() {
             if (this.autocomplete) {
-                this.busEmit('onEnter');
+                this.$refs.childAutocomplete.onEnter();
                 this.newTag = null;
             } else {
-                this.tags.push(this.newTag);
+                if (this.checkDuplicate(this.newTag)) {
+                    this.tags.push(this.newTag);
+                    this.newTag = null;
+                    return;
+                }
                 this.newTag = null;
                 return;
             }
         },
-        busEmit(emit) {
-            this.$bus && this.$bus.$emit(emit);
+        arrowDown() {
+            if (this.$refs.childAutocomplete) {
+                this.$refs.childAutocomplete.onArrowDown();
+            }
+            return;
+        },
+        arrowUp() {
+            if (this.$refs.childAutocomplete) {
+                this.$refs.childAutocomplete.onArrowUp();
+            }
+            return;
         }
     }
 };

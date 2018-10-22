@@ -3,6 +3,13 @@
         position: relative;
         background-color: #fff;
         margin-top: 5px;
+        h5{
+            margin: 5px 0px;
+        }
+        .inline{
+            display: inline-flex;
+            margin-bottom: 10px;
+        }
         .tag-input {
             min-width: 100px;
             border: none;
@@ -14,6 +21,11 @@
             font-size: 0.85em;
             padding: 5px 5px;
             margin: 0px;
+            input {
+                outline: none;
+                min-width: 100px;
+                flex: 1 0 auto;
+            }
         }
         .input {
             border: 1px solid #9e9e9e;
@@ -21,11 +33,6 @@
             border-radius: 0.25rem;
             flex-wrap: wrap;
             display: flex;
-        }
-        input {
-            outline: none;
-            min-width: 100px;
-            flex: 1 0 auto;
         }
         ul {
             margin: 0;
@@ -87,6 +94,11 @@
 
 <template>
     <div class="dgt-tag-input-component">
+        <h5> Autocomplete </h5>
+        <div class="inline">
+            <input type="radio" v-model="showComplete" :value="true"> True<br>
+            <input type="radio" v-model="showComplete" :value="false"> False<br>
+        </div>
         <div class="input">
             <ul>
                 <li v-for="(tag, index) in tags" :key="tag" :class="'tag-'+index" class="tag is-info">
@@ -101,7 +113,7 @@
             </ul>
         </div>
         <!-- chamada do component de autocomplete -->
-        <dgt-autocomplete v-if="autocomplete" @tag-selected="setTagsAutocomplete" ref="childAutocomplete" 
+        <dgt-autocomplete v-if="showComplete" @tag-selected="setTagsAutocomplete" ref="childAutocomplete" 
         :existing-tags="tags" :searchTag="newTag" :items="validsTags"></dgt-autocomplete>
     </div>
 </template>
@@ -114,14 +126,13 @@ export default {
         dgtAutocomplete
     },
     props: {
-        objTag: Array,
-        autocomplete: false
+        objTag: Array
     },
     data() {
         return {
             tags: [],
             newTag: null,
-            // substituir validsTags por tags que poderão ser buscadas no autocomplete;
+            showComplete: true,
             validsTags: [
                 'Batman',
                 'Super-Man',
@@ -152,6 +163,7 @@ export default {
     methods: {
         remove(index) {
             this.tags.splice(index, 1);
+            document.getElementById('inputTag').focus();
         },
         setTagsAutocomplete(param) {
             document.getElementById('inputTag').focus();
@@ -177,20 +189,30 @@ export default {
             return false;
         },
         setTags() {
-            if (this.autocomplete) {
+            if (this.showComplete) {
                 this.$refs.childAutocomplete.onEnter();
                 this.newTag = null;
             } else {
-                this.tags.push(this.newTag);
+                if (this.checkDuplicate(this.newTag)) {
+                    this.tags.push(this.newTag);
+                    this.newTag = null;
+                    return;
+                }
                 this.newTag = null;
                 return;
             }
         },
         arrowDown() {
-            this.$refs.childAutocomplete.onArrowDown();
+            if (this.$refs.childAutocomplete) {
+                this.$refs.childAutocomplete.onArrowDown();
+            }
+            return;
         },
         arrowUp() {
-            this.$refs.childAutocomplete.onArrowUp();
+            if (this.$refs.childAutocomplete) {
+                this.$refs.childAutocomplete.onArrowUp();
+            }
+            return;
         }
     }
 };
