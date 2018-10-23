@@ -8,7 +8,7 @@ describe('dgtTagInput', () => {
     beforeAll(() => {
         wrapper = mount(dgtTagInput, {
           propsData: {
-            data: { icon: 'add', name: 'Nova pesquisa...', url: 'New search' }
+            showComplete: true
           }
         });
     });
@@ -17,7 +17,4 @@ describe('dgtTagInput', () => {
         expect(wrapper.isVueInstance()).toBeTruthy();
     });
 
-    test('Verifica se a resposta do request trouxe o data', () => {
-        expect(wrapper.props().data).toBeTruthy();
-    });
 });

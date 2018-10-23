@@ -108,99 +108,100 @@
 </template>
 
 <script>
-import dgtAutocomplete from './dgt-autocomplete.vue';
-export default {
-    name: 'dgtTagInput',
-    components: {
-        dgtAutocomplete
-    },
-    props: {
-        objTag: Array,
-        autocomplete: false,
-        validsTags: null
-    },
-    model: {
-        event: 'tag-insert'
-    },
-    data() {
-        return {
-            tags: [],
-            newTag: null
-        };
-    },
-    created() {
-        this.tags = this.objTag;
-    },
-    watch: {
-        objTag() {
+    import dgtAutocomplete from './dgt-autocomplete.vue';
+    
+    export default {
+        name: 'dgtTagInput',
+        components: {
+            dgtAutocomplete
+        },
+        props: {
+            objTag: Array,
+            autocomplete: false,
+            validsTags: null
+        },
+        model: {
+            event: 'tag-insert'
+        },
+        data() {
+            return {
+                tags: [],
+                newTag: null
+            };
+        },
+        created() {
             this.tags = this.objTag;
-            this.newTag = null;
-        }
-    },
-    computed: {
-        editableTags: {
-            get() {
-                return this.tags.join(' ');
+        },
+        watch: {
+            objTag() {
+                this.tags = this.objTag;
+                this.newTag = null;
+            }
+        },
+        computed: {
+            editableTags: {
+                get() {
+                    return this.tags.join(' ');
+                },
+                set(val) {
+                    this.tags = val.split(' ');
+                }
+            }
+        },
+        methods: {
+            remove(index) {
+                this.tags.splice(index, 1);
+                document.getElementById('inputTag').focus();
             },
-            set(val) {
-                this.tags = val.split(' ');
-            }
-        }
-    },
-    methods: {
-        remove(index) {
-            this.tags.splice(index, 1);
-            document.getElementById('inputTag').focus();
-        },
-        setTagsAutocomplete(param) {
-            document.getElementById('inputTag').focus();
-            if (!param) {
-                if (this.checkDuplicate(this.newTag)) {
-                    this.tags.push(this.newTag);
+            setTagsAutocomplete(param) {
+                document.getElementById('inputTag').focus();
+                if (!param) {
+                    if (this.checkDuplicate(this.newTag)) {
+                        this.tags.push(this.newTag);
+                        this.newTag = null;
+                        return;
+                    }
                     this.newTag = null;
                     return;
                 }
+                this.tags.push(param);
                 this.newTag = null;
-                return;
-            }
-            this.tags.push(param);
-            this.newTag = null;
-        },
-        checkDuplicate(tag) {
-            if (tag) {
-                const lowerTags = this.tags.map(item => {
-                    return item.toLowerCase();
-                });
-                return lowerTags.indexOf(tag.toLowerCase()) < 0;
-            }
-            return false;
-        },
-        setTags() {
-            if (this.autocomplete) {
-                this.$refs.childAutocomplete.onEnter();
-                this.newTag = null;
-            } else {
-                if (this.checkDuplicate(this.newTag)) {
-                    this.tags.push(this.newTag);
+            },
+            checkDuplicate(tag) {
+                if (tag) {
+                    const lowerTags = this.tags.map(item => {
+                        return item.toLowerCase();
+                    });
+                    return lowerTags.indexOf(tag.toLowerCase()) < 0;
+                }
+                return false;
+            },
+            setTags() {
+                if (this.autocomplete) {
+                    this.$refs.childAutocomplete.onEnter();
+                    this.newTag = null;
+                } else {
+                    if (this.checkDuplicate(this.newTag)) {
+                        this.tags.push(this.newTag);
+                        this.newTag = null;
+                        return;
+                    }
                     this.newTag = null;
                     return;
                 }
-                this.newTag = null;
+            },
+            arrowDown() {
+                if (this.$refs.childAutocomplete) {
+                    this.$refs.childAutocomplete.onArrowDown();
+                }
+                return;
+            },
+            arrowUp() {
+                if (this.$refs.childAutocomplete) {
+                    this.$refs.childAutocomplete.onArrowUp();
+                }
                 return;
             }
-        },
-        arrowDown() {
-            if (this.$refs.childAutocomplete) {
-                this.$refs.childAutocomplete.onArrowDown();
-            }
-            return;
-        },
-        arrowUp() {
-            if (this.$refs.childAutocomplete) {
-                this.$refs.childAutocomplete.onArrowUp();
-            }
-            return;
         }
-    }
-};
+    };
 </Script>
