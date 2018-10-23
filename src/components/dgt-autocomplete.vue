@@ -126,8 +126,8 @@ export default {
             }
         },
         onEnter() {
-            this.search = this.results[this.arrowCounter];
-            this.$emit('tag-selected', this.search);
+            this.search = '';
+            this.$emit('tag-selected', this.results[this.arrowCounter]);
             this.isOpen = false;
             this.arrowCounter = -1;
         },
