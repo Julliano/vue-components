@@ -1,11 +1,14 @@
 <template>
+    <dgt-tabs-view></dgt-tabs-view>
 </template>
 
 <script>
-import dgtGridView from './examples/dgt-grid.view';
+import dgtTabsView from './examples/dgt-tabs.view';
 
 export default {
     name: 'app',
-    components: {}
+    components: {
+        dgtTabsView
+    }
 };
 </script>
