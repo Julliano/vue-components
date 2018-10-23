@@ -1,13 +1,31 @@
+<style lang="scss" scoped>
+    #dgt-card-grid {
+        padding: 10px;
+        h4, small {
+            margin: 0;
+            padding: 1px;
+        }
+        .cards {
+            flex-wrap: wrap;
+            display: flex;
+        }
+    }
+</style>
+
 <template>
-    <div>
-        <dgt-card-grid :cards="gridExample" header="Exemplo de título" sub-header="Exemplo de sub título" style="left: 300px"></dgt-card-grid>
+    <div id="dgt-card-grid">
+        <h4 v-if="header">{{ header }}</h4>
+        <small v-if="subHeader">{{ subHeader }}</small>
+        <div class="cards">
+            <dgt-card v-for="card in cards" :key="card.id" :data="card" :style="card.style"></dgt-card>
+        </div>
     </div>
 </template>
 
 <script>
-    import dgtCardGrid from '../components/dgt-card-grid.vue';
+    import dgtCard from '../components/dgt-card.vue';
 
-    let gridExample = [
+    let cards = [
         {
             icon: 'calendar_today',
             url: '/midias',
@@ -60,11 +78,13 @@
     export default {
         data() {
             return {
-                gridExample
+                cards,
+                header: 'Exemplo de título',
+                subHeader: 'Exemplo de sub título'
             };
         },
         components: {
-            dgtCardGrid
+            dgtCard
         }
     };
 </script>

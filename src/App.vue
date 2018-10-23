@@ -2,7 +2,7 @@
     .showcase{
         margin-left: 20px;
         h3{
-            margin: 10px 0px 5px;
+            margin: 25px 0px 5px;
         }
     }
 </style>

@@ -7,11 +7,11 @@
             margin: 5px 0px;
         }
         .inline{
-            display: inline-flex;
-            margin-bottom: 10px;
+        display: inline-flex;
         }
         .grid{
             display: grid;
+            margin-right: 10px;
         }
         .tag-input {
             min-width: 100px;
@@ -31,6 +31,7 @@
             }
         }
         .input {
+            margin-top: 10px;
             border: 1px solid #9e9e9e;
             padding: 4px;
             border-radius: 0.25rem;
@@ -97,16 +98,22 @@
 
 <template>
     <div class="dgt-tag-input-component">
-        <div class="grid">
-            <label>Autocomplete</label>
-            <div class="inline">
-                <input type="radio" v-model="showComplete" :value="true"> True<br>
-                <input type="radio" v-model="showComplete" :value="false"> False<br>
+        <div class="inline">
+            <div class="grid">
+                <label>Autocomplete</label>
+                <div class="inline">
+                    <input type="radio" v-model="showComplete" :value="true"> True<br>
+                    <input type="radio" v-model="showComplete" :value="false"> False<br>
+                </div>
+            </div>
+            <div class="grid">
+                <label>Tag color:</label>
+                <input v-model="backgroundTag">
             </div>
         </div>
         <div class="input">
             <ul>
-                <li v-for="(tag, index) in tags" :key="tag" :class="'tag-'+index" class="tag is-info">
+                <li v-for="(tag, index) in tags" :key="tag" :class="'tag-'+index" :style="'background: '+backgroundTag" class="tag is-info">
                     {{tag}}
                     <button class="delete is-small" @click="remove(index)"></button>
                 </li>
@@ -136,6 +143,7 @@ export default {
     data() {
         return {
             tags: [],
+            backgroundTag: '#3273dc',
             newTag: null,
             showComplete: true,
             validsTags: [

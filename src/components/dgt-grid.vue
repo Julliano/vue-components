@@ -1,71 +1,71 @@
 <style lang="scss">
-.dgt-grid-component {
-  left: 372px;
-  max-width: 944px;
-  .dgt-grid {
-    display: grid;
-    overflow-x: auto;
-    width: 944px;
-    .col {
-      min-width: 30px;
-      overflow: hidden;
-      .row {
-        border-bottom: 1px solid gray;
-        white-space: nowrap;
-        height: 18px;
-        position: relative;
-        &.row-header:hover .span-resize {
-          background-color: black;
+    .dgt-grid-component {
+    left: 372px;
+    max-width: 944px;
+    .dgt-grid {
+        display: grid;
+        overflow-x: auto;
+        width: 944px;
+        .col {
+        min-width: 30px;
+        overflow: hidden;
+        .row {
+            border-bottom: 1px solid gray;
+            white-space: nowrap;
+            height: 18px;
+            position: relative;
+            &.row-header:hover .span-resize {
+            background-color: black;
+            }
+            &.selected {
+            background-color: rgb(223, 236, 245);
+            }
+            .cel {
+            width: 100%;
+            height: 100%;
+            }
+            .material-icons {
+            font-size: 16px;
+            &.inactive {
+                color: gray;
+            }
+            }
+            .header {
+            background-color: gray;
+            width: 100%;
+            display: inline-block;
+            color: #fff;
+            .arrow-sort-1 {
+                transition: all 0.4s ease;
+                transform: rotateZ(90deg);
+            }
+            .arrow-sort-2 {
+                transition: all 0.4s ease;
+                transform: rotateZ(-90deg);
+            }
+            }
+            .span-resize {
+            position: absolute;
+            right: 0px;
+            height: 100%;
+            width: 4px;
+            background-color: transparent;
+            &:hover {
+                cursor: w-resize;
+            }
+            }
+            &:not(.header) {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+            }
         }
-        &.selected {
-          background-color: rgb(223, 236, 245);
         }
-        .cel {
-          width: 100%;
-          height: 100%;
-        }
-        .material-icons {
-          font-size: 16px;
-          &.inactive {
-            color: gray;
-          }
-        }
-        .header {
-          background-color: gray;
-          width: 100%;
-          display: inline-block;
-          color: #fff;
-          .arrow-sort-1 {
-            transition: all 0.4s ease;
-            transform: rotateZ(90deg);
-          }
-          .arrow-sort-2 {
-            transition: all 0.4s ease;
-            transform: rotateZ(-90deg);
-          }
-        }
-        .span-resize {
-          position: absolute;
-          right: 0px;
-          height: 100%;
-          width: 4px;
-          background-color: transparent;
-          &:hover {
-            cursor: w-resize;
-          }
-        }
-        &:not(.header) {
-          -webkit-touch-callout: none; /* iOS Safari */
-          -webkit-user-select: none; /* Safari */
-          -khtml-user-select: none; /* Konqueror HTML */
-          -moz-user-select: none; /* Firefox */
-          -ms-user-select: none; /* Internet Explorer/Edge */
-          user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-        }
-      }
     }
-  }
-}
+    }
 </style>
 
 <template>

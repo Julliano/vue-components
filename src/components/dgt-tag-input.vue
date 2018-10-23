@@ -131,7 +131,7 @@ export default {
         this.tags = this.objTag;
     },
     watch: {
-        objTag: function() {
+        objTag() {
             this.tags = this.objTag;
             this.newTag = null;
         }
@@ -158,16 +158,15 @@ export default {
                     this.tags.push(this.newTag);
                     this.newTag = null;
                     return;
-                } else {
-                    this.newTag = null;
-                    return;
                 }
+                this.newTag = null;
+                return;
             }
             this.tags.push(param);
             this.newTag = null;
         },
         checkDuplicate(tag) {
-            if(tag){
+            if (tag) {
                 const lowerTags = this.tags.map(item => {
                     return item.toLowerCase();
                 });

@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    #dgt-card-grid {
+    .dgt-card-grid {
         padding: 10px;
         h4, small {
             margin: 0;
@@ -11,8 +11,9 @@
         }
     }
 </style>
+
 <template>
-    <div id="dgt-card-grid" class="component">
+    <div class="dgt-card-grid">
         <h4 v-if="header">{{ header }}</h4>
         <small v-if="subHeader">{{ subHeader }}</small>
         <div class="cards">

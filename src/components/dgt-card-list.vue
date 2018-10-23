@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    #dgt-card-list {
+    .dgt-card-list {
         padding: 10px;
         width: fit-content;
         h4, small {
@@ -20,8 +20,9 @@
         }
     }
 </style>
+
 <template>
-    <div id="dgt-card-list" class="component">
+    <div class="dgt-card-list">
         <h4 v-if="header">{{ header }}</h4>
         <small v-if="subHeader">{{ subHeader }}</small>
         <hr>
