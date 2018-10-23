@@ -6,7 +6,7 @@ import { Selector } from 'testcafe';
 
 fixture`dgt-card`.page`${scenario.baseURL}`;
 
-test('insert and remove tag', async t => {
+test('test card click', async t => {
     const card = Selector('.dgt-card-component .material-icons');
     await t.click(card).wait(1000);
 });
