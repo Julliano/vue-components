@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    .dgt-card-grid {
+    .dgt-component-grid {
         padding: 10px;
         h4, small {
             margin: 0;
@@ -13,25 +13,21 @@
 </style>
 
 <template>
-    <div class="dgt-card-grid">
+    <div class="dgt-component-grid">
         <h4 v-if="header">{{ header }}</h4>
         <small v-if="subHeader">{{ subHeader }}</small>
-        <div class="cards">
-            <dgt-card v-for="card in cards" :key="card.id" :data="card" :style="card.style"></dgt-card>
-        </div>
+        <slot name="main-slot" :grid="grid"></slot>
     </div>
 </template>
 <script>
-    import dgtCard from './dgt-card.vue';
     export default {
-        name: 'dgtCardGrid',
+        name: 'dgtComponentGrid',
         props: {
-            cards: Array,
+            grid: Array,
             header: String,
             subHeader: String
         },
         components: {
-            dgtCard
         }
     };
 </Script>

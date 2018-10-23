@@ -24,11 +24,11 @@
         <h3> Dgt-Card </h3>
         <dgt-card></dgt-card>
         <hr>
-        <h3> Dgt-Card-List </h3>
-        <dgt-card-list></dgt-card-list>
+        <h3> Dgt-List </h3>
+        <dgt-list></dgt-list>
         <hr>
-        <h3> Dgt-Card-Grid </h3>
-        <dgt-card-grid></dgt-card-grid>
+        <h3> Dgt-Component-Grid </h3>
+        <dgt-component-grid></dgt-component-grid>
     </div>
 </template>
 
@@ -37,8 +37,8 @@
 import dgtStar from './examples/dgt-star.view';
 import dgtGrid from './examples/dgt-grid.view';
 import dgtCard from './examples/dgt-card.view';
-import dgtCardList from './examples/dgt-card-list.view';
-import dgtCardGrid from './examples/dgt-card-grid.view';
+import dgtList from './examples/dgt-list.view';
+import dgtComponentGrid from './examples/dgt-component-grid.view';
 import dgtTagInput from './examples/dgt-tag-input.view';
 import dgtAutocomplete from './examples/dgt-autocomplete.view';
 
@@ -55,10 +55,10 @@ export default {
         dgtStar,
         dgtGrid,
         dgtCard,
-        dgtCardList,
-        dgtCardGrid,
+        dgtList,
         dgtTagInput,
-        dgtAutocomplete
+        dgtAutocomplete,
+        dgtComponentGrid
     }
 };
 </script>

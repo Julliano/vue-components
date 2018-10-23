@@ -26,27 +26,14 @@
 </style>
 
 <template>
-    <div style="margin: 10px" class="dgt-card-component" @click="goTo( data.url )">
-        <i class="material-icons">{{ data.icon }}</i>
-        <div>
-            <span>
-                {{ data.name }}
-                <span class="opacity-5" v-if="data.count !== undefined">
-                    ({{ data.count }})
-                </span>
-            </span>
-            <br>
-            <small name="card-subheader" class="opacity-5" v-if="data.subHeader">
-                {{ data.subHeader }}
-            </small>
-        </div>
-    </div>
+    <dgt-card :data="data" :style="'margin: 10px'"></dgt-card>
 </template>
 
 <script>
     import dgtCard from '../components/dgt-card.vue';
 
     export default {
+        name: 'dgtCardView',
         data() {
             return {
                 data: {
@@ -57,9 +44,6 @@
             };
         },
         methods: {
-            goTo(url) {
-                console.log(url);
-            }
         },
         components: {
             dgtCard

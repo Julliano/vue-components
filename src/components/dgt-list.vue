@@ -26,22 +26,18 @@
         <h4 v-if="header">{{ header }}</h4>
         <small v-if="subHeader">{{ subHeader }}</small>
         <hr>
-        <div class="cards">
-            <dgt-card v-for="card in list" :key="card.id" :data="card" :style="card.style"></dgt-card>
-        </div>
+        <slot name="main-slot" :list="list"></slot>
     </div>
 </template>
 <script>
-    import dgtCard from './dgt-card.vue';
     export default {
-        name: 'dgtCardList',
+        name: 'dgtList',
         props: {
             list: Array,
             header: String,
             subHeader: String
         },
         components: {
-            dgtCard
         }
     };
 </Script>

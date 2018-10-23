@@ -32,7 +32,7 @@
 <template>
     <div class="dgt-autocomplete">
         <div class="autocomplete">
-            <input v-if="showInput" type="text" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
+            <input v-if="showInput" type="text" :style="customizacao" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
             <ul id="autocomplete-results" v-show="isOpen" class="autocomplete-results">
                 <li v-for="(result, i) in results" :key="i" @click="setTags(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
                     {{ result }}
@@ -52,7 +52,8 @@ export default {
         items: Array,
         searchTag: String,
         showInput: Boolean,
-        existingTags: Array
+        existingTags: Array,
+        customizacao: String
     },
     data() {
         return {

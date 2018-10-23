@@ -108,7 +108,11 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
     :list="listExample" (default: [] / list que servirá para popular o que será interado no slot  interior)
 
+    existe um slot no component para permitir a injeção do que sera reproduzido em lista:
+    <slot name="main-slot" :list="list"></slot>
+
     exemplo de formato do array que será passado dentro do array de objetos:
+    
     let listExample = [
         {
             icon: 'calendar_today',
@@ -134,23 +138,32 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     <dgt-grid-component></dgt-grid-component>
 
     Esse component necessita que parametros sejam passados na sua instância, ex:
-    <dgt-grid-component :list="listExample" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-card-list>
+    <dgt-grid-component :grid="grid" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-card-list>
 
-    :list="listExample" (default: [] / list que servirá para popular o que será interado no slot  interior)
+    :grid="grid" (default: [] / array que servirá para popular o que será interado no slot  interior)
+
+    existe um slot no component para permitir a injeção do que sera reproduzido em grid:
+    <slot name="main-slot" :grid="grid"></slot>
 
     exemplo de formato do array que será passado dentro do array de objetos:
-    let listExample = [
+    grid: [
         {
             icon: 'calendar_today',
             url: '/midias',
             name: 'Agenda',
-            subHeader: 'Atualizado 16/10/2018'
+            count: 0
         },
         {
             icon: 'time_to_leave',
             url: '/uber',
             name: 'Dados Uber',
-            subHeader: 'Atualizado 16/10/2018'
+            count: 12
+        },
+        {
+            icon: 'image',
+            url: '/midias',
+            name: 'Mídias',
+            count: 0
         }
     ]
 

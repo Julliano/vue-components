@@ -57,6 +57,7 @@
                 border: none;
                 border-radius: 290486px;
                 transform: rotate(45deg);
+                outline: none;
                 &.is-small {
                     height: 16px;
                     width: 16px;
@@ -102,7 +103,7 @@
         </div>
         <!-- chamada do component de autocomplete -->
         <dgt-autocomplete v-if="autocomplete" @tag-selected="setTagsAutocomplete" 
-        :existing-tags="objTag" :searchTag="newTag" :items="validsTags"></dgt-autocomplete>
+        :existing-tags="objTag" :searchTag="newTag" :items="validsTags" ref="childAutocomplete"></dgt-autocomplete>
     </div>
 </template>
 
