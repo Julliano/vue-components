@@ -213,7 +213,7 @@ export default {
     },
     methods: {
         kebabCase(word) {
-            return word.toLowerCase().replace(' ', '-');
+            return word.toLowerCase().replace(/ /g, '-');
         },
         getSelected(tabName) {
             if (this.data.tabs[tabName] && this.data.tabs[tabName].selected) {
