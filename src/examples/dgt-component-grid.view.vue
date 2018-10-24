@@ -1,21 +1,8 @@
-<style lang="scss" scoped>
-    #dgt-card-grid {
-        padding: 10px;
-        h4, small {
-            margin: 0;
-            padding: 1px;
-        }
-        .cards {
-            flex-wrap: wrap;
-            display: flex;
-        }
-    }
-</style>
 
 <template>
     <dgt-component-grid :grid="grid" :header="header" :sub-header="subHeader">
         <template slot="main-slot" slot-scope="mainProps">
-            <div class="cards">
+            <div class="grid">
                 <dgt-card v-for="card in mainProps.grid" :key="card.id" :data="card" :style="card.style"></dgt-card>
             </div>
         </template>
@@ -28,6 +15,10 @@
 
     export default {
         name: 'dgtComponentGridView',
+        components: {
+            dgtCard,
+            dgtComponentGrid
+        },
         data() {
             return {
                 grid: [
@@ -71,10 +62,6 @@
                 header: 'Exemplo de título',
                 subHeader: 'Exemplo de sub título'
             };
-        },
-        components: {
-            dgtCard,
-            dgtComponentGrid
         }
     };
 </script>

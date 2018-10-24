@@ -1,39 +1,46 @@
 <style lang="scss" scoped>
-    .dgt-autocomplete {
-        .autocomplete {
-            position: relative;
-        }
-        .autocomplete-results {
-            padding: 0;
-            position: absolute;
-            margin: 0;
-            border: 1px solid #eeeeee;
-            max-height: 100px;
-            overflow: auto;
-            width: 100%;
-            display: block;
-            z-index: 2;
-            background: white;
-        }
-        .autocomplete-result {
-            list-style: none;
-            text-align: left;
-            padding: 4px 2px;
-            cursor: pointer;
-        }
-        .autocomplete-result.is-active,
-        .autocomplete-result:hover {
-            background-color: #4aae9b;
-            color: white;
-        }
+.dgt-autocomplete {
+  .autocomplete {
+    position: relative;
+    input {
+      width: var(--dgt-input-width, 98%);
+      padding: var(--dgt-input-padding, 6px);
+      border-radius: var(--dgt-input-border-radius, 0.25rem);
+      border: var(--dgt-input-border, 1px solid #9e9e9e);
     }
+    .autocomplete-results {
+      padding: 0;
+      position: absolute;
+      margin: 0;
+      border: 1px solid #eeeeee;
+      max-height: var(--dgt-ul-max-height, 100px);
+      color: var(--dgt-results-color, black);
+      overflow: auto;
+      width: var(--dgt-ul-width, 100%);
+      display: block;
+      z-index: 2;
+      background: var(--dgt-ul-background, white);
+      .autocomplete-result {
+        list-style: none;
+        text-align: left;
+        padding: 4px 2px;
+        cursor: pointer;
+      }
+      .autocomplete-result.is-active,
+      .autocomplete-result:hover {
+        background-color: var(--dgt-result-background, #4aae9b);
+        color: var(--dgt-result-color, white);
+      }
+    }
+  }
+}
 </style>
 
 <template>
     <div class="dgt-autocomplete">
         <div class="autocomplete">
-            <input v-if="showInput" type="text" :style="customizacao" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
-            <ul id="autocomplete-results" v-show="isOpen" class="autocomplete-results">
+            <input v-if="showInput" type="text" class="input" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
+            <ul v-show="isOpen" class="autocomplete-results">
                 <li v-for="(result, i) in results" :key="i" @click="setTags(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
                     {{ result }}
                 </li>
@@ -49,11 +56,10 @@ export default {
         event: 'tag-selected'
     },
     props: {
-        items: Array,
-        searchTag: String,
-        showInput: Boolean,
-        existingTags: Array,
-        customizacao: String
+        items: {},
+        searchTag: '',
+        showInput: false,
+        existingTags: {}
     },
     data() {
         return {
@@ -63,23 +69,6 @@ export default {
             search: '',
             arrowCounter: 0
         };
-    },
-    watch: {
-        items(val, oldValue) {
-            if (val.length !== oldValue.length) {
-                this.results = val;
-                this.isLoading = false;
-            }
-        },
-        searchTag() {
-            if (this.searchTag !== null) {
-                this.search = this.searchTag;
-                this.isOpen = false;
-                if (this.search !== '') {
-                    this.onChange();
-                }
-            }
-        }
     },
     mounted() {
         document.addEventListener('click', this.handleClickOutside);
@@ -99,15 +88,13 @@ export default {
                 const resultados = this.items.filter(item => {
                     return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                 });
+                this.results = resultados;
                 if (this.existingTags) {
-                    return this.results = resultados.filter(function(e) {
+                    this.results = resultados.filter(function(e) {
                         return this.indexOf(e) < 0;
                     }, this.existingTags);
                 }
-                this.results = resultados;
             }
-            return this.results;
-            // garante que a tag que está sendo procurada já não está setada no component pai;
         },
         setTags(result) {
             // Avisa o componente pai que a tag foi selecionada;
@@ -135,6 +122,23 @@ export default {
             if (!this.$el.contains(evt.target)) {
                 this.isOpen = false;
                 this.arrowCounter = -1;
+            }
+        }
+    },
+    watch: {
+        items(val, oldValue) {
+            if (val.length !== oldValue.length) {
+                this.results = val;
+                this.isLoading = false;
+            }
+        },
+        searchTag() {
+            if (this.searchTag) {
+                this.search = this.searchTag;
+                this.isOpen = false;
+                if (this.search !== '') {
+                    this.onChange();
+                }
             }
         }
     }

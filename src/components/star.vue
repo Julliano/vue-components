@@ -1,5 +1,11 @@
+<style lang="scss" scoped>
+.vue-star-rating-star {
+  overflow: visible !important;
+}
+</style>
+
 <template>
-    <svg class="vue-star-rating-star" :height="getSize" :width="getSize" :viewBox="viewBox" @mousemove="mouseMoving" @click="selected">
+    <svg class="vue-star-rating-star" :height="size" :width="size" :viewBox="viewBox" @mousemove="mouseMoving" @click="selected">
 
         <linearGradient :id="grad" x1="0" x2="100%" y1="0" y2="0">
             <stop :offset="getFill" :stop-color="activeColor" />
@@ -60,11 +66,12 @@ export default {
             default: 0
         }
     },
-    created() {
-        this.starPoints = (this.points.length) ? this.points : this.starPoints;
-        this.calculatePoints();
-        this.grad = this.getRandomId();
-        this.glowId = this.getRandomId();
+    data() {
+        return {
+            starPoints: [19.8, 2.2, 6.6, 43.56, 39.6, 17.16, 0, 17.16, 33, 43.56],
+            grad: '',
+            glowId: ''
+        };
     },
     computed: {
         starPointsToString() {
@@ -73,17 +80,11 @@ export default {
         getGradId() {
             return `url(#${this.grad})`;
         },
-        getSize() {
-            // Adjust star size when rounded corners are set with no border
-            const size = (this.borderWidth <= 0) ? parseInt(this.size) -
-                parseInt(this.border) : this.size;
-            return parseInt(size) + parseInt(this.border);
-        },
         getFill() {
             return `${this.fill}%`;
         },
         border() {
-            return (this.borderWidth <= 0) ? 6 : this.borderWidth;
+            return (this.borderWidth <= 0) ? 0 : this.borderWidth;
         },
         getBorderColor() {
             if (this.borderWidth <= 0) {
@@ -101,6 +102,12 @@ export default {
             return `0 0 ${this.maxSize} ${this.maxSize}`;
         }
     },
+    created() {
+        this.starPoints = (this.points.length) ? this.points : this.starPoints;
+        this.calculatePoints();
+        this.grad = this.getRandomId();
+        this.glowId = this.getRandomId();
+    },
     methods: {
         mouseMoving($event) {
             this.$emit('star-mouse-move', {
@@ -111,9 +118,9 @@ export default {
         },
         getPosition($event) {
             // calculate position in percentage.
-            var starWidth = (92 / 100) * this.size;
+            let starWidth = (92 / 100) * this.size;
             const offset = Math.max($event.offsetX, 1);
-            var position = Math.round((100 / starWidth) * offset);
+            let position = Math.round((100 / starWidth) * offset);
             return Math.min(position, 100);
         },
         selected($event) {
@@ -130,19 +137,6 @@ export default {
                 return ((this.size / this.maxSize) * point) + (this.border * 1.5);
             });
         }
-    },
-    data() {
-        return {
-            starPoints: [19.8, 2.2, 6.6, 43.56, 39.6, 17.16, 0, 17.16, 33, 43.56],
-            grad: '',
-            glowId: ''
-        };
     }
 };
 </script>
-
-<style scoped>
-    .vue-star-rating-star {
-        overflow: visible !important;
-    }
-</style>

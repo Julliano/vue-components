@@ -1,42 +1,20 @@
 <style lang="scss" scoped>
-    .dgt-autocomplete {
-        .autocomplete {
-            position: relative;
-        }
-        .autocomplete-results {
-            padding: 0;
-            position: absolute;
-            margin: 0;
-            border: 1px solid #eeeeee;
-            max-height: 100px;
-            overflow: auto;
-            width: 100%;
-            display: block;
-            z-index: 2;
-            background: white;
-        }
-        .autocomplete-result {
-            list-style: none;
-            text-align: left;
-            padding: 4px 2px;
-            cursor: pointer;
-        }
-        .autocomplete-result.is-active,
-        .autocomplete-result:hover {
-            background-color: #4aae9b;
-            color: white;
-        }
-        input{
-            border: 1px solid #9e9e9e;
-            padding: 6px 0px 6px 6px;
-            border-radius: 0.25rem;
-            width: 99%;
-        }
-    }
+.custom {
+  --dgt-input-width: 50%;
+  --dgt-input-padding: 10px;
+  --dgt-input-border-radius: 0.25rem;
+  --dgt-input-border: 5px solid #9e9e9e;
+  --dgt-ul-background: #000;
+  --dgt-ul-width: 50%;
+  --dgt-ul-max-height: 200px;
+  --dgt-result-background: yellow;
+  --dgt-result-color: black;
+  --dgt-results-color: white;
+}
 </style>
 
 <template>
-    <dgt-autocomplete :show-input="showInput" :items="items" :customizacao="'width: 98%; padding: 6px; border-radius: 0.25rem; border: 1px solid #9e9e9e;'"></dgt-autocomplete>
+    <dgt-autocomplete :show-input="showInput" :items="items"></dgt-autocomplete>
 </template>
 
 <script>

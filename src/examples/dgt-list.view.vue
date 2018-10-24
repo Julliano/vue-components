@@ -1,30 +1,16 @@
 <style lang="scss" scoped>
-    .dgt-card-list {
-        padding: 10px;
-        width: fit-content;
-        h4, small {
-            margin: 0;
-            padding: 1px;
-        }
-        hr {
-            margin-bottom: 1px;
-            box-shadow: 0px 1px 0px 0px #C7C7C7;
-            border-bottom: 0;
-        }
-        .cards {
-            flex-wrap: wrap;
-            display: grid;
-            overflow-y: scroll;
-            max-height: 400px;
-            padding: 2px 0 2px 10px;
-        }
-    }
+.custom {
+  --dgt-list-width: fit-content;
+  --dgt-list-max-height: 400px;
+  --dgt-list-padding: 2px 0 2px 10px;
+}
 </style>
 
+
 <template>
-    <dgt-list :list="list" :header="header" :sub-header="subHeader">
+    <dgt-list :list="list" :header="header" :sub-header="subHeader" class="custom">
         <template slot="main-slot" slot-scope="mainProps">
-            <div class="cards">
+            <div class="list">
                 <dgt-card v-for="card in mainProps.list" :key="card.id" :data="card" :style="card.style"></dgt-card>
             </div>
         </template>
@@ -37,6 +23,10 @@
 
     export default {
         name: 'dgtListView',
+        components: {
+            dgtCard,
+            dgtList
+        },
         data() {
             return {
                 list: [
@@ -74,10 +64,6 @@
                 header: 'Exemplo de título',
                 subHeader: 'Exemplo de sub título'
             };
-        },
-        components: {
-            dgtCard,
-            dgtList
         }
     };
 </script>

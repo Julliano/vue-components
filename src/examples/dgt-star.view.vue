@@ -1,28 +1,15 @@
 <style scoped>
-    .vue-star-rating-star {
-        display: inline-block;
-    }
-    .vue-star-rating-pointer {
-        cursor: pointer;
-    }
-    .vue-star-rating {
-        display: flex;
-        align-items: center;
-    }
-    .vue-star-rating-inline {
-        display: inline-flex;
-    }component
-    .vue-star-rating-rating-text {
-        margin-top: 7px;
-        margin-left: 7px;
-    }
-    .inline{
-        display: inline-flex;
-    }
-    .grid{
-        display: grid;
-        margin-right: 10px;
-    }
+.inline {
+  display: inline-flex;
+  margin-bottom: 10px;
+}
+.grid {
+  display: grid;
+  margin-right: 10px;
+}
+.custom {
+  --dgt-star-margin-right: 10px;
+}
 </style>
 
 <template>
@@ -59,6 +46,10 @@
                 <input v-model.number="maxRating" type="number" min="1" max="100">
             </div>
             <div class="grid">
+                <label> Size: </label>
+                <input v-model.number="size" type="number" min="1" max="100">
+            </div>
+            <div class="grid">
                 <label> Active Color: </label>
                 <input v-model="activeColor">
             </div>
@@ -78,7 +69,7 @@
             </div>
         </div>
         <dgt-star-rating :increment="increment" :rating="rating" :active-color="activeColor"
-        :max-rating="maxRating" :read-only="readOnly" :show-rating="showRating"></dgt-star-rating>
+        :max-rating="maxRating" :star-size="size" :read-only="readOnly" :show-rating="showRating"></dgt-star-rating>
     </div>
 </template>
 
@@ -99,6 +90,7 @@
                 readOnly: false,
                 showRating: false,
                 step: 0,
+                size: 50,
                 fillLevel: [],
                 currentRating: 0,
                 selectedRating: 0,

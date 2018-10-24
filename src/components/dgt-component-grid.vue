@@ -1,15 +1,16 @@
 <style lang="scss" scoped>
-    .dgt-component-grid {
-        padding: 10px;
-        h4, small {
-            margin: 0;
-            padding: 1px;
-        }
-        .cards {
-            flex-wrap: wrap;
-            display: flex;
-        }
-    }
+.dgt-component-grid {
+  padding: 10px;
+  h4,
+  small {
+    margin: 0;
+    padding: 1px;
+  }
+  .grid {
+    flex-wrap: wrap;
+    display: flex;
+  }
+}
 </style>
 
 <template>
@@ -19,15 +20,14 @@
         <slot name="main-slot" :grid="grid"></slot>
     </div>
 </template>
+
 <script>
     export default {
         name: 'dgtComponentGrid',
         props: {
-            grid: Array,
-            header: String,
-            subHeader: String
-        },
-        components: {
+            grid: {},
+            header: '',
+            subHeader: ''
         }
     };
 </Script>
