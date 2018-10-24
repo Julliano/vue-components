@@ -202,7 +202,7 @@ export default {
                 observer.disconnect();
             });
 
-            //observer.observe(this.$el, config);
+            observer.observe(this.$el, config);
             window.addEventListener('resize', () => {
                 this.setAnimatedBar(
                     this.$el.querySelector('.tabs-container .tabs-list .tab[selected]')
