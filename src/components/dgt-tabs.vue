@@ -218,19 +218,23 @@ export default {
         getSelected(tabName) {
             if (this.data.tabs[tabName] && this.data.tabs[tabName].selected) {
                 this.selectedTab = tabName;
+                this.emitGeneral('swapTabs', this.data.tabs[tabName], tabName);
                 return true;
             }
             return false;
         },
         moveAnimatedBar(elem) {
-            let widthElem = elem.offsetWidth;
-            let positionAnimatedBar = elem.offsetLeft;
-            let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
-            let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
+            if (elem && elem.offsetWidth) {
+                let widthElem = elem.offsetWidth;
+                let positionAnimatedBar = elem.offsetLeft;
+                let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
+                let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
 
-            animatedBar.style.left = `${positionAnimatedBar}px`;
-            animatedBarBorderWidth += animatedBarBorderWidth;
-            animatedBar.style.width = `${widthElem - animatedBarBorderWidth}px`;
+                animatedBar.style.left = `${positionAnimatedBar}px`;
+                animatedBarBorderWidth += animatedBarBorderWidth;
+                animatedBar.style.width = `${widthElem - animatedBarBorderWidth}px`;
+            }
+
         },
         verticalMoveAnimatedBar(elem) {
             let widthElem = elem.offsetHeight;
@@ -246,7 +250,7 @@ export default {
         setAnimatedBar(elem) {
             if (this.data.vertical) {
                 let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab')
-                    .offsetWidth;
+                    .widthTab.offsetWidth;
                 this.$el.querySelector('.tabs-container').style.width = `${widthTab}px`;
                 this.verticalMoveAnimatedBar(elem);
                 return;
@@ -266,7 +270,7 @@ export default {
             this.setAnimatedBar(elem);
         },
         emitGeneral(emitFunc, ...args) {
-            this.$emit('swapTabs', args);
+            this.$emit(emitFunc, args);
         }
     }
 };

@@ -40,7 +40,7 @@ let dataTabs = {
             quantityContents: 10
         },
         'Filtros impsum': {
-            block: true,
+            block: false,
             quantityContents: 5
         },
         'Filtros Gerais': {
