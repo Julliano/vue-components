@@ -118,7 +118,6 @@
     li.bar-animated {
       width: 1px;
       top: 0;
-      -webkit-transition: height 1s, top 1s; /* For Safari 3.1 to 6.0 */
       transition: height 1s, top 1s;
     }
   }
