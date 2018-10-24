@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
 .vue-star-rating-star {
-  overflow: visible !important;
+  overflow: visible;
 }
 </style>
 
@@ -15,7 +15,7 @@
         <filter :id="glowId"  height="130%" width="130%" filterUnits="userSpaceOnUse">
             <feGaussianBlur result="coloredBlur"/>
             <feMerge>
-                <feMergeNode in="coloredBlur"/>
+                <feM in="coloredBlur"/>
                 <feMergeNode in="SourceGraphic"/>
             </feMerge>
         </filter>

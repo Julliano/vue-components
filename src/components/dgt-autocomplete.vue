@@ -136,11 +136,11 @@ export default {
             if (this.searchTag) {
                 this.search = this.searchTag;
                 this.isOpen = false;
-                if (this.search !== '') {
+                if (this.search) {
                     this.onChange();
                 }
             }
         }
     }
 };
-</Script>
+</script>

@@ -30,4 +30,4 @@
             subHeader: ''
         }
     };
-</Script>
+</script>

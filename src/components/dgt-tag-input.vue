@@ -163,39 +163,30 @@
                 this.newTag = null;
             },
             checkDuplicate(tag) {
-                if (tag) {
-                    const lowerTags = this.tags.map(item => {
-                        return item.toLowerCase();
-                    });
-                    return lowerTags.indexOf(tag.toLowerCase()) < 0;
-                }
-                return false;
+                if (!tag) return false;
+
+                const lowerTags = this.tags.map(item => {
+                    return item.toLowerCase();
+                });
+                return lowerTags.indexOf(tag.toLowerCase()) < 0;
             },
             setTags() {
                 if (this.autocomplete) {
                     this.$refs.childAutocomplete.onEnter();
-                    this.newTag = null;
-                } else {
-                    if (this.checkDuplicate(this.newTag)) {
-                        this.tags.push(this.newTag);
-                        this.newTag = null;
-                        return;
-                    }
-                    this.newTag = null;
-                    return;
+                } else if (this.checkDuplicate(this.newTag)) {
+                    this.tags.push(this.newTag);
                 }
+                this.newTag = null;
             },
             arrowDown() {
                 if (this.$refs.childAutocomplete) {
                     this.$refs.childAutocomplete.onArrowDown();
                 }
-                return;
             },
             arrowUp() {
                 if (this.$refs.childAutocomplete) {
                     this.$refs.childAutocomplete.onArrowUp();
                 }
-                return;
             }
         },
         watch: {
@@ -205,4 +196,4 @@
             }
         }
     };
-</Script>
+</script>
