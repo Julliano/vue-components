@@ -2,7 +2,7 @@ import VueSelector from 'testcafe-vue-selectors';
 import scenario from '../package.json';
 import { Selector } from 'testcafe';
 
-fixture`transmitter-message`.page`${scenario.baseURL}`;
+fixture`dgt-Grid`.page`${scenario.baseURL}`;
 
 test('check if contains header line', async t => {
     let rowHeader = Selector('.row row-header');
