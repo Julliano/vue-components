@@ -1,25 +1,25 @@
 <style lang="scss" scoped>
 .dgt-grid-component {
   left: var(--gridComponentLeft, 372px);
-  max-width: var(--gridComponentMaxWidth, 944px);
+  max-width: var(--dgt-grid-max-width, 944px);
   .dgt-grid {
     display: grid;
     overflow-x: auto;
-    width: var(--widthGrid, 944px);
+    width: var(--dgt-grid-width, 944px);
     .col {
-      min-width: var(--colMinWidth, 30px);
+      min-width: var(--dgt-grid-col-min-width, 30px);
       overflow: hidden;
       .row {
-        border-bottom: var(--rowBorderBottom, 1px solid gray);
+        border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
         white-space: var(--rowWhiteSpace, nowrap);
         height: var(--rowHeight, 25px);
         position: relative;
         &.row-header:hover .span-resize {
-          background-color: var(--rowHeaderBackgroundColor, black);
+          background-color: var(--dgt-grid-row-header-background-color, black);
         }
         &.selected {
           background-color: var(
-            --rowSelectedBackgroundColor,
+            --dgt-grid-row-selected-background-color,
             rgb(223, 236, 245)
           );
         }
@@ -28,23 +28,26 @@
           height: 100%;
         }
         .header {
-          background-color: var(--headerBackgroundColor, gray);
+          background-color: var(--dgt-grid-header-background-color, gray);
           width: 100%;
           height: 100%;
           display: inline-block;
-          color: var(--headerColor, #fff);
+          color: var(--dgt-grid-header-color, #fff);
           &:hover {
-            cursor: var(--headerHover, default);
+            cursor: var(--dgt-grid-header-hover, default);
           }
         }
         .span-resize {
           position: absolute;
-          right: var(--headerSpanSize, 0px);
+          right: var(--dgt-grid-header-span-size, 0px);
           height: 100%;
-          width: var(--headerSpanWidth, 4px);
-          background-color: var(--headerSpanBackgroundColor, transparent);
+          width: var(--dgt-grid-header-span-width, 4px);
+          background-color: var(
+            --dgt-grid-header-span-background-color,
+            transparent
+          );
           &:hover {
-            cursor: var(--headerSpanResizeHover, w-resize);
+            cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
           }
         }
         &:not(.header) {

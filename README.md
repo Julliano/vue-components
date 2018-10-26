@@ -499,7 +499,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 
 ## DgtTabs - DGTTabs
 
-### Como ultilizar o componente dgtTabs:
+#### Como ultilizar o componente dgtTabs:
 
     dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
 
@@ -507,38 +507,18 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     dataTabs: {
         vertical: false,
         position: '',
-        fontSize: '10px',
         barAnimatedHidden: false,
         barAnimatedSize: '2',
-        barAnimatedColor: '#000',
-        tabsContainerStyle: {
-            margin: '5px'
-        },
-        tabsTextStyle: {
-            padding: '3px'
-        },
-        tabBlockedStyle: {
-            color: '#0f0f0f'
-        },
-        tabSelectedStyle: {
-            backgroundColor: 'cyan',
-            color: '#000'
-        },
-        tabsStyle: {
-            /* backgroundColor: 'transparent' */
-        },
         tabs: {
             'Filtros lorem': {
+                block: true,
                 quantityContents: 10
             },
             'Filtros impsum': {
+                block: false,
                 quantityContents: 5
             },
             'Filtros Gerais': {
-                style: {
-                    backgroundColor: 'red',
-                    color: '#fff'
-                },
                 selected: true,
                 quantityContents: 3
             },
@@ -547,7 +527,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     }
     ```
 
-    O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo.
+    O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo. O atributo block deternina se a tag será 'clicavel' ou não.
 
     #### Abaixo a estrutura básica:
 
@@ -557,12 +537,12 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
             'Filtros lorem': {},
             'Filtros impsum': {},
             'Filtros Gerais': {},
-            'Filtros Específicos': {}
+            'Filtros Específicos': {selected: true}
         }
     }
     ```
 
-    O componente envia um array via bus para fora com o nome da tab clicada e o próprio objeto da data recebido por props
+    O componente envia um array via emit para fora com o nome da tab clicada e o próprio objeto da data recebido por props
 
     O atributo 'position' pode receber apenas dois valores:
 
@@ -574,18 +554,6 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     ```js
         vertical: true,
         position: 'vertical-left',
-    ```
-
-
-    O atributo 'tabsStyle' define regras de estilo para todas as tabs, caso você queira um estilo para uma tab específica você deve adicionar dentro do objeto da tab desejada.
-
-    ```js
-        'Filtros Gerais': {
-            style: {
-                backgroundColor: 'red',
-                color: '#fff'
-            }
-        }
     ```
 
     O atributo 'selected' dentro do objeto da tab define a tab que estará selecionada por default, nesse caso apenas uma tab deve conter este atributo.
@@ -606,7 +574,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         </template>
     ```
 
-### Slot no componente:
+#### Slot no componente:
 
     ```html
         <slot :name="key" :data=data></slot>
