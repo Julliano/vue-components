@@ -1,57 +1,148 @@
+<style lang="scss" scoped>
+.dgt-grid-view {
+  .dgt-grid-component {
+    .material-icons {
+      font-size: 16px;
+      &.inactive {
+        color: gray;
+      }
+    }
+    .arrow-sort-1 {
+      transition: all 0.4s ease;
+      transform: rotateZ(90deg);
+    }
+    .arrow-sort-2 {
+      transition: all 0.4s ease;
+      transform: rotateZ(-90deg);
+    }
+    .arrow-drop-down {
+      font-size: 23px;
+      float: right;
+      top: 0;
+      position: absolute;
+      right: 3px;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+  .select-columns {
+    ul {
+      border: 1px solid #000;
+      width: 140px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      margin-top: 5px;
+      box-shadow: 0px 0px 7px #888888;
+      max-height: 0;
+      opacity: 0;
+      transition: max-height 0.5s;
+      overflow: hidden;
+      &.open {
+        max-height: 200px;
+        opacity: 1;
+      }
+    }
+  }
+}
+</style>
+
 <template>
-    <dgt-grid :data="dataDgtGrid" @selectedLine="selectedLine" @pagination="pagination">
-        <template slot="top-bar" slot-scope="slotProps">
-            <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
-        </template>
-        <template slot="checkBox-header" slot-scope="slotProps">
-            <input type="checkbox" class="custom-col" v-model="slotProps.data.isChecked" @click="toggleChecked($event, true)"/>
-        </template>
-        <template slot="iconStorage-header" slot-scope="slotProps">
-            <div class="header"></div>
-            <span class="span-resize" @mousedown.prevent="resizeColumn($event)"></span>
-        </template>
-        <template slot="iconAttach-header" slot-scope="slotProps">
-            <div class="header"></div>
-            <span class="span-resize" @mousedown.prevent="resizeColumn($event)"></span>
-        </template>
-        <template slot="iconMessage-header" slot-scope="slotProps">
-            <div class="header"></div>
-            <span class="span-resize" @mousedown.prevent="resizeColumn($event)"></span>
-        </template>
-        <template slot="icon-order" slot-scope="slotProps">
-            <i v-if="slotProps.currentColumn === slotProps.columnSort"
-                :class="`material-icons arrow-sort-${slotProps.sortState === -1 ? 2 : slotProps.sortState}`">
-                {{slotProps.data.arrowsSort[slotProps.sortState === -1 ? 2 : slotProps.sortState]}}
-            </i>
-            <i v-else class="material-icons arrow-sort ">compare_arrows</i>
-        </template>
-        <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <input type="checkbox" 
-                ref="checkbox" 
-                for="checkbox" 
-                v-model="slotProps.obj.checked" 
-                @change="toggleChecked($event)" 
-                @click="preventPropagation($event)"
-                :key="index"
-            >
-        </template>
-        <template :slot="`iconStorage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons" :key="index">storage</i>
-        </template>
-        <template :slot="`iconAttach-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons" :key="index">attach_file</i>
-        </template>
-            <template :slot="`iconMessage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-            <i class="material-icons" :key="index">message</i>
-        </template>
-        <!-- <template slot="custom-pagination" slot-scope="slotProps">
-            <button class="material-icons prev-all" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, 1)" style="background: none; border: none;">first_page</button>
-            <button class="material-icons prev" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, `${parseInt(slotProps.page) - 1}`)" style="background: none; border: none;">chevron_left</button>
-            Pág. {{slotProps.page}} de {{slotProps.total}}
-            <button class="material-icons next" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${parseInt(slotProps.page) + 1}`)" style="background: none; border: none;">chevron_right</button>
-            <button class="material-icons next-all" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${slotProps.total}`)" style="background: none; border: none;">last_page</button>
-        </template> -->
-    </dgt-grid>
+    <div class="dgt-grid-view">
+        <div class="select-columns">
+            <input type="button" value="select columns" @click="showMenuColumns($event)">
+            <ul class="list-columns">
+                <li>
+                    <input type="checkbox" checked value="checkBox" @click="toggleColumn($event)">
+                    checkBox
+                </li>
+                <li>
+                    <input type="checkbox" checked value="iconStorage" @click="toggleColumn($event)">
+                    iconStorage
+                </li>
+                <li>
+                    <input type="checkbox" checked value="iconAttach" @click="toggleColumn($event)">
+                    iconAttach
+                </li>
+                <li>
+                    <input type="checkbox" checked value="iconMessage" @click="toggleColumn($event)">
+                    iconMessage
+                </li>
+                <li>
+                    <input type="checkbox" checked value="horario" @click="toggleColumn($event)">
+                    horario
+                </li>
+                <li>
+                    <input type="checkbox" checked value="conta" @click="toggleColumn($event)">
+                    conta
+                </li>
+                <li>
+                    <input type="checkbox" checked value="url" @click="toggleColumn($event)">
+                    url
+                </li>
+                <li>
+                    <input type="checkbox" checked value="localidade" @click="toggleColumn($event)">
+                    localidade
+                </li>
+                <li>
+                    <input type="checkbox" checked value="data" @click="toggleColumn($event)">
+                    data
+                </li>
+            </ul>
+        </div>
+        <dgt-grid v-if="drawComponent" :dataProps="dataDgtGrid" @selectedLine="selectedLine" @pagination="pagination">
+            <template slot="top-bar" slot-scope="slotProps">
+                <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
+            </template>
+            <template slot="checkBox-header" slot-scope="slotProps">
+                <input type="checkbox" class="custom-col" v-model="slotProps.dataProps.isChecked" @click="toggleChecked($event, true)"/>
+                <i class="material-icons arrow-drop-down">arrow_drop_down</i>
+            </template>
+            <template slot="iconStorage-header" slot-scope="slotProps">
+                <div class="header"></div>
+            </template>
+            <template slot="iconAttach-header" slot-scope="slotProps">
+                <div class="header"></div>
+            </template>
+            <template slot="iconMessage-header" slot-scope="slotProps">
+                <div class="header"></div>
+            </template>
+            <template slot="icon-order" slot-scope="slotProps">
+                <i v-if="slotProps.currentColumn === slotProps.columnSort"
+                    :class="`material-icons arrow-sort-${slotProps.sortState === -1 ? 2 : slotProps.sortState}`">
+                    {{slotProps.dataProps.arrowsSort[slotProps.sortState === -1 ? 2 : slotProps.sortState]}}
+                </i>
+                <i v-else class="material-icons arrow-sort ">compare_arrows</i>
+            </template>
+            <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
+                <input type="checkbox"
+                    ref="checkbox"
+                    for="checkbox"
+                    v-model="slotProps.obj.checked"
+                    @change="toggleChecked($event)"
+                    @click="preventPropagation($event)"
+                    :key="index"
+                >
+            </template>
+            <template :slot="`iconStorage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
+                <i class="material-icons" :key="index">storage</i>
+            </template>
+            <template :slot="`iconAttach-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
+                <i class="material-icons" :key="index">attach_file</i>
+            </template>
+                <template :slot="`iconMessage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
+                <i class="material-icons" :key="index">message</i>
+            </template>
+            <!-- <template slot="custom-pagination" slot-scope="slotProps">
+                <button class="material-icons prev-all" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, 1)" style="background: none; border: none;">first_page</button>
+                <button class="material-icons prev" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, `${parseInt(slotProps.page) - 1}`)" style="background: none; border: none;">chevron_left</button>
+                Pág. {{slotProps.page}} de {{slotProps.total}}
+                <button class="material-icons next" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${parseInt(slotProps.page) + 1}`)" style="background: none; border: none;">chevron_right</button>
+                <button class="material-icons next-all" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${slotProps.total}`)" style="background: none; border: none;">last_page</button>
+            </template> -->
+        </dgt-grid>
+    </div>
 </template>
 
 <script>
@@ -140,31 +231,36 @@ const dataDgtGrid = {
         checkBox: {
             draggable: false,
             resizable: false,
-            width: 30,
-            isCustomColumn: true
+            width: 40,
+            isCustomColumn: true,
+            closed: true
         },
         iconStorage: {
-            draggable: true,
-            resizable: true,
+            draggable: false,
+            resizable: false,
             width: 30,
-            isCustomColumn: true
+            isCustomColumn: true,
+            closed: true
         },
         iconAttach: {
-            draggable: true,
-            resizable: true,
+            draggable: false,
+            resizable: false,
             width: 30,
-            isCustomColumn: true
+            isCustomColumn: true,
+            closed: true
         },
         iconMessage: {
-            draggable: true,
-            resizable: true,
+            draggable: false,
+            resizable: false,
             width: 30,
-            isCustomColumn: true
+            isCustomColumn: true,
+            closed: true
         },
         horario: {
             name: 'horario',
             draggable: true,
-            resizable: true
+            resizable: true,
+            closed: true
         },
         conta: {
             name: 'conta',
@@ -189,7 +285,6 @@ const dataDgtGrid = {
     },
     minWidthColumn: 30,
     data: page1,
-    icons: ['storage', 'attach_file', 'message'],
     checkedAll: false,
     checkeds: 0,
     arrowsSort: ['compare_arrows', 'arrow_right_alt', 'arrow_right_alt']
@@ -202,10 +297,18 @@ export default {
     },
     data() {
         return {
-            dataDgtGrid
+            dataDgtGrid,
+            closedColumns: {},
+            drawComponent: true
         };
     },
     methods: {
+        reset() {
+            this.drawComponent = false;
+            this.$nextTick(() => {
+                this.drawComponent = true;
+            });
+        },
         next(page, total) {
             if (parseInt(page) === parseInt(total)) return true;
             return false;
@@ -269,11 +372,42 @@ export default {
                 return item.checked;
             });
             if (checkedItems.length) {
-                //rest para salvaar multiplos objs
+                //rest para salvar multiplos objs
             }
         },
         resizeColumn(event) {
             this.$children[0].resizeColumn(event);
+        },
+        showMenuColumns(event) {
+            let listColumns = event.target.parentElement.querySelector('.list-columns');
+
+            if (listColumns.className.indexOf('open') === -1) {
+                listColumns.className += ' open';
+            } else {
+                listColumns.className = listColumns.className.replace(/open/g, '');
+            }
+        },
+        removeColumn(columnName) {
+            this.closedColumns[columnName] = this.dataDgtGrid.headers[columnName];
+            this.dataDgtGrid.headers = Object.keys(this.dataDgtGrid.headers).reduce((obj, key) => {
+                if (key !== columnName) {
+                    obj[key] = this.dataDgtGrid.headers[key];
+                }
+                return obj;
+            }, {});
+            this.reset();
+        },
+        includeColumn(columnName) {
+            this.dataDgtGrid.headers[columnName] = this.closedColumns[columnName];
+            delete this.closedColumns[columnName];
+            this.reset();
+        },
+        toggleColumn(event) {
+            if (!event.target.checked) {
+                this.removeColumn(event.target.value);
+            } else {
+                this.includeColumn(event.target.value);
+            }
         }
     }
 };
