@@ -1,10 +1,10 @@
 <style lang="scss" scoped>
-  .showcase{
-    margin-left: 20px;
-    h3{
-      margin: 25px 0px 5px;
-    }
+.showcase {
+  margin-left: 20px;
+  h3 {
+    margin: 25px 0px 5px;
   }
+}
 </style>
 
 <template>
@@ -29,6 +29,8 @@
         <hr>
         <h3> Dgt-Component-Grid </h3>
         <dgt-component-grid-view></dgt-component-grid-view>
+        <h3> Dgt-Tabs </h3>
+        <dgt-tabs-view></dgt-tabs-view>
     </div>
 </template>
 
@@ -41,7 +43,7 @@ import dgtListView from './examples/dgt-list.view';
 import dgtTagInputView from './examples/dgt-tag-input.view';
 import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
-
+import dgtTabsView from './examples/dgt-tabs.view';
 
 export default {
     name: 'app',
@@ -52,7 +54,8 @@ export default {
         dgtListView,
         dgtTagInputView,
         dgtAutocompleteView,
-        dgtComponentGridView
+        dgtComponentGridView,
+        dgtTabsView
     }
 };
 </script>

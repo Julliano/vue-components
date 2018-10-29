@@ -31,6 +31,8 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtGrid](#DGTGrid)
 1. [DgtStarRating](#DGTStarRating)
 1. [DgtTagInput](#DGTTagInput)
+1. [DgtGrid](#DGTGrid)
+1. [DgtTabs](#DGTTabs)
 
 ## Componente de Autocomplete - DGTAutocomplete
 
@@ -277,6 +279,119 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
 ## Componente de Grid - DGTGrid
 
+### Como ultilizar o componente dgtGrid
+
+    - dgtGrid é um componente de grid com funcionalidades básicas de um grid e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
+
+### Slots:
+    - O vue trabalha com conceito de slots e para cada slot previsto no componente é possível implementa-lo da maneira que desejar.
+    Cada slot do componente retorna um data, que é o proprio data do componente pai quando passado como props.
+
+### dgtGrid:
+    ```html
+        <slot name="custom-column-header" :data="data"></slot>
+    ```
+
+### Exemplo componente pai:
+    ```html
+        <template slot="custom-column-header" slot-scope="slotProps">
+    ```
+
+    - Além do data o slot pode retornar outros parametros no caso do slot de icon
+
+### dgtGrid:
+    ```html
+        <slot name="icon-order" :data="data" :sortState="sortState" :columnSort="sortedColumn" :currentColumn="header.name"></slot>
+    ```
+
+### Exemplo componente pai:
+    ```html
+        <i v-if="slotProps.currentColumn === slotProps.columnSort" 
+            :class="`material-icons arrow-sort-${slotProps.sortState === -1 ? 2 : slotProps.sortState}`">
+            {{slotProps.data.arrowsSort[slotProps.sortState === -1 ? 2 : slotProps.sortState]}}
+        </i>
+        <i v-else class="material-icons arrow-sort ">compare_arrows</i>
+    ```
+
+### Dados necessários para a renderização do componente:
+    ```json
+        dataProps: {
+            minWidthColumn: 80,
+            pagination: {
+                page: 1,
+                total: 1
+            },
+            headers: {
+                Col1: {
+                    draggable: false,
+                    resizable: false
+                },
+                Col2: {
+                    draggable: false,
+                    resizable: false
+                },
+                Col3: {
+                    name: 'Name Col3',
+                    draggable: true,
+                    resizable: true
+                },
+                Col4: {
+                    name: 'Name Col4',
+                    draggable: true,
+                    resizable: true
+                },
+                Col5: {
+                    name: 'Name Col4',
+                    draggable: true,
+                    resizable: true
+                }
+            },
+            data: [
+                {
+                    Col1: 'row 1 colum 1',
+                    Col2: 'row 1 colum 2',
+                    Col3: 'row 1 colum 3',
+                    Col4: 'row 1 colum 4',
+                    Col5: 'row 1 colum 5'
+                },
+                {
+                    Col1: 'row 2 colum 1',
+                    Col2: 'row 2 colum 2',
+                    Col3: 'row 2 colum 3',
+                    Col5: 'row 2 colum 5'
+                }
+            ]
+        }
+    ```
+
+todos os objetos em header serão colunas, cada objeto em data pode ter uma célula de cada coluna, note que o segundo objeto não possui a linha da coluna quatro, nesse caso essa célula aperecerá vazia.
+
+### Disparando eventos para fora do componente:
+
+    - O componente envia um evento, via emit, para fora onde o componente pai pode capturar para realizar operações sobre ele.
+
+    - Trigger de paginação: dispara quando acontece um clique em um dos botões de paginação
+
+    ```js
+        this.emitGeneral('pagination', page);
+    ```
+
+    - Trigger de linha selecionada: dispara quando acontece um clique em alguma linnha da grid
+
+    ```js
+        this.emitGeneral('selectedLine', this.selectedLine);
+    ```
+    ```js
+        this.$bus.$emit('hideDetails');
+    ```
+
+    - A paginação também é customizavel, caso seja criado um slot de paginação não será enviado uma trigger via bus, porém o data será retornado no slot como visto antes, então para realizar alguma ação nos eventos de clique será necessário implementar estes eventos no componente pai.
+
+### Coluna customizavel:
+
+    - A coluna customColumn é um slot totalmente customizavel, logo se existir ela deve ser toda implementada inclusive os eventos que existirem nela, exceto os eventos nativos do componente.
+    A customColumn pode ser inserida em qualquer lugar da grid ou seja no inicio entre outras colunas ou no fim.
+
 ## Componente de Rating star - DGTStarRating
 
     dgtStarRating é um componente construido para dar notas no formato de estrelas.
@@ -382,3 +497,87 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
         ```
 
 
+## DgtTabs - DGTTabs
+
+#### Como ultilizar o componente dgtTabs:
+
+    dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
+
+    ```js
+    dataTabs: {
+        vertical: false,
+        position: '',
+        barAnimatedHidden: false,
+        barAnimatedSize: '2',
+        tabs: {
+            'Filtros lorem': {
+                block: true,
+                quantityContents: 10
+            },
+            'Filtros impsum': {
+                block: false,
+                quantityContents: 5
+            },
+            'Filtros Gerais': {
+                selected: true,
+                quantityContents: 3
+            },
+            'Filtros Específicos': {}
+        }
+    }
+    ```
+
+    O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo. O atributo block deternina se a tag será 'clicavel' ou não.
+
+    #### Abaixo a estrutura básica:
+
+    ```js
+    dataTabs: {
+        tabs: {
+            'Filtros lorem': {},
+            'Filtros impsum': {},
+            'Filtros Gerais': {},
+            'Filtros Específicos': {selected: true}
+        }
+    }
+    ```
+
+    O componente envia um array via emit para fora com o nome da tab clicada e o próprio objeto da data recebido por props
+
+    O atributo 'position' pode receber apenas dois valores:
+
+    `position: 'vertical-left' | 'vertical-right'`
+
+    para setar um desses valorer ao atributo position é necessário que o atributo 'vertical' esteja true, caso contrário mantenha o atributo 
+    'position' com uma string vazio, assim como no exemplo.
+
+    ```js
+        vertical: true,
+        position: 'vertical-left',
+    ```
+
+    O atributo 'selected' dentro do objeto da tab define a tab que estará selecionada por default, nesse caso apenas uma tab deve conter este atributo.
+
+    ```js
+        'Filtros Gerais': {
+            selected: true
+        }
+    ```
+
+    O atributo 'quantityContents' é apenas um atributo extra para a construção do componente na view, logo esse atributo não é enxergado pelo componente. Cada tab terá um slot dinamico para customização individual de cada tab
+
+    ### Exemplo em view:
+
+    ```html
+        <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
+            <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
+        </template>
+    ```
+
+#### Slot no componente:
+
+    ```html
+        <slot :name="key" :data=data></slot>
+    ```
+
+    O atributo 'key' no slot é o mesmo nome da tab definada no objeto tabs
