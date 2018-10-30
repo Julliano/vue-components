@@ -18,10 +18,3 @@ test('insert tag, and try insert the same tag again', async t => {
     await t.typeText(inputTag, 'Ba').wait(500).pressKey('enter');
     await t.typeText(inputTag, 'Ba').wait(500).pressKey('enter');
 });
-
-test('insert tag using autocomplete', async t => {
-    const radioTrue = Selector('.inline input');
-    await t.click(radioTrue).wait(400);
-    const inputTag = Selector('#inputTag');
-    await t.typeText(inputTag, 'Ba').wait(500).pressKey('down').wait(500).pressKey('enter').wait(1000);
-});

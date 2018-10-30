@@ -35,18 +35,23 @@
                 <input type="number" v-model="fontSize">
             </div>
         </div>
-        <dgt-tag-input :style="'--dgt-background-tag: ' + `${backgroundTag}`+'; --dgt-tag-font-size: ' + `${fontSize}`+'px; --dgt-background-delete-tag: ' + `${backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${xTagDelete}`" 
-            @new-tag="newTag" :obj-tag="tags" @enter="keyEnter"></dgt-tag-input>
+        <dgt-autocomplete :items="validsTags" :search-tag="search" :existingTags="tags" @tag-selected="pushTag" ref="childComplete">
+            <template slot="slot" slot-scope="slotProps">
+                <dgt-tag-input @new-tag="newTag" :obj-tag="tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter"></dgt-tag-input>
+            </template>
+        </dgt-autocomplete>
     </div>
 </template>
 
 <script>
     import dgtTagInput from '../components/dgt-tag-input.vue';
+    import dgtAutocomplete from '../components/dgt-autocomplete.vue';
     
     export default {
         name: 'dgtTagInputView',
         components: {
-            dgtTagInput
+            dgtTagInput,
+            dgtAutocomplete
         },
         data() {
             return {
@@ -55,7 +60,11 @@
                 backgroundTagDelete: '#000333',
                 xTagDelete: '#fff',
                 fontSize: 14,
-                search: ''
+                search: '',
+                validsTags: [
+                    'teste',
+                    'teste2'
+                ]
             };
         },
         methods: {
@@ -66,14 +75,10 @@
                 this.tags.push(param);
             },
             keyDown() {
-                if (this.$refs.childComplete) {
-                    this.$refs.childComplete.onArrowDown();
-                }
+                this.$refs.childComplete && this.$refs.childComplete.onArrowDown();
             },
             keyUp() {
-                if (this.$refs.childComplete) {
-                    this.$refs.childComplete.onArrowUp();
-                }
+                this.$refs.childComplete && this.$refs.childComplete.onArrowUp();
             },
             keyEnter() {
                 if (this.$refs.childComplete) {

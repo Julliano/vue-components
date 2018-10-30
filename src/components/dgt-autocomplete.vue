@@ -79,6 +79,10 @@ export default {
     },
     methods: {
         onChange() {
+            if (!this.search) {
+                this.isOpen = false;
+                return;
+            }
             this.filterResults();
             this.isOpen = true;
         },
@@ -131,7 +135,7 @@ export default {
             }
         },
         searchTag() {
-            if (this.searchTag === '') this.isOpen = false;
+            if (!this.searchTag) this.isOpen = false;
             if (this.searchTag) {
                 this.search = this.searchTag;
                 this.isOpen = false;
