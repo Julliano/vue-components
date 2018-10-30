@@ -91,7 +91,7 @@
                 </li>
             </ul>
         </div>
-        <dgt-grid v-if="drawComponent" :dataProps="dataDgtGrid" @selectedLine="selectedLine" @pagination="pagination">
+        <dgt-grid v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination">
             <template slot="top-bar" slot-scope="slotProps">
                 <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
             </template>
@@ -134,13 +134,6 @@
                 <template :slot="`iconMessage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
                 <i class="material-icons" :key="index">message</i>
             </template>
-            <!-- <template slot="custom-pagination" slot-scope="slotProps">
-                <button class="material-icons prev-all" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, 1)" style="background: none; border: none;">first_page</button>
-                <button class="material-icons prev" :disabled="isPagination(slotProps.page, slotProps.total, 'prev')" @click="pagination($event, `${parseInt(slotProps.page) - 1}`)" style="background: none; border: none;">chevron_left</button>
-                Pág. {{slotProps.page}} de {{slotProps.total}}
-                <button class="material-icons next" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${parseInt(slotProps.page) + 1}`)" style="background: none; border: none;">chevron_right</button>
-                <button class="material-icons next-all" :disabled="isPagination(slotProps.page, slotProps.total, 'next')" @click="pagination($event, `${slotProps.total}`)" style="background: none; border: none;">last_page</button>
-            </template> -->
         </dgt-grid>
     </div>
 </template>

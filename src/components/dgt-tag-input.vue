@@ -12,7 +12,7 @@
     flex: 1 0 auto;
     display: flex;
     font-size: 0.85em;
-    padding: 5px 5px;
+    padding: 2px 5px;
     margin: 0px;
   }
   .input {
@@ -38,15 +38,16 @@
     align-items: center;
     border-radius: 290486px;
     display: flex;
-    min-height: 2em;
+    min-height: var(--dgt-tag-min-height, 2em);
     max-width: 315px;
-    line-height: 1.5;
-    padding: 0 0.875em 0.1em 0.875em;
-    margin: 2px 1px;
+    line-height: var(--dgt-tag-line-height, 1.5);
+    padding: var(--dgt-tag-padding, 0 0.875em 0.1em 0.875em);
+    margin: var(--dgt-tag-margin, 2px 1px);
     vertical-align: top;
     word-break: break-all;
     &.is-info {
       background-color: var(--dgt-background-tag, #3273dc);
+      font-size: var(--dgt-tag-font-size, 16px);
       color: #fff;
     }
     .delete {
@@ -96,33 +97,19 @@
                     <button class="delete is-small" @click="remove(index)"></button>
                 </li>
                 <li class="new-tag-input">
-                    <input id="inputTag" class="tag-input" type="text" placeholder="Add Tag" 
-                    @keyup.down="arrowDown" @keyup.up="arrowUp"
-                    v-on:keyup.enter="setTags()" v-model="newTag">
+                    <input id="inputTag" class="tag-input" type="text" placeholder="Add Tag"
+                        @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" v-model="newTag">
                 </li>
             </ul>
         </div>
-        <!-- chamada do component de autocomplete -->
-        <dgt-autocomplete v-if="autocomplete" @tag-selected="setTagsAutocomplete" 
-        :existing-tags="objTag" :searchTag="newTag" :items="validsTags" ref="childAutocomplete"></dgt-autocomplete>
     </div>
 </template>
 
 <script>
-    import dgtAutocomplete from './dgt-autocomplete.vue';
-    
     export default {
         name: 'dgtTagInput',
-        model: {
-            event: 'tag-insert'
-        },
         props: {
-            objTag: {},
-            autocomplete: false,
-            validsTags: null
-        },
-        components: {
-            dgtAutocomplete
+            objTag: {}
         },
         data() {
             return {
@@ -143,24 +130,13 @@
         created() {
             this.tags = this.objTag;
         },
+        updated() {
+            this.$emit('new-tag', this.newTag);
+        },
         methods: {
             remove(index) {
                 this.tags.splice(index, 1);
                 document.getElementById('inputTag').focus();
-            },
-            setTagsAutocomplete(param) {
-                document.getElementById('inputTag').focus();
-                if (!param) {
-                    if (this.checkDuplicate(this.newTag)) {
-                        this.tags.push(this.newTag);
-                        this.newTag = null;
-                        return;
-                    }
-                    this.newTag = null;
-                    return;
-                }
-                this.tags.push(param);
-                this.newTag = null;
             },
             checkDuplicate(tag) {
                 if (!tag) return false;
@@ -170,23 +146,17 @@
                 });
                 return lowerTags.indexOf(tag.toLowerCase()) < 0;
             },
-            setTags() {
-                if (this.autocomplete) {
-                    this.$refs.childAutocomplete.onEnter();
-                } else if (this.checkDuplicate(this.newTag)) {
-                    this.tags.push(this.newTag);
+            onArrowUp() {
+                this.$emit('keyup');
+            },
+            onArrowDown() {
+                this.$emit('keydown');
+            },
+            onEnter() {
+                if (this.checkDuplicate(this.newTag)) {
+                    this.$emit('enter', this.newTag);
                 }
                 this.newTag = null;
-            },
-            arrowDown() {
-                if (this.$refs.childAutocomplete) {
-                    this.$refs.childAutocomplete.onArrowDown();
-                }
-            },
-            arrowUp() {
-                if (this.$refs.childAutocomplete) {
-                    this.$refs.childAutocomplete.onArrowUp();
-                }
             }
         },
         watch: {

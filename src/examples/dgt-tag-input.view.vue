@@ -11,19 +11,13 @@
   --dgt-delete-tag: yellow;
   --dgt-background-tag: #000;
   --dgt-background-delete-tag: red;
+  --dgt-tag-font-size: 12px;
 }
 </style>
 
 <template>
     <div>
         <div class="inline">
-            <div class="grid">
-                <label>Autocomplete</label>
-                <div class="inline">
-                    <input type="radio" v-model="showComplete" :value="true"> True<br>
-                    <input type="radio" v-model="showComplete" :value="false"> False<br>
-                </div>
-            </div>
             <div class="grid">
                 <label>Tag color:</label>
                 <input v-model="backgroundTag">
@@ -36,14 +30,19 @@
                 <label>Tag delete X color:</label>
                 <input v-model="xTagDelete">
             </div>
+            <div class="grid">
+                <label>Font-size:</label>
+                <input type="number" v-model="fontSize">
+            </div>
         </div>
-        <dgt-tag-input :obj-tag="tags" :style="'--dgt-background-tag: ' + `${backgroundTag}`+'; --dgt-background-delete-tag: ' + `${backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${xTagDelete}`" :valids-tags="validsTags"
-        :autocomplete="showComplete"></dgt-tag-input>
+        <dgt-tag-input :style="'--dgt-background-tag: ' + `${backgroundTag}`+'; --dgt-tag-font-size: ' + `${fontSize}`+'px; --dgt-background-delete-tag: ' + `${backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${xTagDelete}`" 
+            @new-tag="newTag" :obj-tag="tags" @enter="keyEnter"></dgt-tag-input>
     </div>
 </template>
 
 <script>
     import dgtTagInput from '../components/dgt-tag-input.vue';
+    
     export default {
         name: 'dgtTagInputView',
         components: {
@@ -55,19 +54,35 @@
                 backgroundTag: '#000',
                 backgroundTagDelete: '#000333',
                 xTagDelete: '#fff',
-                newTag: null,
-                showComplete: true,
-                validsTags: [
-                    'Batman',
-                    'Super-Man',
-                    'Lex Luthor',
-                    'Lana Lang',
-                    'Arqueiro-Verde',
-                    'Aquaman',
-                    'Flash',
-                    'Mulher Maravilha'
-                ]
+                fontSize: 14,
+                search: ''
             };
+        },
+        methods: {
+            newTag(param) {
+                this.search = param;
+            },
+            pushTag(param) {
+                this.tags.push(param);
+            },
+            keyDown() {
+                if (this.$refs.childComplete) {
+                    this.$refs.childComplete.onArrowDown();
+                }
+            },
+            keyUp() {
+                if (this.$refs.childComplete) {
+                    this.$refs.childComplete.onArrowUp();
+                }
+            },
+            keyEnter() {
+                if (this.$refs.childComplete) {
+                    this.$refs.childComplete.onEnter();
+                } else {
+                    this.tags.push(this.search);
+                }
+                document.getElementById('inputTag').focus();
+            }
         }
     };
 </script>

@@ -471,12 +471,18 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     Exemplo de importação customizada do componente:
 
     ```html
-        <dgt-tag-input :obj-tag="tags" :valids-tags="validsTags" autocomplete="showComplete"></dgt-tag-input>
+        <dgt-tag-input :obj-tag="tags" @new-tag="newTag" @enter="keyEnter"></dgt-tag-input>
     ```
 
-    :objTag="obj.tags"          (default: null / atributo que armazenas as tags do objeto);
-    :autocomplete="true"        (default: false / define se a tag exibirá autocomplete);
-    :validsTags="arrayTags"     (default: null / define o array de possibilidades de tags no autocomplete);
+    :objTag="obj.tags"      (default: null / atributo que armazenas as tags do objeto);
+    @new-tag="newTag"       (default: '' / função chamada para armazenar o v-model da tag);
+    @enter="keyEnter"       (função chamada ao pressionar enter, exemplo a seguir);
+
+    ```js
+        keyEnter() {
+            this.tags.push(this.search);
+        }
+    ```
 
     o formato do objTag tratado é:
     Array de strings: ['batman', 'Aquaman'], esse array serve para que tags já existentes, no obj passado, não sejam novamente inseridos (duplicando o registro);
@@ -487,7 +493,12 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         {
             --dgt-delete-tag: yellow;           
             --dgt-background-tag: #000;         
-            --dgt-background-delete-tag: red;   
+            --dgt-background-delete-tag: red;
+            --dgt-tag-min-height: 2em;
+            --dgt-tag-line-height: 1.5;
+            --dgt-tag-padding: 0 0.875em 0.1em 0.875em;
+            --dgt-tag-margin: 2px 1px;
+            --dgt-tag-font-size: 16px;
         }
     ```
 
