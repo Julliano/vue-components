@@ -217,7 +217,7 @@ export default {
         getSelected(tabName) {
             if (this.data.tabs[tabName] && this.data.tabs[tabName].selected) {
                 this.selectedTab = tabName;
-                this.emitGeneral('swapTabs', this.data.tabs[tabName], tabName);
+                this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
                 return true;
             }
             return false;
@@ -265,7 +265,7 @@ export default {
             this.selectedTab = tabName;
             this.data.tabs[tabName].selected = true;
 
-            this.emitGeneral('swapTabs', this.data.tabs[tabName], tabName);
+            this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
             this.setAnimatedBar(elem);
         },
         emitGeneral(emitFunc, ...args) {

@@ -38,10 +38,12 @@
 
 <template>
     <div class="dgt-autocomplete">
+        <slot name="slot"></slot>
         <div class="autocomplete">
-            <input v-if="showInput" type="text" class="input" @input="onChange" v-model="search" @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
+            <input v-if="showInput" type="text" class="input" @input="onChange" v-model="search"
+                @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
             <ul v-show="isOpen" class="autocomplete-results">
-                <li v-for="(result, i) in results" :key="i" @click="setTags(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
+                <li v-for="(result, i) in results" :key="i" @click="onEnter(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
                     {{ result }}
                 </li>
             </ul>
@@ -65,9 +67,8 @@ export default {
         return {
             isOpen: false,
             results: [],
-            isLoading: false,
             search: '',
-            arrowCounter: 0
+            arrowCounter: -1
         };
     },
     mounted() {
@@ -78,12 +79,14 @@ export default {
     },
     methods: {
         onChange() {
-            // Mostrar possíveis resultados para o autocomplete
+            if (!this.search) {
+                this.isOpen = false;
+                return;
+            }
             this.filterResults();
             this.isOpen = true;
         },
         filterResults() {
-            // retorna os possíveis resultados;
             if (this.items) {
                 const resultados = this.items.filter(item => {
                     return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
@@ -96,12 +99,6 @@ export default {
                 }
             }
         },
-        setTags(result) {
-            // Avisa o componente pai que a tag foi selecionada;
-            this.$emit('tag-selected', result);
-            this.search = '';
-            this.isOpen = false;
-        },
         onArrowDown() {
             if (this.arrowCounter < this.results.length) {
                 this.arrowCounter = this.arrowCounter + 1;
@@ -112,9 +109,15 @@ export default {
                 this.arrowCounter = this.arrowCounter - 1;
             }
         },
-        onEnter() {
+        onEnter(param) {
+            if (this.arrowCounter >= 0) {
+                this.$emit('tag-selected', this.results[this.arrowCounter]);
+            } else if (param) {
+                this.$emit('tag-selected', param);
+            } else {
+                this.$emit('tag-selected', this.search);
+            }
             this.search = '';
-            this.$emit('tag-selected', this.results[this.arrowCounter]);
             this.isOpen = false;
             this.arrowCounter = -1;
         },
@@ -129,10 +132,10 @@ export default {
         items(val, oldValue) {
             if (val.length !== oldValue.length) {
                 this.results = val;
-                this.isLoading = false;
             }
         },
         searchTag() {
+            if (!this.searchTag) this.isOpen = false;
             if (this.searchTag) {
                 this.search = this.searchTag;
                 this.isOpen = false;

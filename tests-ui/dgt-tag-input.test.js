@@ -6,11 +6,7 @@ describe('dgtTagInput', () => {
     let wrapper;
 
     beforeAll(() => {
-        wrapper = mount(dgtTagInput, {
-          propsData: {
-            showComplete: true
-          }
-        });
+        wrapper = mount(dgtTagInput);
     });
 
     test('Verifica se é uma instância Vue', () => {

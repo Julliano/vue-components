@@ -144,7 +144,7 @@ export default {
     },
     model: {
         prop: 'grid',
-        event: ['selectedLine', 'pagination']
+        event: ['selected-line', 'pagination']
     },
     data() {
         return {
@@ -329,7 +329,7 @@ export default {
         },
         selectedLineFunc(item) {
             this.selectedLine = this.selectedLine === item ? null : item;
-            this.emitGeneral('selectedLine', this.selectedLine);
+            this.emitGeneral('selected-line', this.selectedLine);
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, ...args);

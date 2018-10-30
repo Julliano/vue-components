@@ -5,7 +5,7 @@
 </style>
 
 <template>
-    <dgt-tabs :data="dataTabs" @swapTabs="swapTabs">
+    <dgt-tabs :data="dataTabs" @swap-tabs="swapTabs">
         <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
             <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
         </template>
