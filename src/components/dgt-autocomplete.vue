@@ -3,9 +3,10 @@
   .autocomplete {
     position: relative;
     input {
-      width: var(--dgt-input-width, 98%);
-      padding: var(--dgt-input-padding, 6px);
-      border-radius: var(--dgt-input-border-radius, 0.25rem);
+      box-sizing: border-box;
+      width: var(--dgt-input-width, auto);
+      padding: var(--dgt-input-padding,  0);
+      border-radius: var(--dgt-input-border-radius,  0);
       border: var(--dgt-input-border, 1px solid #9e9e9e);
     }
     .autocomplete-results {
@@ -14,12 +15,12 @@
       margin: 0;
       border: 1px solid #eeeeee;
       max-height: var(--dgt-ul-max-height, 100px);
-      color: var(--dgt-results-color, black);
+      color: var(--dgt-results-color, #000);
       overflow: auto;
-      width: var(--dgt-ul-width, 100%);
+      width: var(--dgt-ul-width, auto);
       display: block;
       z-index: 2;
-      background: var(--dgt-ul-background, white);
+      background: var(--dgt-ul-background, #fff);
       .autocomplete-result {
         list-style: none;
         text-align: left;
@@ -28,8 +29,8 @@
       }
       .autocomplete-result.is-active,
       .autocomplete-result:hover {
-        background-color: var(--dgt-result-background, #4aae9b);
-        color: var(--dgt-result-color, white);
+        background-color: var(--dgt-result-background, #333);
+        color: var(--dgt-result-color, #fff);
       }
     }
   }
@@ -38,9 +39,12 @@
 
 <template>
     <div class="dgt-autocomplete">
-        <slot name="slot"></slot>
+        <label :for="id">
+              <slot name="label"></slot>
+        </label>
+         <slot></slot>
         <div class="autocomplete">
-            <input v-if="showInput" type="text" class="input" @input="onChange" v-model="search"
+            <input v-if="showInput" :id="id" :name="id" type="text" class="input" @input="onChange" v-model="search"
                 @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
             <ul v-show="isOpen" class="autocomplete-results">
                 <li v-for="(result, i) in results" :key="i" @click="onEnter(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
@@ -58,6 +62,7 @@ export default {
         event: 'tag-selected'
     },
     props: {
+        id: '',
         items: {},
         searchTag: '',
         showInput: false,

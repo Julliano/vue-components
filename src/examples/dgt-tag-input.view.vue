@@ -35,8 +35,8 @@
                 <input type="number" v-model="fontSize">
             </div>
         </div>
-        <dgt-autocomplete :items="validsTags" :search-tag="search" :existingTags="tags" @tag-selected="pushTag" ref="childComplete">
-            <template slot="slot" slot-scope="slotProps">
+        <dgt-autocomplete id="auto-complete-tag" :items="validsTags" :search-tag="search" :existingTags="tags" @tag-selected="pushTag" ref="childComplete">
+            <template slot-scope="slotProps">
                 <dgt-tag-input @new-tag="newTag" :obj-tag="tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter"></dgt-tag-input>
             </template>
         </dgt-autocomplete>
@@ -46,7 +46,7 @@
 <script>
     import dgtTagInput from '../components/dgt-tag-input.vue';
     import dgtAutocomplete from '../components/dgt-autocomplete.vue';
-    
+
     export default {
         name: 'dgtTagInputView',
         components: {

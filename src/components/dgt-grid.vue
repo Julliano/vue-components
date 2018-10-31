@@ -71,7 +71,7 @@
                         </div>
                         <div class="name-column" v-else>
                             <span>{{header.name}}</span>
-                            <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn" :currentColumn="header.name"></slot> 
+                            <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn" :currentColumn="header.name"></slot>
                         </div>
                     </div>
                     <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
@@ -256,8 +256,8 @@ export default {
             if (this.sortState === 0) {
                 return this.originalState;
             }
-            var order = this.sortState || 1;
-            var data = this.filteredData;
+            let order = this.sortState || 1;
+            let data = this.filteredData;
             if (this.sortedColumn) {
                 data = data.slice().sort((a, b) => {
                     a = a[this.sortedColumn] || '';
@@ -268,7 +268,6 @@ export default {
             return data;
         },
         resizeColumn(event) {
-            event.preventDefault();
             const { body } = document;
             this.colWidthPos2 = event.clientX;
             let mouseMove = e => {

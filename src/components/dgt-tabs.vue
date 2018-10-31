@@ -7,59 +7,58 @@
     li {
       text-decoration: none;
       list-style: none;
-    }
-    li.tabs {
+
       .tabs-list {
-        margin: 0;
-        padding: 0;
-        display: inline-block;
-        font-size: 10px;
-        .tab {
-          &:hover {
-            cursor: var(--tabCursorPointer, default);
-          }
-          &::before {
-            content: "";
-            position: absolute;
-            top: -1px;
-            left: 0;
-            border-top: 10px solid #fff;
-            border-right: 10px solid transparent;
-            width: 0;
-          }
-          &.blocked {
-            opacity: var(--tabBlockedOpacity, 0.4);
-            color: var(--tabBlockedColor, #0f0f0f);
-          }
-          &[selected] {
-            background-color: var(--tabSelectedBackgroundColor, #cbcbcb);
-            color: var(--tabSelectedColor, #000);
-          }
+          margin: 0;
+          padding: 0;
           display: inline-block;
-          position: relative;
-          background-color: var(--tabsBackgroundColor, #f9f9fa);
-          margin-right: 3px;
-          .tab-text {
-            white-space: nowrap;
-            margin: 10px 5px;
-            padding: 3px;
+          font-size: 10px;
+          .tab {
+            &:hover {
+              cursor: var(--tabCursorPointer, default);
+            }
+            &::before {
+              content: "";
+              position: absolute;
+              top: -1px;
+              left: 0;
+              border-top: 10px solid #fff;
+              border-right: 10px solid transparent;
+              width: 0;
+            }
+            &.blocked {
+              opacity: var(--tabBlockedOpacity, 0.4);
+              color: var(--tabBlockedColor, #0f0f0f);
+            }
+            &[selected] {
+              background-color: var(--tabSelectedBackgroundColor, #cbcbcb);
+              color: var(--tabSelectedColor, #000);
+            }
+            display: inline-block;
+            position: relative;
+            background-color: var(--tabsBackgroundColor, #f9f9fa);
+            margin-right: 3px;
+            .tab-text {
+              white-space: nowrap;
+              margin: 10px 5px;
+              padding: 3px;
+            }
           }
-        }
+       }
+      &.bar-animated {
+        background-color: var(--barAnimatedBackgroundColor, #000);
+        border-color: var(--barAnimatedBackgroundColor, #000);
+        height: 0;
+        left: 0;
+        transition-timing-function: var(
+            --barAnimatedTransitionTimingFunction,
+            ease
+        );
+        transition: width 0.5s, left 0.5s;
+        position: absolute;
+        float: left;
+        bottom: 0px;
       }
-    }
-    li.bar-animated {
-      background-color: var(--barAnimatedBackgroundColor, #000);
-      border-color: var(--barAnimatedBackgroundColor, #000);
-      height: 0;
-      left: 0;
-      transition-timing-function: var(
-        --barAnimatedTransitionTimingFunction,
-        ease
-      );
-      transition: width 0.5s, left 0.5s;
-      position: absolute;
-      float: left;
-      bottom: 0px;
     }
   }
 
@@ -82,40 +81,30 @@
       .tabs-container {
         float: left;
       }
-      li.tabs {
-        .tabs-list {
-          .tab {
-            &::before {
-              border-left: 10px solid transparent;
-              border-right: 0;
-              right: 0;
-            }
-            transform: rotate(180deg);
-          }
+    .tab {
+      transform: rotate(180deg);
+      ::before {
+        border-left: 10px solid transparent;
+        border-right: 0;
+        right: 0;
         }
       }
-      li.bar-animated {
+      .bar-animated {
         bottom: 15px;
         right: 0;
         left: auto;
       }
     }
     &.vertical-right {
-      li.tabs {
-        .tabs-list {
-          .tab {
-            &::before {
-              width: 0;
-              left: initial;
-            }
-          }
+        .tab::before {
+          width: 0;
+          left: initial;
         }
-      }
       .tabs-content {
         float: left;
       }
     }
-    li.bar-animated {
+    .bar-animated {
       width: 1px;
       top: 0;
       transition: height 1s, top 1s;
@@ -129,7 +118,7 @@
         <ul class="tabs-container">
             <li class="tabs">
                 <ul class="tabs-list">
-                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${tab.block ? 'blocked' : ''}`" 
+                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${tab.block ? 'blocked' : ''}`"
                         :index="`${index}`"
                         v-for="(tab, key, index) in data.tabs" :key="key"
                         @click.prevent="swapTab($event, key)"
