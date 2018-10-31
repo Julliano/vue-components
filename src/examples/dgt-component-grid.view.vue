@@ -26,36 +26,42 @@
                         icon: 'calendar_today',
                         url: '/midias',
                         name: 'Agenda',
+                        class: 'material-icons',
                         count: 0
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         count: 12
                     },
                     {
                         icon: 'image',
                         url: '/midias',
                         name: 'Mídias',
+                        class: 'material-icons',
                         count: 0
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         count: 12
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         count: 12
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         count: 12
                     }
                 ],

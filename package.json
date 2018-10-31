@@ -66,5 +66,8 @@
             "^.+\\.js$": "babel-jest",
             "^.+\\.vue$": "vue-jest"
         }
+    },
+    "dependencies": {
+        "dgt-vitra": "^1.0.7"
     }
 }

@@ -10,10 +10,10 @@
   cursor: pointer;
   display: inline-flex;
   i {
-    font-size: 50px;
-    width: 33%;
-    margin: auto 0;
-    opacity: 0.5;
+    font-size: var(--dgt-card-icon-font-size, 50px);
+    width: var(--dgt-card-icon-width, 33%);
+    margin: var(--dgt-card-icon-margin, auto 0);
+    opacity: var(--dgt-card-icon-opacity, 0.5);
   }
   div {
     margin: auto;
@@ -27,7 +27,7 @@
 
 <template>
     <div class="dgt-card-component component" @click="goTo( data.url )">
-        <i class="material-icons">{{ data.icon }}</i>
+        <i :class="`${data.class}`">{{ data.icon }}</i>
         <div>
             <span>
                 {{ data.name }}

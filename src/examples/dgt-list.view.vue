@@ -34,30 +34,35 @@
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         subHeader: 'Atualizado 16/10/2018'
                     },
                     {
                         icon: 'image',
                         url: '/midias',
                         name: 'Histórico de localização',
+                        class: 'material-icons',
                         subHeader: 'Atualizado 16/10/2018'
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         subHeader: 'Atualizado 16/10/2018'
                     },
                     {
                         icon: 'image',
                         url: '/midias',
                         name: 'Mídias',
+                        class: 'material-icons',
                         subHeader: 'Atualizado 16/10/2018'
                     },
                     {
                         icon: 'time_to_leave',
                         url: '/uber',
                         name: 'Dados Uber',
+                        class: 'material-icons',
                         subHeader: 'Atualizado 16/10/2018'
                     }
                 ],
