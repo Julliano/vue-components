@@ -1,7 +1,7 @@
 {
     "name": "dgt-vue-components",
     "description": "Library of Dígitro vue components",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "author": "digitro.com.br>",
     "license": "MIT",
     "private": true,
