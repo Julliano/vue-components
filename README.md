@@ -113,9 +113,12 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     Esse component necessita que um objeto seja passado por parametro na sua instância, ex:
 
         ```html
-            <dgt-card :data="data"></dgt-card>
+            <dgt-card @card-cliked="doSomething" :data="data"></dgt-card>
         ```
 
+    @card-cliked="callFunction" (ao clicar no card ele emitirá um evento que pode ser capturado
+    pelo @card-cliked, caso deseje passe a função que será chamada no recebimento desse evento.
+    esse função receberá o atributo emit dentro do data passado);
     :data="data" (default: {} / o objeto que populará o card)
         - o componente suporta a renderização de icones apenas com classe ou que precisam de 
         texto (ex: material-icons), em caso de classe basta passar a classe no atributo 'class'
@@ -126,7 +129,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
         ```js
             {
                 icon: 'image',
-                url: '/midias',
+                emit: '/midias',
                 name: 'Mídias',
                 class: 'material-icons',
                 subHeader: 'Subtitle',

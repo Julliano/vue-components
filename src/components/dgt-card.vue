@@ -26,7 +26,7 @@
 </style>
 
 <template>
-    <div class="dgt-card-component component" @click="goTo( data.url )">
+    <div class="dgt-card-component component" @click="emit(data.emit)">
         <i :class="`${data.class}`">{{ data.icon }}</i>
         <div>
             <span>
@@ -50,9 +50,9 @@
             data: {}
         },
         methods: {
-            goTo(url) {
+            emit(param) {
                 // do something
-                return url;
+                this.$emit('card-cliked', param);
             }
         }
     };

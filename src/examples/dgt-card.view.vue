@@ -23,11 +23,11 @@
         <div class="inline">
             <div class="grid">
                 <label>Icon dgt-vitra</label>
-                <dgt-card :data="data" class="custom"></dgt-card>
+                <dgt-card @card-cliked="doSomething" :data="data" class="custom"></dgt-card>
             </div>
             <div class="grid">
                 <label>Icon material-icons</label>
-                <dgt-card :data="data2" class="custom"></dgt-card>
+                <dgt-card @card-cliked="doSomething" :data="data2" class="custom"></dgt-card>
             </div>
         </div>
     </div>
@@ -45,16 +45,21 @@
             return {
                 data: {
                     name: 'Nova pesquisa...',
-                    url: 'New search',
+                    emit: 'New search',
                     class: 'mdi mdi-access-point-network'
                 },
                 data2: {
                     icon: 'add',
                     name: 'Nova pesquisa...',
-                    url: 'New search',
+                    emit: 'New search',
                     class: 'material-icons'
                 }
             };
+        },
+        methods: {
+            doSomething(param) {
+                return param;
+            }
         }
     };
 </script>
