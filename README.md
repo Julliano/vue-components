@@ -117,6 +117,9 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
         ```
 
     :data="data" (default: {} / o objeto que populará o card)
+        - o componente suporta a renderização de icones apenas com classe ou que precisam de 
+        texto (ex: material-icons), em caso de classe basta passar a classe no atributo 'class'
+        do objeto; no caso do texto do icone, basta passa-lo no atributo 'icon' do objeto.
 
     formato do objeto que será passado:
 
@@ -125,6 +128,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 icon: 'image',
                 url: '/midias',
                 name: 'Mídias',
+                class: 'material-icons',
                 subHeader: 'Subtitle',
                 count: 0
             }
@@ -141,6 +145,10 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-card-border-radius: 4px;
                 --dgt-card-padding: 10px;
                 --dgt-card-margin: 10px 12px 10px 0;
+                --dgt-card-icon-opacity: 0.5;
+                --dgt-card-icon-font-size: 50px;
+                --dgt-card-icon-width: 33%;
+                --dgt-card-icon-margin: auto 0;
             }
         ```
     

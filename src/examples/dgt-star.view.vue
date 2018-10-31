@@ -69,7 +69,7 @@
             </div>
         </div>
         <dgt-star-rating :increment="increment" :rating="rating" :active-color="activeColor"
-        :max-rating="maxRating" :star-size="size" :read-only="readOnly" :show-rating="showRating"></dgt-star-rating>
+        :max-rating="maxRating" :padding="2" :star-size="size" :read-only="readOnly" :show-rating="showRating"></dgt-star-rating>
     </div>
 </template>
 
