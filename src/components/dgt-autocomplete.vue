@@ -5,8 +5,8 @@
     input {
       box-sizing: border-box;
       width: var(--dgt-input-width, auto);
-      padding: var(--dgt-input-padding,  0);
-      border-radius: var(--dgt-input-border-radius,  0);
+      padding: var(--dgt-input-padding, 0);
+      border-radius: var(--dgt-input-border-radius, 0);
       border: var(--dgt-input-border, 1px solid #9e9e9e);
     }
     .autocomplete-results {
@@ -42,7 +42,7 @@
         <label :for="id">
               <slot name="label"></slot>
         </label>
-         <slot></slot>
+        <slot></slot>
         <div class="autocomplete">
             <input v-if="showInput" :id="id" :name="id" type="text" class="input" @input="onChange" v-model="search"
                 @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
