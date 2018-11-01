@@ -66,7 +66,11 @@ export default {
         items: {},
         searchTag: '',
         showInput: false,
-        existingTags: {}
+        existingTags: {},
+        minSearch: {
+            type: Number,
+            default: 1
+        }
     },
     data() {
         return {
@@ -88,8 +92,10 @@ export default {
                 this.isOpen = false;
                 return;
             }
-            this.filterResults();
-            this.isOpen = true;
+            if (this.search.length >= this.minSearch) {
+                this.filterResults();
+                this.isOpen = true;
+            }
         },
         filterResults() {
             if (this.items) {
