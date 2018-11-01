@@ -1,10 +1,8 @@
 {
     "name": "dgt-vue-components",
     "description": "Library of Dígitro vue components",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "author": "digitro.com.br>",
-    "license": "MIT",
-    "private": true,
     "baseURL": "http://localhost:8080",
     "scripts": {
         "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
