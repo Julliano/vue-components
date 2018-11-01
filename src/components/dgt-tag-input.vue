@@ -12,19 +12,15 @@
     flex: 1 0 auto;
     display: flex;
     font-size: 0.85em;
-    padding: 2px 5px;
     margin: 0px;
   }
-  .input {
+  .fake-input {
     border: 1px solid #9e9e9e;
-    padding: 4px;
-    border-radius: 0.25rem;
     flex-wrap: wrap;
     display: flex;
   }
   input {
     outline: none;
-    min-width: 100px;
     flex: 1 0 auto;
   }
   ul {
@@ -90,7 +86,7 @@
 
 <template>
     <div class="dgt-tag-input-component">
-        <div class="input">
+        <div class="fake-input">
             <ul>
                 <li v-for="(tag, index) in tags" :key="tag" :class="'tag-'+index" class="tag is-info">
                     {{tag}}
