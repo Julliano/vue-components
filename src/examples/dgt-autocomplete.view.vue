@@ -14,7 +14,9 @@
 </style>
 
 <template>
-    <dgt-autocomplete :show-input="showInput" :items="items"></dgt-autocomplete>
+    <dgt-autocomplete id="my-auto-complete" :show-input="showInput" :items="items">
+        <template slot="label">My custom label</template>
+    </dgt-autocomplete>
 </template>
 
 <script>

@@ -15,9 +15,13 @@
     margin: var(--dgt-card-icon-margin, auto 0);
     opacity: var(--dgt-card-icon-opacity, 0.5);
   }
-  div {
+  .text-container {
     margin: auto;
     width: 67%;
+    .card-name{
+        margin: 0;
+        font-weight: normal;
+    }
     .opacity-5 {
       opacity: 0.5;
     }
@@ -28,14 +32,13 @@
 <template>
     <div class="dgt-card-component component" @click="emit(data.emit)">
         <i :class="`${data.class}`">{{ data.icon }}</i>
-        <div>
-            <span>
+        <div class="text-container">
+            <h4 class="card-name">
                 {{ data.name }}
                 <span class="opacity-5" v-if="data.count">
                     ({{ data.count }})
                 </span>
-            </span>
-            <br>
+            </h4>
             <small name="card-subheader" class="opacity-5" v-if="data.subHeader">
                 {{ data.subHeader }}
             </small>

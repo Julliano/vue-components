@@ -48,7 +48,7 @@
 <script>
     import dgtTagInput from '../components/dgt-tag-input.vue';
     import dgtAutocomplete from '../components/dgt-autocomplete.vue';
-    
+
     export default {
         name: 'dgtTagInputView',
         components: {
