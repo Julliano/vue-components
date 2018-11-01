@@ -37,8 +37,8 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
 1. [DgtAutocomplete](#DGTAutocomplete)
 1. [DgtCard](#DGTCard)
-1. [DgtCardList](#DGTList)
-1. [DgtCardGrid](#DGTComponentsGrid)
+1. [DgtList](#DGTList)
+1. [DgtComponentsGrid](#DGTComponentsGrid)
 1. [DgtGrid](#DGTGrid)
 1. [DgtStarRating](#DGTStarRating)
 1. [DgtTagInput](#DGTTagInput)
@@ -225,6 +225,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
         ```css
             {
+                --dgt-grid-padding: 10px;
                 --dgt-list-width: fit-content;
                 --dgt-list-max-height: 400px;
                 --dgt-list-padding: 2px 0 2px 10px;
@@ -256,7 +257,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     Esse component necessita que parametros sejam passados na sua instância, ex:
 
     ```html
-        <dgt-grid-component :grid="grid" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-card-list>
+        <dgt-grid-component :grid="grid" header="Exemplo de título" sub-header="Exemplo de sub título"></dgt-grid-component>
     ```
 
     :grid="grid" (default: [] / array que servirá para popular o que será interado no slot  interior)
@@ -298,6 +299,27 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                     count: 0
                 }
             ]
+        ```
+    É possível customizar o componente com algumas variáveis que podem ser passadar como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
+
+        ```css
+            {
+                --dgt-grid-padding: 10px;
+            }
+        ```
+    
+    Para utilizar essa funcionalidade basta criar uma class com as variáveis desejadas, ex:
+
+        ```css
+            .custom {
+                --dgt-grid-padding: 0px;
+            }
+        ```
+
+    e importar o componente passando a classe:
+
+        ```html
+            <dgt-grid-component class="custom"></dgt-grid-component>
         ```
 
 ## Componente de Grid - DGTGrid

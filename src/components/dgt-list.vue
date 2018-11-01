@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
 .dgt-list-component {
-  padding: 10px;
+  padding: var(--dgt-grid-padding, 10px);
   width: var(--dgt-list-width, fit-content);
   h4,
   small {

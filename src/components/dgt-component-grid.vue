@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
 .dgt-component-grid {
-  padding: 10px;
+  padding: var(--dgt-grid-padding, 10px);
   h4,
   small {
     margin: 0;
