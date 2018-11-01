@@ -58,15 +58,16 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     Ao instanciar o component é necessário passar alguns parametros, exemplo:
 
         ```html
-            <dgt-autocomplete @tag-selected="setTagsAutocomplete" :existing-tags="objTag"   :searchTag="newTag" :items="validsTags"></dgt-autocomplete>
+            <dgt-autocomplete @tag-selected="setTagsAutocomplete" :existing-tags="objTag"   :searchTag="newTag" :minSearch="2" :items="validsTags"></dgt-autocomplete>
         ```    
             
     @tag-selected (função que irá ser chamada, no component pai, quando uma tag for selecionada no autocomplete);
     
     :existing-tags="objTag" (default = [] / atributo que recebe as tags já atribuidas ao obj, para retirar do autocomplete as tags já selecionadas);
     :searchTag="newTag"     (default = '' / tag que será procurada nas tags do autocomplete);
-    :items="validsTags"        (default = [] / atributo que recebe as todas as tags que serão disponibilizadas no complete);
-    :showInput="True"          (default = false / define se o autocomplete incluirá um input ou apenas a <ul> e <li>);
+    :minSearch="2"          (default = 1 / quantidade de caracteres para filtrar resultados);
+    :items="validsTags"     (default = [] / atributo que recebe as todas as tags que serão disponibilizadas no complete);
+    :showInput="True"       (default = false / define se o autocomplete incluirá um input ou apenas a <ul> e <li>);
     
     
     É possível customizar o componente com algumas variáveis que podem ser passadar como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
