@@ -330,7 +330,7 @@ export default {
             this.dataDgtGrid.data = page === 2 ? page2 : page1;
         },
         sortColumn(columnName) {
-            console.log(columnName);
+            return columnName;
         },
         checkeAll() {
             this.dataDgtGrid.data.forEach(obj => {
