@@ -335,7 +335,7 @@ export default {
         },
         trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
             let sumWidthColumns = this.sumWidthColumns(columnsWidth);
-            for (let i of columnsWidth.keys()) {
+            for (let i = 0; i < columnsWidth.length; i++) {
                 let elem = columnsWidth[i];
                 if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
                     columnsWidth[i] =  `${parseInt(columnsWidth[i].replace('px', '')) -
