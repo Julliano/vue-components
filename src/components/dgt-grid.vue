@@ -203,11 +203,10 @@ export default {
             this.filteredData = this.filter();
         },
         sumWidthColumns(widthColumns) {
-            let totalSum = widthColumns.reduce((sum, current) => {
+            return widthColumns.reduce((sum, current) => {
                 let currentNum = parseInt(current.replace('px', ''));
                 return currentNum ? currentNum + sum : sum;
             }, 0);
-            return totalSum;
         },
         setMinWidthColumn(width) {
             if (this.minWidthColumn !== 10) return false;
@@ -336,7 +335,7 @@ export default {
         },
         trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
             let sumWidthColumns = this.sumWidthColumns(columnsWidth);
-            for (let i = 0; i < columnsWidth.length; i++) {
+            for (let i of columnsWidth.keys()) {
                 let elem = columnsWidth[i];
                 if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
                     columnsWidth[i] =  `${parseInt(columnsWidth[i].replace('px', '')) -
