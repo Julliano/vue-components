@@ -102,6 +102,7 @@ export default {
     name: 'dgtGrid',
     props: {
         dataProps: {
+            disableOrderColumns: false,
             pagination: {
                 page: 1,
                 total: 1
@@ -170,19 +171,29 @@ export default {
     mounted() {
         if (this.dataProps && this.dataProps.headers) {
             this.init();
-            this.gridTemplateColumns = this.templateColumns();
+            this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
             this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
         }
 
     },
     updated() {
-        let widthColumn = document.querySelector('.dgt-grid .col:nth-child(1)');
+        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
+        let indexColumn1fr = 0;
+        for (let columnWidth in dgtGridColumnsWidth) {
+            indexColumn1fr++;
+            if (columnWidth === '1fr') break;
+        }
+        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
 
         if (!widthColumn) return;
 
         if (this.setMinWidthColumn(widthColumn)) {
-            this.gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
+            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+                widthGrid);
+            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
         }
     },
     methods: {
@@ -190,6 +201,12 @@ export default {
             this.originalState = this.dataProps.data;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
+        },
+        sumWidthColumns(widthColumns) {
+            return widthColumns.reduce((sum, current) => {
+                let currentNum = parseInt(current.replace('px', ''));
+                return currentNum ? currentNum + sum : sum;
+            }, 0);
         },
         setMinWidthColumn(width) {
             if (this.minWidthColumn !== 10) return false;
@@ -240,6 +257,10 @@ export default {
             }
         },
         sortBy(event) {
+            this.emitGeneral('sort-column', event.target.closest('.header').querySelector('.name-column span').textContent);
+
+            if (this.dataProps.disableOrderColumns) return;
+
             this.sortedColumn = event.target.closest('.name-column');
 
             this.sortedColumn =
@@ -304,13 +325,28 @@ export default {
         },
         templateColumns(widthColumn = '1fr ') {
             let cols = this.dataProps.headers;
-            let templateColumns = '';
+            let templateColumns = [];
 
-            for (let col in cols) templateColumns +=
-                (widthColumn !== '1fr ' && cols[col].width && `${cols[col].width}px `) ||
-                widthColumn;
+            for (let col in cols) templateColumns.push(
+                cols[col].width && `${cols[col].width}px ` || widthColumn
+            );
 
             return templateColumns;
+        },
+        trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
+            let sumWidthColumns = this.sumWidthColumns(columnsWidth);
+            for (let i of columnsWidth.keys()) {
+                let elem = columnsWidth[i];
+                if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
+                    columnsWidth[i] =  `${parseInt(columnsWidth[i].replace('px', '')) -
+                        (sumWidthColumns > widthGrid ? sumWidthColumns - widthGrid : 0)}px `;
+                    break;
+                }
+            };
+            return columnsWidth;
+        },
+        joinColumnsWidth(templateColumns) {
+            return templateColumns.join(' ');
         },
         isPagination(direction) {
             switch (direction) {
