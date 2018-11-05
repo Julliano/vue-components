@@ -258,6 +258,8 @@ export default {
             }
         },
         sortBy(event) {
+            this.emitGeneral('sort-column', event.target.closest('.header').querySelector('.name-column span').textContent);
+
             if (this.dataProps.disableOrderColumns) return;
 
             this.sortedColumn = event.target.closest('.name-column');

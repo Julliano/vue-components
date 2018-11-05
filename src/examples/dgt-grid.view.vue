@@ -91,7 +91,7 @@
                 </li>
             </ul>
         </div>
-        <dgt-grid v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination">
+        <dgt-grid v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination" @sort-column="sortColumn">
             <template slot="top-bar" slot-scope="slotProps">
                 <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
             </template>
@@ -328,6 +328,9 @@ export default {
             this.dataDgtGrid.pagination.page = page;
             this.toggleChecked('reset');
             this.dataDgtGrid.data = page === 2 ? page2 : page1;
+        },
+        sortColumn(columnName) {
+            console.log(columnName);
         },
         checkeAll() {
             this.dataDgtGrid.data.forEach(obj => {
