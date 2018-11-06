@@ -183,9 +183,9 @@ export default {
 
         let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let columnWidth of dgtGridColumnsWidth) {
-            indexColumn1fr++;
-            if (columnWidth === '1fr') break;
+        for (let index = 0; index < dgtGridColumnsWidth.length; index++) {
+            indexColumn1fr += index;
+            if (dgtGridColumnsWidth[index] === '1fr') break;
         }
         let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
