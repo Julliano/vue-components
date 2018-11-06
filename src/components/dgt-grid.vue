@@ -32,14 +32,20 @@
             background-color: var(--dgt-grid-header-background-color, gray);
             width: 100%;
             height: 100%;
-            display: flex;
             align-items: center;
+            position: relative;
             color: var(--dgt-grid-header-color, #fff);
             i{
               vertical-align: text-top;
             }
             &:hover {
               cursor: var(--dgt-grid-header-hover, default);
+            }
+            .name-column{
+                  width: 100%;
+                  height: 100%;
+                  vertical-align: sub;
+                  display: inline-block;
             }
           }
           .span-resize {
@@ -59,27 +65,28 @@
     }
     .horizontal-center{
       justify-content: center;
+      text-align: center;
     }
   }
 </style>
 
 <template>
-  <div class="dgt-grid-component component">
+  <section class="dgt-grid-component component">
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
       <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)"
            @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
            :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
         <div class="row row-header">
-          <div class="header header-1" :class="{'horizontal-center': header.isCustomColumn}" @click="sortBy($event)">
-            <div class="name-column" v-if="header.isCustomColumn">
+          <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
+            <span class="name-column" v-if="header.isCustomColumn">
               <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
-            </div>
-            <div class="name-column" v-else>
+            </span>
+            <span class="name-column" v-else>
               <span>{{header.name}}</span>
               <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn"
                     :currentColumn="header.name"></slot>
-            </div>
+            </span>
           </div>
           <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
         </div>
@@ -95,7 +102,7 @@
         </div>
       </div>
     </div>
-    <div class="pagination" v-if="pagination">
+    <footer class="pagination" v-if="pagination">
       <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="pagination.page"
             :total="pagination.total" :dataProps="dataProps"></slot>
       <div v-else>
@@ -105,8 +112,8 @@
         <button class="next" :disabled="isPagination('next')" v-on:click.stop="paginate(++pagination.page)">next
         </button>
       </div>
-    </div>
-  </div>
+    </footer>
+  </section>
 </template>
 
 <script>
