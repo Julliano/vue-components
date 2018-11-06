@@ -3,56 +3,57 @@
   .tabs-container {
     padding: 0;
     position: relative;
-    margin: var(--tabsContainerMargin, 5px);
+    margin: var(--dgt-tabs-container-margin, 5px);
     li {
       text-decoration: none;
       list-style: none;
-
       .tabs-list {
-          margin: 0;
-          padding: 0;
-          display: inline-block;
-          font-size: 10px;
-          .tab {
-            &:hover {
-              cursor: var(--tabCursorPointer, default);
-            }
-            &::before {
-              content: "";
-              position: absolute;
-              top: -1px;
-              left: 0;
-              border-top: 10px solid #fff;
-              border-right: 10px solid transparent;
-              width: 0;
-            }
-            &.blocked {
-              opacity: var(--tabBlockedOpacity, 0.4);
-              color: var(--tabBlockedColor, #0f0f0f);
-            }
-            &[selected] {
-              background-color: var(--tabSelectedBackgroundColor, #cbcbcb);
-              color: var(--tabSelectedColor, #000);
-            }
-            display: inline-block;
-            position: relative;
-            background-color: var(--tabsBackgroundColor, #f9f9fa);
-            margin-right: 3px;
-            .tab-text {
-              white-space: nowrap;
-              margin: 10px 5px;
-              padding: 3px;
-            }
+        margin: 0;
+        padding: 0;
+        display: inline-block;
+        font-size: 10px;
+        width: 100%;
+        .tab {
+          &:hover {
+            cursor: var(--dgt-tab-cursor, default);
           }
-       }
+          &::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            left: 0;
+            border-top: 10px solid #fff;
+            border-right: 10px solid transparent;
+            width: 0;
+          }
+          &.blocked {
+            opacity: var(--dgt-tab-blocked-opacity, 0.4);
+            color: var(--dgt-tab-blocked-color, #0f0f0f);
+          }
+          &[selected] {
+            background-color: var(--dgt-tab-selected-background-color, #cbcbcb);
+            color: var(--dgt-tab-selected-color, #000);
+          }
+          display: inline-block;
+          position: relative;
+          background-color: var(--dgt-tabs-background-color, #f9f9fa);
+          margin-right: 3px;
+          width: var(--dgt-tabs-each-width, auto);
+          .tab-text {
+            white-space: nowrap;
+            margin: 10px 5px;
+            padding: 3px;
+          }
+        }
+      }
       &.bar-animated {
-        background-color: var(--barAnimatedBackgroundColor, #000);
-        border-color: var(--barAnimatedBackgroundColor, #000);
+        background-color: var(--dgt-bar-animated-background-color, #000);
+        border-color: var(--dgt-bar-animated-background-color, #000);
         height: 0;
         left: 0;
         transition-timing-function: var(
-            --barAnimatedTransitionTimingFunction,
-            ease
+          --dgt-bar-animated-transition-timing-function,
+          ease
         );
         transition: width 0.5s, left 0.5s;
         position: absolute;
@@ -81,12 +82,12 @@
       .tabs-container {
         float: left;
       }
-    .tab {
-      transform: rotate(180deg);
-      ::before {
-        border-left: 10px solid transparent;
-        border-right: 0;
-        right: 0;
+      .tab {
+        transform: rotate(180deg);
+        ::before {
+          border-left: 10px solid transparent;
+          border-right: 0;
+          right: 0;
         }
       }
       .bar-animated {
@@ -96,10 +97,10 @@
       }
     }
     &.vertical-right {
-        .tab::before {
-          width: 0;
-          left: initial;
-        }
+      .tab::before {
+        width: 0;
+        left: initial;
+      }
       .tabs-content {
         float: left;
       }
