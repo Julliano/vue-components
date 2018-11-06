@@ -110,288 +110,283 @@
 </template>
 
 <script>
-  export default {
-      name: 'dgtGrid',
-      props: {
-          dataProps: {
-              disableOrderColumns: false,
-              pagination: {
-                  page: 1,
-                  total: 1
-              },
-              headers: {
-                  Col1: {
-                      name: 'Col1'
-                  },
-                  Col2: {
-                      name: 'Col1'
-                  },
-                  Col3: {
-                      name: 'Col1'
-                  },
-                  Col4: {
-                      name: 'Col1'
-                  },
-                  Col5: {
-                      name: 'Col1'
-                  }
-              },
-              minWidthColumn: 80,
-              data: [
-                  {
-                      Col1: 'row 1 colum 1',
-                      Col2: 'row 1 colum 2',
-                      Col3: 'row 1 colum 3',
-                      Col4: 'row 1 colum 4',
-                      Col5: 'row 1 colum 5'
-                  },
-                  {
-                      Col1: 'row 2 colum 1',
-                      Col2: 'row 2 colum 2',
-                      Col3: 'row 2 colum 3',
-                      Col4: 'row 2 colum 4',
-                      Col5: 'row 2 colum 5'
-                  }
-              ]
-          }
-      },
-      model: {
-          prop: 'grid',
-          event: ['selected-line', 'pagination']
-      },
-      data() {
-          return {
-              minWidthColumn: 10,
-              gridTemplateColumns: '',
-              gridRow: '',
-              sortedColumn: '',
-              sortState: 0,
-              filteredData: [],
-              originalState: [],
-              colWidthPos1: 0,
-              colWidthPos2: 0,
-              selectedLine: {},
-              headers: {}
-          };
-      },
-      beforeMount() {
-          if (!this.dataProps) return;
+export default {
+    name: 'dgtGrid',
+    props: {
+        dataProps: {
+            disableOrderColumns: false,
+            pagination: {
+                page: 1,
+                total: 1
+            },
+            headers: {
+                Col1: {
+                    name: 'Col1'
+                },
+                Col2: {
+                    name: 'Col1'
+                },
+                Col3: {
+                    name: 'Col1'
+                },
+                Col4: {
+                    name: 'Col1'
+                },
+                Col5: {
+                    name: 'Col1'
+                }
+            },
+            minWidthColumn: 80,
+            data: [
+                {
+                    Col1: 'row 1 colum 1',
+                    Col2: 'row 1 colum 2',
+                    Col3: 'row 1 colum 3',
+                    Col4: 'row 1 colum 4',
+                    Col5: 'row 1 colum 5'
+                },
+                {
+                    Col1: 'row 2 colum 1',
+                    Col2: 'row 2 colum 2',
+                    Col3: 'row 2 colum 3',
+                    Col4: 'row 2 colum 4',
+                    Col5: 'row 2 colum 5'
+                }
+            ]
+        }
+    },
+    model: {
+        prop: 'grid',
+        event: ['selected-line', 'pagination']
+    },
+    data() {
+        return {
+            minWidthColumn: 10,
+            gridTemplateColumns: '',
+            gridRow: '',
+            sortedColumn: '',
+            sortState: 0,
+            filteredData: [],
+            originalState: [],
+            colWidthPos1: 0,
+            colWidthPos2: 0,
+            selectedLine: {},
+            headers: {}
+        };
+    },
+    beforeMount() {
+        if (!this.dataProps) return;
 
-          this.pagination = this.dataProps.pagination;
-          this.dataProps.headers = this.dataProps.headers;
-      },
-      mounted() {
-          if (this.dataProps && this.dataProps.headers) {
-              this.init();
-              this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
-              this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-          }
+        this.pagination = this.dataProps.pagination;
+        this.dataProps.headers = this.dataProps.headers;
+    },
+    mounted() {
+        if (this.dataProps && this.dataProps.headers) {
+            this.init();
+            this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
+            this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
+        }
 
-      },
-      updated() {
-          let dgtGridColumnsWidth = document.querySelector('.dgt-grid')
-              .style
-              .gridTemplateColumns
-              .split(' ');
-          let indexColumn1fr = 0;
-          for (let columnWidth in dgtGridColumnsWidth) {
-              indexColumn1fr++;
-              if (columnWidth === '1fr') break;
-          }
-          let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
-          widthColumn = widthColumn && widthColumn.offsetWidth;
+    },
+    updated() {
+        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
+        let indexColumn1fr = 0;
+        for (let columnWidth in dgtGridColumnsWidth) {
+            indexColumn1fr++;
+            if (columnWidth === '1fr') break;
+        }
+        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
+        widthColumn = widthColumn && widthColumn.offsetWidth;
 
-          if (!widthColumn) return;
+        if (!widthColumn) return;
 
-          if (this.setMinWidthColumn(widthColumn)) {
-              let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-              let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
-              gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
-                  widthGrid);
-              this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
-          }
-      },
-      methods: {
-          init() {
-              this.originalState = this.dataProps.data;
-              this.filteredData = this.originalState;
-              this.filteredData = this.filter();
-          },
-          sumWidthColumns(widthColumns) {
-              return widthColumns.reduce((sum, current) => {
-                  let currentNum = parseInt(current.replace('px', ''));
-                  return currentNum ? currentNum + sum : sum;
-              }, 0);
-          },
-          setMinWidthColumn(width) {
-              if (this.minWidthColumn !== 10) return false;
-              this.minWidthColumn = this.dataProps.minWidthColumn || width;
-              return true;
-          },
-          indexElement(container, child) {
-              let nodes = Array.prototype.slice.call(container.children);
-              return nodes.indexOf(child);
-          },
-          drop(event) {
-              const columnDrop = event.target.closest('[class^="col"]');
-              if (!columnDrop.draggable) return;
+        if (this.setMinWidthColumn(widthColumn)) {
+            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
+            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+                widthGrid);
+            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
+        }
+    },
+    methods: {
+        init() {
+            this.originalState = this.dataProps.data;
+            this.filteredData = this.originalState;
+            this.filteredData = this.filter();
+        },
+        sumWidthColumns(widthColumns) {
+            return widthColumns.reduce((sum, current) => {
+                let currentNum = parseInt(current.replace('px', ''));
+                return currentNum ? currentNum + sum : sum;
+            }, 0);
+        },
+        setMinWidthColumn(width) {
+            if (this.minWidthColumn !== 10) return false;
+            this.minWidthColumn = this.dataProps.minWidthColumn || width;
+            return true;
+        },
+        indexElement(container, child) {
+            let nodes = Array.prototype.slice.call(container.children);
+            return nodes.indexOf(child);
+        },
+        drop(event) {
+            const columnDrop = event.target.closest('[class^="col"]');
+            if (!columnDrop.draggable) return;
 
-              const grid = columnDrop.parentElement;
-              const indexDrop = this.indexElement(grid, columnDrop);
-              const indexDrag = this.indexElement(grid, this.columnDrag);
+            const grid = columnDrop.parentElement;
+            const indexDrop = this.indexElement(grid, columnDrop);
+            const indexDrag = this.indexElement(grid, this.columnDrag);
 
-              let gridTemplateColumns = grid.style.gridTemplateColumns && grid.style.gridTemplateColumns.split(' ');
+            let gridTemplateColumns = grid.style.gridTemplateColumns && grid.style.gridTemplateColumns.split(' ');
 
-              [gridTemplateColumns[indexDrag], gridTemplateColumns[indexDrop]] =
-          [gridTemplateColumns[indexDrop], gridTemplateColumns[indexDrag]];
+            [gridTemplateColumns[indexDrag], gridTemplateColumns[indexDrop]] =
+                [gridTemplateColumns[indexDrop], gridTemplateColumns[indexDrag]];
 
-              grid.style.gridTemplateColumns = gridTemplateColumns.join(' ');
+            grid.style.gridTemplateColumns = gridTemplateColumns.join(' ');
 
-              indexDrop > indexDrag ?
-                  grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop + 1]) :
-                  grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
-          },
-          drag(event) {
-              this.columnDrag = event.target;
-              event.dataTransfer.setData('text', event.target.id);
-          },
-          dragover(event) {
-              event.preventDefault();
-          },
-          setSortState() {
-              switch (this.sortState) {
-                  case 0:
-                      this.sortState = 1;
-                      break;
-                  case 1:
-                      this.sortState = -1;
-                      break;
-                  default:
-                      this.sortState = 0;
-                      break;
-              }
-          },
-          sortBy(event) {
-              this.emitGeneral('sort-column', event.target.closest('.header')
-                  .querySelector('.name-column span').textContent);
+            indexDrop > indexDrag ?
+                grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop + 1]) :
+                grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
+        },
+        drag(event) {
+            this.columnDrag = event.target;
+            event.dataTransfer.setData('text', event.target.id);
+        },
+        dragover(event) {
+            event.preventDefault();
+        },
+        setSortState() {
+            switch (this.sortState) {
+                case 0:
+                    this.sortState = 1;
+                    break;
+                case 1:
+                    this.sortState = -1;
+                    break;
+                default:
+                    this.sortState = 0;
+                    break;
+            }
+        },
+        sortBy(event) {
+            const nameColumn = event.target.closest('.header').querySelector('.name-column span');
+            nameColumn && this.emitGeneral('sort-column', nameColumn.textContent);
 
-              if (this.dataProps.disableOrderColumns) return;
+            if (this.dataProps.disableOrderColumns) return;
 
-              this.sortedColumn = event.target.closest('.name-column');
+            this.sortedColumn = event.target.closest('.name-column');
 
-              this.sortedColumn =
-          this.sortedColumn &&
-          this.sortedColumn.querySelector('span') &&
-          this.sortedColumn.querySelector('span').textContent;
+            this.sortedColumn =
+                this.sortedColumn &&
+                this.sortedColumn.querySelector('span') &&
+                this.sortedColumn.querySelector('span').textContent;
 
-              if (!this.sortedColumn) return;
+            if (!this.sortedColumn) return;
 
-              this.setSortState();
-              this.filteredData = this.filter();
-          },
-          filter() {
-              if (this.sortState === 0) {
-                  return this.originalState;
-              }
-              let order = this.sortState || 1;
-              let data = this.filteredData;
-              if (this.sortedColumn) {
-                  data = data.slice()
-                      .sort((a, b) => {
-                          a = a[this.sortedColumn] || '';
-                          b = b[this.sortedColumn] || '';
-                          return (a === b ? 0 : a > b ? 1 : -1) * order;
-                      });
-              }
-              return data;
-          },
-          resizeColumn(event) {
-              const {body} = document;
-              this.colWidthPos2 = event.clientX;
-              let mouseMove = e => {
-                  e.preventDefault();
-                  let columnResizible = event.target.closest('[class^="col"]');
-                  if (!columnResizible) return;
-                  let dgtGrid = document.querySelector('.dgt-grid');
-                  let elem = dgtGrid.querySelector(
-                      `.${columnResizible.className.replace(/ /g, '.')}`
-                  );
-                  this.colWidthPos1 = this.colWidthPos2 - e.clientX;
-                  this.colWidthPos2 = e.clientX;
-                  let indexToDrop = this.indexElement(dgtGrid, elem);
-                  let splitWidthColumns = dgtGrid.style.gridTemplateColumns.split(' ');
-                  let newWidth = elem.offsetWidth - this.colWidthPos1;
-                  if (elem.offsetWidth >= this.minWidthColumn) {
-                      splitWidthColumns[indexToDrop] = `${newWidth}px`;
-                      if (newWidth < this.minWidthColumn) {
-                          splitWidthColumns[indexToDrop] = `${this.minWidthColumn}px`;
-                      }
-                      dgtGrid.style.gridTemplateColumns = splitWidthColumns.join(' ');
-                  } else {
-                      splitWidthColumns[indexToDrop] = this.minWidthColumn;
-                  }
-              };
-              body.addEventListener('mousemove', mouseMove, false);
-              body.addEventListener(
-                  'mouseup',
-                  () => {
-                      body.removeEventListener('mousemove', mouseMove, false);
-                  },
-                  false
-              );
-          },
-          templateColumns(widthColumn = '1fr ') {
-              let cols = this.dataProps.headers;
-              let templateColumns = [];
+            this.setSortState();
+            this.filteredData = this.filter();
+        },
+        filter() {
+            if (this.sortState === 0) {
+                return this.originalState;
+            }
+            let order = this.sortState || 1;
+            let data = this.filteredData;
+            if (this.sortedColumn) {
+                data = data.slice().sort((a, b) => {
+                    a = a[this.sortedColumn] || '';
+                    b = b[this.sortedColumn] || '';
+                    return (a === b ? 0 : a > b ? 1 : -1) * order;
+                });
+            }
+            return data;
+        },
+        resizeColumn(event) {
+            const { body } = document;
+            this.colWidthPos2 = event.clientX;
+            let mouseMove = e => {
+                e.preventDefault();
+                let columnResizible = event.target.closest('[class^="col"]');
+                if (!columnResizible) return;
+                let dgtGrid = document.querySelector('.dgt-grid');
+                let elem = dgtGrid.querySelector(
+                    `.${columnResizible.className.replace(/ /g, '.')}`
+                );
+                this.colWidthPos1 = this.colWidthPos2 - e.clientX;
+                this.colWidthPos2 = e.clientX;
+                let indexToDrop = this.indexElement(dgtGrid, elem);
+                let splitWidthColumns = dgtGrid.style.gridTemplateColumns.split(' ');
+                let newWidth = elem.offsetWidth - this.colWidthPos1;
+                if (elem.offsetWidth >= this.minWidthColumn) {
+                    splitWidthColumns[indexToDrop] = `${newWidth}px`;
+                    if (newWidth < this.minWidthColumn) {
+                        splitWidthColumns[indexToDrop] = `${this.minWidthColumn}px`;
+                    }
+                    dgtGrid.style.gridTemplateColumns = splitWidthColumns.join(' ');
+                } else {
+                    splitWidthColumns[indexToDrop] = this.minWidthColumn;
+                }
+            };
+            body.addEventListener('mousemove', mouseMove, false);
+            body.addEventListener(
+                'mouseup',
+                () => {
+                    body.removeEventListener('mousemove', mouseMove, false);
+                },
+                false
+            );
+        },
+        templateColumns(widthColumn = '1fr ') {
+            let cols = this.dataProps.headers;
+            let templateColumns = [];
 
-              for (let col in cols) templateColumns.push(
-                  cols[col].width && `${cols[col].width}px ` || widthColumn
-              );
+            for (let col in cols) templateColumns.push(
+                cols[col].width && `${cols[col].width}px ` || widthColumn
+            );
 
-              return templateColumns;
-          },
-          trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
-              let sumWidthColumns = this.sumWidthColumns(columnsWidth);
-              for (let i = 0; i < columnsWidth.length; i++) {
-                  let elem = columnsWidth[i];
-                  if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
-                      columnsWidth[i] = `${parseInt(columnsWidth[i].replace('px', '')) -
-            (sumWidthColumns > widthGrid ? sumWidthColumns - widthGrid : 0)}px `;
-                      break;
-                  }
-              }
-              ;
-              return columnsWidth;
-          },
-          joinColumnsWidth(templateColumns) {
-              return templateColumns.join(' ');
-          },
-          isPagination(direction) {
-              switch (direction) {
-                  case 'prev':
-                      if (this.pagination.page === 1) return true;
-                      break;
-                  case 'next':
-                      if (this.pagination.page === this.pagination.total) return true;
-                      break;
-              }
-              return false;
-          },
-          paginate(page) {
-              this.emitGeneral('pagination', page);
-          },
-          selectedLineFunc(item) {
-              this.selectedLine = this.selectedLine === item ? null : item;
-              this.emitGeneral('selected-line', this.selectedLine);
-          },
-          emitGeneral(emitFunc, ...args) {
-              this.$emit(emitFunc, ...args);
-          }
-      },
-      watch: {
-          'dataProps.data'() {
-              this.init();
-          }
-      }
-  };
+            return templateColumns;
+        },
+        trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
+            let sumWidthColumns = this.sumWidthColumns(columnsWidth);
+            for (let i = 0; i < columnsWidth.length; i++) {
+                let elem = columnsWidth[i];
+                if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
+                    columnsWidth[i] =  `${parseInt(columnsWidth[i].replace('px', '')) -
+                        (sumWidthColumns > widthGrid ? sumWidthColumns - widthGrid : 0)}px `;
+                    break;
+                }
+            };
+            return columnsWidth;
+        },
+        joinColumnsWidth(templateColumns) {
+            return templateColumns.join(' ');
+        },
+        isPagination(direction) {
+            switch (direction) {
+                case 'prev':
+                    if (this.pagination.page === 1) return true;
+                    break;
+                case 'next':
+                    if (this.pagination.page === this.pagination.total) return true;
+                    break;
+            }
+            return false;
+        },
+        paginate(page) {
+            this.emitGeneral('pagination', page);
+        },
+        selectedLineFunc(item) {
+            this.selectedLine = this.selectedLine === item ? null : item;
+            this.emitGeneral('selected-line', this.selectedLine);
+        },
+        emitGeneral(emitFunc, ...args) {
+            this.$emit(emitFunc, ...args);
+        }
+    },
+    watch: {
+        'dataProps.data'() {
+            this.init();
+        }
+    }
+};
 </script>

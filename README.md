@@ -411,6 +411,15 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
 todos os objetos em header serão colunas, cada objeto em data pode ter uma célula de cada coluna, note que o segundo objeto não possui a linha da coluna quatro, nesse caso essa célula aperecerá vazia.
 
+### Flags
+    - O componente dgt-grid te dá a possibilidade de habilitar/desabilitar funcionalidades
+
+    ```js
+        const dataDgtGrid = {
+            disableOrderColumns: false
+        };
+    ```
+
 ### Disparando eventos para fora do componente:
 
     - O componente envia um evento, via emit, para fora onde o componente pai pode capturar para realizar operações sobre ele.
