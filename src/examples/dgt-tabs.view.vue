@@ -1,6 +1,6 @@
 <style lang="scss">
 :root {
-  --barAnimatedBackgroundColor: blue;
+  --dgt-bar-animated-background-color: blue;
 }
 </style>
 
