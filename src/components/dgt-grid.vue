@@ -1,100 +1,112 @@
 <style lang="scss" scoped>
-.dgt-grid-component {
-  left: var(--gridComponentLeft, 372px);
-  max-width: var(--dgt-grid-max-width, 944px);
-  .dgt-grid {
-    display: grid;
-    overflow-x: auto;
-    width: var(--dgt-grid-width, 944px);
-    .col {
-      min-width: var(--dgt-grid-col-min-width, 30px);
-      overflow: hidden;
-      .row {
-        border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
-        white-space: var(--rowWhiteSpace, nowrap);
-        height: var(--rowHeight, 25px);
-        position: relative;
-        &.row-header:hover .span-resize {
-          background-color: var(--dgt-grid-row-header-background-color, black);
-        }
-        &.selected {
-          background-color: var(
-            --dgt-grid-row-selected-background-color,
-            rgb(223, 236, 245)
-          );
-        }
-        .cel {
-          width: 100%;
-          height: 100%;
-        }
-        .header {
-          background-color: var(--dgt-grid-header-background-color, gray);
-          width: 100%;
-          height: 100%;
-          display: inline-block;
-          color: var(--dgt-grid-header-color, #fff);
-          &:hover {
-            cursor: var(--dgt-grid-header-hover, default);
+  .dgt-grid-component {
+    left: var(--gridComponentLeft, 372px);
+    max-width: var(--dgt-grid-max-width, 944px);
+    .dgt-grid {
+      display: grid;
+      overflow-x: auto;
+      width: var(--dgt-grid-width, 944px);
+      .col {
+        min-width: var(--dgt-grid-col-min-width, 30px);
+        overflow: hidden;
+        .row {
+          border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
+          white-space: var(--rowWhiteSpace, nowrap);
+          height: var(--rowHeight, 25px);
+          position: relative;
+          display: flex;
+          align-items: center;
+          &.row-header:hover .span-resize {
+            background-color: var(--dgt-grid-row-header-background-color, #ccc);
           }
-        }
-        .span-resize {
-          position: absolute;
-          right: var(--dgt-grid-header-span-size, 0px);
-          height: 100%;
-          width: var(--dgt-grid-header-span-width, 4px);
-          background-color: var(
-            --dgt-grid-header-span-background-color,
-            transparent
-          );
-          &:hover {
-            cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
+          &.selected {
+            background-color: var(
+                --dgt-grid-row-selected-background-color,
+                rgb(223, 236, 245)
+            );
           }
-        }
-        &:not(.header) {
-          user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+          .cel {
+            display: inline;
+          }
+          .header {
+            background-color: var(--dgt-grid-header-background-color, gray);
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            color: var(--dgt-grid-header-color, #fff);
+            i{
+              vertical-align: text-top;
+            }
+            &:hover {
+              cursor: var(--dgt-grid-header-hover, default);
+            }
+          }
+          .span-resize {
+            position: absolute;
+            right: var(--dgt-grid-header-span-size, 0px);
+            height: 100%;
+            width: var(--dgt-grid-header-span-width, 4px);
+            &:hover {
+              cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
+            }
+          }
+          &:not(.header) {
+            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
+          }
         }
       }
     }
+    .horizontal-center{
+      justify-content: center;
+    }
   }
-}
 </style>
 
 <template>
-    <div class="dgt-grid-component component">
-        <slot name="top-bar" :dataProps="dataProps"></slot>
-        <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-            <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)" @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
-                <div class="row row-header">
-                    <div class="header header-1" @click="sortBy($event)">
-                        <div class="name-column" v-if="header.isCustomColumn">
-                            <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
-                        </div>
-                        <div class="name-column" v-else>
-                            <span>{{header.name}}</span>
-                            <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn" :currentColumn="header.name"></slot>
-                        </div>
-                    </div>
-                    <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
-                </div>
-                <div class="row" v-for="(item, index, key) in filteredData" :key=key :class="`row-${index} ${selectedLine === item ? 'selected': ''}`" @click="selectedLineFunc(item)">
-                    <div :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
-                        <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]" :dataProps="dataProps" :obj="item"></slot>
-                    </div>
-                    <div :class="`${headerKey} cel cel-${index}`" v-else>
+  <div class="dgt-grid-component component">
+    <slot name="top-bar" :dataProps="dataProps"></slot>
+    <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
+      <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)"
+           @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
+           :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
+        <div class="row row-header">
+          <div class="header header-1" :class="{'horizontal-center': header.isCustomColumn}" @click="sortBy($event)">
+            <div class="name-column" v-if="header.isCustomColumn">
+              <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
+            </div>
+            <div class="name-column" v-else>
+              <span>{{header.name}}</span>
+              <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn"
+                    :currentColumn="header.name"></slot>
+            </div>
+          </div>
+          <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
+        </div>
+        <div class="row"  v-for="(item, index, key) in filteredData" :key=key
+             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @click="selectedLineFunc(item)">
+          <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
+            <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
+                  :dataProps="dataProps" :obj="item"></slot>
+          </template>
+          <span :class="`${headerKey} cel cel-${index}`" v-else>
                         {{item[headerKey]}}
-                    </div>
-                </div>
-            </div>
+                    </span>
         </div>
-        <div class="pagination" v-if="pagination">
-            <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="pagination.page" :total="pagination.total" :dataProps="dataProps"></slot>
-            <div v-else>
-                <button class="prev" :disabled="isPagination('prev')" v-on:click.stop="paginate(--pagination.page)">prev</button>
-                <span class="prev">{{pagination.page}} de {{pagination.total}}</span>
-                <button class="next" :disabled="isPagination('next')" v-on:click.stop="paginate(++pagination.page)">next</button>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="pagination" v-if="pagination">
+      <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="pagination.page"
+            :total="pagination.total" :dataProps="dataProps"></slot>
+      <div v-else>
+        <button class="prev" :disabled="isPagination('prev')" v-on:click.stop="paginate(--pagination.page)">prev
+        </button>
+        <span class="prev">{{pagination.page}} de {{pagination.total}}</span>
+        <button class="next" :disabled="isPagination('next')" v-on:click.stop="paginate(++pagination.page)">next
+        </button>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -177,28 +189,24 @@ export default {
 
     },
     updated() {
-        const dgtGrid = document.querySelector('.dgt-grid');
-
-        if (!dgtGrid) return;
-
-        let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
+        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let index = 0; index < dgtGridColumnsWidth.length; index++) {
-            indexColumn1fr += index;
-            if (dgtGridColumnsWidth[index] === '1fr') break;
+        for (let columnWidth in dgtGridColumnsWidth) {
+            indexColumn1fr++;
+            if (columnWidth === '1fr') break;
         }
-        let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
+        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
 
         if (!widthColumn) return;
 
-        if (!this.setMinWidthColumn(widthColumn)) return;
-
-        let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-        let widthGrid = dgtGrid.offsetWidth;
-        gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
-            widthGrid);
-        this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
+        if (this.setMinWidthColumn(widthColumn)) {
+            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
+            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+                widthGrid);
+            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
+        }
     },
     methods: {
         init() {
