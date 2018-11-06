@@ -98,6 +98,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
     name: 'dgtGrid',
     props: {
@@ -177,20 +178,24 @@ export default {
 
     },
     updated() {
-        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
+        const dgtGrid = document.querySelector('.dgt-grid');
+        
+        if(!dgtGrid) return;
+
+        let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let columnWidth in dgtGridColumnsWidth) {
+        for (let columnWidth of dgtGridColumnsWidth) {
             indexColumn1fr++;
             if (columnWidth === '1fr') break;
         }
-        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
+        let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
 
         if (!widthColumn) return;
 
         if (this.setMinWidthColumn(widthColumn)) {
             let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
+            let widthGrid = dgtGrid.offsetWidth;
             gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
                 widthGrid);
             this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
@@ -257,7 +262,8 @@ export default {
             }
         },
         sortBy(event) {
-            this.emitGeneral('sort-column', event.target.closest('.header').querySelector('.name-column span').textContent);
+            const nameColumn = event.target.closest('.header').querySelector('.name-column span');
+            nameColumn && this.emitGeneral('sort-column', nameColumn.textContent);
 
             if (this.dataProps.disableOrderColumns) return;
 
@@ -328,8 +334,7 @@ export default {
             let templateColumns = [];
 
             for (let col in cols) templateColumns.push(
-                cols[col].width && `${cols[col].width}px ` || widthColumn
-            );
+                cols[col].width && `${cols[col].width}px ` || widthColumn);
 
             return templateColumns;
         },

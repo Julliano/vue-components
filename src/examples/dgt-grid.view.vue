@@ -276,7 +276,7 @@ const dataDgtGrid = {
             resizable: true
         }
     },
-    disableOrderColumns: true,
+    disableOrderColumns: false,
     minWidthColumn: 30,
     data: page1,
     checkedAll: false,
