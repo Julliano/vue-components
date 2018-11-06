@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .dgt-grid-view {
   .dgt-grid-component {
     .material-icons {
@@ -17,10 +17,9 @@
     }
     .arrow-drop-down {
       font-size: 23px;
-      float: right;
-      top: 0;
+      top: 4px;
       position: absolute;
-      right: 3px;
+      right: -5px;
       &:hover {
         cursor: pointer;
       }
@@ -91,7 +90,7 @@
                 </li>
             </ul>
         </div>
-        <dgt-grid v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination" @sort-column="sortColumn">
+        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination" @sort-column="sortColumn">
             <template slot="top-bar" slot-scope="slotProps">
                 <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
             </template>
