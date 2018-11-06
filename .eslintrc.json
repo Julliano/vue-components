@@ -39,7 +39,7 @@
         "class-methods-use-this": "warn",
         "complexity": [
             "warn",
-            6
+            7
         ],
         "consistent-return": "warn",
         "no-caller": "error",

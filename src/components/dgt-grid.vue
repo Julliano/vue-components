@@ -98,7 +98,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 export default {
     name: 'dgtGrid',
     props: {
@@ -179,8 +178,8 @@ export default {
     },
     updated() {
         const dgtGrid = document.querySelector('.dgt-grid');
-        
-        if(!dgtGrid) return;
+
+        if (!dgtGrid) return;
 
         let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
@@ -193,13 +192,13 @@ export default {
 
         if (!widthColumn) return;
 
-        if (this.setMinWidthColumn(widthColumn)) {
-            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-            let widthGrid = dgtGrid.offsetWidth;
-            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
-                widthGrid);
-            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
-        }
+        if (!this.setMinWidthColumn(widthColumn)) return;
+
+        let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+        let widthGrid = dgtGrid.offsetWidth;
+        gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+            widthGrid);
+        this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
     },
     methods: {
         init() {
@@ -334,7 +333,8 @@ export default {
             let templateColumns = [];
 
             for (let col in cols) templateColumns.push(
-                cols[col].width && `${cols[col].width}px ` || widthColumn);
+                cols[col].width && `${cols[col].width}px ` || widthColumn
+            );
 
             return templateColumns;
         },
