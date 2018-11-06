@@ -15,9 +15,12 @@
       transition: all 0.4s ease;
       transform: rotateZ(-90deg);
     }
+    input[type=checkbox]{
+      vertical-align: sub;
+    }
     .arrow-drop-down {
       font-size: 23px;
-      top: 4px;
+      top: 0px;
       position: absolute;
       right: -5px;
       &:hover {
