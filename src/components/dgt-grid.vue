@@ -373,7 +373,7 @@ export default {
         },
         clickLine(event, item) {
             switch (event.button) {
-                case 1:
+                case 0:
                     this.selectedLineFunc(item);
                     break;
                 case 2:
