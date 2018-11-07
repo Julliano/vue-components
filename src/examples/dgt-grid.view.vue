@@ -188,7 +188,8 @@ const page1 = [
         storage: false,
         attach_file: false,
         message: true,
-        tipo: 'pesquisa'
+        tipo: 'pesquisa',
+        selected: true
     },
     {
         horario: 'horario1',

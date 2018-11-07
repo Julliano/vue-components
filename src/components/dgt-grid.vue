@@ -16,10 +16,16 @@
         position: relative;
         display: flex;
         align-items: center;
-        &.row-header:hover .span-resize {
-          background-color: var(--dgt-grid-row-header-background-color, #ccc);
+        &.row-header {
+          background-color: var(--dgt-grid-row-header-background-color, gray);
         }
-        &.selected {
+        &.row-header:hover .span-resize {
+          background-color: var(
+            --dgt-grid-row-header-span-background-color,
+            #ccc
+          );
+        }
+        &[is-selected="true"] {
           background-color: var(
             --dgt-grid-row-selected-background-color,
             rgb(223, 236, 245)
@@ -29,9 +35,7 @@
           display: inline;
         }
         .header {
-          background-color: var(--dgt-grid-header-background-color, gray);
           width: 100%;
-          height: 100%;
           align-items: center;
           position: relative;
           color: var(--dgt-grid-header-color, #fff);
@@ -90,7 +94,9 @@
           <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
-             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @mousedown.stop="clickLine($event, item)">
+             :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
+             :is-selected="`${toogleSelectedLine(false, item) || selectedLine === item ? true : false}`"
+             @mousedown.stop="clickLine($event, item, index)">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -147,7 +153,8 @@ export default {
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
-                    Col3: 'row 1 colum 3'
+                    Col3: 'row 1 colum 3',
+                    selected: true
                 },
                 {
                     Col1: 'row 2 colum 1',
@@ -371,19 +378,28 @@ export default {
         paginate(page) {
             this.emitGeneral('pagination', page);
         },
-        clickLine(event, item) {
+        clickLine(event, item, rowIndex) {
             switch (event.button) {
                 case 0:
-                    this.selectedLineFunc(item);
+                    this.toogleSelectedLine(true, item, rowIndex);
                     break;
                 case 2:
                     this.emitGeneral('rightClick', event, item);
                     break;
             }
         },
-        selectedLineFunc(item) {
-            this.selectedLine = this.selectedLine === item ? null : item;
-            this.emitGeneral('selected-line', this.selectedLine);
+        toogleSelectedLine(isEvent, item, rowIndex) {
+            if (!isEvent && item.selected) {
+                return true;
+            } else if (isEvent) {
+                document.querySelectorAll('.dgt-grid .row[is-selected=true]').forEach((cel)=>{
+                    cel.setAttribute('is-selected', 'false');
+                });
+                document.querySelectorAll(`.dgt-grid .row-${rowIndex}`).forEach((cel)=>{
+                    cel.setAttribute('is-selected', 'true');
+                });
+                this.emitGeneral('selected-line', this.selectedLine);
+            }
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, ...args);
