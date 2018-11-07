@@ -15,7 +15,7 @@
       transition: all 0.4s ease;
       transform: rotateZ(-90deg);
     }
-    input[type=checkbox]{
+    input[type="checkbox"] {
       vertical-align: sub;
     }
     .arrow-drop-down {
@@ -226,6 +226,7 @@ const dataDgtGrid = {
         checkBox: {
             draggable: false,
             resizable: false,
+            sortable: false,
             width: 40,
             isCustomColumn: true,
             closed: true
@@ -233,6 +234,7 @@ const dataDgtGrid = {
         iconStorage: {
             draggable: false,
             resizable: false,
+            sortable: false,
             width: 30,
             isCustomColumn: true,
             closed: true
@@ -240,6 +242,7 @@ const dataDgtGrid = {
         iconAttach: {
             draggable: false,
             resizable: false,
+            sortable: false,
             width: 30,
             isCustomColumn: true,
             closed: true
@@ -247,6 +250,7 @@ const dataDgtGrid = {
         iconMessage: {
             draggable: false,
             resizable: false,
+            sortable: false,
             width: 30,
             isCustomColumn: true,
             closed: true
@@ -255,27 +259,32 @@ const dataDgtGrid = {
             name: 'horario',
             draggable: true,
             resizable: true,
+            sortable: true,
             closed: true
         },
         conta: {
             name: 'conta',
             draggable: true,
-            resizable: true
+            resizable: true,
+            sortable: true
         },
         url: {
             name: 'url',
             draggable: true,
-            resizable: true
+            resizable: true,
+            sortable: true
         },
         localidade: {
             name: 'localidade',
             draggable: true,
-            resizable: true
+            resizable: true,
+            sortable: true
         },
         data: {
             name: 'data',
             draggable: true,
-            resizable: true
+            resizable: true,
+            sortable: true
         }
     },
     disableOrderColumns: false,

@@ -1,80 +1,80 @@
 <style lang="scss" scoped>
-  .dgt-grid-component {
-    left: var(--gridComponentLeft, 372px);
-    max-width: var(--dgt-grid-max-width, 944px);
-    .dgt-grid {
-      display: grid;
-      overflow-x: auto;
-      width: var(--dgt-grid-width, 944px);
-      .col {
-        min-width: var(--dgt-grid-col-min-width, 30px);
-        overflow: hidden;
-        .row {
-          border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
-          white-space: var(--rowWhiteSpace, nowrap);
-          height: var(--rowHeight, 25px);
-          position: relative;
-          display: flex;
+.dgt-grid-component {
+  left: var(--gridComponentLeft, 372px);
+  max-width: var(--dgt-grid-max-width, 100%);
+  .dgt-grid {
+    display: grid;
+    overflow-x: auto;
+    width: var(--dgt-grid-width, 100%);
+    .col {
+      min-width: var(--dgt-grid-col-min-width, 30px);
+      overflow: hidden;
+      .row {
+        border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
+        white-space: var(--rowWhiteSpace, nowrap);
+        height: var(--rowHeight, 25px);
+        position: relative;
+        display: flex;
+        align-items: center;
+        &.row-header:hover .span-resize {
+          background-color: var(--dgt-grid-row-header-background-color, #ccc);
+        }
+        &.selected {
+          background-color: var(
+            --dgt-grid-row-selected-background-color,
+            rgb(223, 236, 245)
+          );
+        }
+        .cel {
+          display: inline;
+        }
+        .header {
+          background-color: var(--dgt-grid-header-background-color, gray);
+          width: 100%;
+          height: 100%;
           align-items: center;
-          &.row-header:hover .span-resize {
-            background-color: var(--dgt-grid-row-header-background-color, #ccc);
+          position: relative;
+          color: var(--dgt-grid-header-color, #fff);
+          i {
+            vertical-align: text-top;
           }
-          &.selected {
-            background-color: var(
-                --dgt-grid-row-selected-background-color,
-                rgb(223, 236, 245)
-            );
+          &:hover {
+            cursor: var(--dgt-grid-header-hover, default);
           }
-          .cel {
-            display: inline;
-          }
-          .header {
-            background-color: var(--dgt-grid-header-background-color, gray);
+          .name-column {
             width: 100%;
             height: 100%;
-            align-items: center;
-            position: relative;
-            color: var(--dgt-grid-header-color, #fff);
-            i{
-              vertical-align: text-top;
-            }
-            &:hover {
-              cursor: var(--dgt-grid-header-hover, default);
-            }
-            .name-column{
-                  width: 100%;
-                  height: 100%;
-                  vertical-align: sub;
-                  display: inline-block;
-            }
+            vertical-align: sub;
+            display: inline-block;
           }
-          .span-resize {
-            position: absolute;
-            right: var(--dgt-grid-header-span-size, 0px);
-            height: 100%;
-            width: var(--dgt-grid-header-span-width, 4px);
-            &:hover {
-              cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
-            }
+        }
+        .span-resize {
+          position: absolute;
+          right: var(--dgt-grid-header-span-size, 0px);
+          height: 100%;
+          width: var(--dgt-grid-header-span-width, 4px);
+          &:hover {
+            cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
           }
-          &:not(.header) {
-            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-          }
+        }
+        &:not(.header) {
+          user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
         }
       }
     }
-    .horizontal-center{
-      justify-content: center;
-      text-align: center;
-    }
   }
+  .horizontal-center {
+    justify-content: center;
+    text-align: center;
+  }
+}
 </style>
 
 <template>
   <section class="dgt-grid-component component">
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-      <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)"
+      <div class="col" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)" @drop.prevent="drop($event)"
            @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
            :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
         <div class="row row-header">
@@ -117,6 +117,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 export default {
     name: 'dgtGrid',
     props: {
@@ -128,18 +129,17 @@ export default {
             },
             headers: {
                 Col1: {
-                    name: 'Col1'
+                    name: 'Col1',
+                    draggable: true,
+                    resizable: true,
+                    sortable: true,
+                    width: '1fr',
+                    isCustomColumn: false
                 },
                 Col2: {
                     name: 'Col1'
                 },
                 Col3: {
-                    name: 'Col1'
-                },
-                Col4: {
-                    name: 'Col1'
-                },
-                Col5: {
                     name: 'Col1'
                 }
             },
@@ -148,16 +148,12 @@ export default {
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
-                    Col3: 'row 1 colum 3',
-                    Col4: 'row 1 colum 4',
-                    Col5: 'row 1 colum 5'
+                    Col3: 'row 1 colum 3'
                 },
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3',
-                    Col4: 'row 2 colum 4',
-                    Col5: 'row 2 colum 5'
+                    Col3: 'row 2 colum 3'
                 }
             ]
         }
@@ -182,41 +178,34 @@ export default {
         };
     },
     beforeMount() {
-        if (!this.dataProps) return;
-
-        this.pagination = this.dataProps.pagination;
-        this.dataProps.headers = this.dataProps.headers;
+        if (!this.dataProps.headers) return;
+        this.init();
+        this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
+        this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
     },
     mounted() {
-        if (this.dataProps && this.dataProps.headers) {
-            this.init();
-            this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
-            this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-        }
+        let dgtGrid = document.querySelector('.dgt-grid');
+        
+        if(!dgtGrid) return;
 
-    },
-    updated() {
-        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
+        let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let columnWidth in dgtGridColumnsWidth) {
-            indexColumn1fr++;
-            if (columnWidth === '1fr') break;
+        for (let index = 0; index < dgtGridColumnsWidth.length; index++) {
+            indexColumn1fr = index + 1;
+            if (dgtGridColumnsWidth[index] === '1fr') break;
         }
-        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
+        let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
+        let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+        let widthGrid = dgtGrid.offsetWidth;
+        gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+            widthGrid);
+        this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
 
-        if (!widthColumn) return;
-
-        if (this.setMinWidthColumn(widthColumn)) {
-            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
-            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
-                widthGrid);
-            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
-        }
     },
     methods: {
         init() {
+            this.pagination = this.dataProps.pagination;
             this.originalState = this.dataProps.data;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
