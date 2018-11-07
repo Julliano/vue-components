@@ -74,10 +74,9 @@
   <section class="dgt-grid-component component">
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-      <div class="col" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)" @drop.prevent="drop($event)"
-           @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
-           :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
-        <div class="row row-header">
+      <div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
+           :class="'col-'+headerIndex" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
+        <div class="row row-header" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)">
           <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
             <span class="name-column" v-if="header.isCustomColumn">
               <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
@@ -91,7 +90,7 @@
           <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
-             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @click="selectedLineFunc(item)">
+             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @mousedown.stop="clickLine($event, item)">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -185,8 +184,8 @@ export default {
     },
     mounted() {
         let dgtGrid = document.querySelector('.dgt-grid');
-        
-        if(!dgtGrid) return;
+
+        if (!dgtGrid) return;
 
         let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
@@ -226,10 +225,11 @@ export default {
             return nodes.indexOf(child);
         },
         drop(event) {
-            const columnDrop = event.target.closest('[class^="col"]');
-            if (!columnDrop.draggable) return;
+            const columnDrop = event.target.closest('.col');
+            let rowHeader = columnDrop.querySelector('.row-header');
+            if (!rowHeader.draggable) return;
 
-            const grid = columnDrop.parentElement;
+            const grid = columnDrop.closest('.dgt-grid');
             const indexDrop = this.indexElement(grid, columnDrop);
             const indexDrag = this.indexElement(grid, this.columnDrag);
 
@@ -245,8 +245,8 @@ export default {
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
         },
         drag(event) {
-            this.columnDrag = event.target;
-            event.dataTransfer.setData('text', event.target.id);
+            this.columnDrag = event.target.closest('.col');
+            event.dataTransfer.setData('text', event.target.closest('.col').id);
         },
         dragover(event) {
             event.preventDefault();
@@ -370,6 +370,16 @@ export default {
         },
         paginate(page) {
             this.emitGeneral('pagination', page);
+        },
+        clickLine(event, item) {
+            switch (event.button) {
+                case 1:
+                    this.selectedLineFunc(item);
+                    break;
+                case 2:
+                    this.emitGeneral('rightClick', event, item);
+                    break;
+            }
         },
         selectedLineFunc(item) {
             this.selectedLine = this.selectedLine === item ? null : item;
