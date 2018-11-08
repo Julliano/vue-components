@@ -93,7 +93,8 @@
                 </li>
             </ul>
         </div>
-        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination" @sort-column="sortColumn">
+        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" 
+            @pagination="pagination" @sort-column="sortColumn" @dragable-columns="dragableColumns" @resize="resizeColumn" @right-click="rightClick">
             <template slot="top-bar" slot-scope="slotProps">
                 <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
             </template>
@@ -123,7 +124,7 @@
                     for="checkbox"
                     v-model="slotProps.obj.checked"
                     @change="toggleChecked($event)"
-                    @click="preventPropagation($event)"
+                    @mousedown="preventPropagation($event)"
                     :key="index"
                 >
             </template>
@@ -384,8 +385,14 @@ export default {
                 //rest para salvar multiplos objs
             }
         },
-        resizeColumn(event) {
-            this.$children[0].resizeColumn(event);
+        dragableColumns(columns) {
+            return columns;
+        },
+        resizeColumn(newWidth, columnType) {
+            dataDgtGrid.headers[columnType].width = newWidth;
+        },
+        rightClick(event, item) {
+            return [event, item];
         },
         showMenuColumns(event) {
             let listColumns = event.target.parentElement.querySelector('.list-columns');

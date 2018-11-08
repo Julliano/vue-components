@@ -25,7 +25,7 @@
             #ccc
           );
         }
-        &[is-selected="true"] {
+        &[selected="selected"] {
           background-color: var(
             --dgt-grid-row-selected-background-color,
             rgb(223, 236, 245)
@@ -79,7 +79,7 @@
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
       <div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
-           :class="'col-'+headerIndex" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
+           :class="`col-${headerIndex}`" :column-type="headerKey" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
         <div class="row row-header" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)">
           <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
             <span class="name-column" v-if="header.isCustomColumn">
@@ -95,8 +95,7 @@
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
              :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
-             :is-selected="`${toogleSelectedLine(false, item) || selectedLine === item ? true : false}`"
-             @mousedown.stop="clickLine($event, item, index)">
+             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -188,6 +187,11 @@ export default {
         this.init();
         this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
         this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
+        [ this.selectedLine ] = this.dataProps.data.filter((line) => {
+            if (line.selected) {
+                return line;
+            }
+        })
     },
     mounted() {
         let dgtGrid = document.querySelector('.dgt-grid');
@@ -250,6 +254,8 @@ export default {
             indexDrop > indexDrag ?
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop + 1]) :
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
+
+            this.emitNewDispositionColumns();
         },
         drag(event) {
             this.columnDrag = event.target.closest('.col');
@@ -257,6 +263,12 @@ export default {
         },
         dragover(event) {
             event.preventDefault();
+        },
+        emitNewDispositionColumns() {
+            let columns = [...document.querySelectorAll('.dgt-grid .col')].map(el => {
+                return el.getAttribute('column-type');
+            });
+            this.emitGeneral('dragable-columns', columns);
         },
         setSortState() {
             switch (this.sortState) {
@@ -307,9 +319,11 @@ export default {
         resizeColumn(event) {
             const { body } = document;
             this.colWidthPos2 = event.clientX;
+            let newWidth = 0;
+            let columnResizible = null;
             let mouseMove = e => {
                 e.preventDefault();
-                let columnResizible = event.target.closest('[class^="col"]');
+                columnResizible = event.target.closest('[class^="col"]');
                 if (!columnResizible) return;
                 let dgtGrid = document.querySelector('.dgt-grid');
                 let elem = dgtGrid.querySelector(
@@ -319,7 +333,7 @@ export default {
                 this.colWidthPos2 = e.clientX;
                 let indexToDrop = this.indexElement(dgtGrid, elem);
                 let splitWidthColumns = dgtGrid.style.gridTemplateColumns.split(' ');
-                let newWidth = elem.offsetWidth - this.colWidthPos1;
+                newWidth = elem.offsetWidth - this.colWidthPos1;
                 if (elem.offsetWidth >= this.minWidthColumn) {
                     splitWidthColumns[indexToDrop] = `${newWidth}px`;
                     if (newWidth < this.minWidthColumn) {
@@ -330,11 +344,19 @@ export default {
                     splitWidthColumns[indexToDrop] = this.minWidthColumn;
                 }
             };
+
             body.addEventListener('mousemove', mouseMove, false);
+            let i = 0;
             body.addEventListener(
                 'mouseup',
                 () => {
-                    body.removeEventListener('mousemove', mouseMove, false);
+                    if (i === 0) {
+                        if (!columnResizible) return;
+
+                        body.removeEventListener('mousemove', mouseMove, false);
+                        this.emitGeneral('resize', newWidth, columnResizible.getAttribute('column-type'));
+                    }
+                    i++;
                 },
                 false
             );
@@ -381,25 +403,16 @@ export default {
         clickLine(event, item, rowIndex) {
             switch (event.button) {
                 case 0:
-                    this.toogleSelectedLine(true, item, rowIndex);
+                    this.toogleSelectedLine(item, rowIndex);
                     break;
                 case 2:
-                    this.emitGeneral('rightClick', event, item);
+                    this.emitGeneral('right-click', event, item);
                     break;
             }
         },
-        toogleSelectedLine(isEvent, item, rowIndex) {
-            if (!isEvent && item.selected) {
-                return true;
-            } else if (isEvent) {
-                document.querySelectorAll('.dgt-grid .row[is-selected=true]').forEach((cel)=>{
-                    cel.setAttribute('is-selected', 'false');
-                });
-                document.querySelectorAll(`.dgt-grid .row-${rowIndex}`).forEach((cel)=>{
-                    cel.setAttribute('is-selected', 'true');
-                });
-                this.emitGeneral('selected-line', this.selectedLine);
-            }
+        toogleSelectedLine(item, rowIndex) {
+            this.selectedLine = item;
+            this.emitGeneral('selected-line', this.selectedLine);
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, ...args);
