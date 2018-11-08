@@ -24,13 +24,13 @@
         <h3> Dgt-Card </h3>
         <dgt-card-view></dgt-card-view>
         <hr>
+        <h3> Dgt-Tabs </h3>
+        <dgt-tabs-view></dgt-tabs-view>
         <h3> Dgt-List </h3>
         <dgt-list-view></dgt-list-view>
         <hr>
         <h3> Dgt-Component-Grid </h3>
         <dgt-component-grid-view></dgt-component-grid-view>
-        <h3> Dgt-Tabs </h3>
-        <dgt-tabs-view></dgt-tabs-view>
     </div>
 </template>
 
