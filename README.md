@@ -639,6 +639,39 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         </template>
     ```
 
+    É possível customizar o componente com algumas variáveis que podem ser passadas como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
+
+    ```css
+        {
+            --dgt-tabs-container-margin: 5px;
+            --dgt-tab-cursor: default;
+            --dgt-tab-before-opacity: 1;
+            --dgt-tab-blocked-opacity: 0.4;
+            --dgt-tab-blocked-color: #0f0f0f;
+            --dgt-tab-selected-background-color: #cbcbcb;
+            --dgt-tab-selected-color: #000;
+            --dgt-tab-border-bottom: 0;
+            --dgt-tabs-background-color: #f9f9fa;
+            --dgt-tabs-margin-right: 3px;
+            --dgt-tabs-each-width: auto;
+            --dgt-tabs-text-margin: 10px 5px;
+            --dgt-tabs-text-padding: 3px;
+            --dgt-bar-animated-background-color: #000;
+            --dgt-bar-animated-background-color: #000;
+            --dgt-bar-animated-transition-timing-function: ease;
+        }
+    ```
+
+    Para utilizar essa funcionalidade basta criar uma class, ex:
+
+        ```css
+            .custom {
+            --dgt-bar-animated-background-color: blue;
+            --dgt-tab-border-bottom: 4px solid blue;
+            --dgt-tabs-text-margin: 10px 5px 6px;
+            }
+        ```
+
 #### Slot no componente:
 
     ```html
