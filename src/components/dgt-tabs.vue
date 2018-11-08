@@ -19,6 +19,7 @@
           }
           &::before {
             content: "";
+            opacity: var(--dgt-tab-before-opacity, 1);
             position: absolute;
             top: -1px;
             left: 0;
@@ -33,6 +34,9 @@
           &[selected] {
             background-color: var(--dgt-tab-selected-background-color, #cbcbcb);
             color: var(--dgt-tab-selected-color, #000);
+            &.not-animated{
+              border-bottom: var(--dgt-tab-border-bottom, 0);
+            }
           }
           display: inline-block;
           position: relative;
@@ -41,8 +45,8 @@
           width: var(--dgt-tabs-each-width, auto);
           .tab-text {
             white-space: nowrap;
-            margin: 10px 5px;
-            padding: 3px;
+            margin: var(--dgt-tabs-text-margin, 10px 5px);
+            padding: var(--dgt-tabs-text-padding, 3px);
           }
         }
       }
@@ -119,7 +123,7 @@
         <ul class="tabs-container">
             <li class="tabs">
                 <ul class="tabs-list">
-                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${tab.block ? 'blocked' : ''}`"
+                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${data.barAnimatedHidden ? 'not-animated' : ''} ${tab.block ? 'blocked' : ''}`"
                         :index="`${index}`"
                         v-for="(tab, key, index) in data.tabs" :key="key"
                         @click.prevent="swapTab($event, key)"
@@ -130,7 +134,7 @@
                             <slot :name="key" :data=data></slot>
                         </p>
                     </li>
-                    <li v-else :class="`tab tab-${index} blocked`">
+                    <li v-else :class="`tab tab-${index} blocked ${data.barAnimatedHidden ? 'not-animated' : ''}`">
                         <p class="tab-text">
                             {{key}}
                             <slot :name="key" :data=data></slot>
