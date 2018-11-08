@@ -361,49 +361,40 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 ### Dados necessários para a renderização do componente:
     ```json
         dataProps: {
-            minWidthColumn: 80,
+            disableOrderColumns: false,
             pagination: {
                 page: 1,
                 total: 1
             },
             headers: {
                 Col1: {
-                    draggable: false,
-                    resizable: false
+                    name: 'Col1',
+                    draggable: true,
+                    resizable: true,
+                    sortable: true,
+                    width: '1fr',
+                    isCustomColumn: false
                 },
                 Col2: {
-                    draggable: false,
-                    resizable: false
+                    name: 'Col1'
                 },
                 Col3: {
-                    name: 'Name Col3',
-                    draggable: true,
-                    resizable: true
-                },
-                Col4: {
-                    name: 'Name Col4',
-                    draggable: true,
-                    resizable: true
-                },
-                Col5: {
-                    name: 'Name Col4',
-                    draggable: true,
-                    resizable: true
+                    name: 'Col1'
                 }
             },
-            data: [
+            minWidthColumn: 80,
+            lines: [
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
                     Col3: 'row 1 colum 3',
                     Col4: 'row 1 colum 4',
-                    Col5: 'row 1 colum 5'
+                    selected: true
                 },
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3',
-                    Col5: 'row 2 colum 5'
+                    Col3: 'row 2 colum 3'
                 }
             ]
         }
@@ -416,13 +407,33 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 
     ```js
         const dataDgtGrid = {
-            disableOrderColumns: false
+            disableOrderColumns: false // disabilita ordenação de todas as colunas
         };
+        lines: [
+            {
+                Col1: 'row 1 colum 1',
+                selected: true // inicia a grid com a linha selecionada
+            }
+        ];
+        Col1: {
+            name: 'Col1',
+            draggable: true, // habilita/desabilita drag&drop para a coluna
+            resizable: true, // habilita/desabilita resize para a coluna
+            sortable: true,  // habilita/desabilita sort para a coluna
+            width: '1fr',
+            isCustomColumn: false
+        }
     ```
 
 ### Disparando eventos para fora do componente:
 
     - O componente envia um evento, via emit, para fora onde o componente pai pode capturar para realizar operações sobre ele.
+
+    - Trigger de linha selecionada: dispara quando acontece um clique em alguma linnha da grid
+
+    ```js
+        this.emitGeneral('selected-line', this.selectedLine);
+    ```
 
     - Trigger de paginação: dispara quando acontece um clique em um dos botões de paginação
 
@@ -430,13 +441,22 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         this.emitGeneral('pagination', page);
     ```
 
-    - Trigger de linha selecionada: dispara quando acontece um clique em alguma linnha da grid
+    - Trigger de ordernação por coluna: dispara quando acontece um clique no row-header de alguma coluna
 
     ```js
-        this.emitGeneral('selectedLine', this.selectedLine);
+        this.emitGeneral('sort-column', nameColumn.textContent);
     ```
+
+    - Trigger de drag&drop por coluna: dispara quando acontece um drag&drop
+
     ```js
-        this.$bus.$emit('hideDetails');
+        this.emitGeneral('dragable-columns', columns);
+    ```
+
+    - Trigger de click do botão direito: dispara quando acontece um clique com o botão direito em um linha
+
+    ```js
+        this.emitGeneral('right-click', event, item);
     ```
 
     - A paginação também é customizavel, caso seja criado um slot de paginação não será enviado uma trigger via bus, porém o data será retornado no slot como visto antes, então para realizar alguma ação nos eventos de clique será necessário implementar estes eventos no componente pai.

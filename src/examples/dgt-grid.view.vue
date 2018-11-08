@@ -291,7 +291,7 @@ const dataDgtGrid = {
     },
     disableOrderColumns: false,
     minWidthColumn: 30,
-    data: page1,
+    lines: page1,
     checkedAll: false,
     checkeds: 0,
     arrowsSort: ['compare_arrows', 'arrow_right_alt', 'arrow_right_alt']
@@ -340,15 +340,15 @@ export default {
             this.dataDgtGrid.lineSelected = null;
             this.dataDgtGrid.pagination.page = page;
             this.toggleChecked('reset');
-            this.dataDgtGrid.data = page === 2 ? page2 : page1;
+            this.dataDgtGrid.lines = page === 2 ? page2 : page1;
         },
         sortColumn(columnName) {
             return columnName;
         },
         checkeAll() {
-            this.dataDgtGrid.data.forEach(obj => {
+            this.dataDgtGrid.lines.forEach(obj => {
                 obj.checked = !this.dataDgtGrid.isChecked;
-                this.dataDgtGrid.checkeds = obj.checked ? this.dataDgtGrid.data.length : 0;
+                this.dataDgtGrid.checkeds = obj.checked ? this.dataDgtGrid.lines.length : 0;
             });
         },
         toggleChecked(event, toggleCheckedAll) {
@@ -366,7 +366,7 @@ export default {
                 --this.dataDgtGrid.checkeds;
             } else {
                 ++this.dataDgtGrid.checkeds;
-                if (this.dataDgtGrid.checkeds === this.dataDgtGrid.data.length) {
+                if (this.dataDgtGrid.checkeds === this.dataDgtGrid.lines.length) {
                     this.dataDgtGrid.isChecked = true;
                 }
             }
@@ -378,7 +378,7 @@ export default {
             return obj[icon];
         },
         saveCheckedItems() {
-            let checkedItems = this.dataDgtGrid.data.filter(item => {
+            let checkedItems = this.dataDgtGrid.lines.filter(item => {
                 return item.checked;
             });
             if (checkedItems.length) {

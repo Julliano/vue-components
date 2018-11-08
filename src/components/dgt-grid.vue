@@ -148,7 +148,7 @@ export default {
                 }
             },
             minWidthColumn: 80,
-            data: [
+            lines: [
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
@@ -187,7 +187,7 @@ export default {
         this.init();
         this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
         this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-        [ this.selectedLine ] = this.dataProps.data.filter((line) => {
+        [ this.selectedLine ] = this.dataProps.lines.filter((line) => {
             if (line.selected) {
                 return line;
             }
@@ -216,7 +216,7 @@ export default {
     methods: {
         init() {
             this.pagination = this.dataProps.pagination;
-            this.originalState = this.dataProps.data;
+            this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
         },
@@ -419,7 +419,7 @@ export default {
         }
     },
     watch: {
-        'dataProps.data'() {
+        'dataProps.lines'() {
             this.init();
         }
     }
