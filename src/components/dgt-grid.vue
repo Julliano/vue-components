@@ -29,7 +29,7 @@
           background-color: var(
             --dgt-grid-row-selected-background-color,
             rgb(223, 236, 245)
-          );
+          ) !important;
         }
         .cel {
           display: inline;
@@ -95,7 +95,8 @@
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
              :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
-             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)">
+             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)"
+             :style="`background-color: ${item.lineColor}`">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -158,7 +159,8 @@ export default {
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3'
+                    Col3: 'row 2 colum 3',
+                    lineColor: 'red'
                 }
             ]
         }

@@ -394,7 +394,8 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3'
+                    Col3: 'row 2 colum 3',
+                    lineColor: 'cyan'
                 }
             ]
         }
@@ -412,7 +413,8 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         lines: [
             {
                 Col1: 'row 1 colum 1',
-                selected: true // inicia a grid com a linha selecionada
+                selected: true, // inicia a grid com a linha selecionada
+                lineColor: 'cyan' // adiciona cor default para a linha
             }
         ];
         Col1: {
