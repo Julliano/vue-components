@@ -93,7 +93,7 @@
                     <button class="delete is-small" @click="remove(index)"></button>
                 </li>
                 <li class="new-tag-input">
-                    <input id="inputTag" class="tag-input" type="text" placeholder="Add Tag"
+                    <input id="inputTag" class="tag-input" type="text" :placeholder="placeholder"
                         @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" v-model="newTag">
                 </li>
             </ul>
@@ -105,7 +105,8 @@
     export default {
         name: 'dgtTagInput',
         props: {
-            objTag: {}
+            objTag: {},
+            placeholder: String
         },
         data() {
             return {

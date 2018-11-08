@@ -37,7 +37,7 @@
         </div>
         <dgt-autocomplete :items="validsTags" :search-tag="search" :existingTags="tags" @tag-selected="pushTag" ref="childComplete">
             <template slot-scope="slotProps">
-                <dgt-tag-input @new-tag="newTag" :obj-tag="tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter"
+                <dgt-tag-input @new-tag="newTag" :obj-tag="tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
                 :style="'--dgt-background-tag: ' + `${backgroundTag}`+'; --dgt-tag-font-size: ' + `${fontSize}`+'px; --dgt-background-delete-tag: ' + `${backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${xTagDelete}`">
                 </dgt-tag-input>
             </template>
