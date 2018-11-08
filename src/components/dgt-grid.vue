@@ -1,83 +1,86 @@
 <style lang="scss" scoped>
-  .dgt-grid-component {
-    left: var(--gridComponentLeft, 372px);
-    max-width: var(--dgt-grid-max-width, 944px);
-    .dgt-grid {
-      display: grid;
-      overflow-x: auto;
-      width: var(--dgt-grid-width, 944px);
-      .col {
-        min-width: var(--dgt-grid-col-min-width, 30px);
-        overflow: hidden;
-        .row {
-          border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
-          white-space: var(--rowWhiteSpace, nowrap);
-          height: var(--rowHeight, 25px);
-          position: relative;
-          display: flex;
+.dgt-grid-component {
+  left: var(--dgt-grid-component-left, 372px);
+  max-width: var(--dgt-grid-component-max-width, 100%);
+  .dgt-grid {
+    display: grid;
+    overflow-x: auto;
+    width: var(--dgt-grid-width, 100%);
+    .col {
+      min-width: var(--dgt-grid-col-min-width, 30px);
+      overflow: hidden;
+      .row {
+        border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
+        white-space: var(--dgt-grid-row-white-space, nowrap);
+        height: var(--rowHeight, 25px);
+        position: relative;
+        display: flex;
+        align-items: center;
+        &.row-header {
+          background-color: var(--dgt-grid-row-header-background-color, gray);
+        }
+        &.row-header:hover .span-resize {
+          background-color: var(
+            --dgt-grid-row-header-span-background-color,
+            #ccc
+          );
+        }
+        &[selected="selected"] {
+          background-color: var(
+            --dgt-grid-row-selected-background-color,
+            rgb(223, 236, 245)
+          ) !important;
+        }
+        .cel {
+          display: inline;
+        }
+        .header {
+          width: 100%;
           align-items: center;
-          &.row-header:hover .span-resize {
-            background-color: var(--dgt-grid-row-header-background-color, #ccc);
+          position: relative;
+          color: var(--dgt-grid-header-color, #fff);
+          i {
+            vertical-align: text-top;
           }
-          &.selected {
-            background-color: var(
-                --dgt-grid-row-selected-background-color,
-                rgb(223, 236, 245)
-            );
+          &:hover {
+            cursor: var(--dgt-grid-header-hover, default);
           }
-          .cel {
-            display: inline;
-          }
-          .header {
-            background-color: var(--dgt-grid-header-background-color, gray);
+          .name-column {
             width: 100%;
             height: 100%;
-            align-items: center;
-            position: relative;
-            color: var(--dgt-grid-header-color, #fff);
-            i{
-              vertical-align: text-top;
-            }
-            &:hover {
-              cursor: var(--dgt-grid-header-hover, default);
-            }
-            .name-column{
-                  width: 100%;
-                  height: 100%;
-                  vertical-align: sub;
-                  display: inline-block;
-            }
+            vertical-align: sub;
+            display: inline-block;
           }
-          .span-resize {
-            position: absolute;
-            right: var(--dgt-grid-header-span-size, 0px);
-            height: 100%;
-            width: var(--dgt-grid-header-span-width, 4px);
-            &:hover {
-              cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
-            }
+        }
+        .span-resize {
+          position: absolute;
+          right: var(--dgt-grid-header-span-size, 0px);
+          height: 100%;
+          width: var(--dgt-grid-header-span-width, 4px);
+          &:hover {
+            cursor: var(--dgt-grid-header-span-resize-hover, w-resize);
           }
-          &:not(.header) {
-            user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
-          }
+        }
+        &:not(.header) {
+          user-select: none; /* Non-prefixed version, currently supported by Chrome and Opera */
         }
       }
     }
-    .horizontal-center{
-      justify-content: center;
-      text-align: center;
-    }
   }
+  .horizontal-center {
+    justify-content: center;
+    text-align: center;
+  }
+}
 </style>
 
 <template>
   <section class="dgt-grid-component component">
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-      <div class="col" :draggable="header.draggable" @dragstart="drag($event)" @drop.prevent="drop($event)"
-           @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
-           :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
-        <div class="row row-header">
+      <div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
+           :class="`col-${headerIndex}`" :column-type="headerKey" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
+        <div class="row row-header" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)">
           <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
             <span class="name-column" v-if="header.isCustomColumn">
               <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
@@ -91,7 +94,9 @@
           <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
-             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @click="selectedLineFunc(item)">
+             :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
+             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)"
+             :style="`background-color: ${item.lineColor}`">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -128,36 +133,33 @@ export default {
             },
             headers: {
                 Col1: {
-                    name: 'Col1'
+                    name: 'Col1',
+                    draggable: true,
+                    resizable: true,
+                    sortable: true,
+                    width: '1fr',
+                    isCustomColumn: false
                 },
                 Col2: {
                     name: 'Col1'
                 },
                 Col3: {
                     name: 'Col1'
-                },
-                Col4: {
-                    name: 'Col1'
-                },
-                Col5: {
-                    name: 'Col1'
                 }
             },
             minWidthColumn: 80,
-            data: [
+            lines: [
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
                     Col3: 'row 1 colum 3',
-                    Col4: 'row 1 colum 4',
-                    Col5: 'row 1 colum 5'
+                    selected: true
                 },
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
                     Col3: 'row 2 colum 3',
-                    Col4: 'row 2 colum 4',
-                    Col5: 'row 2 colum 5'
+                    lineColor: 'red'
                 }
             ]
         }
@@ -182,42 +184,41 @@ export default {
         };
     },
     beforeMount() {
-        if (!this.dataProps) return;
-
-        this.pagination = this.dataProps.pagination;
-        this.dataProps.headers = this.dataProps.headers;
+        if (!this.dataProps.headers || !this.dataProps.lines) return;
+        this.init();
+        this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
+        this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
+        [this.selectedLine] = this.dataProps.lines.filter((line) => {
+            if (line.selected) {
+                return line;
+            }
+            return false;
+        });
     },
     mounted() {
-        if (this.dataProps && this.dataProps.headers) {
-            this.init();
-            this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
-            this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-        }
+        let dgtGrid = document.querySelector('.dgt-grid');
 
-    },
-    updated() {
-        let dgtGridColumnsWidth = document.querySelector('.dgt-grid').style.gridTemplateColumns.split(' ');
+        if (!dgtGrid) return;
+
+        let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let columnWidth in dgtGridColumnsWidth) {
-            indexColumn1fr++;
-            if (columnWidth === '1fr') break;
+        for (let index = 0; index < dgtGridColumnsWidth.length; index++) {
+            indexColumn1fr = index + 1;
+            if (dgtGridColumnsWidth[index] === '1fr') break;
         }
-        let widthColumn = document.querySelector(`.dgt-grid .col:nth-child(${indexColumn1fr})`);
+        let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
+        let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
+        let widthGrid = dgtGrid.offsetWidth;
+        gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
+            widthGrid);
+        this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
 
-        if (!widthColumn) return;
-
-        if (this.setMinWidthColumn(widthColumn)) {
-            let gridTemplateColumns = this.templateColumns(`${widthColumn}px `);
-            let widthGrid = document.querySelector('.dgt-grid').offsetWidth;
-            gridTemplateColumns = this.trimWidthColumns(widthColumn, gridTemplateColumns,
-                widthGrid);
-            this.gridTemplateColumns = this.joinColumnsWidth(gridTemplateColumns);
-        }
     },
     methods: {
         init() {
-            this.originalState = this.dataProps.data;
+            this.pagination = this.dataProps.pagination;
+            this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
         },
@@ -237,10 +238,11 @@ export default {
             return nodes.indexOf(child);
         },
         drop(event) {
-            const columnDrop = event.target.closest('[class^="col"]');
-            if (!columnDrop.draggable) return;
+            const columnDrop = event.target.closest('.col');
+            let rowHeader = columnDrop.querySelector('.row-header');
+            if (!rowHeader.draggable) return;
 
-            const grid = columnDrop.parentElement;
+            const grid = columnDrop.closest('.dgt-grid');
             const indexDrop = this.indexElement(grid, columnDrop);
             const indexDrag = this.indexElement(grid, this.columnDrag);
 
@@ -254,13 +256,21 @@ export default {
             indexDrop > indexDrag ?
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop + 1]) :
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
+
+            this.emitNewDispositionColumns();
         },
         drag(event) {
-            this.columnDrag = event.target;
-            event.dataTransfer.setData('text', event.target.id);
+            this.columnDrag = event.target.closest('.col');
+            event.dataTransfer.setData('text', event.target.closest('.col').id);
         },
         dragover(event) {
             event.preventDefault();
+        },
+        emitNewDispositionColumns() {
+            let columns = [...document.querySelectorAll('.dgt-grid .col')].map(el => {
+                return el.getAttribute('column-type');
+            });
+            this.emitGeneral('dragable-columns', columns);
         },
         setSortState() {
             switch (this.sortState) {
@@ -311,9 +321,11 @@ export default {
         resizeColumn(event) {
             const { body } = document;
             this.colWidthPos2 = event.clientX;
+            let newWidth = 0;
+            let columnResizible = null;
             let mouseMove = e => {
                 e.preventDefault();
-                let columnResizible = event.target.closest('[class^="col"]');
+                columnResizible = event.target.closest('[class^="col"]');
                 if (!columnResizible) return;
                 let dgtGrid = document.querySelector('.dgt-grid');
                 let elem = dgtGrid.querySelector(
@@ -323,7 +335,7 @@ export default {
                 this.colWidthPos2 = e.clientX;
                 let indexToDrop = this.indexElement(dgtGrid, elem);
                 let splitWidthColumns = dgtGrid.style.gridTemplateColumns.split(' ');
-                let newWidth = elem.offsetWidth - this.colWidthPos1;
+                newWidth = elem.offsetWidth - this.colWidthPos1;
                 if (elem.offsetWidth >= this.minWidthColumn) {
                     splitWidthColumns[indexToDrop] = `${newWidth}px`;
                     if (newWidth < this.minWidthColumn) {
@@ -334,11 +346,19 @@ export default {
                     splitWidthColumns[indexToDrop] = this.minWidthColumn;
                 }
             };
+
             body.addEventListener('mousemove', mouseMove, false);
+            let i = 0;
             body.addEventListener(
                 'mouseup',
                 () => {
-                    body.removeEventListener('mousemove', mouseMove, false);
+                    if (i === 0) {
+                        if (!columnResizible) return;
+
+                        body.removeEventListener('mousemove', mouseMove, false);
+                        this.emitGeneral('resize', newWidth, columnResizible.getAttribute('column-type'));
+                    }
+                    i++;
                 },
                 false
             );
@@ -382,8 +402,18 @@ export default {
         paginate(page) {
             this.emitGeneral('pagination', page);
         },
-        selectedLineFunc(item) {
-            this.selectedLine = this.selectedLine === item ? null : item;
+        clickLine(event, item, rowIndex) {
+            switch (event.button) {
+                case 0:
+                    this.toogleSelectedLine(item, rowIndex);
+                    break;
+                case 2:
+                    this.emitGeneral('right-click', event, item);
+                    break;
+            }
+        },
+        toogleSelectedLine(item) {
+            this.selectedLine = item;
             this.emitGeneral('selected-line', this.selectedLine);
         },
         emitGeneral(emitFunc, ...args) {
@@ -391,7 +421,7 @@ export default {
         }
     },
     watch: {
-        'dataProps.data'() {
+        'dataProps.lines'() {
             this.init();
         }
     }
