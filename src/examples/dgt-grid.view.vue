@@ -93,7 +93,8 @@
                 </li>
             </ul>
         </div>
-        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" @pagination="pagination" @sort-column="sortColumn">
+        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" 
+            @pagination="pagination" @sort-column="sortColumn" @dragable-columns="dragableColumns" @resize="resizeColumn" @right-click="rightClick">
             <template slot="top-bar" slot-scope="slotProps">
                 <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
             </template>
@@ -123,7 +124,7 @@
                     for="checkbox"
                     v-model="slotProps.obj.checked"
                     @change="toggleChecked($event)"
-                    @click="preventPropagation($event)"
+                    @mousedown="preventPropagation($event)"
                     :key="index"
                 >
             </template>
@@ -188,7 +189,8 @@ const page1 = [
         storage: false,
         attach_file: false,
         message: true,
-        tipo: 'pesquisa'
+        tipo: 'pesquisa',
+        selected: true
     },
     {
         horario: 'horario1',
@@ -289,7 +291,7 @@ const dataDgtGrid = {
     },
     disableOrderColumns: false,
     minWidthColumn: 30,
-    data: page1,
+    lines: page1,
     checkedAll: false,
     checkeds: 0,
     arrowsSort: ['compare_arrows', 'arrow_right_alt', 'arrow_right_alt']
@@ -338,15 +340,15 @@ export default {
             this.dataDgtGrid.lineSelected = null;
             this.dataDgtGrid.pagination.page = page;
             this.toggleChecked('reset');
-            this.dataDgtGrid.data = page === 2 ? page2 : page1;
+            this.dataDgtGrid.lines = page === 2 ? page2 : page1;
         },
         sortColumn(columnName) {
             return columnName;
         },
         checkeAll() {
-            this.dataDgtGrid.data.forEach(obj => {
+            this.dataDgtGrid.lines.forEach(obj => {
                 obj.checked = !this.dataDgtGrid.isChecked;
-                this.dataDgtGrid.checkeds = obj.checked ? this.dataDgtGrid.data.length : 0;
+                this.dataDgtGrid.checkeds = obj.checked ? this.dataDgtGrid.lines.length : 0;
             });
         },
         toggleChecked(event, toggleCheckedAll) {
@@ -364,7 +366,7 @@ export default {
                 --this.dataDgtGrid.checkeds;
             } else {
                 ++this.dataDgtGrid.checkeds;
-                if (this.dataDgtGrid.checkeds === this.dataDgtGrid.data.length) {
+                if (this.dataDgtGrid.checkeds === this.dataDgtGrid.lines.length) {
                     this.dataDgtGrid.isChecked = true;
                 }
             }
@@ -376,15 +378,21 @@ export default {
             return obj[icon];
         },
         saveCheckedItems() {
-            let checkedItems = this.dataDgtGrid.data.filter(item => {
+            let checkedItems = this.dataDgtGrid.lines.filter(item => {
                 return item.checked;
             });
             if (checkedItems.length) {
                 //rest para salvar multiplos objs
             }
         },
-        resizeColumn(event) {
-            this.$children[0].resizeColumn(event);
+        dragableColumns(columns) {
+            return columns;
+        },
+        resizeColumn(newWidth, columnType) {
+            dataDgtGrid.headers[columnType].width = newWidth;
+        },
+        rightClick(event, item) {
+            return [event, item];
         },
         showMenuColumns(event) {
             let listColumns = event.target.parentElement.querySelector('.list-columns');

@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .dgt-grid-component {
-  left: var(--gridComponentLeft, 372px);
-  max-width: var(--dgt-grid-max-width, 100%);
+  left: var(--dgt-grid-component-left, 372px);
+  max-width: var(--dgt-grid-component-max-width, 100%);
   .dgt-grid {
     display: grid;
     overflow-x: auto;
@@ -11,27 +11,31 @@
       overflow: hidden;
       .row {
         border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
-        white-space: var(--rowWhiteSpace, nowrap);
+        white-space: var(--dgt-grid-row-white-space, nowrap);
         height: var(--rowHeight, 25px);
         position: relative;
         display: flex;
         align-items: center;
-        &.row-header:hover .span-resize {
-          background-color: var(--dgt-grid-row-header-background-color, #ccc);
+        &.row-header {
+          background-color: var(--dgt-grid-row-header-background-color, gray);
         }
-        &.selected {
+        &.row-header:hover .span-resize {
+          background-color: var(
+            --dgt-grid-row-header-span-background-color,
+            #ccc
+          );
+        }
+        &[selected="selected"] {
           background-color: var(
             --dgt-grid-row-selected-background-color,
             rgb(223, 236, 245)
-          );
+          ) !important;
         }
         .cel {
           display: inline;
         }
         .header {
-          background-color: var(--dgt-grid-header-background-color, gray);
           width: 100%;
-          height: 100%;
           align-items: center;
           position: relative;
           color: var(--dgt-grid-header-color, #fff);
@@ -74,10 +78,9 @@
   <section class="dgt-grid-component component">
     <slot name="top-bar" :dataProps="dataProps"></slot>
     <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-      <div class="col" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)" @drop.prevent="drop($event)"
-           @dragover="dragover($event)" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
-           :class="'col-'+headerIndex" :id="`col-${headerIndex}`">
-        <div class="row row-header">
+      <div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
+           :class="`col-${headerIndex}`" :column-type="headerKey" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
+        <div class="row row-header" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)">
           <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
             <span class="name-column" v-if="header.isCustomColumn">
               <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
@@ -91,7 +94,9 @@
           <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
         </div>
         <div class="row"  v-for="(item, index, key) in filteredData" :key=key
-             :class="['row-'+index,  {selected:  selectedLine === item, 'horizontal-center':  header['isCustomColumn']}]" @click="selectedLineFunc(item)">
+             :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
+             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)"
+             :style="`background-color: ${item.lineColor}`">
           <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
             <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
                   :dataProps="dataProps" :obj="item"></slot>
@@ -117,7 +122,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 export default {
     name: 'dgtGrid',
     props: {
@@ -144,16 +148,18 @@ export default {
                 }
             },
             minWidthColumn: 80,
-            data: [
+            lines: [
                 {
                     Col1: 'row 1 colum 1',
                     Col2: 'row 1 colum 2',
-                    Col3: 'row 1 colum 3'
+                    Col3: 'row 1 colum 3',
+                    selected: true
                 },
                 {
                     Col1: 'row 2 colum 1',
                     Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3'
+                    Col3: 'row 2 colum 3',
+                    lineColor: 'red'
                 }
             ]
         }
@@ -178,15 +184,21 @@ export default {
         };
     },
     beforeMount() {
-        if (!this.dataProps.headers) return;
+        if (!this.dataProps.headers || !this.dataProps.lines) return;
         this.init();
         this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
         this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
+        [this.selectedLine] = this.dataProps.lines.filter((line) => {
+            if (line.selected) {
+                return line;
+            }
+            return false;
+        });
     },
     mounted() {
         let dgtGrid = document.querySelector('.dgt-grid');
-        
-        if(!dgtGrid) return;
+
+        if (!dgtGrid) return;
 
         let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
@@ -206,7 +218,7 @@ export default {
     methods: {
         init() {
             this.pagination = this.dataProps.pagination;
-            this.originalState = this.dataProps.data;
+            this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
         },
@@ -226,10 +238,11 @@ export default {
             return nodes.indexOf(child);
         },
         drop(event) {
-            const columnDrop = event.target.closest('[class^="col"]');
-            if (!columnDrop.draggable) return;
+            const columnDrop = event.target.closest('.col');
+            let rowHeader = columnDrop.querySelector('.row-header');
+            if (!rowHeader.draggable) return;
 
-            const grid = columnDrop.parentElement;
+            const grid = columnDrop.closest('.dgt-grid');
             const indexDrop = this.indexElement(grid, columnDrop);
             const indexDrag = this.indexElement(grid, this.columnDrag);
 
@@ -243,13 +256,21 @@ export default {
             indexDrop > indexDrag ?
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop + 1]) :
                 grid.insertBefore(this.columnDrag, grid.childNodes[indexDrop]);
+
+            this.emitNewDispositionColumns();
         },
         drag(event) {
-            this.columnDrag = event.target;
-            event.dataTransfer.setData('text', event.target.id);
+            this.columnDrag = event.target.closest('.col');
+            event.dataTransfer.setData('text', event.target.closest('.col').id);
         },
         dragover(event) {
             event.preventDefault();
+        },
+        emitNewDispositionColumns() {
+            let columns = [...document.querySelectorAll('.dgt-grid .col')].map(el => {
+                return el.getAttribute('column-type');
+            });
+            this.emitGeneral('dragable-columns', columns);
         },
         setSortState() {
             switch (this.sortState) {
@@ -300,9 +321,11 @@ export default {
         resizeColumn(event) {
             const { body } = document;
             this.colWidthPos2 = event.clientX;
+            let newWidth = 0;
+            let columnResizible = null;
             let mouseMove = e => {
                 e.preventDefault();
-                let columnResizible = event.target.closest('[class^="col"]');
+                columnResizible = event.target.closest('[class^="col"]');
                 if (!columnResizible) return;
                 let dgtGrid = document.querySelector('.dgt-grid');
                 let elem = dgtGrid.querySelector(
@@ -312,7 +335,7 @@ export default {
                 this.colWidthPos2 = e.clientX;
                 let indexToDrop = this.indexElement(dgtGrid, elem);
                 let splitWidthColumns = dgtGrid.style.gridTemplateColumns.split(' ');
-                let newWidth = elem.offsetWidth - this.colWidthPos1;
+                newWidth = elem.offsetWidth - this.colWidthPos1;
                 if (elem.offsetWidth >= this.minWidthColumn) {
                     splitWidthColumns[indexToDrop] = `${newWidth}px`;
                     if (newWidth < this.minWidthColumn) {
@@ -323,11 +346,19 @@ export default {
                     splitWidthColumns[indexToDrop] = this.minWidthColumn;
                 }
             };
+
             body.addEventListener('mousemove', mouseMove, false);
+            let i = 0;
             body.addEventListener(
                 'mouseup',
                 () => {
-                    body.removeEventListener('mousemove', mouseMove, false);
+                    if (i === 0) {
+                        if (!columnResizible) return;
+
+                        body.removeEventListener('mousemove', mouseMove, false);
+                        this.emitGeneral('resize', newWidth, columnResizible.getAttribute('column-type'));
+                    }
+                    i++;
                 },
                 false
             );
@@ -371,8 +402,18 @@ export default {
         paginate(page) {
             this.emitGeneral('pagination', page);
         },
-        selectedLineFunc(item) {
-            this.selectedLine = this.selectedLine === item ? null : item;
+        clickLine(event, item, rowIndex) {
+            switch (event.button) {
+                case 0:
+                    this.toogleSelectedLine(item, rowIndex);
+                    break;
+                case 2:
+                    this.emitGeneral('right-click', event, item);
+                    break;
+            }
+        },
+        toogleSelectedLine(item) {
+            this.selectedLine = item;
             this.emitGeneral('selected-line', this.selectedLine);
         },
         emitGeneral(emitFunc, ...args) {
@@ -380,7 +421,7 @@ export default {
         }
     },
     watch: {
-        'dataProps.data'() {
+        'dataProps.lines'() {
             this.init();
         }
     }
