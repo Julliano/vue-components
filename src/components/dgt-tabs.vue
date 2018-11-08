@@ -37,7 +37,7 @@
           display: inline-block;
           position: relative;
           background-color: var(--dgt-tabs-background-color, #f9f9fa);
-          margin-right: 3px;
+          margin-right: var(--dgt-tabs-margin-right, 3px);
           width: var(--dgt-tabs-each-width, auto);
           .tab-text {
             white-space: nowrap;
