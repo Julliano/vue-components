@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .dgt-grid-component {
-  left: var(--gridComponentLeft, 372px);
-  max-width: var(--dgt-grid-max-width, 100%);
+  left: var(--dgt-grid-component-left, 372px);
+  max-width: var(--dgt-grid-component-max-width, 100%);
   .dgt-grid {
     display: grid;
     overflow-x: auto;
@@ -11,7 +11,7 @@
       overflow: hidden;
       .row {
         border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
-        white-space: var(--rowWhiteSpace, nowrap);
+        white-space: var(--dgt-grid-row-white-space, nowrap);
         height: var(--rowHeight, 25px);
         position: relative;
         display: flex;
@@ -122,7 +122,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 export default {
     name: 'dgtGrid',
     props: {
@@ -185,15 +184,16 @@ export default {
         };
     },
     beforeMount() {
-        if (!this.dataProps.headers) return;
+        if (!this.dataProps.headers || !this.dataProps.lines) return;
         this.init();
         this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
         this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-        [ this.selectedLine ] = this.dataProps.lines.filter((line) => {
+        [this.selectedLine] = this.dataProps.lines.filter((line) => {
             if (line.selected) {
                 return line;
             }
-        })
+            return false;
+        });
     },
     mounted() {
         let dgtGrid = document.querySelector('.dgt-grid');
@@ -412,7 +412,7 @@ export default {
                     break;
             }
         },
-        toogleSelectedLine(item, rowIndex) {
+        toogleSelectedLine(item) {
             this.selectedLine = item;
             this.emitGeneral('selected-line', this.selectedLine);
         },
