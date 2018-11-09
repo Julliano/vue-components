@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .custom {
   --dgt-list-width: fit-content;
   --dgt-list-max-height: 400px;

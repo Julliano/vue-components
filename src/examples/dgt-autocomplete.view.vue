@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .custom {
   --dgt-input-width: 50%;
   --dgt-input-padding: 10px;
