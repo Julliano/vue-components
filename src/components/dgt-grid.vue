@@ -202,9 +202,9 @@ export default {
 
         let dgtGridColumnsWidth = dgtGrid.style.gridTemplateColumns.split(' ');
         let indexColumn1fr = 0;
-        for (let index = 0; index < dgtGridColumnsWidth.length; index++) {
-            indexColumn1fr = index + 1;
-            if (dgtGridColumnsWidth[index] === '1fr') break;
+        for (let columnWidth of dgtGridColumnsWidth) {
+            indexColumn1fr++;
+            if (columnWidth === '1fr') break;
         }
         let widthColumn = dgtGrid.querySelector(`.col:nth-child(${indexColumn1fr})`);
         widthColumn = widthColumn && widthColumn.offsetWidth;
@@ -375,10 +375,10 @@ export default {
         },
         trimWidthColumns(defaultWidthColumn, columnsWidth, widthGrid) {
             let sumWidthColumns = this.sumWidthColumns(columnsWidth);
-            for (let i = 0; i < columnsWidth.length; i++) {
-                let elem = columnsWidth[i];
-                if (elem.indexOf(`${defaultWidthColumn}`) > -1) {
-                    columnsWidth[i] =  `${parseInt(columnsWidth[i].replace('px', '')) -
+            for (let key of columnsWidth.keys()) {
+                let col = columnsWidth[key];
+                if (col.indexOf(`${defaultWidthColumn}`) > -1) {
+                    columnsWidth[key] =  `${parseInt(columnsWidth[key].replace('px', '')) -
                         (sumWidthColumns > widthGrid ? sumWidthColumns - widthGrid : 0)}px `;
                     break;
                 }
