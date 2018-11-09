@@ -18,14 +18,14 @@
         <h3> Dgt-Autocomplete </h3>
         <dgt-autocomplete-view></dgt-autocomplete-view>
         <hr>
+        <h3> Dgt-Tabs </h3>
+        <dgt-tabs-view></dgt-tabs-view>
         <h3> Dgt-Grid </h3>
         <dgt-grid-view></dgt-grid-view>
         <hr>
         <h3> Dgt-Card </h3>
         <dgt-card-view></dgt-card-view>
         <hr>
-        <h3> Dgt-Tabs </h3>
-        <dgt-tabs-view></dgt-tabs-view>
         <h3> Dgt-List </h3>
         <dgt-list-view></dgt-list-view>
         <hr>

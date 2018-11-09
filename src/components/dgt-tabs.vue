@@ -211,7 +211,7 @@ export default {
                     );
                     clearTimeout(executeMutation);
                     observer.observe(this.$el, config);
-                });
+                }, 200);
                 observer.disconnect();
             });
             observer.observe(this.$el.closest('body'), config);
@@ -239,10 +239,7 @@ export default {
                 let widthElem = elem.offsetWidth;
                 let positionAnimatedBar = elem.offsetLeft;
                 let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
-                //let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
-
                 animatedBar.style.left = `${positionAnimatedBar}px`;
-                //animatedBarBorderWidth += animatedBarBorderWidth;
                 animatedBar.style.width = `${widthElem}px`;
             }
 
