@@ -14,7 +14,7 @@ describe('dgtTabs', () => {
 
         wrapper = mount(dgtTabs, {
             propsData: {
-                data: { color: 'red' }
+                dataProps: { color: 'red' }
             }
         });
     });
@@ -24,6 +24,6 @@ describe('dgtTabs', () => {
     });
 
     test('Verifica se a resposta do request trouxe data', () => {
-        expect(wrapper.props().data).toBeTruthy();
+        expect(wrapper.props().dataProps).toBeTruthy();
     });
 });

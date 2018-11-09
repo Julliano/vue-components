@@ -42,10 +42,9 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtGrid](#DGTGrid)
 1. [DgtStarRating](#DGTStarRating)
 1. [DgtTagInput](#DGTTagInput)
-1. [DgtGrid](#DGTGrid)
 1. [DgtTabs](#DGTTabs)
 
-## Componente de Autocomplete - DGTAutocomplete
+## DGTAutocomplete
 
     Como utilizar o componente dgtAutocomplete:
 
@@ -105,7 +104,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
             <dgt-autocomplete class="custom"></dgt-autocomplete>
         ```
 
-## Componente de Card - DGTCard
+## DGTCard
 
     Como utilizar o componente dgtCard
 
@@ -172,7 +171,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
             <dgt-card class="custom"></dgt-card>
         ```
 
-## Componente de lista - DGTList
+## DGTList
 
     Como utilizar o componente dgtList
 
@@ -248,7 +247,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
         ```
 
 
-## Componente de Grid de components - DGTComponentsGrid
+## DGTComponentsGrid
 
     Como utilizar o componente dgtComponentGrid
 
@@ -322,7 +321,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
             <dgt-grid-component class="custom"></dgt-grid-component>
         ```
 
-## Componente de Grid - DGTGrid
+## DGTGrid
 
 ### Como ultilizar o componente dgtGrid
 
@@ -332,19 +331,19 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     - O vue trabalha com conceito de slots e para cada slot previsto no componente é possível implementa-lo da maneira que desejar.
     Cada slot do componente retorna um data, que é o proprio data do componente pai quando passado como props.
 
-### dgtGrid:
+dgtGrid:
     ```html
         <slot name="custom-column-header" :data="data"></slot>
     ```
 
-### Exemplo componente pai:
+Exemplo componente pai:
     ```html
         <template slot="custom-column-header" slot-scope="slotProps">
     ```
 
     - Além do data o slot pode retornar outros parametros no caso do slot de icon
 
-### dgtGrid:
+dgtGrid:
     ```html
         <slot name="icon-order" :data="data" :sortState="sortState" :columnSort="sortedColumn" :currentColumn="header.name"></slot>
     ```
@@ -468,7 +467,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     - A coluna customColumn é um slot totalmente customizavel, logo se existir ela deve ser toda implementada inclusive os eventos que existirem nela, exceto os eventos nativos do componente.
     A customColumn pode ser inserida em qualquer lugar da grid ou seja no inicio entre outras colunas ou no fim.
 
-## Componente de Rating star - DGTStarRating
+## DGTStarRating
 
     dgtStarRating é um componente construido para dar notas no formato de estrelas.
     Foi construido de maneira customizável (cujas customizações estão a seguir no mesmo documento)
@@ -527,7 +526,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
             <dgt-star-rating class="custom"></dgt-star-rating>
         ```
 
-## Componente de Tag input - DGTTagInput
+## DGTTagInput
 
     dgtTagInput é um componente construido para criar e gerenciar tags.
 
@@ -583,18 +582,16 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
             <dgt-tag-input class="custom"></dgt-tag-input>
         ```
 
+## DGTTabs
 
-## DgtTabs - DGTTabs
+-dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
 
-#### Como ultilizar o componente dgtTabs:
-
-    dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
-
-    ```js
-    dataTabs: {
+```js
+dataTabs: {
+    dataProps: {
         vertical: false,
         position: '',
-        barAnimatedHidden: false,
+        barAnimatedHidden: true,
         barAnimatedSize: '2',
         tabs: {
             'Filtros lorem': {
@@ -612,92 +609,102 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
             'Filtros Específicos': {}
         }
     }
-    ```
+}
+```
 
-    O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo. O atributo block deternina se a tag será 'clicavel' ou não.
+O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo. O atributo block deternina se a tag será 'clicavel' ou não.
 
-    #### Abaixo a estrutura básica:
+### Abaixo a estrutura básica:
 
-    ```js
-    dataTabs: {
-        tabs: {
-            'Filtros lorem': {},
-            'Filtros impsum': {},
-            'Filtros Gerais': {},
-            'Filtros Específicos': {selected: true}
-        }
+```js
+    tabs: {
+        'Filtros lorem': {},
+        'Filtros impsum': {},
+        'Filtros Gerais': {},
+        'Filtros Específicos': {selected: true}
     }
-    ```
+}
+```
 
-    O componente envia um array via emit para fora com o nome da tab clicada e o próprio objeto da data recebido por props
+O componente envia um array via emit para fora com o nome da tab clicada e o próprio objeto da data recebido por props
 
-    O atributo 'position' pode receber apenas dois valores:
+O atributo 'position' pode receber apenas dois valores:
 
-    `position: 'vertical-left' | 'vertical-right'`
+`position: 'vertical-left' | 'vertical-right'`
 
-    para setar um desses valorer ao atributo position é necessário que o atributo 'vertical' esteja true, caso contrário mantenha o atributo 
-    'position' com uma string vazio, assim como no exemplo.
+para setar um desses valorer ao atributo position é necessário que o atributo 'vertical' esteja true, caso contrário mantenha o atributo 
+'position' com uma string vazio, assim como no exemplo.
 
-    ```js
+```js
+    {
+        vertical: false,
+        position: '',
+    }
+    {
         vertical: true,
         position: 'vertical-left',
-    ```
+    }
+    {
+        vertical: true,
+        position: 'vertical-right',
+    }
+```
 
-    O atributo 'selected' dentro do objeto da tab define a tab que estará selecionada por default, nesse caso apenas uma tab deve conter este atributo.
+O atributo 'selected' dentro do objeto da tab define a tab que estará selecionada por default, nesse caso apenas uma tab deve conter este atributo.
 
-    ```js
-        'Filtros Gerais': {
-            selected: true
-        }
-    ```
+```js
+    'Filtros Gerais': {
+        selected: true
+    }
+```
 
-    O atributo 'quantityContents' é apenas um atributo extra para a construção do componente na view, logo esse atributo não é enxergado pelo componente. Cada tab terá um slot dinamico para customização individual de cada tab
+O atributo 'quantityContents' é apenas um atributo extra para a construção do componente na view, logo esse atributo não é enxergado pelo componente. Cada tab terá um slot dinamico para customização individual de cada tab
 
-    ### Exemplo em view:
+### Exemplo em view:
 
-    ```html
-        <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
-            <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
-        </template>
-    ```
+```html
+    <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
+        <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
+    </template>
+```
 
-    É possível customizar o componente com algumas variáveis que podem ser passadas como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
+É possível customizar o componente com algumas variáveis que podem ser passadas como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
+
+```css
+    {
+        --dgt-tabs-container-margin: 5px;
+        --dgt-tabs-cursor: default;
+        --dgt-tabs-before-opacity: 1;
+        --dgt-tabs-blocked-opacity: 0.4;
+        --dgt-tabs-blocked-color: #0f0f0f;
+        --dgt-tabs-selected-background-color: #cbcbcb;
+        --dgt-tabs-selected-color: #000;
+        --dgt-tabs-border-bottom: 0;
+        --dgt-tabs-background-color: #f9f9fa;
+        --dgt-tabs-margin-right: 3px;
+        --dgt-tabs-each-width: auto;
+        --dgt-tabs-text-margin: 10px 5px;
+        --dgt-tabs-text-padding: 3px;
+        --dgt-tabs-bar-animated-background-color: #000;
+        --dgt-tabs-bar-animated-background-color: #000;
+        --dgt-tabs-bar-animated-transition-timing-function: ease;
+    }
+```
+
+Para utilizar essa funcionalidade basta criar uma class, ex:
 
     ```css
-        {
-            --dgt-tabs-container-margin: 5px;
-            --dgt-tab-cursor: default;
-            --dgt-tab-before-opacity: 1;
-            --dgt-tab-blocked-opacity: 0.4;
-            --dgt-tab-blocked-color: #0f0f0f;
-            --dgt-tab-selected-background-color: #cbcbcb;
-            --dgt-tab-selected-color: #000;
-            --dgt-tab-border-bottom: 0;
-            --dgt-tabs-background-color: #f9f9fa;
-            --dgt-tabs-margin-right: 3px;
-            --dgt-tabs-each-width: auto;
-            --dgt-tabs-text-margin: 10px 5px;
-            --dgt-tabs-text-padding: 3px;
-            --dgt-bar-animated-background-color: #000;
-            --dgt-bar-animated-background-color: #000;
-            --dgt-bar-animated-transition-timing-function: ease;
+        .custom {
+        --dgt-tabs-bar-animated-background-color: blue;
+        --dgt-tabs-border-bottom: 4px solid blue;
+        --dgt-tabs-text-margin: 10px 5px 6px;
         }
     ```
 
-    Para utilizar essa funcionalidade basta criar uma class, ex:
+-Slot no componente:
 
-        ```css
-            .custom {
-            --dgt-bar-animated-background-color: blue;
-            --dgt-tab-border-bottom: 4px solid blue;
-            --dgt-tabs-text-margin: 10px 5px 6px;
-            }
-        ```
+```html
+    <slot :name="key" :dataProps=dataTabs></slot>
+```
 
-#### Slot no componente:
-
-    ```html
-        <slot :name="key" :data=data></slot>
-    ```
-
-    O atributo 'key' no slot é o mesmo nome da tab definada no objeto tabs
+O atributo 'key' no slot é o mesmo nome da tab definada no objeto tabs

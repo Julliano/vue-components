@@ -215,7 +215,7 @@ export default {
                 });
                 observer.disconnect();
             });
-            observer.observe(this.$el.parentNode.parentNode, config);
+            observer.observe(this.$el.closest('body'), config);
             window.addEventListener('resize', () => {
                 this.setAnimatedBar(
                     this.$el.querySelector('.tabs-container .tabs-list .tab[selected]')
