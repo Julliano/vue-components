@@ -18,9 +18,9 @@
   .text-container {
     margin: auto;
     width: 67%;
-    .card-name{
-        margin: 0;
-        font-weight: normal;
+    .card-name {
+      margin: 0;
+      font-weight: normal;
     }
     .opacity-5 {
       opacity: 0.5;
@@ -30,17 +30,17 @@
 </style>
 
 <template>
-    <div class="dgt-card-component component" @click="emit(data.emit)">
-        <i :class="`${data.class}`">{{ data.icon }}</i>
+    <div class="dgt-card-component component" @click="emit(dataProps.emit)">
+        <i :class="`${dataProps.class}`">{{ dataProps.icon }}</i>
         <div class="text-container">
             <h4 class="card-name">
-                {{ data.name }}
-                <span class="opacity-5" v-if="data.count">
-                    ({{ data.count }})
+                {{ dataProps.name }}
+                <span class="opacity-5" v-if="dataProps.count">
+                    ({{ dataProps.count }})
                 </span>
             </h4>
-            <small name="card-subheader" class="opacity-5" v-if="data.subHeader">
-                {{ data.subHeader }}
+            <small name="card-subheader" class="opacity-5" v-if="dataProps.subHeader">
+                {{ dataProps.subHeader }}
             </small>
         </div>
     </div>
@@ -50,7 +50,14 @@
     export default {
         name: 'dgtCard',
         props: {
-            data: {}
+            dataProps: {
+                icon: 'image',
+                emit: '/midias',
+                name: 'Mídias',
+                class: 'material-icons',
+                subHeader: 'Subtitle',
+                count: 0
+            }
         },
         methods: {
             emit(param) {
