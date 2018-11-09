@@ -51,12 +51,12 @@
         name: 'dgtCard',
         props: {
             dataProps: {
-                icon: 'image',
-                emit: '/midias',
-                name: 'Mídias',
-                class: 'material-icons',
-                subHeader: 'Subtitle',
-                count: 0
+                icon: String,
+                emit: String,
+                name: String,
+                class: String,
+                subHeader: String,
+                count: Number
             }
         },
         methods: {

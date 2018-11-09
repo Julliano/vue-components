@@ -26,8 +26,8 @@
         name: 'dgtComponentGrid',
         props: {
             grid: {},
-            header: '',
-            subHeader: ''
+            header: String,
+            subHeader: String
         }
     };
 </script>

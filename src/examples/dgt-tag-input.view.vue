@@ -37,7 +37,7 @@
         </div>
         <dgt-autocomplete :items="tagProps.validsTags" :search-tag="tagProps.search" :existingTags="tagProps.tags" @tag-selected="pushTag" ref="childComplete">
             <template slot-scope="slotProps">
-                <dgt-tag-input @new-tag="newTag" :obj-tag="tagProps.tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
+                <dgt-tag-input @new-tag="newTag" :tag-arr="tagProps.tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
                 :style="'--dgt-background-tag: ' + `${tagProps.backgroundTag}`+'; --dgt-tag-font-size: ' + `${tagProps.fontSize}`+'px; --dgt-background-delete-tag: ' + `${tagProps.backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${tagProps.xTagDelete}`">
                 </dgt-tag-input>
             </template>
@@ -75,10 +75,10 @@
         },
         methods: {
             newTag(param) {
-                this.search = param;
+                this.tagProps.search = param;
             },
             pushTag(param) {
-                this.tags.push(param);
+                this.tagProps.tags.push(param);
             },
             keyDown() {
                 this.$refs.childComplete && this.$refs.childComplete.onArrowDown();
@@ -90,7 +90,7 @@
                 if (this.$refs.childComplete) {
                     this.$refs.childComplete.onEnter();
                 } else {
-                    this.tags.push(this.search);
+                    this.tagProps.tags.push(this.search);
                 }
                 document.getElementById('inputTag').focus();
             }

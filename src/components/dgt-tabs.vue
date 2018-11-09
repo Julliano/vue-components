@@ -165,22 +165,22 @@ export default {
     name: 'dgtTabs',
     props: {
         dataProps: {
-            vertical: false,
-            position: '',
-            barAnimatedHidden: true,
-            barAnimatedSize: '2',
+            vertical: Boolean,
+            position: String,
+            barAnimatedHidden: Boolean,
+            barAnimatedSize: Number,
             tabs: {
                 'Filtros lorem': {
-                    block: true,
-                    quantityContents: 10
+                    block: Boolean,
+                    quantityContents: Number
                 },
                 'Filtros impsum': {
-                    block: false,
-                    quantityContents: 5
+                    block: Boolean,
+                    quantityContents: Number
                 },
                 'Filtros Gerais': {
-                    selected: true,
-                    quantityContents: 3
+                    selected: Boolean,
+                    quantityContents: Number
                 },
                 'Filtros Específicos': {}
             }

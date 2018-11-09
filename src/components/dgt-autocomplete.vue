@@ -62,14 +62,14 @@ export default {
         event: 'tag-selected'
     },
     props: {
-        id: '',
-        items: {},
-        searchTag: '',
-        showInput: false,
+        id: String,
+        items: Array,
+        searchTag: String,
+        showInput: Boolean,
         existingTags: {},
         minSearch: {
             type: Number,
-            default: 1
+            default: Number
         }
     },
     data() {
