@@ -1,7 +1,6 @@
 const path = require('path');
 const uglify = require('rollup-plugin-uglify')
 const vue = require('rollup-plugin-vue')
-const buble = require('rollup-plugin-buble')
 const postcss = require('rollup-plugin-postcss')
 const autoprefixer = require('autoprefixer')
 const { rollup } = require('rollup')
@@ -46,10 +45,6 @@ const configs = {
     umd: {
         output: '.js',
         format: 'umd'
-    },
-    esm: {
-        output: '.esm.js',
-        format: 'es'
     }
 }
 gulp.task('compile-vue-components', async () => {
@@ -61,15 +56,13 @@ gulp.task('compile-vue-components', async () => {
                 input: path.join(__dirname, 'src', 'components', `${componetsVueJs[i]}.vue`),
                 plugins: [
                     vue({
-                        css: true
+                        css: true,
+                        compileTemplate: true
                     }),
                     postcss({
                         plugins: [
                             autoprefixer()
                         ]
-                    }),
-                    buble({
-                        objectAssign: 'Object.assign'
                     })
                 ].concat(config.plugins || [])
             }

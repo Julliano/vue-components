@@ -1,7 +1,7 @@
 {
     "name": "dgt-vue-components",
     "description": "Library of Dígitro vue components",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "author": "digitro.com.br>",
     "baseURL": "http://localhost:8080",
     "scripts": {
@@ -18,7 +18,7 @@
         "not ie <= 8"
     ],
     "devDependencies": {
-        "@babel/core": "^7.0.0",
+        "@babel/core": "^7.1.5",
         "@vue/test-utils": "^1.0.0-beta.25",
         "babel-core": "^6.26.0",
         "babel-jest": "^23.6.0",
@@ -35,10 +35,9 @@
         "gulp-vueify": "0.0.3",
         "jest": "^23.6.0",
         "jsonfile": "^5.0.0",
-        "node-sass": "^4.5.3",
+        "node-sass": "^4.10.0",
         "ramda": "^0.25.0",
-        "rollup": "^0.57.1",
-        "rollup-plugin-buble": "^0.19.2",
+        "rollup": "^0.67.0",
         "rollup-plugin-postcss": "^1.6.1",
         "rollup-plugin-uglify": "^3.0.0",
         "rollup-plugin-vue": "^2.3.0",
