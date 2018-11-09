@@ -9,6 +9,6 @@ test('swap between tabs', async t => {
     const tabCount = await tabs.count;
     for (let i = 0; i < tabCount; i++) {
         const tab = Selector(`.tab.tab-${i}`);
-        await t.click(tab).wait(500);
+        await t.click(tab).wait(10);
     }
 });

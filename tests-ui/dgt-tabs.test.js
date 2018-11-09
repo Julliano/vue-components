@@ -6,6 +6,12 @@ describe('dgtTabs', () => {
     let wrapper;
 
     beforeAll(() => {
+        global.MutationObserver = class {
+            constructor(callback) { }
+            disconnect() { }
+            observe(element, initObject) { }
+        };
+
         wrapper = mount(dgtTabs, {
             propsData: {
                 data: { color: 'red' }

@@ -1,13 +1,14 @@
 <style lang="scss">
 :root {
-  --dgt-bar-animated-background-color: blue;
-  --dgt-tab-border-bottom: 4px solid blue;
+  --dgt-tabs-bar-animated-background-color: blue;
+  --dgt-tabs-border-bottom: 4px solid blue;
   --dgt-tabs-text-margin: 10px 5px 6px;
+  --dgt-tabs-before-color: #f5f5f5;
 }
 </style>
 
 <template>
-    <dgt-tabs :data="dataTabs" @swap-tabs="swapTabs">
+    <dgt-tabs :dataProps="dataTabs" @swap-tabs="swapTabs">
         <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
             <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
         </template>
@@ -42,7 +43,7 @@ import dgtTabs from '../components/dgt-tabs.vue';
 let dataTabs = {
     vertical: false,
     position: '',
-    barAnimatedHidden: true,
+    barAnimatedHidden: false,
     barAnimatedSize: '2',
     tabs: {
         'Filtros lorem': {

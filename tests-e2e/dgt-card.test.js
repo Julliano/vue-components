@@ -8,5 +8,5 @@ fixture`dgt-card`.page`${scenario.baseURL}`;
 
 test('test card click', async t => {
     const card = Selector('.dgt-card-component .material-icons');
-    await t.click(card).wait(1000);
+    await t.click(card).wait(10);
 });

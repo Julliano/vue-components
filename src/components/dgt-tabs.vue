@@ -15,27 +15,30 @@
         width: 100%;
         .tab {
           &:hover {
-            cursor: var(--dgt-tab-cursor, default);
+            cursor: var(--dgt-tabs-cursor, default);
           }
           &::before {
             content: "";
-            opacity: var(--dgt-tab-before-opacity, 1);
+            opacity: var(--dgt-tabs-before-opacity, 1);
             position: absolute;
             top: -1px;
             left: 0;
-            border-top: 10px solid #fff;
+            border-top: 10px solid var(--dgt-tabs-before-color, #fff);
             border-right: 10px solid transparent;
             width: 0;
           }
           &.blocked {
-            opacity: var(--dgt-tab-blocked-opacity, 0.4);
-            color: var(--dgt-tab-blocked-color, #0f0f0f);
+            opacity: var(--dgt-tabs-blocked-opacity, 0.4);
+            color: var(--dgt-tabs-blocked-color, #0f0f0f);
           }
           &[selected] {
-            background-color: var(--dgt-tab-selected-background-color, #cbcbcb);
-            color: var(--dgt-tab-selected-color, #000);
-            &.not-animated{
-              border-bottom: var(--dgt-tab-border-bottom, 0);
+            background-color: var(
+              --dgt-tabs-selected-background-color,
+              #cbcbcb
+            );
+            color: var(--dgt-tabs-selected-color, #000);
+            &.not-animated {
+              border-bottom: var(--dgt-tabs-border-bottom, 0);
             }
           }
           display: inline-block;
@@ -51,12 +54,12 @@
         }
       }
       &.bar-animated {
-        background-color: var(--dgt-bar-animated-background-color, #000);
-        border-color: var(--dgt-bar-animated-background-color, #000);
+        background-color: var(--dgt-tabs-bar-animated-background-color, #000);
+        border-color: var(--dgt-tabs-bar-animated-background-color, #000);
         height: 0;
         left: 0;
         transition-timing-function: var(
-          --dgt-bar-animated-transition-timing-function,
+          --dgt-tabs-bar-animated-transition-timing-function,
           ease
         );
         transition: width 0.5s, left 0.5s;
@@ -119,49 +122,70 @@
 </style>
 
 <template>
-    <div class="dgt-tabs-component component" :class="`${data.vertical ? 'vertical' : ''} ${data.position}`">
+    <div class="dgt-tabs-component component" :class="`${dataProps.vertical ? 'vertical' : ''} ${dataProps.position}`">
         <ul class="tabs-container">
             <li class="tabs">
                 <ul class="tabs-list">
-                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${data.barAnimatedHidden ? 'not-animated' : ''} ${tab.block ? 'blocked' : ''}`"
+                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${dataProps.barAnimatedHidden ? 'not-animated' : ''} ${tab.block ? 'blocked' : ''}`"
                         :index="`${index}`"
-                        v-for="(tab, key, index) in data.tabs" :key="key"
+                        v-for="(tab, key, index) in dataProps.tabs" :key="key"
                         @click.prevent="swapTab($event, key)"
                         v-if="!tab.block"
                         >
                         <p class="tab-text">
                             {{key}}
-                            <slot :name="key" :data=data></slot>
+                            <slot :name="key" :dataProps=dataProps></slot>
                         </p>
                     </li>
-                    <li v-else :class="`tab tab-${index} blocked ${data.barAnimatedHidden ? 'not-animated' : ''}`">
+                    <li v-else :class="`tab tab-${index} blocked ${dataProps.barAnimatedHidden ? 'not-animated' : ''}`">
                         <p class="tab-text">
                             {{key}}
-                            <slot :name="key" :data=data></slot>
+                            <slot :name="key" :dataProps=dataProps></slot>
                         </p>
                     </li>
                 </ul>
             </li>
             <li class="bar-animated"
-                :hidden="data.barAnimatedHidden"
+                :hidden="dataProps.barAnimatedHidden"
                 :style="{
-                    borderWidth: `${data.barAnimatedSize}px`,
+                    borderWidth: `${dataProps.barAnimatedSize}px`,
                     borderStyle: 'solid',
-                    borderColor: `${data.barAnimatedColor}`
+                    borderColor: `${dataProps.barAnimatedColor}`
                 }">
             </li>
         </ul>
         <div class="tabs-content">
-            <slot name="tabContent" :data=data :selectedTab=selectedTab></slot>
+            <slot name="tabContent" :dataProps=dataProps :selectedTab=selectedTab></slot>
         </div>
     </div>
 </template>
 
 <script>
+/* eslint-disable */
 export default {
     name: 'dgtTabs',
     props: {
-        data: {}
+        dataProps: {
+            vertical: false,
+            position: '',
+            barAnimatedHidden: true,
+            barAnimatedSize: '2',
+            tabs: {
+                'Filtros lorem': {
+                    block: true,
+                    quantityContents: 10
+                },
+                'Filtros impsum': {
+                    block: false,
+                    quantityContents: 5
+                },
+                'Filtros Gerais': {
+                    selected: true,
+                    quantityContents: 3
+                },
+                'Filtros Específicos': {}
+            }
+        }
     },
     data() {
         return {
@@ -169,10 +193,6 @@ export default {
         };
     },
     mounted() {
-        let tabSelected = this.$el.querySelector('.tabs-container .tabs-list .tab[selected]');
-
-        this.setAnimatedBar(tabSelected);
-
         this.$nextTick(() => {
             let config = {
                 childList: true,
@@ -195,8 +215,7 @@ export default {
                 });
                 observer.disconnect();
             });
-
-            observer.observe(this.$el, config);
+            observer.observe(this.$el.parentNode.parentNode, config);
             window.addEventListener('resize', () => {
                 this.setAnimatedBar(
                     this.$el.querySelector('.tabs-container .tabs-list .tab[selected]')
@@ -209,9 +228,9 @@ export default {
             return word.toLowerCase().replace(/ /g, '-');
         },
         getSelected(tabName) {
-            if (this.data.tabs[tabName] && this.data.tabs[tabName].selected) {
+            if (this.dataProps.tabs[tabName] && this.dataProps.tabs[tabName].selected) {
                 this.selectedTab = tabName;
-                this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
+                this.emitGeneral('swap-tabs', this.dataProps.tabs[tabName], tabName);
                 return true;
             }
             return false;
@@ -221,11 +240,11 @@ export default {
                 let widthElem = elem.offsetWidth;
                 let positionAnimatedBar = elem.offsetLeft;
                 let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
-                let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
+                //let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
 
                 animatedBar.style.left = `${positionAnimatedBar}px`;
-                animatedBarBorderWidth += animatedBarBorderWidth;
-                animatedBar.style.width = `${widthElem - animatedBarBorderWidth}px`;
+                //animatedBarBorderWidth += animatedBarBorderWidth;
+                animatedBar.style.width = `${widthElem}px`;
             }
 
         },
@@ -241,7 +260,7 @@ export default {
             animatedBar.style.height = `${widthElem - animatedBarBorderHeight}px`;
         },
         setAnimatedBar(elem) {
-            if (this.data.vertical) {
+            if (this.dataProps.vertical) {
                 let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab')
                     .widthTab.offsetWidth;
                 this.$el.querySelector('.tabs-container').style.width = `${widthTab}px`;
@@ -255,11 +274,11 @@ export default {
                 event.target :
                 event.target.parentNode;
 
-            this.data.tabs[this.selectedTab].selected = false;
+            this.dataProps.tabs[this.selectedTab].selected = false;
             this.selectedTab = tabName;
-            this.data.tabs[tabName].selected = true;
+            this.dataProps.tabs[tabName].selected = true;
 
-            this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
+            this.emitGeneral('swap-tabs', this.dataProps.tabs[tabName], tabName);
             this.setAnimatedBar(elem);
         },
         emitGeneral(emitFunc, ...args) {

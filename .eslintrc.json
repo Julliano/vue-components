@@ -96,7 +96,12 @@
                 "enforceForRenamedProperties": false
             }
         ],
+        "prefer-object-spread": [
+            "error"
+        ],
+        "prefer-spread": "error",
         "prefer-template": "error",
+        "no-useless-call": "error",
         "template-curly-spacing": [
             "error",
             "never"
@@ -164,6 +169,7 @@
             {
                 "code": 100,
                 "ignoreTrailingComments": true,
+                "ignoreComments": true,
                 "ignoreStrings": true
             }
         ],
