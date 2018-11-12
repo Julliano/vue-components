@@ -8,7 +8,6 @@
     width: var(--dgt-grid-width, 100%);
     .col {
       min-width: var(--dgt-grid-col-min-width, 30px);
-      overflow: hidden;
       .row {
         border-bottom: var(--dgt-grid-row-border-bottom, 1px solid gray);
         white-space: var(--dgt-grid-row-white-space, nowrap);
@@ -33,6 +32,7 @@
         }
         .cel {
           display: inline;
+          overflow-x: hidden;
         }
         .header {
           width: 100%;
