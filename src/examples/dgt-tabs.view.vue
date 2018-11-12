@@ -120,6 +120,14 @@ export default {
     methods: {
         swapTabs(response) {
             [this.tabSelected] = [response[1]];
+        },
+        setConfig(isVertical, position) {
+            dataTabs.vertical = isVertical;
+            dataTabs.position = position;
+            this.drawComponent = false;
+            this.$nextTick(() => {
+                this.drawComponent = true;
+            });
         }
     },
     watch: {
@@ -132,28 +140,13 @@ export default {
         disposition(disposition) {
             switch (disposition) {
                 case 'vertical-left':
-                    dataTabs.vertical = true;
-                    dataTabs.position = 'vertical-left';
-                    this.drawComponent = false;
-                    this.$nextTick(() => {
-                        this.drawComponent = true;
-                    });
+                    this.setConfig(true, 'vertical-left');
                     break;
                 case 'vertical-right':
-                    dataTabs.vertical = true;
-                    dataTabs.position = 'vertical-right';
-                    this.drawComponent = false;
-                    this.$nextTick(() => {
-                        this.drawComponent = true;
-                    });
+                    this.setConfig(true, 'vertical-right');
                     break;
                 default:
-                    dataTabs.vertical = false;
-                    dataTabs.position = '';
-                    this.drawComponent = false;
-                    this.$nextTick(() => {
-                        this.drawComponent = true;
-                    });
+                    this.setConfig(false, '');
                     break;
             }
         },

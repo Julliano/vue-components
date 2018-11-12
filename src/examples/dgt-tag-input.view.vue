@@ -35,7 +35,7 @@
                 <input type="number" v-model="tagProps.fontSize">
             </div>
         </div>
-        <dgt-autocomplete :items="tagProps.validsTags" :search-tag="tagProps.search" :existingTags="tagProps.tags" @tag-selected="pushTag" ref="childComplete">
+        <dgt-autocomplete :items="tagProps.validsTags" :search-tag="tagProps.search" :existing-tags="tagProps.tags" @tag-selected="pushTag" ref="childComplete">
             <template slot-scope="slotProps">
                 <dgt-tag-input @new-tag="newTag" :tag-arr="tagProps.tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
                 :style="'--dgt-background-tag: ' + `${tagProps.backgroundTag}`+'; --dgt-tag-font-size: ' + `${tagProps.fontSize}`+'px; --dgt-background-delete-tag: ' + `${tagProps.backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${tagProps.xTagDelete}`">
