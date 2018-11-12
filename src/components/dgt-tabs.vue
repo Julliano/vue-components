@@ -3,7 +3,7 @@
   .tabs-container {
     padding: 0;
     position: relative;
-    margin: var(--dgt-tabs-container-margin, 5px);
+    margin: var(--dgt-tabs-container-margin, 0);
     li {
       text-decoration: none;
       list-style: none;
@@ -34,7 +34,7 @@
           &[selected] {
             background-color: var(
               --dgt-tabs-selected-background-color,
-              #cbcbcb
+              #898989
             );
             color: var(--dgt-tabs-selected-color, #000);
             &.not-animated {
@@ -48,6 +48,7 @@
           width: var(--dgt-tabs-each-width, auto);
           .tab-text {
             white-space: nowrap;
+            font-size: var(--dgt-tabs-text-font-size, 14px);
             margin: var(--dgt-tabs-text-margin, 10px 5px);
             padding: var(--dgt-tabs-text-padding, 3px);
           }
@@ -81,41 +82,48 @@
           .tab {
             writing-mode: vertical-rl;
             display: block;
+            &::before {
+              left: initial;
+              border-top: 10px solid var(--dgt-tabs-before-color, #fff);
+              border-left: 10px solid transparent;
+              border-right: none;
+            }
+            &[selected] {
+              &.not-animated {
+                border-left: var(--dgt-tabs-border-bottom, 0);
+                border-bottom: none;
+              }
+            }
           }
         }
+      }
+      &.bar-animated {
+        width: 1px;
+        top: 0;
+        transition: height 1s, top 1s;
       }
     }
     &.vertical-left {
       .tabs-container {
         float: left;
       }
-      .tab {
-        transform: rotate(180deg);
-        ::before {
-          border-left: 10px solid transparent;
-          border-right: 0;
-          right: 0;
+      li {
+        .tabs-list {
+          .tab {
+            transform: rotate(180deg);
+          }
         }
-      }
-      .bar-animated {
-        bottom: 15px;
-        right: 0;
-        left: auto;
+        &.bar-animated {
+          bottom: 15px;
+          right: 0;
+          left: auto;
+        }
       }
     }
     &.vertical-right {
-      .tab::before {
-        width: 0;
-        left: initial;
-      }
       .tabs-content {
         float: left;
       }
-    }
-    .bar-animated {
-      width: 1px;
-      top: 0;
-      transition: height 1s, top 1s;
     }
   }
 }
@@ -192,6 +200,9 @@ export default {
         };
     },
     mounted() {
+        let tabSelected = this.$el.querySelector('.tabs-container .tabs-list .tab[selected]');
+        this.setAnimatedBar(tabSelected);
+
         this.$nextTick(() => {
             let config = {
                 childList: true,
@@ -235,30 +246,29 @@ export default {
             return false;
         },
         moveAnimatedBar(elem) {
-            if (elem && elem.offsetWidth) {
-                let widthElem = elem.offsetWidth;
-                let positionAnimatedBar = elem.offsetLeft;
-                let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
-                animatedBar.style.left = `${positionAnimatedBar}px`;
-                animatedBar.style.width = `${widthElem}px`;
-            }
-
+            if (!(elem && elem.offsetWidth)) return;
+            let widthElem = elem.offsetWidth;
+            let positionAnimatedBar = elem.offsetLeft;
+            let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
+            animatedBar.style.left = `${positionAnimatedBar}px`;
+            animatedBar.style.width = `${widthElem}px`;
         },
         verticalMoveAnimatedBar(elem) {
+            if (!(elem && elem.offsetWidth)) return;
             let widthElem = elem.offsetHeight;
             let positionAnimatedBar = elem.offsetTop;
             let tabsContainer = this.$el.querySelector('.tabs-container');
             let animatedBar = tabsContainer.querySelector('.bar-animated');
-            let animatedBarBorderHeight = parseInt(animatedBar.style.borderWidth.replace('px', ''));
-
             animatedBar.style.top = `${positionAnimatedBar}px`;
-            animatedBarBorderHeight += animatedBarBorderHeight;
-            animatedBar.style.height = `${widthElem - animatedBarBorderHeight}px`;
+            animatedBar.style.height = `${widthElem}px`;
         },
         setAnimatedBar(elem) {
             if (this.dataProps.vertical) {
-                let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab')
-                    .widthTab.offsetWidth;
+                let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab');
+
+                if (!widthTab) return;
+
+                widthTab = widthTab.offsetWidth;
                 this.$el.querySelector('.tabs-container').style.width = `${widthTab}px`;
                 this.verticalMoveAnimatedBar(elem);
                 return;
