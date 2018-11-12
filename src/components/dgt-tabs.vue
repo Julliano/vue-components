@@ -3,7 +3,7 @@
   .tabs-container {
     padding: 0;
     position: relative;
-    margin: var(--dgt-tabs-container-margin, 5px);
+    margin: var(--dgt-tabs-container-margin, 0);
     li {
       text-decoration: none;
       list-style: none;
@@ -15,27 +15,30 @@
         width: 100%;
         .tab {
           &:hover {
-            cursor: var(--dgt-tab-cursor, default);
+            cursor: var(--dgt-tabs-cursor, default);
           }
           &::before {
             content: "";
-            opacity: var(--dgt-tab-before-opacity, 1);
+            opacity: var(--dgt-tabs-before-opacity, 1);
             position: absolute;
             top: -1px;
             left: 0;
-            border-top: 10px solid #fff;
+            border-top: 10px solid var(--dgt-tabs-before-color, #fff);
             border-right: 10px solid transparent;
             width: 0;
           }
           &.blocked {
-            opacity: var(--dgt-tab-blocked-opacity, 0.4);
-            color: var(--dgt-tab-blocked-color, #0f0f0f);
+            opacity: var(--dgt-tabs-blocked-opacity, 0.4);
+            color: var(--dgt-tabs-blocked-color, #0f0f0f);
           }
           &[selected] {
-            background-color: var(--dgt-tab-selected-background-color, #cbcbcb);
-            color: var(--dgt-tab-selected-color, #000);
-            &.not-animated{
-              border-bottom: var(--dgt-tab-border-bottom, 0);
+            background-color: var(
+              --dgt-tabs-selected-background-color,
+              #898989
+            );
+            color: var(--dgt-tabs-selected-color, #000);
+            &.not-animated {
+              border-bottom: var(--dgt-tabs-border-bottom, 0);
             }
           }
           display: inline-block;
@@ -45,18 +48,19 @@
           width: var(--dgt-tabs-each-width, auto);
           .tab-text {
             white-space: nowrap;
+            font-size: var(--dgt-tabs-text-font-size, 14px);
             margin: var(--dgt-tabs-text-margin, 10px 5px);
             padding: var(--dgt-tabs-text-padding, 3px);
           }
         }
       }
       &.bar-animated {
-        background-color: var(--dgt-bar-animated-background-color, #000);
-        border-color: var(--dgt-bar-animated-background-color, #000);
+        background-color: var(--dgt-tabs-bar-animated-background-color, #000);
+        border-color: var(--dgt-tabs-bar-animated-background-color, #000);
         height: 0;
         left: 0;
         transition-timing-function: var(
-          --dgt-bar-animated-transition-timing-function,
+          --dgt-tabs-bar-animated-transition-timing-function,
           ease
         );
         transition: width 0.5s, left 0.5s;
@@ -78,81 +82,88 @@
           .tab {
             writing-mode: vertical-rl;
             display: block;
+            &::before {
+              left: initial;
+              border-top: 10px solid var(--dgt-tabs-before-color, #fff);
+              border-left: 10px solid transparent;
+              border-right: none;
+            }
+            &[selected] {
+              &.not-animated {
+                border-left: var(--dgt-tabs-border-bottom, 0);
+                border-bottom: none;
+              }
+            }
           }
         }
+      }
+      &.bar-animated {
+        width: 1px;
+        top: 0;
+        transition: height 1s, top 1s;
       }
     }
     &.vertical-left {
       .tabs-container {
         float: left;
       }
-      .tab {
-        transform: rotate(180deg);
-        ::before {
-          border-left: 10px solid transparent;
-          border-right: 0;
-          right: 0;
+      li {
+        .tabs-list {
+          .tab {
+            transform: rotate(180deg);
+          }
         }
-      }
-      .bar-animated {
-        bottom: 15px;
-        right: 0;
-        left: auto;
+        &.bar-animated {
+          bottom: 15px;
+          right: 0;
+          left: auto;
+        }
       }
     }
     &.vertical-right {
-      .tab::before {
-        width: 0;
-        left: initial;
-      }
       .tabs-content {
         float: left;
       }
-    }
-    .bar-animated {
-      width: 1px;
-      top: 0;
-      transition: height 1s, top 1s;
     }
   }
 }
 </style>
 
 <template>
-    <div class="dgt-tabs-component component" :class="`${data.vertical ? 'vertical' : ''} ${data.position}`">
+    <div class="dgt-tabs-component component" :class="`${dataProps.vertical ? 'vertical' : ''} ${dataProps.position}`">
         <ul class="tabs-container">
             <li class="tabs">
                 <ul class="tabs-list">
-                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${data.barAnimatedHidden ? 'not-animated' : ''} ${tab.block ? 'blocked' : ''}`"
+                    <li class="tab" :selected="getSelected(key)" :class="`tab-${index} ${kebabCase(key)} ${dataProps.barAnimatedHidden ? 'not-animated' : ''} ${tab.block ? 'blocked' : ''}`"
                         :index="`${index}`"
-                        v-for="(tab, key, index) in data.tabs" :key="key"
+                        v-for="(tab, key, index) in dataProps.tabs" :key="key"
                         @click.prevent="swapTab($event, key)"
                         v-if="!tab.block"
                         >
                         <p class="tab-text">
                             {{key}}
-                            <slot :name="key" :data=data></slot>
+                            <slot :name="key" :dataProps=dataProps></slot>
                         </p>
                     </li>
-                    <li v-else :class="`tab tab-${index} blocked ${data.barAnimatedHidden ? 'not-animated' : ''}`">
+                    <li v-else :class="`tab tab-${index} blocked ${dataProps.barAnimatedHidden ? 'not-animated' : ''}`">
                         <p class="tab-text">
                             {{key}}
-                            <slot :name="key" :data=data></slot>
+                            <slot :name="key" :dataProps=dataProps></slot>
                         </p>
                     </li>
                 </ul>
             </li>
             <li class="bar-animated"
-                :hidden="data.barAnimatedHidden"
+                :hidden="dataProps.barAnimatedHidden"
                 :style="{
-                    borderWidth: `${data.barAnimatedSize}px`,
+                    borderWidth: `${dataProps.barAnimatedSize}px`,
                     borderStyle: 'solid',
-                    borderColor: `${data.barAnimatedColor}`
+                    borderColor: `${dataProps.barAnimatedColor}`
                 }">
             </li>
         </ul>
         <div class="tabs-content">
-            <slot name="tabContent" :data=data :selectedTab=selectedTab></slot>
+            <slot name="tabContent" :dataProps=dataProps :selectedTab=selectedTab></slot>
         </div>
     </div>
 </template>
@@ -161,7 +172,27 @@
 export default {
     name: 'dgtTabs',
     props: {
-        data: {}
+        dataProps: {
+            vertical: Boolean,
+            position: String,
+            barAnimatedHidden: Boolean,
+            barAnimatedSize: Number,
+            tabs: {
+                'Filtros lorem': {
+                    block: Boolean,
+                    quantityContents: Number
+                },
+                'Filtros impsum': {
+                    block: Boolean,
+                    quantityContents: Number
+                },
+                'Filtros Gerais': {
+                    selected: Boolean,
+                    quantityContents: Number
+                },
+                'Filtros Específicos': {}
+            }
+        }
     },
     data() {
         return {
@@ -170,7 +201,6 @@ export default {
     },
     mounted() {
         let tabSelected = this.$el.querySelector('.tabs-container .tabs-list .tab[selected]');
-
         this.setAnimatedBar(tabSelected);
 
         this.$nextTick(() => {
@@ -192,11 +222,10 @@ export default {
                     );
                     clearTimeout(executeMutation);
                     observer.observe(this.$el, config);
-                });
+                }, 200);
                 observer.disconnect();
             });
-
-            observer.observe(this.$el, config);
+            observer.observe(this.$el.closest('body'), config);
             window.addEventListener('resize', () => {
                 this.setAnimatedBar(
                     this.$el.querySelector('.tabs-container .tabs-list .tab[selected]')
@@ -209,41 +238,37 @@ export default {
             return word.toLowerCase().replace(/ /g, '-');
         },
         getSelected(tabName) {
-            if (this.data.tabs[tabName] && this.data.tabs[tabName].selected) {
+            if (this.dataProps.tabs[tabName] && this.dataProps.tabs[tabName].selected) {
                 this.selectedTab = tabName;
-                this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
+                this.emitGeneral('swap-tabs', this.dataProps.tabs[tabName], tabName);
                 return true;
             }
             return false;
         },
         moveAnimatedBar(elem) {
-            if (elem && elem.offsetWidth) {
-                let widthElem = elem.offsetWidth;
-                let positionAnimatedBar = elem.offsetLeft;
-                let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
-                let animatedBarBorderWidth = parseInt(animatedBar.style.borderWidth.replace('px', ''));
-
-                animatedBar.style.left = `${positionAnimatedBar}px`;
-                animatedBarBorderWidth += animatedBarBorderWidth;
-                animatedBar.style.width = `${widthElem - animatedBarBorderWidth}px`;
-            }
-
+            if (!(elem && elem.offsetWidth)) return;
+            let widthElem = elem.offsetWidth;
+            let positionAnimatedBar = elem.offsetLeft;
+            let animatedBar = this.$el.querySelector('.tabs-container .bar-animated');
+            animatedBar.style.left = `${positionAnimatedBar}px`;
+            animatedBar.style.width = `${widthElem}px`;
         },
         verticalMoveAnimatedBar(elem) {
+            if (!(elem && elem.offsetWidth)) return;
             let widthElem = elem.offsetHeight;
             let positionAnimatedBar = elem.offsetTop;
             let tabsContainer = this.$el.querySelector('.tabs-container');
             let animatedBar = tabsContainer.querySelector('.bar-animated');
-            let animatedBarBorderHeight = parseInt(animatedBar.style.borderWidth.replace('px', ''));
-
             animatedBar.style.top = `${positionAnimatedBar}px`;
-            animatedBarBorderHeight += animatedBarBorderHeight;
-            animatedBar.style.height = `${widthElem - animatedBarBorderHeight}px`;
+            animatedBar.style.height = `${widthElem}px`;
         },
         setAnimatedBar(elem) {
-            if (this.data.vertical) {
-                let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab')
-                    .widthTab.offsetWidth;
+            if (this.dataProps.vertical) {
+                let widthTab = this.$el.querySelector('.tabs-container .tabs-list .tab');
+
+                if (!widthTab) return;
+
+                widthTab = widthTab.offsetWidth;
                 this.$el.querySelector('.tabs-container').style.width = `${widthTab}px`;
                 this.verticalMoveAnimatedBar(elem);
                 return;
@@ -255,11 +280,11 @@ export default {
                 event.target :
                 event.target.parentNode;
 
-            this.data.tabs[this.selectedTab].selected = false;
+            this.dataProps.tabs[this.selectedTab].selected = false;
             this.selectedTab = tabName;
-            this.data.tabs[tabName].selected = true;
+            this.dataProps.tabs[tabName].selected = true;
 
-            this.emitGeneral('swap-tabs', this.data.tabs[tabName], tabName);
+            this.emitGeneral('swap-tabs', this.dataProps.tabs[tabName], tabName);
             this.setAnimatedBar(elem);
         },
         emitGeneral(emitFunc, ...args) {

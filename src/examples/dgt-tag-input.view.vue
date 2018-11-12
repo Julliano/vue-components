@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .inline {
   display: inline-flex;
   margin-bottom: 10px;
@@ -20,25 +20,25 @@
         <div class="inline">
             <div class="grid">
                 <label>Tag color:</label>
-                <input v-model="backgroundTag">
+                <input v-model="tagProps.backgroundTag">
             </div>
             <div class="grid">
                 <label>Tag delete bg color:</label>
-                <input v-model="backgroundTagDelete">
+                <input v-model="tagProps.backgroundTagDelete">
             </div>
             <div class="grid">
                 <label>Tag delete X color:</label>
-                <input v-model="xTagDelete">
+                <input v-model="tagProps.xTagDelete">
             </div>
             <div class="grid">
                 <label>Font-size:</label>
-                <input type="number" v-model="fontSize">
+                <input type="number" v-model="tagProps.fontSize">
             </div>
         </div>
-        <dgt-autocomplete :items="validsTags" :search-tag="search" :existingTags="tags" @tag-selected="pushTag" ref="childComplete">
+        <dgt-autocomplete :items="tagProps.validsTags" :search-tag="tagProps.search" :existing-tags="tagProps.tags" @tag-selected="pushTag" ref="childComplete">
             <template slot-scope="slotProps">
-                <dgt-tag-input @new-tag="newTag" :obj-tag="tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
-                :style="'--dgt-background-tag: ' + `${backgroundTag}`+'; --dgt-tag-font-size: ' + `${fontSize}`+'px; --dgt-background-delete-tag: ' + `${backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${xTagDelete}`">
+                <dgt-tag-input @new-tag="newTag" :tag-arr="tagProps.tags" @keyup="keyUp" @keydown="keyDown" @enter="keyEnter" placeholder="Adicionar tag"
+                :style="'--dgt-background-tag: ' + `${tagProps.backgroundTag}`+'; --dgt-tag-font-size: ' + `${tagProps.fontSize}`+'px; --dgt-background-delete-tag: ' + `${tagProps.backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${tagProps.xTagDelete}`">
                 </dgt-tag-input>
             </template>
         </dgt-autocomplete>
@@ -49,6 +49,19 @@
     import dgtTagInput from '../components/dgt-tag-input.vue';
     import dgtAutocomplete from '../components/dgt-autocomplete.vue';
 
+    const tagProps = {
+        tags: [],
+        backgroundTag: '#000',
+        backgroundTagDelete: '#000333',
+        xTagDelete: '#fff',
+        fontSize: 14,
+        search: '',
+        validsTags: [
+            'teste',
+            'teste2'
+        ]
+    };
+
     export default {
         name: 'dgtTagInputView',
         components: {
@@ -57,24 +70,15 @@
         },
         data() {
             return {
-                tags: [],
-                backgroundTag: '#000',
-                backgroundTagDelete: '#000333',
-                xTagDelete: '#fff',
-                fontSize: 14,
-                search: '',
-                validsTags: [
-                    'teste',
-                    'teste2'
-                ]
+                tagProps
             };
         },
         methods: {
             newTag(param) {
-                this.search = param;
+                this.tagProps.search = param;
             },
             pushTag(param) {
-                this.tags.push(param);
+                this.tagProps.tags.push(param);
             },
             keyDown() {
                 this.$refs.childComplete && this.$refs.childComplete.onArrowDown();
@@ -86,7 +90,7 @@
                 if (this.$refs.childComplete) {
                     this.$refs.childComplete.onEnter();
                 } else {
-                    this.tags.push(this.search);
+                    this.tagProps.tags.push(this.search);
                 }
                 document.getElementById('inputTag').focus();
             }

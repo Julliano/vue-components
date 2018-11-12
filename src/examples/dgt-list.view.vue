@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .custom {
   --dgt-list-width: fit-content;
   --dgt-list-max-height: 400px;
@@ -8,10 +8,10 @@
 
 
 <template>
-    <dgt-list :list="list" :header="header" :sub-header="subHeader" class="custom">
-        <template slot="main-slot" slot-scope="mainProps">
+    <dgt-list :list="listProps.list" :header="listProps.header" :sub-header="listProps.subHeader" class="custom">
+        <template slot="main-slot" slot-scope="slotProps">
             <div class="list">
-                <dgt-card v-for="card in mainProps.list" :key="card.id" :data="card" :style="card.style"></dgt-card>
+                <dgt-card v-for="card in slotProps.list" :key="card.id" :dataProps="card" :style="card.style"></dgt-card>
             </div>
         </template>
     </dgt-list>
@@ -21,6 +21,48 @@
     import dgtList from '../components/dgt-list.vue';
     import dgtCard from '../components/dgt-card.vue';
 
+    const listProps = {
+        list: [
+            {
+                icon: 'time_to_leave',
+                emit: '/uber',
+                name: 'Dados Uber',
+                class: 'material-icons',
+                subHeader: 'Atualizado 16/10/2018'
+            },
+            {
+                icon: 'image',
+                emit: '/midias',
+                name: 'Histórico de localização',
+                class: 'material-icons',
+                subHeader: 'Atualizado 16/10/2018'
+            },
+            {
+                icon: 'time_to_leave',
+                emit: '/uber',
+                name: 'Dados Uber',
+                class: 'material-icons',
+                subHeader: 'Atualizado 16/10/2018'
+            },
+            {
+                icon: 'image',
+                emit: '/midias',
+                name: 'Mídias',
+                class: 'material-icons',
+                subHeader: 'Atualizado 16/10/2018'
+            },
+            {
+                icon: 'time_to_leave',
+                emit: '/uber',
+                name: 'Dados Uber',
+                class: 'material-icons',
+                subHeader: 'Atualizado 16/10/2018'
+            }
+        ],
+        header: 'Exemplo de título',
+        subHeader: 'Exemplo de sub título'
+    };
+
     export default {
         name: 'dgtListView',
         components: {
@@ -29,45 +71,7 @@
         },
         data() {
             return {
-                list: [
-                    {
-                        icon: 'time_to_leave',
-                        emit: '/uber',
-                        name: 'Dados Uber',
-                        class: 'material-icons',
-                        subHeader: 'Atualizado 16/10/2018'
-                    },
-                    {
-                        icon: 'image',
-                        emit: '/midias',
-                        name: 'Histórico de localização',
-                        class: 'material-icons',
-                        subHeader: 'Atualizado 16/10/2018'
-                    },
-                    {
-                        icon: 'time_to_leave',
-                        emit: '/uber',
-                        name: 'Dados Uber',
-                        class: 'material-icons',
-                        subHeader: 'Atualizado 16/10/2018'
-                    },
-                    {
-                        icon: 'image',
-                        emit: '/midias',
-                        name: 'Mídias',
-                        class: 'material-icons',
-                        subHeader: 'Atualizado 16/10/2018'
-                    },
-                    {
-                        icon: 'time_to_leave',
-                        emit: '/uber',
-                        name: 'Dados Uber',
-                        class: 'material-icons',
-                        subHeader: 'Atualizado 16/10/2018'
-                    }
-                ],
-                header: 'Exemplo de título',
-                subHeader: 'Exemplo de sub título'
+                listProps
             };
         }
     };

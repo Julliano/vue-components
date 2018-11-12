@@ -126,40 +126,35 @@ export default {
     name: 'dgtGrid',
     props: {
         dataProps: {
-            disableOrderColumns: false,
+            disableOrderColumns: Boolean,
             pagination: {
-                page: 1,
-                total: 1
+                page: Number,
+                total: Number
             },
             headers: {
                 Col1: {
-                    name: 'Col1',
-                    draggable: true,
-                    resizable: true,
-                    sortable: true,
-                    width: '1fr',
-                    isCustomColumn: false
+                    name: String,
+                    draggable: Boolean,
+                    resizable: Boolean,
+                    sortable: Boolean,
+                    width: String,
+                    isCustomColumn: Boolean
                 },
                 Col2: {
-                    name: 'Col1'
+                    name: String
                 },
                 Col3: {
-                    name: 'Col1'
+                    name: String
                 }
             },
-            minWidthColumn: 80,
+            minWidthColumn: Number,
             lines: [
                 {
-                    Col1: 'row 1 colum 1',
-                    Col2: 'row 1 colum 2',
-                    Col3: 'row 1 colum 3',
-                    selected: true
-                },
-                {
-                    Col1: 'row 2 colum 1',
-                    Col2: 'row 2 colum 2',
-                    Col3: 'row 2 colum 3',
-                    lineColor: 'red'
+                    Col1: String,
+                    Col2: String,
+                    Col3: String,
+                    selected: Boolean,
+                    lineColor: String
                 }
             ]
         }

@@ -35,8 +35,8 @@
         name: 'dgtList',
         props: {
             list: {},
-            header: '',
-            subHeader: ''
+            header: String,
+            subHeader: String
         }
     };
 </script>

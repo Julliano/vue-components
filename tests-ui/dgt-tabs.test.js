@@ -6,9 +6,15 @@ describe('dgtTabs', () => {
     let wrapper;
 
     beforeAll(() => {
+        global.MutationObserver = class {
+            constructor(callback) { }
+            disconnect() { }
+            observe(element, initObject) { }
+        };
+
         wrapper = mount(dgtTabs, {
             propsData: {
-                data: { color: 'red' }
+                dataProps: { color: 'red' }
             }
         });
     });
@@ -18,6 +24,6 @@ describe('dgtTabs', () => {
     });
 
     test('Verifica se a resposta do request trouxe data', () => {
-        expect(wrapper.props().data).toBeTruthy();
+        expect(wrapper.props().dataProps).toBeTruthy();
     });
 });

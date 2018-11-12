@@ -1,4 +1,4 @@
-<style lang="scss" scoped>
+<style lang="scss">
 .inline {
   display: inline-flex;
   .grid {
@@ -23,11 +23,11 @@
         <div class="inline">
             <div class="grid">
                 <label>Icon dgt-vitra</label>
-                <dgt-card @card-cliked="doSomething" :data="data" class="custom"></dgt-card>
+                <dgt-card @card-cliked="doSomething" :dataProps="data" class="custom"></dgt-card>
             </div>
             <div class="grid">
                 <label>Icon material-icons</label>
-                <dgt-card @card-cliked="doSomething" :data="data2" class="custom"></dgt-card>
+                <dgt-card @card-cliked="doSomething" :dataProps="data2" class="custom"></dgt-card>
             </div>
         </div>
     </div>
@@ -36,6 +36,18 @@
 <script>
     import dgtCard from '../components/dgt-card.vue';
 
+    const data = {
+        name: 'Nova pesquisa...',
+        emit: 'New search',
+        class: 'mdi mdi-access-point-network'
+    };
+    const data2 = {
+        icon: 'add',
+        name: 'Nova pesquisa...',
+        emit: 'New search',
+        class: 'material-icons'
+    };
+
     export default {
         name: 'dgtCardView',
         components: {
@@ -43,17 +55,8 @@
         },
         data() {
             return {
-                data: {
-                    name: 'Nova pesquisa...',
-                    emit: 'New search',
-                    class: 'mdi mdi-access-point-network'
-                },
-                data2: {
-                    icon: 'add',
-                    name: 'Nova pesquisa...',
-                    emit: 'New search',
-                    class: 'material-icons'
-                }
+                data,
+                data2
             };
         },
         methods: {

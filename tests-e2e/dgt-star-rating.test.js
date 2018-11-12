@@ -8,8 +8,8 @@ fixture`dgt-star-rating`.page`${scenario.baseURL}`;
 
 test('change star rating value', async t => {
     const star = Selector('.star-3');
-    await t.click(star).wait(500);
+    await t.click(star).wait(10);
     const star1 = Selector('.star-1');
-    await t.click(star1).wait(500);
+    await t.click(star1).wait(10);
 });
 

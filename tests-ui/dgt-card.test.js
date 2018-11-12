@@ -8,7 +8,7 @@ describe('dgtCard', () => {
     beforeAll(() => {
         wrapper = mount(dgtCard, {
             propsData: {
-                data: { icon: 'add', name: 'Nova pesquisa...', url: 'New search' }
+                dataProps: { icon: 'add', name: 'Nova pesquisa...', url: 'New search' }
             }
         });
     });
@@ -18,6 +18,6 @@ describe('dgtCard', () => {
     });
 
     test('Verifica se a resposta do request trouxe o data', () => {
-        expect(wrapper.props().data).toBeTruthy();
+        expect(wrapper.props().dataProps).toBeTruthy();
     });
 });

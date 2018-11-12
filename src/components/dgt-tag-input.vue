@@ -105,7 +105,7 @@
     export default {
         name: 'dgtTagInput',
         props: {
-            objTag: {},
+            tagArr: Array,
             placeholder: String
         },
         data() {
@@ -125,7 +125,7 @@
             }
         },
         created() {
-            this.tags = this.objTag;
+            this.tags = this.tagArr;
         },
         updated() {
             this.$emit('new-tag', this.newTag);
@@ -157,8 +157,8 @@
             }
         },
         watch: {
-            objTag() {
-                this.tags = this.objTag;
+            tagArr() {
+                this.tags = this.tagArr;
                 this.newTag = null;
             }
         }
