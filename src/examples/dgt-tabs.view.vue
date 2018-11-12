@@ -82,7 +82,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import dgtTabs from '../components/dgt-tabs.vue';
 
 let dataTabs = {
