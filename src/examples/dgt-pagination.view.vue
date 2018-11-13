@@ -13,7 +13,7 @@
 </style>
 
 <template>
-    <dgt-pagination></dgt-pagination>
+    <dgt-pagination :data-props="dataPagination" :names="names"></dgt-pagination>
 </template>
 
 <script>
@@ -21,20 +21,33 @@
 import dgtPagination from '../components/dgt-pagination.vue';
 
 let dataPagination = {
+    totalPages: 12,
+    totalRegisters: 1145,
+    numberFormat: '',
     qtdPerPage: {
         default: 50,
         options: [70, 100]
-    },
-    totalPages: 12,
-    totalRegisters: 1145,
-    numberFormat: ''
+    }
 };
+
+let names = {
+    showing: 'Mostrando',
+    first: 'início',
+    prev: 'anterior',
+    page: 'Pág.',
+    of: 'de',
+    next: 'próxima',
+    last: 'última',
+    registers: 'registros'
+}
 
 export default {
     name: 'dgtPaginationView',
     components: { dgtPagination },
     data() {
         return {
+            dataPagination,
+            names
         };
     },
     methods: {
