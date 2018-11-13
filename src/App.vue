@@ -9,29 +9,32 @@
 
 <template>
     <div class="showcase">
-        <h3> Dgt-Star </h3>
+        <h3>Dgt-Star</h3>
         <dgt-star-view></dgt-star-view>
         <hr style="clear: both;">
-        <h3> Dgt-Tag-Input </h3>
+        <h3>Dgt-Tag-Input</h3>
         <dgt-tag-input-view></dgt-tag-input-view>
         <hr style="clear: both;">
-        <h3> Dgt-Autocomplete </h3>
+        <h3>Dgt-Autocomplete</h3>
         <dgt-autocomplete-view></dgt-autocomplete-view>
         <hr style="clear: both;">
-        <h3> Dgt-Tabs </h3>
+        <h3>Dgt-Tabs</h3>
         <dgt-tabs-view></dgt-tabs-view>
         <hr style="clear: both;">
-        <h3> Dgt-Grid </h3>
+        <h3>Dgt-Grid</h3>
         <dgt-grid-view></dgt-grid-view>
         <hr style="clear: both;">
-        <h3> Dgt-Card </h3>
+        <h3>Dgt-Card</h3>
         <dgt-card-view></dgt-card-view>
         <hr style="clear: both;">
-        <h3> Dgt-List </h3>
+        <h3>Dgt-List</h3>
         <dgt-list-view></dgt-list-view>
         <hr style="clear: both;">
-        <h3> Dgt-Component-Grid </h3>
+        <h3>Dgt-Component-Grid</h3>
         <dgt-component-grid-view></dgt-component-grid-view>
+        <hr style="clear: both;">
+        <h3>Dgt-Pagination</h3>
+        <dgt-pagination-view></dgt-pagination-view>
     </div>
 </template>
 
@@ -45,6 +48,7 @@ import dgtTagInputView from './examples/dgt-tag-input.view';
 import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
 import dgtTabsView from './examples/dgt-tabs.view';
+import dgtPaginationView from './examples/dgt-pagination.view';
 
 export default {
     name: 'app',
@@ -56,7 +60,8 @@ export default {
         dgtTagInputView,
         dgtAutocompleteView,
         dgtComponentGridView,
-        dgtTabsView
+        dgtTabsView,
+        dgtPaginationView
     }
 };
 </script>
