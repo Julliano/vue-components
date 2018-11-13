@@ -14,6 +14,7 @@
         font-size: 10px;
         width: 100%;
         .tab {
+            border-bottom: var(--dgt-tabs-border-bottom, 0);
           &:hover {
             cursor: var(--dgt-tabs-cursor, default);
           }
@@ -38,7 +39,7 @@
             );
             color: var(--dgt-tabs-selected-color, #000);
             &.not-animated {
-              border-bottom: var(--dgt-tabs-border-bottom, 0);
+              border-bottom: var(--dgt-tabs-border-bottom-selected, 0);
             }
           }
           display: inline-block;

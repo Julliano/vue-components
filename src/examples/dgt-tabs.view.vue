@@ -1,7 +1,8 @@
 <style lang="scss">
 .dgt-tabs-component {
   --dgt-tabs-bar-animated-background-color: blue;
-  --dgt-tabs-border-bottom: 4px solid blue;
+  --dgt-tabs-border-bottom: 4px solid transparent;
+  --dgt-tabs-border-bottom-selected: 4px solid blue;
   --dgt-tabs-text-margin: 10px 5px 6px;
   --dgt-tabs-text-font-size: 16px;
   --dgt-tabs-text-padding: 10px;
