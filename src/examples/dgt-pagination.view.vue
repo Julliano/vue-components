@@ -1,45 +1,45 @@
 <style lang="scss">
-.dgt-tabs-component {
-  --dgt-tabs-bar-animated-background-color: blue;
-  --dgt-tabs-border-bottom: 4px solid transparent;
-  --dgt-tabs-border-bottom-selected: 4px solid blue;
-  --dgt-tabs-text-margin: 10px 5px 6px;
-  --dgt-tabs-text-font-size: 16px;
-  --dgt-tabs-text-padding: 10px;
-  --dgt-tabs-margin-right: 8px;
-  --dgt-tabs-before-color: #f5f5f5;
-  --dgt-tabs-background-color: #ccc;
+.dgt-pagination-component {
+  --dgt-pagination-arrow-size: 10px;
+  --dgt-pagination-space-arrow-2: 5px;
+  --dgt-pagination-arrow-2-border: 2px solid #525252;
+  --dgt-pagination-arrow-border: 2px solid #525252;
+  --dgt-pagination-arrow-2-border-width: 2px 2px 0 0;
 }
 </style>
 
 <template>
-    <dgt-pagination :data-props="dataPagination" :names="names"></dgt-pagination>
+    <dgt-pagination
+        :data-props="dataPagination"
+        :dictionary="dictionary"
+        @paginate="paginate"
+        @items-per-page="itemsPerPage"
+    ></dgt-pagination>
 </template>
 
 <script>
-/* eslint-disable */
 import dgtPagination from '../components/dgt-pagination.vue';
 
 let dataPagination = {
     totalPages: 12,
     totalRegisters: 1145,
+    currentPage: 2,
     numberFormat: '',
-    qtdPerPage: {
-        default: 50,
-        options: [70, 100]
-    }
+    qtdPerPage: [50, 70, 100]
 };
 
-let names = {
+let dictionary = {
     showing: 'Mostrando',
-    first: 'início',
-    prev: 'anterior',
+    first: 'Ir para primeira página',
+    prev: 'Página anterior',
     page: 'Pág.',
     of: 'de',
-    next: 'próxima',
-    last: 'última',
-    registers: 'registros'
-}
+    next: 'Próxima página',
+    last: 'Ir para última página',
+    registers: 'registros',
+    currentPage: 'Insira o número de uma página',
+    itemsPerPage: 'Número de itens por página'
+};
 
 export default {
     name: 'dgtPaginationView',
@@ -47,10 +47,19 @@ export default {
     data() {
         return {
             dataPagination,
-            names
+            dictionary
         };
     },
     methods: {
+        itemsPerPage(quantity) {
+            let obj1 = { um: 1 };
+            let obj2 = { dois: 2 };
+            let obj3 = { ...obj1, ...obj2 }
+            return quantity;
+        },
+        paginate(pageNumber) {
+            return pageNumber;
+        }
     }
 };
 </script>
