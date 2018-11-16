@@ -54,7 +54,8 @@ export default {
         itemsPerPage(quantity) {
             let obj1 = { um: 1 };
             let obj2 = { dois: 2 };
-            let obj3 = { ...obj1, ...obj2 }
+            let obj3 = { ...obj1, ...obj2 };
+            console.log(obj3);
             return quantity;
         },
         paginate(pageNumber) {

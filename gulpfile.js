@@ -1,25 +1,26 @@
+/* eslint-disable */
 const path = require('path');
-const uglify = require('rollup-plugin-uglify')
-const vue = require('rollup-plugin-vue')
-const postcss = require('rollup-plugin-postcss')
-const autoprefixer = require('autoprefixer')
-const { rollup } = require('rollup')
-const chalk = require('chalk')
+const uglify = require('rollup-plugin-uglify');
+const vue = require('rollup-plugin-vue');
+const postcss = require('rollup-plugin-postcss');
+const autoprefixer = require('autoprefixer');
+const { rollup } = require('rollup');
+const chalk = require('chalk');
 const gulp = require('gulp');
 const jsonfile = require('jsonfile');
 const fs = require('fs');
 
-const version = require('./package.json').version
+const { version } = require('./package.json');
 const packageJson = jsonfile.readFileSync('./package.json');
 const paths = { src: 'src/components/**/*.vue', dist: 'dist' };
 const componetsVueJs = ['dgt-autocomplete', 'dgt-card', 'dgt-component-grid', 'dgt-grid', 'dgt-list', 'dgt-star-rating', 'dgt-tabs', 'dgt-tag-input'];
 const banner =
-    '/*!\n' +
-    ' * dgt-vue-components' + version + '\n' +
-    ' * (c) 2018-' + new Date().getFullYear() + ' Digitro\n' +
-    ' */'
+    `${'/*!\n' +
+    ' * dgt-vue-components'}${version}\n` +
+    ` * (c) 2018-${new Date().getFullYear()} Digitro\n` +
+    ' */';
 
-/* 
+/*
     const configs = {
         umd: {
             output: '.js',
@@ -38,7 +39,7 @@ const banner =
             output: '.esm.js',
             format: 'es'
         }
-    } 
+    }
 */
 
 const configs = {
@@ -46,12 +47,12 @@ const configs = {
         output: '.js',
         format: 'umd'
     }
-}
+};
 gulp.task('compile-vue-components', async () => {
     for (let i = 0; i < componetsVueJs.length; i++) {
         Object.keys(configs).forEach(async function (key) {
-            const config = configs[key]
-            console.log(chalk.cyan(`Building ${key}: ${config.output}`))
+            const config = configs[key];
+            console.log(chalk.cyan(`Building ${key}: ${config.output}`));
             const inputOptions = {
                 input: path.join(__dirname, 'src', 'components', `${componetsVueJs[i]}.vue`),
                 plugins: [
@@ -65,16 +66,16 @@ gulp.task('compile-vue-components', async () => {
                         ]
                     })
                 ].concat(config.plugins || [])
-            }
-            const bundle = await rollup(inputOptions)
+            };
+            const bundle = await rollup(inputOptions);
             const outputOptions = {
                 file: path.join(__dirname, 'dist', `${componetsVueJs[i]}${config.output}`),
                 format: config.format,
-                banner: banner,
+                banner,
                 name: componetsVueJs[i]
-            }
-            await bundle.write(outputOptions)
-        })
+            };
+            await bundle.write(outputOptions);
+        });
     }
 });
 
