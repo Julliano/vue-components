@@ -25,7 +25,7 @@
     <div class="dgt-list-component">
         <h4 v-if="header">{{ header }}</h4>
         <small v-if="subHeader">{{ subHeader }}</small>
-        <hr>
+        <hr v-if="header || subHeader">
         <slot name="main-slot" :list="list"></slot>
     </div>
 </template>
