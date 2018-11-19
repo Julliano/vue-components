@@ -1,10 +1,9 @@
 <style lang="scss">
 .dgt-pagination-component {
-  --dgt-pagination-arrow-size: 10px;
+  --dgt-pagination-arrow-size: 12px;
   --dgt-pagination-space-arrow-2: 5px;
   --dgt-pagination-arrow-2-border: 2px solid #525252;
-  --dgt-pagination-arrow-border: 2px solid #525252;
-  --dgt-pagination-arrow-2-border-width: 2px 2px 0 0;
+  --dgt-pagination-arrow-border-width: 1px 1px 0 0;
 }
 </style>
 
@@ -21,6 +20,14 @@
 import dgtPagination from '../components/dgt-pagination.vue';
 
 let dataPagination = {
+    totalPages: 12,
+    totalRegisters: 1145,
+    currentPage: 1,
+    numberFormat: '',
+    qtdPerPage: [50, 70, 100]
+};
+
+let dataPagination2 = {
     totalPages: 12,
     totalRegisters: 1145,
     currentPage: 2,
@@ -52,13 +59,10 @@ export default {
     },
     methods: {
         itemsPerPage(quantity) {
-            let obj1 = { um: 1 };
-            let obj2 = { dois: 2 };
-            let obj3 = { ...obj1, ...obj2 };
-            console.log(obj3);
             return quantity;
         },
         paginate(pageNumber) {
+            this.dataPagination = dataPagination2;
             return pageNumber;
         }
     }
