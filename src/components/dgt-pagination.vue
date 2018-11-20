@@ -113,6 +113,11 @@
   .arrow,
   .arrow-2 {
     cursor: pointer;
+
+    &[disable] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
   }
 }
 </style>
@@ -122,19 +127,21 @@
         <div class="grid-item">
             <span>{{dictionary.showing}}</span>
             <select :title="dictionary.itemsPerPage" @change="itemsPerPage($event)">
-                <option
-                    :value="value"
-                    v-for="(value, index) in dataProps.qtdPerPage"
-                    :key="index"
-                >{{value}}</option>
+                <option v-for="(value, index) in dataProps.qtdPerPage" :key="index">{{value}}</option>
             </select>
         </div>
         <div class="grid-item">
-            <div class="arrow-2 prev" :title="dictionary.first" @click="paginate(1)"></div>
+            <div
+                class="arrow-2 prev"
+                :title="dictionary.first"
+                @click="paginate(1)"
+                :disable="disablePaginationPrev"
+            ></div>
             <div
                 class="arrow prev"
                 :title="dictionary.prev"
                 @click="paginate(dataProps.currentPage-1)"
+                :disable="disablePaginationPrev"
             ></div>
             <span>{{dictionary.page}}</span>
             <input
@@ -149,16 +156,18 @@
             <div
                 class="arrow next"
                 :title="dictionary.next"
+                :disable="disablePaginationNext"
                 @click="paginate(dataProps.currentPage+1)"
             ></div>
             <div
                 class="arrow-2 next"
                 :title="dictionary.last"
+                :disable="disablePaginationNext"
                 @click="paginate(dataProps.totalPages)"
             ></div>
         </div>
         <div class="grid-item">
-            <span>{{showing[0]}} - {{showing[1]}} {{dictionary.of}} {{dataProps.totalRegisters}} {{dictionary.registers}}</span>
+            <span>{{rangeBegin}} - {{rangeEnd}} {{dictionary.of}} {{dataProps.totalRegisters}} {{dictionary.registers}}</span>
         </div>
     </div>
 </template>
@@ -175,7 +184,8 @@ export default {
                     totalPages: 0,
                     currentPage: 1,
                     numberFormat: 0,
-                    qtdPerPage: [0]
+                    qtdPerPage: [0],
+                    qtdPerPageCurrent: 0
                 };
             }
         },
@@ -199,19 +209,28 @@ export default {
     },
     data() {
         return {
-            showing: [0, 0]
+            showing: [0, 0],
+            rangeBegin: 1,
+            rangeEnd: 1,
+            disablePaginationPrev: true,
+            disablePaginationNext: false
         };
     },
-    mounted() {
+    beforeMount() {
         this.elementsVisible();
+
+    },
+    mounted() {
+        this.checkLockPagination();
     },
     updated() {
         this.elementsVisible();
     },
     methods: {
         elementsVisible() {
-            let range = this.dataProps.currentPage * this.dataProps.itemsPerPage;
-            this.showing = [range - (this.dataProps.itemsPerPage - 1), range];
+            let range = this.dataProps.currentPage * this.dataProps.qtdPerPageCurrent;
+            this.rangeBegin = range - (this.dataProps.qtdPerPageCurrent - 1);
+            this.rangeEnd = range;
         },
         pressKey(event) {
             let page = this.validateValue(event);
@@ -229,7 +248,17 @@ export default {
             }
             return parseInt(event.target.value);
         },
+        checkLockPagination(page = this.dataProps.currentPage) {
+            if (this.dataProps.totalPages === page) {
+                this.disablePaginationNext = true;
+                this.disablePaginationPrev = false;
+            } else if (page === 1) {
+                this.disablePaginationPrev = true;
+                this.disablePaginationNext = false;
+            }
+        },
         paginate(page) {
+            this.checkLockPagination(page);
             this.emitGeneral('paginate', page);
         },
         itemsPerPage(event) {

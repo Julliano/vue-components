@@ -11,6 +11,7 @@
     <dgt-pagination
         :data-props="dataPagination"
         :dictionary="dictionary"
+        :qtd-per-page-current="qtdPerPageCurrent"
         @paginate="paginate"
         @items-per-page="itemsPerPage"
     ></dgt-pagination>
@@ -19,20 +20,22 @@
 <script>
 import dgtPagination from '../components/dgt-pagination.vue';
 
-let dataPagination = {
-    totalPages: 12,
-    totalRegisters: 1145,
+const dataPagination1 = {
+    totalPages: 2,
+    totalRegisters: 100,
     currentPage: 1,
     numberFormat: '',
-    qtdPerPage: [50, 70, 100]
+    qtdPerPage: [50, 70, 100],
+    qtdPerPageCurrent: 50
 };
 
-let dataPagination2 = {
-    totalPages: 12,
-    totalRegisters: 1145,
+const dataPagination2 = {
+    totalPages: 2,
+    totalRegisters: 100,
     currentPage: 2,
     numberFormat: '',
-    qtdPerPage: [50, 70, 100]
+    qtdPerPage: [50, 70, 100],
+    qtdPerPageCurrent: 50
 };
 
 let dictionary = {
@@ -53,17 +56,24 @@ export default {
     components: { dgtPagination },
     data() {
         return {
-            dataPagination,
+            dataPagination: {...dataPagination1},
+            qtdPerPageCurrent: 50,
             dictionary
         };
     },
     methods: {
         itemsPerPage(quantity) {
-            return quantity;
+            if (!quantity) return;
+            [quantity] = quantity;
+            this.qtdPerPageCurrent = parseInt(quantity);
         },
         paginate(pageNumber) {
-            this.dataPagination = dataPagination2;
-            return pageNumber;
+            [pageNumber] = pageNumber;
+            if (pageNumber === 2) {
+                this.dataPagination = {...dataPagination2};
+            } else {
+                this.dataPagination = {...dataPagination1};
+            }
         }
     }
 };
