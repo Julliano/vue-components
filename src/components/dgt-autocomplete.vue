@@ -48,6 +48,7 @@
                 v-if="showInput"
                 :id="id"
                 :name="id"
+                @blur="$emit('blured')"
                 type="text"
                 class="input"
                 @input="onChange"
