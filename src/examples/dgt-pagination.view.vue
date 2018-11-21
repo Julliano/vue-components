@@ -20,11 +20,10 @@
 <script>
 import dgtPagination from '../components/dgt-pagination.vue';
 
-const dataPagination1 = {
+const dataPagination = {
     totalPagesDefault: 2,
     totalRegisters: 201,
     currentPage: 1,
-    numberFormat: '',
     pageSizes: [50, 70, 100],
     pageSizeDefault: 50
 };
@@ -47,7 +46,7 @@ export default {
     components: { dgtPagination },
     data() {
         return {
-            ...dataPagination1,
+            ...dataPagination,
             dictionary
         };
     },

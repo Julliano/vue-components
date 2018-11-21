@@ -129,6 +129,7 @@
         <div class="grid-item">
             <span>{{dictionary.showing}}</span>
             <select
+                class="select-page-size"
                 :title="dictionary.itemsPerPage"
                 v-model="pageSizeCurrent"
                 @change="changePageSize($event)"
@@ -141,11 +142,15 @@
             </select>
         </div>
         <div class="grid-item">
-            <button class="paginate-button" @click="paginate(1)" :disable="disablePaginationPrev">
+            <button
+                class="paginate-button first"
+                @click="paginate(1)"
+                :disable="disablePaginationPrev"
+            >
                 <div class="arrow-2 prev" :title="dictionary.first"></div>
             </button>
             <button
-                class="paginate-button"
+                class="paginate-button prev"
                 @click="paginate(currentPage-1)"
                 :disable="disablePaginationPrev"
             >
@@ -162,14 +167,14 @@
             {{dictionary.of}}
             <span>{{totalPages}}</span>
             <button
-                class="paginate-button"
+                class="paginate-button next"
                 @click="paginate(currentPage+1)"
                 :disable="disablePaginationNext"
             >
                 <div class="arrow next" :title="dictionary.next"></div>
             </button>
             <button
-                class="paginate-button"
+                class="paginate-button last"
                 @click="paginate(totalPages)"
                 :disable="disablePaginationNext"
             >
@@ -272,13 +277,14 @@ export default {
             if (requiredPage > this.totalPages) requiredPage = this.totalPages;
             return requiredPage;
         },
+        /* eslint-disable-next-line complexity */
         validateValue(event) {
-            if (!((event.keyCode > 95 && event.keyCode < 106) ||
-                (event.keyCode > 47 && event.keyCode < 58) ||
-                event.keyCode === 8 || event.keyCode === 9)) {
+            if (event.keyCode !== 13) {
                 setTimeout(() => {
                     event.target.value = event.target.value.match(/[0-9]*/);
                 }, 10);
+            } else if (event.target.value === '') {
+                event.target.value = this.currentPage;
             }
         },
         checkLockPagination(page = this.currentPage) {
