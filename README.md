@@ -60,7 +60,9 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
             <dgt-autocomplete @tag-selected="setTagsAutocomplete" :existing-tags="objTag"   :searchTag="newTag" :minSearch="2" :items="validsTags"></dgt-autocomplete>
         ```    
             
-    @tag-selected (função que irá ser chamada, no component pai, quando uma tag for selecionada no autocomplete);
+    @tag-selected       (função que irá ser chamada, no component pai, quando uma tag for selecionada no autocomplete);
+    @changed            (evento que será disparado quando algo mudar no input);
+    @verified-change    (evento que será disparado quando algo mudar no input e passar pela verificação de valor mínimo para busca)
     
     :existing-tags="objTag" (default = [] / atributo que recebe as tags já atribuidas ao obj, para retirar do autocomplete as tags já selecionadas);
     :searchTag="newTag"     (default = '' / tag que será procurada nas tags do autocomplete);
