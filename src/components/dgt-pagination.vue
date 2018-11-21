@@ -34,6 +34,18 @@
     -webkit-appearance: none;
   }
 
+  .paginate-button {
+    background-color: transparent;
+    border: none;
+    &[disable] {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+    &:focus {
+      outline-color: transparent;
+    }
+  }
+
   .arrow {
     display: inline-block;
     height: var(--dgt-pagination-arrow-size, 10px);
@@ -109,16 +121,6 @@
       }
     }
   }
-
-  .arrow,
-  .arrow-2 {
-    cursor: pointer;
-
-    &[disable] {
-      opacity: 0.5;
-      pointer-events: none;
-    }
-  }
 }
 </style>
 
@@ -126,48 +128,56 @@
     <div class="dgt-pagination-component">
         <div class="grid-item">
             <span>{{dictionary.showing}}</span>
-            <select :title="dictionary.itemsPerPage" @change="itemsPerPage($event)">
-                <option v-for="(value, index) in dataProps.qtdPerPage" :key="index">{{value}}</option>
+            <select
+                :title="dictionary.itemsPerPage"
+                v-model="pageSizeCurrent"
+                @change="changePageSize($event)"
+            >
+                <option
+                    v-for="(value, index) in pageSizes"
+                    :key="index"
+                    :selected="pageSizeCurrent === value"
+                >{{value}}</option>
             </select>
         </div>
         <div class="grid-item">
-            <div
-                class="arrow-2 prev"
-                :title="dictionary.first"
-                @click="paginate(1)"
+            <button class="paginate-button" @click="paginate(1)" :disable="disablePaginationPrev">
+                <div class="arrow-2 prev" :title="dictionary.first"></div>
+            </button>
+            <button
+                class="paginate-button"
+                @click="paginate(currentPage-1)"
                 :disable="disablePaginationPrev"
-            ></div>
-            <div
-                class="arrow prev"
-                :title="dictionary.prev"
-                @click="paginate(dataProps.currentPage-1)"
-                :disable="disablePaginationPrev"
-            ></div>
+            >
+                <div class="arrow prev" :title="dictionary.prev"></div>
+            </button>
             <span>{{dictionary.page}}</span>
             <input
                 class="page-number-input"
                 type="text"
-                :value="dataProps.currentPage"
+                :value="currentPage"
                 :title="dictionary.currentPage"
                 @keydown="pressKey($event)"
             >
             {{dictionary.of}}
-            <span>{{dataProps.totalPages}}</span>
-            <div
-                class="arrow next"
-                :title="dictionary.next"
+            <span>{{totalPages}}</span>
+            <button
+                class="paginate-button"
+                @click="paginate(currentPage+1)"
                 :disable="disablePaginationNext"
-                @click="paginate(dataProps.currentPage+1)"
-            ></div>
-            <div
-                class="arrow-2 next"
-                :title="dictionary.last"
+            >
+                <div class="arrow next" :title="dictionary.next"></div>
+            </button>
+            <button
+                class="paginate-button"
+                @click="paginate(totalPages)"
                 :disable="disablePaginationNext"
-                @click="paginate(dataProps.totalPages)"
-            ></div>
+            >
+                <div class="arrow-2 next" :title="dictionary.last"></div>
+            </button>
         </div>
         <div class="grid-item">
-            <span>{{rangeBegin}} - {{rangeEnd}} {{dictionary.of}} {{dataProps.totalRegisters}} {{dictionary.registers}}</span>
+            <span>{{rangeBegin}} - {{rangeEnd}} {{dictionary.of}} {{totalRegisters}} {{dictionary.registers}}</span>
         </div>
     </div>
 </template>
@@ -176,18 +186,25 @@
 export default {
     name: 'dgtPagination',
     props: {
-        dataProps: {
-            type: Object,
-            default: () => {
-                return {
-                    totalRegisters: 0,
-                    totalPages: 0,
-                    currentPage: 1,
-                    numberFormat: 0,
-                    qtdPerPage: [0],
-                    qtdPerPageCurrent: 0
-                };
+        totalPagesDefault: Number,
+        numberFormat: String,
+        totalRegisters: {
+            type: Number,
+            required: true
+        },
+        currentPage: {
+            type: Number,
+            required: true
+        },
+        pageSizes: {
+            type: Array,
+            default() {
+                return [10, 20, 30, 40, 50, 100];
             }
+        },
+        pageSizeDefault: {
+            type: Number,
+            default: 10
         },
         dictionary: {
             type: Object,
@@ -212,11 +229,14 @@ export default {
             showing: [0, 0],
             rangeBegin: 1,
             rangeEnd: 1,
+            totalPages: this.totalPagesDefault | 10,
             disablePaginationPrev: true,
-            disablePaginationNext: false
+            disablePaginationNext: false,
+            pageSizeCurrent: this.pageSizeDefault
         };
     },
     beforeMount() {
+        this.totalPages = this.countPages();
         this.elementsVisible();
 
     },
@@ -224,19 +244,33 @@ export default {
         this.checkLockPagination();
     },
     updated() {
+        this.totalPages = this.countPages();
         this.elementsVisible();
+        this.checkLockPagination();
     },
     methods: {
         elementsVisible() {
-            let range = this.dataProps.currentPage * this.dataProps.qtdPerPageCurrent;
-            this.rangeBegin = range - (this.dataProps.qtdPerPageCurrent - 1);
-            this.rangeEnd = range;
+            let range = this.currentPage * this.pageSizeCurrent;
+            let rangeBegin = range - (this.pageSizeCurrent - 1);
+            this.rangeBegin = rangeBegin > this.totalRegisters ? this.totalRegisters : rangeBegin;
+            this.rangeEnd = range > this.totalRegisters ? this.totalRegisters : range;
+        },
+        countPages() {
+            if (!this.totalPagesDefault);
+            return Math.ceil(this.totalRegisters / this.pageSizeCurrent);
         },
         pressKey(event) {
-            let page = this.validateValue(event);
+            let page = parseInt(event.target.value);
             if (event.keyCode === 13 && page) {
-                this.emitGeneral('paginate', page);
+                page = this.valideRequiredPage(page);
+                this.emitGeneral('paginate', page, this.pageSizeCurrent);
+            } else {
+                this.validateValue(event);
             }
+        },
+        valideRequiredPage(requiredPage) {
+            if (requiredPage > this.totalPages) requiredPage = this.totalPages;
+            return requiredPage;
         },
         validateValue(event) {
             if (!((event.keyCode > 95 && event.keyCode < 106) ||
@@ -246,23 +280,27 @@ export default {
                     event.target.value = event.target.value.match(/[0-9]*/);
                 }, 10);
             }
-            return parseInt(event.target.value);
         },
-        checkLockPagination(page = this.dataProps.currentPage) {
-            if (this.dataProps.totalPages === page) {
+        checkLockPagination(page = this.currentPage) {
+            if (this.totalPages === page) {
                 this.disablePaginationNext = true;
                 this.disablePaginationPrev = false;
             } else if (page === 1) {
                 this.disablePaginationPrev = true;
                 this.disablePaginationNext = false;
+            } else if (page > 1 && page < this.totalPages) {
+                this.disablePaginationPrev = false;
+                this.disablePaginationNext = false;
             }
         },
         paginate(page) {
             this.checkLockPagination(page);
-            this.emitGeneral('paginate', page);
+            this.emitGeneral('paginate', page, this.pageSizeCurrent);
         },
-        itemsPerPage(event) {
-            this.emitGeneral('items-per-page', event.target.value);
+        changePageSize(event) {
+            let currentPage = this.countPages();
+            currentPage = currentPage < this.currentPage ? currentPage : this.currentPage;
+            this.emitGeneral('change-page-size', event.target.value, currentPage);
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, args);

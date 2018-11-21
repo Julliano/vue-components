@@ -9,11 +9,11 @@
 
 <template>
     <dgt-pagination
-        :data-props="dataPagination"
+        :total-registers="totalRegisters"
+        :current-page="currentPage"
         :dictionary="dictionary"
-        :qtd-per-page-current="qtdPerPageCurrent"
         @paginate="paginate"
-        @items-per-page="itemsPerPage"
+        @change-page-size="changePageSize"
     ></dgt-pagination>
 </template>
 
@@ -21,21 +21,12 @@
 import dgtPagination from '../components/dgt-pagination.vue';
 
 const dataPagination1 = {
-    totalPages: 2,
-    totalRegisters: 100,
+    totalPagesDefault: 2,
+    totalRegisters: 201,
     currentPage: 1,
     numberFormat: '',
-    qtdPerPage: [50, 70, 100],
-    qtdPerPageCurrent: 50
-};
-
-const dataPagination2 = {
-    totalPages: 2,
-    totalRegisters: 100,
-    currentPage: 2,
-    numberFormat: '',
-    qtdPerPage: [50, 70, 100],
-    qtdPerPageCurrent: 50
+    pageSizes: [50, 70, 100],
+    pageSizeDefault: 50
 };
 
 let dictionary = {
@@ -56,24 +47,21 @@ export default {
     components: { dgtPagination },
     data() {
         return {
-            dataPagination: {...dataPagination1},
-            qtdPerPageCurrent: 50,
+            ...dataPagination1,
             dictionary
         };
     },
     methods: {
-        itemsPerPage(quantity) {
-            if (!quantity) return;
-            [quantity] = quantity;
-            this.qtdPerPageCurrent = parseInt(quantity);
+        /* eslint-disable-next-line no-unused-vars*/
+        changePageSize([pageSize, currentPage]) {
+            if (!pageSize) return;
+            this.$set(this.$data, 'pageSizeDefault', parseInt(pageSize));
+            this.$set(this.$data, 'currentPage', parseInt(currentPage));
         },
-        paginate(pageNumber) {
-            [pageNumber] = pageNumber;
-            if (pageNumber === 2) {
-                this.dataPagination = {...dataPagination2};
-            } else {
-                this.dataPagination = {...dataPagination1};
-            }
+        /* eslint-disable-next-line no-unused-vars*/
+        paginate([pageNumber, pageSize]) {
+            if (!pageNumber) return;
+            this.$set(this.$data, 'currentPage', parseInt(pageNumber));
         }
     }
 };
