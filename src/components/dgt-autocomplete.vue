@@ -40,16 +40,30 @@
 <template>
     <div class="dgt-autocomplete">
         <label :for="id">
-              <slot name="label"></slot>
+            <slot name="label"></slot>
         </label>
         <slot></slot>
         <div class="autocomplete">
-            <input v-if="showInput" :id="id" :name="id" type="text" class="input" @input="onChange" v-model="search"
-                @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" />
+            <input
+                v-if="showInput"
+                :id="id"
+                :name="id"
+                type="text"
+                class="input"
+                @input="onChange"
+                v-model="search"
+                @keyup.down="onArrowDown"
+                @keyup.up="onArrowUp"
+                @keyup.enter="onEnter"
+            >
             <ul v-show="isOpen" class="autocomplete-results">
-                <li v-for="(result, i) in results" :key="i" @click="onEnter(result)" class="autocomplete-result" :class="{ 'is-active': i === arrowCounter }">
-                    {{ result }}
-                </li>
+                <li
+                    v-for="(result, i) in results"
+                    :key="i"
+                    @click="onEnter(result)"
+                    class="autocomplete-result"
+                    :class="{ 'is-active': i === arrowCounter }"
+                >{{ result }}</li>
             </ul>
         </div>
     </div>
@@ -88,11 +102,13 @@ export default {
     },
     methods: {
         onChange() {
+            this.$emit('changed');
             if (!this.search) {
                 this.isOpen = false;
                 return;
             }
             if (this.search.length >= this.minSearch) {
+                this.$emit('verified-change');
                 this.filterResults();
                 this.isOpen = true;
             }
