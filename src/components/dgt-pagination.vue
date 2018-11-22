@@ -213,7 +213,7 @@ export default {
         },
         dictionary: {
             type: Object,
-            default: () => {
+            default() {
                 return {
                     showing: 'showing',
                     first: 'Go to fisrt page',
