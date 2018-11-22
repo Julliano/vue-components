@@ -111,7 +111,6 @@ export default {
             if (this.search.length >= this.minSearch) {
                 this.$emit('verified-change');
                 this.filterResults();
-                this.isOpen = true;
             }
         },
         filterResults() {
@@ -120,6 +119,7 @@ export default {
                     return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                 });
                 this.results = resultados;
+                this.isOpen = !!this.results.length;
                 if (this.existingTags) {
                     this.results = resultados.filter(function(e) {
                         return this.indexOf(e) < 0;
