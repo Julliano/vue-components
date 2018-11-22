@@ -241,7 +241,7 @@ export default {
         };
     },
     beforeMount() {
-        this.totalPages = this.countPages();
+        this.totalPages = this.totalPagesDefault ? this.totalPagesDefault : this.countPages();
         this.elementsVisible();
 
     },
@@ -261,7 +261,6 @@ export default {
             this.rangeEnd = range > this.totalRegisters ? this.totalRegisters : range;
         },
         countPages() {
-            if (!this.totalPagesDefault);
             return Math.ceil(this.totalRegisters / this.pageSizeCurrent);
         },
         pressKey(event) {
