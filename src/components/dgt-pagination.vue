@@ -261,8 +261,9 @@ export default {
             this.rangeEnd = range > this.totalRegisters ? this.totalRegisters : range;
         },
         countPages() {
-            if (!this.totalPagesDefault);
-            return Math.ceil(this.totalRegisters / this.pageSizeCurrent);
+            if (!this.totalPagesDefault) return Math.ceil(this.totalRegisters /
+            this.pageSizeCurrent);
+            return this.totalPages;
         },
         pressKey(event) {
             let page = parseInt(event.target.value);
