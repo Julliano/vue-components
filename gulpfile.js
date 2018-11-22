@@ -13,7 +13,7 @@ const fs = require('fs');
 const { version } = require('./package.json');
 const packageJson = jsonfile.readFileSync('./package.json');
 const paths = { src: 'src/components/**/*.vue', dist: 'dist' };
-const componetsVueJs = ['dgt-autocomplete', 'dgt-card', 'dgt-component-grid', 'dgt-grid', 'dgt-list', 'dgt-star-rating', 'dgt-tabs', 'dgt-tag-input'];
+const componetsVueJs = ['dgt-autocomplete', 'dgt-card', 'dgt-component-grid', 'dgt-grid', 'dgt-list', 'dgt-star-rating', 'dgt-tabs', 'dgt-tag-input', 'dgt-pagination'];
 const banner =
     `${'/*!\n' +
     ' * dgt-vue-components'}${version}\n` +
