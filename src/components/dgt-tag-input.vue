@@ -100,7 +100,7 @@
                 <li class="new-tag-input">
                     <input
                         id="inputTag"
-                        @blur="$emit('blured')"
+                        @blur="$emit('blur')"
                         class="tag-input"
                         type="text"
                         :placeholder="placeholder"
