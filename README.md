@@ -29,6 +29,9 @@ npm run build
 
 npm run build-components
 
+wiki teste-cafe
+http://devexpress.github.io/testcafe/documentation/test-api
+
 ```
 
 For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
@@ -43,6 +46,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtStarRating](#DGTStarRating)
 1. [DgtTagInput](#DGTTagInput)
 1. [DgtTabs](#DGTTabs)
+1. [DgtPagination](#DGTPagination)
 
 ## DGTAutocomplete
 
@@ -711,3 +715,83 @@ Para utilizar essa funcionalidade basta criar uma class, ex:
 ```
 
 O atributo 'key' no slot é o mesmo nome da tab definada no objeto tabs
+
+## DGTPagination
+
+-dgtPagination é um componente de paginação com possibilidades de estilização sem que seja nessesário a alteração nativa do componente.
+
+```js
+    const dataPagination1 = {
+        totalPagesDefault: 2,
+        totalRegisters: 201,
+        currentPage: 1,
+        pageSizes: [50, 70, 100],
+        pageSizeDefault: 50
+    };
+    let dictionary = {
+        showing: 'Mostrando',
+        first: 'Ir para primeira página',
+        prev: 'Página anterior',
+        page: 'Pág.',
+        of: 'de',
+        next: 'Próxima página',
+        last: 'Ir para última página',
+        registers: 'registros',
+        currentPage: 'Insira o número de uma página',
+        itemsPerPage: 'Número de itens por página'
+    };
+```
+
+O exemplo acima mostras todos valores que podem se passados ao componente.
+Obs.: Caso seja passado o objeto dictionary, deve ser passado com todos os atributos.
+
+```html
+    <dgt-pagination
+        :total-registers="totalRegisters"
+        :current-page="currentPage"
+        :dictionary="dictionary"
+        @paginate="paginate"
+        @change-page-size="changePageSize"
+    ></dgt-pagination>
+```
+O exemplo acima mostra a instanciação do compoentente com suas propriedades requeridas.
+
+O componente envia para o componente pai duas menssagens, paginate e change-page-size, abaixo um exemplo to tratamento e recebimento dessas mensagens.
+
+```js
+    changePageSize([pageSize, currentPage]) {
+        if (!pageSize) return;
+        this.$set(this.$data, 'pageSizeDefault', parseInt(pageSize));
+        this.$set(this.$data, 'currentPage', parseInt(currentPage));
+    },
+    paginate([pageNumber, pageSize]) {
+        if (!pageNumber) return;
+        this.$set(this.$data, 'currentPage', parseInt(pageNumber));
+    }
+```
+
+Obs.: Sempre que houver uma mensagem do componente, deve-se ser passado a página corrente novamente. Sempre que for passado uma página acima do limite de páginas atual será passado na mensagem a última pagina válida.
+
+Abaixo comtém todas as variáveis de estilos que podem ser usadas:
+
+```style
+    --dgt-pagination-component-height
+    --dgt-pagination-component-width
+    --dgt-pagination-component-font-size
+    --dgt-pagination-component-bg-color
+    --dgt-pagination-grid-item-margin
+    --dgt-pagination-grid-item-nth-1-padding-left
+    --dgt-pagination-grid-item-nth-2-margin
+    --dgt-pagination-grid-item-nth-2-direct-childs-margin
+    --dgt-pagination-page-number-input-width
+    --dgt-pagination-grid-item-nth-1-text-align
+    --dgt-pagination-grid-item-nth-1-padding-right
+    --dgt-pagination-arrow-size
+    --dgt-pagination-arrow-border
+    --dgt-pagination-arrow-border-width
+    --dgt-pagination-space-arrow-2
+    --dgt-pagination-arrow-2-border
+    --dgt-pagination-arrow-2-hover-after-border
+    --dgt-pagination-arrow-2-hover-border-with
+    --dgt-pagination-arrow-2-hover-border
+```
