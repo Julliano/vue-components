@@ -11,6 +11,7 @@
     <dgt-pagination
         :total-registers="totalRegisters"
         :current-page="currentPage"
+        :totalPagesDefault="21"
         :dictionary="dictionary"
         @paginate="paginate"
         @change-page-size="changePageSize"
