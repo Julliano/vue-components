@@ -65,7 +65,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
         ```    
             
     @tag-selected       (função que irá ser chamada, no component pai, quando uma tag for selecionada no autocomplete);
-    @blured             (evento que será disparado on @blur);
+    @blur               (evento que será disparado on @blur);
     @changed            (evento que será disparado quando algo mudar no input);
     @verified-change    (evento que será disparado quando algo mudar no input e passar pela verificação de valor mínimo para busca)
     
@@ -548,6 +548,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     :objTag="obj.tags"      (default: null / atributo que armazenas as tags do objeto);
     @new-tag="newTag"       (default: '' / função chamada para armazenar o v-model da tag);
     @enter="keyEnter"       (função chamada ao pressionar enter, exemplo a seguir);
+    @blur                   (evento que será disparado on @blur);
 
     ```js
         keyEnter() {
