@@ -544,6 +544,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
     :objTag="obj.tags"      (default: null / atributo que armazenas as tags do objeto);
     @new-tag="newTag"       (default: '' / função chamada para armazenar o v-model da tag);
     @enter="keyEnter"       (função chamada ao pressionar enter, exemplo a seguir);
+    @blured                 (evento que será disparado on @blur);
 
     ```js
         keyEnter() {

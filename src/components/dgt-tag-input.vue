@@ -88,13 +88,27 @@
     <div class="dgt-tag-input-component">
         <div class="fake-input">
             <ul>
-                <li v-for="(tag, index) in tags" :key="tag" :class="'tag-'+index" class="tag is-info">
+                <li
+                    v-for="(tag, index) in tags"
+                    :key="tag"
+                    :class="'tag-'+index"
+                    class="tag is-info"
+                >
                     {{tag}}
                     <button class="delete is-small" @click="remove(index)"></button>
                 </li>
                 <li class="new-tag-input">
-                    <input id="inputTag" class="tag-input" type="text" :placeholder="placeholder"
-                        @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="onEnter" v-model="newTag">
+                    <input
+                        id="inputTag"
+                        @blur="$emit('blured')"
+                        class="tag-input"
+                        type="text"
+                        :placeholder="placeholder"
+                        @keyup.down="onArrowDown"
+                        @keyup.up="onArrowUp"
+                        @keyup.enter="onEnter"
+                        v-model="newTag"
+                    >
                 </li>
             </ul>
         </div>
