@@ -748,6 +748,7 @@ Obs.: Caso seja passado o objeto dictionary, deve ser passado com todos os atrib
 
 ```html
     <dgt-pagination
+        :pagination-icon-classes="array of strings (optional)"
         :total-registers="totalRegisters"
         :current-page="currentPage"
         :dictionary="dictionary"
