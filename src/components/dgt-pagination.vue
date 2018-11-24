@@ -2,123 +2,28 @@
 .dgt-pagination-component {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  height: var(--dgt-pagination-component-height, 50px);
-  width: var(--dgt-pagination-component-width, 100%);
-  font-size: var(--dgt-pagination-component-font-size, 16px);
-  background-color: var(--dgt-pagination-component-bg-color, #ccc);
-  .grid-item {
-    margin: var(--dgt-pagination-grid-item-margin, auto 0);
+  .page-number-input{
+    min-width: 60px;
+    width: 60px;
   }
-  .grid-item:nth-child(1) {
-    padding-left: var(--dgt-pagination-grid-item-nth-1-padding-left, 5px);
-  }
-  .grid-item:nth-child(2) {
-    margin: var(--dgt-pagination-grid-item-nth-2-margin, auto);
-    > * {
-      margin: var(--dgt-pagination-grid-item-nth-2-direct-childs-margin, 0 5px);
-    }
-    .page-number-input {
-      width: var(--dgt-pagination-page-number-input-width, 35px);
-    }
-  }
-  .grid-item:nth-child(3) {
-    text-align: var(--dgt-pagination-grid-item-nth-1-text-align, right);
-    padding-right: var(--dgt-pagination-grid-item-nth-1-padding-right, 5px);
+  .select-page-size{
+    min-width: 70px;
+    width: 70px;
   }
   input[type="number"] {
     -moz-appearance: textfield;
   }
-
   input::-webkit-outer-spin-button,
   input::-webkit-inner-spin-button {
     -webkit-appearance: none;
   }
-
   .paginate-button {
+    cursor: pointer;
     background-color: transparent;
     border: none;
-    &[disable] {
+    &[disabled] {
       opacity: 0.5;
       pointer-events: none;
-    }
-    &:focus {
-      outline-color: transparent;
-    }
-  }
-
-  .arrow {
-    display: inline-block;
-    height: var(--dgt-pagination-arrow-size, 10px);
-    width: var(--dgt-pagination-arrow-size, 10px);
-    border: var(--dgt-pagination-arrow-border, 1px solid rgb(82, 82, 82));
-    border-width: var(--dgt-pagination-arrow-border-width, 1px 1px 0 0);
-
-    &.prev {
-      transform: rotate(-135deg);
-    }
-
-    &.next {
-      transform: rotate(45deg);
-    }
-
-    &:hover {
-      border-color: #525252;
-      border-width: 3px 3px 0px 0;
-    }
-  }
-  .arrow-2 {
-    display: inline-block;
-    height: var(--dgt-pagination-arrow-size, 10px);
-    &:after {
-      content: "";
-      display: block;
-      height: var(--dgt-pagination-arrow-size, 10px);
-      width: var(--dgt-pagination-arrow-size, 10px);
-      border: var(--dgt-pagination-arrow-border, 1px solid #525252);
-      border-width: var(--dgt-pagination-arrow-border-width, 1px 1px 0 0);
-    }
-
-    &.prev {
-      padding-left: var(--dgt-pagination-space-arrow-2, 4px);
-      border-left: var(--dgt-pagination-arrow-2-border, 2px solid #525252);
-      &::after {
-        transform: rotate(-135deg);
-      }
-    }
-
-    &.next {
-      padding-right: var(--dgt-pagination-space-arrow-2, 4px);
-      border-right: var(--dgt-pagination-arrow-2-border, 2px solid #525252);
-      &::after {
-        transform: rotate(45deg);
-      }
-    }
-
-    &:hover {
-      &:after {
-        border: var(
-          --dgt-pagination-arrow-2-hover-after-border,
-          3px solid #525252
-        );
-        border-width: var(
-          --dgt-pagination-arrow-2-hover-border-with,
-          3px 3px 0 0
-        );
-      }
-
-      &.prev {
-        border-left: var(
-          --dgt-pagination-arrow-2-hover-border,
-          3px solid #525252
-        );
-      }
-
-      &.next {
-        border-right: var(
-          --dgt-pagination-arrow-2-hover-border,
-          3px solid #525252
-        );
-      }
     }
   }
 }
@@ -129,7 +34,7 @@
         <div class="grid-item">
             <span>{{dictionary.showing}}</span>
             <select
-                class="select-page-size"
+                class="select-page-size inp"
                 :title="dictionary.itemsPerPage"
                 v-model="pageSizeCurrent"
                 @change="changePageSize($event)"
@@ -145,20 +50,22 @@
             <button
                 class="paginate-button first"
                 @click="paginate(1)"
-                :disable="disablePaginationPrev"
+                :disabled="disabledPaginationPrev"
+                :title="dictionary.first"
             >
-                <div class="arrow-2 prev" :title="dictionary.first"></div>
+                <i :class="paginationIconClasses[0]" ></i>
             </button>
             <button
                 class="paginate-button prev"
                 @click="paginate(currentPage-1)"
-                :disable="disablePaginationPrev"
+                :disabled="disabledPaginationPrev"
+                :title="dictionary.prev"
             >
-                <div class="arrow prev" :title="dictionary.prev"></div>
+                <i :class="paginationIconClasses[1]"></i>
             </button>
             <span>{{dictionary.page}}</span>
             <input
-                class="page-number-input"
+                class="page-number-input inp"
                 type="text"
                 :value="currentPage"
                 :title="dictionary.currentPage"
@@ -169,20 +76,22 @@
             <button
                 class="paginate-button next"
                 @click="paginate(currentPage+1)"
-                :disable="disablePaginationNext"
+                :disabled="disabledPaginationNext"
+                :title="dictionary.next"
             >
-                <div class="arrow next" :title="dictionary.next"></div>
+                <i :class="paginationIconClasses[2]" ></i>
             </button>
             <button
                 class="paginate-button last"
                 @click="paginate(totalPages)"
-                :disable="disablePaginationNext"
+                :disabled="disabledPaginationNext"
+                :title="dictionary.last"
             >
-                <div class="arrow-2 next" :title="dictionary.last"></div>
+                <i :class="paginationIconClasses[3]"></i>
             </button>
         </div>
         <div class="grid-item">
-            <span>{{rangeBegin}} - {{rangeEnd}} {{dictionary.of}} {{totalRegisters}} {{dictionary.registers}}</span>
+            {{rangeBegin}} - {{rangeEnd}} {{dictionary.of}} {{totalRegisters}} {{dictionary.registers}}
         </div>
     </div>
 </template>
@@ -211,12 +120,16 @@ export default {
             type: Number,
             default: 10
         },
+        paginationIconClasses: {
+            type: Array,
+            default: ['mdi chevron-double-left', 'mdi chevron-left', 'mdi chevron-right', 'mdi chevron-double-right']
+        },
         dictionary: {
             type: Object,
             default() {
                 return {
                     showing: 'showing',
-                    first: 'Go to fisrt page',
+                    first: 'Go to first page',
                     prev: 'prev',
                     page: 'page',
                     of: 'of',
@@ -235,8 +148,8 @@ export default {
             rangeBegin: 1,
             rangeEnd: 1,
             totalPages: this.totalPagesDefault | 10,
-            disablePaginationPrev: true,
-            disablePaginationNext: false,
+            disabledPaginationPrev: true,
+            disabledPaginationNext: false,
             pageSizeCurrent: this.pageSizeDefault
         };
     },
@@ -276,7 +189,7 @@ export default {
             if (requiredPage > this.totalPages) requiredPage = this.totalPages;
             return requiredPage;
         },
-        /* eslint-disable-next-line complexity */
+        /* eslint-disabled-next-line complexity */
         validateValue(event) {
             if (event.keyCode !== 13) {
                 setTimeout(() => {
@@ -288,14 +201,14 @@ export default {
         },
         checkLockPagination(page = this.currentPage) {
             if (this.totalPages === page) {
-                this.disablePaginationNext = true;
-                this.disablePaginationPrev = false;
+                this.disabledPaginationNext = true;
+                this.disabledPaginationPrev = false;
             } else if (page === 1) {
-                this.disablePaginationPrev = true;
-                this.disablePaginationNext = false;
+                this.disabledPaginationPrev = true;
+                this.disabledPaginationNext = false;
             } else if (page > 1 && page < this.totalPages) {
-                this.disablePaginationPrev = false;
-                this.disablePaginationNext = false;
+                this.disabledPaginationPrev = false;
+                this.disabledPaginationNext = false;
             }
         },
         paginate(page) {
