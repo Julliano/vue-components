@@ -122,7 +122,9 @@ export default {
         },
         paginationIconClasses: {
             type: Array,
-            default: ['mdi mdi-chevron-double-left', 'mdi mdi-chevron-left', 'mdi mdi-chevron-right', 'mdi mdi-chevron-double-right']
+            default(){
+                return  ['mdi mdi-chevron-double-left', 'mdi mdi-chevron-left', 'mdi mdi-chevron-right', 'mdi mdi-chevron-double-right']
+            }
         },
         dictionary: {
             type: Object,
