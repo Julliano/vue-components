@@ -748,6 +748,7 @@ Obs.: Caso seja passado o objeto dictionary, deve ser passado com todos os atrib
 
 ```html
     <dgt-pagination
+        :pagination-icon-classes="array of strings (optional)"
         :total-registers="totalRegisters"
         :current-page="currentPage"
         :dictionary="dictionary"
@@ -772,27 +773,3 @@ O componente envia para o componente pai duas menssagens, paginate e change-page
 ```
 
 Obs.: Sempre que houver uma mensagem do componente, deve-se ser passado a página corrente novamente. Sempre que for passado uma página acima do limite de páginas atual será passado na mensagem a última pagina válida.
-
-Abaixo comtém todas as variáveis de estilos que podem ser usadas:
-
-```style
-    --dgt-pagination-component-height
-    --dgt-pagination-component-width
-    --dgt-pagination-component-font-size
-    --dgt-pagination-component-bg-color
-    --dgt-pagination-grid-item-margin
-    --dgt-pagination-grid-item-nth-1-padding-left
-    --dgt-pagination-grid-item-nth-2-margin
-    --dgt-pagination-grid-item-nth-2-direct-childs-margin
-    --dgt-pagination-page-number-input-width
-    --dgt-pagination-grid-item-nth-1-text-align
-    --dgt-pagination-grid-item-nth-1-padding-right
-    --dgt-pagination-arrow-size
-    --dgt-pagination-arrow-border
-    --dgt-pagination-arrow-border-width
-    --dgt-pagination-space-arrow-2
-    --dgt-pagination-arrow-2-border
-    --dgt-pagination-arrow-2-hover-after-border
-    --dgt-pagination-arrow-2-hover-border-with
-    --dgt-pagination-arrow-2-hover-border
-```

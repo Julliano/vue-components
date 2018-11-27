@@ -5,10 +5,24 @@
   --dgt-pagination-arrow-2-border: 2px solid #525252;
   --dgt-pagination-arrow-border-width: 1px 1px 0 0;
 }
+.double-chevron-left::before{
+    content: '\00AB';
+}
+.chevron-left::before{
+  content: '\2039';
+}
+.chevron-right::before{
+  content: '\203A';
+}
+.double-chevron-right::before{
+  content: '\00BB';
+}
+
 </style>
 
 <template>
     <dgt-pagination
+        :pagination-icon-classes="['double-chevron-left','chevron-left','chevron-right','double-chevron-right']"
         :total-registers="totalRegisters"
         :current-page="currentPage"
         :totalPagesDefault="21"
