@@ -107,8 +107,8 @@
                         @keyup.down="onArrowDown"
                         @keyup.up="onArrowUp"
                         @keyup.enter="onEnter"
-                        @keypress="onComma($event)"
                         @keyup="onComma($event)"
+                        @keyup.delete="onDeleteTag"
                         v-model="newTag"
                     >
                 </li>
@@ -184,6 +184,10 @@
                     return;
                 }
                 this.onEnter();
+            },
+            onDeleteTag() {
+                if (this.newTag !== null && this.newTag !== '') return;
+                this.tags.pop();
             }
         },
         watch: {
