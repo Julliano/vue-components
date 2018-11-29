@@ -86,7 +86,7 @@
 
 <template>
     <div class="dgt-tag-input-component">
-        <div class="fake-input">
+        <div class="fake-input" @click="focusInputTag">
             <ul>
                 <li
                     v-for="(tag, index) in tags"
@@ -99,7 +99,7 @@
                 </li>
                 <li class="new-tag-input">
                     <input
-                        id="inputTag"
+                        id="input-tag"
                         @blur="$emit('blur')"
                         class="tag-input"
                         type="text"
@@ -107,6 +107,8 @@
                         @keyup.down="onArrowDown"
                         @keyup.up="onArrowUp"
                         @keyup.enter="onEnter"
+                        @keypress="onComma($event)"
+                        @keyup="onComma($event)"
                         v-model="newTag"
                     >
                 </li>
@@ -136,22 +138,30 @@
                 set(val) {
                     this.tags = val.split(' ');
                 }
+            },
+            tag() {
+                if (this.newTag === null || this.newTag.indexOf(',') === 0) {
+                    return null;
+                }
+                return this.newTag.replace(',', '').trim();
             }
         },
         created() {
             this.tags = this.tagArr;
         },
         updated() {
-            this.$emit('new-tag', this.newTag);
+            this.$emit('new-tag', this.tag);
         },
         methods: {
             remove(index) {
                 this.tags.splice(index, 1);
-                document.getElementById('inputTag').focus();
+                this.$el.querySelector('#input-tag').focus();
+            },
+            focusInputTag() {
+                this.$el.querySelector('#input-tag').focus();
             },
             checkDuplicate(tag) {
                 if (!tag) return false;
-
                 const lowerTags = this.tags.map(item => {
                     return item.toLowerCase();
                 });
@@ -164,10 +174,16 @@
                 this.$emit('keydown');
             },
             onEnter() {
-                if (this.checkDuplicate(this.newTag)) {
-                    this.$emit('enter', this.newTag);
+                if (this.checkDuplicate(this.tag)) {
+                    this.$emit('enter', this.tag);
                 }
                 this.newTag = null;
+            },
+            onComma(event) {
+                if (event.key !== ',') {
+                    return;
+                }
+                this.onEnter();
             }
         },
         watch: {
