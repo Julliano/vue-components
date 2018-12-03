@@ -50,7 +50,7 @@
                 :name="id"
                 @blur="$emit('blur')"
                 type="text"
-                class="input"
+                class="inp"
                 @input="onChange"
                 v-model="search"
                 @keyup.down="onArrowDown"
