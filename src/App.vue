@@ -8,7 +8,9 @@
 </style>
 
 <template>
-    <div class="showcase">
+  <div class="dgt-container light padding">
+        <h3>Dgt-Layout</h3>
+        <dgt-layout-view></dgt-layout-view>
         <h3>Dgt-Star</h3>
         <dgt-star-view></dgt-star-view>
         <hr style="clear: both;">
@@ -49,6 +51,7 @@ import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
 import dgtTabsView from './examples/dgt-tabs.view';
 import dgtPaginationView from './examples/dgt-pagination.view';
+import dgtLayoutView from './examples/dgt-layout.view';
 
 export default {
     name: 'app',
@@ -61,7 +64,8 @@ export default {
         dgtAutocompleteView,
         dgtComponentGridView,
         dgtTabsView,
-        dgtPaginationView
+        dgtPaginationView,
+        dgtLayoutView
     }
 };
 </script>
