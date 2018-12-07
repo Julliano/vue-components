@@ -49,6 +49,7 @@ import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
 import dgtTabsView from './examples/dgt-tabs.view';
 import dgtPaginationView from './examples/dgt-pagination.view';
+import dgtLayoutView from './examples/dgt-layout.view';
 
 export default {
     name: 'app',
@@ -61,7 +62,8 @@ export default {
         dgtAutocompleteView,
         dgtComponentGridView,
         dgtTabsView,
-        dgtPaginationView
+        dgtPaginationView,
+        dgtLayoutView
     }
 };
 </script>

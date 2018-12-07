@@ -773,3 +773,41 @@ O componente envia para o componente pai duas menssagens, paginate e change-page
 ```
 
 Obs.: Sempre que houver uma mensagem do componente, deve-se ser passado a página corrente novamente. Sempre que for passado uma página acima do limite de páginas atual será passado na mensagem a última pagina válida.
+
+## DGTLayout
+
+O componente dgt-layout serve para criar layouts redimensionáveis horizontalmente.
+Por padrão o parametro horizontal-resizable é `false`.
+
+Obs.: Quem usar o dgt-layout deve definir as colunas usando display flex, o componente não tem nenhuma definição de css.
+Vamos deixar um exemplo aqui embaixo sendo uma coluna de 70% e outra de 30%:
+
+
+```
+<style>
+  .dgt-resize-view{
+    height: 400px;
+    display: flex;
+  }
+  .column-1{
+      flex-basis: 70%;
+      min-width: 300px; /* Tamanho minimo */
+  }
+  .column-2{
+    flex-basis: 30%;
+    flex-grow: 1;
+    background: #d1d1d1;
+  }
+</style>
+
+<section class="dgt-resize-view">
+  <dgt-layout class="column-1" horizontal-resizable="true">
+      Coluna 1
+  </dgt-layout>
+  <dgt-layout class="column-2">
+      Coluna 2
+  </dgt-layout>
+</section>
+
+```
+
