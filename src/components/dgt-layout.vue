@@ -27,17 +27,12 @@
               default: false
           }
       },
-      mounted() {
-          this.contentArea = this.$el;
-      },
       methods: {
           resize() {
-              const bounds = this.contentArea.getBoundingClientRect();
               let mouseMove = e => {
                   e.preventDefault();
-                  const x = e.clientX - bounds.right;
-                  const newWidth = bounds.width + x;
-                  this.contentArea.style.flexBasis =  `${newWidth}px`;
+                  const width = e.clientX - this.$el.offsetLeft;
+                  this.$el.style.flexBasis =  `${width}px`;
               };
               document.addEventListener('mousemove', mouseMove);
               let i = 0;
@@ -51,7 +46,6 @@
                   },
                   false
               );
-
           }
       }
   };
