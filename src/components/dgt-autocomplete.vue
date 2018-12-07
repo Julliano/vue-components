@@ -50,7 +50,7 @@
                 :name="id"
                 @blur="$emit('blur')"
                 type="text"
-                class="input"
+                class="inp"
                 @input="onChange"
                 v-model="search"
                 @keyup.down="onArrowDown"
@@ -145,7 +145,7 @@ export default {
             } else {
                 this.$emit('tag-selected', this.search);
             }
-            this.search = '';
+            this.search = this.results[this.arrowCounter];
             this.isOpen = false;
             this.arrowCounter = -1;
         },

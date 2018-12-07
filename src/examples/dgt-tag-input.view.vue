@@ -92,7 +92,7 @@
                 } else {
                     this.tagProps.tags.push(this.search);
                 }
-                document.getElementById('inputTag').focus();
+                document.getElementById('input-tag').focus();
             }
         }
     };
