@@ -8,7 +8,7 @@
 </style>
 
 <template>
-    <div class="showcase">
+  <div class="dgt-container light padding">
         <h3>Dgt-Star</h3>
         <dgt-star-view></dgt-star-view>
         <hr style="clear: both;">

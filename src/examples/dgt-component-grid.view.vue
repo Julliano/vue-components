@@ -1,4 +1,3 @@
-
 <template>
     <dgt-component-grid :grid="dgtComponentGridProps.grid" :header="dgtComponentGridProps.header" :sub-header="dgtComponentGridProps.subHeader">
         <template slot="main-slot" slot-scope="mainProps">

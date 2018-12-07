@@ -1,106 +1,110 @@
 <style lang="scss">
-.dgt-grid-view {
-  .dgt-grid-component {
-    .material-icons {
-      font-size: 16px;
-      &.inactive {
-        color: gray;
-      }
-    }
-    .arrow-sort-1 {
-      transition: all 0.4s ease;
-      transform: rotateZ(90deg);
-    }
-    .arrow-sort-2 {
-      transition: all 0.4s ease;
-      transform: rotateZ(-90deg);
-    }
-    input[type="checkbox"] {
-      vertical-align: sub;
-    }
-    .arrow-drop-down {
-      font-size: 23px;
-      top: 0px;
-      position: absolute;
-      right: -5px;
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-  .select-columns {
-    ul {
-      border: 1px solid #000;
-      width: 140px;
-      list-style: none;
+  @import "../styles/variables";
+    .popover{
+      z-index: 100;
       padding: 0;
-      margin: 0;
-      margin-top: 5px;
-      box-shadow: 0px 0px 7px #888888;
-      max-height: 0;
-      opacity: 0;
-      transition: max-height 0.5s;
-      overflow: hidden;
-      &.open {
-        max-height: 200px;
-        opacity: 1;
+    }
+  .dgt-grid-component{
+    --dgt-grid-max-width: 100%;
+    --dgt-grid-width:  auto;
+    --dgt-grid-col-min-width: 30px;
+    --dgt-grid-row-border-bottom: 1px solid #{$gray300};
+    --rowHeight:  31px;
+    --dgt-grid-row-header-span-background-color: #{lighten($primary-color, 35%)};
+    --dgt-grid-row-header-background-color: #{$gray100};
+    --dgt-grid-row-selected-background-color:  #{lighten($primary-color, 55%)};
+    --dgt-grid-header-background-color: #{$gray100};
+    --dgt-grid-header-hover:  #{$primary-color};
+    --dgt-grid-header-color: #{$gray900};
+    --dgt-grid-header-span-width:  5px;
+    --dgt-grid-header-span-background-color: #{lighten($primary-color, 55%)};
+
+    .row:not(.row-header) .mdi{
+      font-size: 1.2em;
+    }
+    .icon-inactive {
+      opacity: 0.5;
+    }
+    .row-header{
+      text-transform: uppercase;
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 7;
+      padding: 0 $normal-space;
+      &[sortable]{
+        transition: background-color .3s ease-in-out;
+        &:hover,
+        &:focus{
+          background-color: $gray300 !important;
+          color: $primary-color;
+          cursor: pointer;
+        }
+        &:active{
+          background-color: $gray400 !important;
+        }
+      }
+      .header i{
+        opacity: .65;
+        vertical-align:  baseline !important;
       }
     }
+    .row{
+      padding: 0 $normal-space;
+    }
   }
-}
 </style>
-
 <template>
     <div class="dgt-grid-view">
-        <div class="select-columns">
-            <input type="button" value="select columns" @click="showMenuColumns($event)">
-            <ul class="list-columns">
-                <li>
-                    <input type="checkbox" checked value="checkBox" @click="toggleColumn($event)">
-                    checkBox
-                </li>
-                <li>
-                    <input type="checkbox" checked value="iconStorage" @click="toggleColumn($event)">
-                    iconStorage
-                </li>
-                <li>
-                    <input type="checkbox" checked value="iconAttach" @click="toggleColumn($event)">
-                    iconAttach
-                </li>
-                <li>
-                    <input type="checkbox" checked value="iconMessage" @click="toggleColumn($event)">
-                    iconMessage
-                </li>
-                <li>
-                    <input type="checkbox" checked value="horario" @click="toggleColumn($event)">
-                    horario
-                </li>
-                <li>
-                    <input type="checkbox" checked value="conta" @click="toggleColumn($event)">
-                    conta
-                </li>
-                <li>
-                    <input type="checkbox" checked value="url" @click="toggleColumn($event)">
-                    url
-                </li>
-                <li>
-                    <input type="checkbox" checked value="localidade" @click="toggleColumn($event)">
-                    localidade
-                </li>
-                <li>
-                    <input type="checkbox" checked value="data" @click="toggleColumn($event)">
-                    data
-                </li>
-            </ul>
-        </div>
-        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine" 
+          <button class="btn btn-primary" @click="showMenuColumns()">
+            <i class="mdi mdi-chevron-down"></i> Hide Columns
+          </button>
+          <ul class="popover" v-show="showPopoverColumns">
+              <li class="popover-item checkbox">
+                  <input type="checkbox" id="checkbox" checked value="checkBox" @click="toggleColumn($event)">
+                  <label for="checkbox">checkBox</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="iconStorage" checked value="iconStorage" @click="toggleColumn($event)">
+                   <label for="iconStorage">IconStorage</label>
+
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="iconAttach" checked value="iconAttach" @click="toggleColumn($event)">
+                  <label for="iconAttach">IconAttach</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="iconMessage" checked value="iconMessage" @click="toggleColumn($event)">
+                  <label for="iconMessage">IconMessage</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="horario" checked value="horario" @click="toggleColumn($event)">
+                  <label for="horario">Horário</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="conta" checked value="conta" @click="toggleColumn($event)">
+                  <label for="conta">Conta</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="url" checked value="url" @click="toggleColumn($event)">
+                  <label for="url">URL</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="localidade" checked value="localidade" @click="toggleColumn($event)">
+                  <label for="localidade">Localidade</label>
+              </li>
+            <li class="popover-item checkbox">
+                  <input type="checkbox" id="data" checked value="data" @click="toggleColumn($event)">
+                  <label for="data">Data</label>
+              </li>
+          </ul>
+        <button class="btn btn-primary right" @click.stop="saveCheckedItems"><i class="mdi mdi-content-save"></i> save item</button>
+        <dgt-grid class="dgt-grid-custom" v-if="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine"
             @pagination="pagination" @sort-column="sortColumn" @dragable-columns="dragableColumns" @resize="resizeColumn" @right-click="rightClick">
-            <template slot="top-bar" slot-scope="slotProps">
-                <button class="btn-save" @click.stop="saveCheckedItems">save item</button>
-            </template>
             <template slot="checkBox-header" slot-scope="slotProps">
-                <input type="checkbox" class="custom-col" v-model="slotProps.dataProps.isChecked" @click="toggleChecked($event, true)"/>
-                <i class="material-icons arrow-drop-down">arrow_drop_down</i>
+                <div class="checkbox">
+                  <input type="checkbox" id="toggle-checkbox" class="custom-col" v-model="slotProps.dataProps.isChecked" @click="toggleChecked($event, true)"/>
+                  <label for="toggle-checkbox"></label>
+                </div>
             </template>
             <template slot="iconStorage-header" slot-scope="slotProps">
                 <div class="header"></div>
@@ -113,29 +117,33 @@
             </template>
             <template slot="icon-order" slot-scope="slotProps">
                 <i v-if="slotProps.currentColumn === slotProps.columnSort"
-                    :class="`material-icons arrow-sort-${slotProps.sortState === -1 ? 2 : slotProps.sortState}`">
-                    {{slotProps.dataProps.arrowsSort[slotProps.sortState === -1 ? 2 : slotProps.sortState]}}
+                   class="mdi"
+                   :class="`mdi-${sortIcon(slotProps.sortState)}`">
                 </i>
-                <i v-else class="material-icons arrow-sort ">compare_arrows</i>
+                <i v-else class="mdi mdi-unfold-more-horizontal"></i>
             </template>
-            <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-                <input type="checkbox"
-                    ref="checkbox"
-                    for="checkbox"
-                    v-model="slotProps.obj.checked"
-                    @change="toggleChecked($event)"
-                    @mousedown="preventPropagation($event)"
-                    :key="index"
-                >
-            </template>
+          <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
+                <div class="checkbox">
+                      <input type="checkbox"
+                            ref="checkbox"
+                            for="checkbox"
+                            v-model="slotProps.obj.checked"
+                            @change="toggleChecked($event)"
+                            @mousedown="preventPropagation($event)"
+                            :key="index"
+                            :id="`checkbox-${index}`"
+                        >
+                        <label :for="`checkbox-${index}`"></label>
+                </div>
+          </template>
             <template :slot="`iconStorage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-                <i class="material-icons" :key="index">storage</i>
+                <i class="mdi mdi-database" :key="index"></i>
             </template>
             <template :slot="`iconAttach-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-                <i class="material-icons" :key="index">attach_file</i>
+                <i class="mdi mdi-attachment" :key="index"></i>
             </template>
                 <template :slot="`iconMessage-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-                <i class="material-icons" :key="index">message</i>
+                <i class="mdi mdi-message-text" :key="index"></i>
             </template>
         </dgt-grid>
     </div>
@@ -306,7 +314,8 @@ export default {
         return {
             dataDgtGrid,
             closedColumns: {},
-            drawComponent: true
+            drawComponent: true,
+            showPopoverColumns: false
         };
     },
     methods: {
@@ -371,6 +380,17 @@ export default {
                 }
             }
         },
+        sortIcon(sortState) {
+            switch (sortState) {
+                case -1:
+                    return 'chevron-up';
+                case 0:
+                    return 'unfold-more-horizontal';
+                case 1:
+                    return 'chevron-down';
+            }
+            return 'unfold-more-horizontal';
+        },
         preventPropagation(event) {
             event.stopPropagation();
         },
@@ -394,14 +414,8 @@ export default {
         rightClick(event, item) {
             return [event, item];
         },
-        showMenuColumns(event) {
-            let listColumns = event.target.parentElement.querySelector('.list-columns');
-
-            if (listColumns.className.indexOf('open') === -1) {
-                listColumns.className += ' open';
-            } else {
-                listColumns.className = listColumns.className.replace(/open/g, '');
-            }
+        showMenuColumns() {
+            this.showPopoverColumns = !this.showPopoverColumns;
         },
         removeColumn(columnName) {
             this.closedColumns[columnName] = this.dataDgtGrid.headers[columnName];
