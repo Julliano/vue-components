@@ -75,50 +75,66 @@
 </style>
 
 <template>
-  <section class="dgt-grid-component component">
-    <slot name="top-bar" :dataProps="dataProps"></slot>
-    <div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
-      <div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers" :key=headerKey
-           :class="`col-${headerIndex}`" :column-type="headerKey" :id="`col-${headerIndex}`"  @drop.prevent="drop($event)" @dragover="dragover($event)">
-        <div class="row row-header" :draggable="header.draggable" :sortable="header.sortable" @dragstart="drag($event)">
-          <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]" @click="sortBy($event)">
-            <span class="name-column" v-if="header.isCustomColumn">
-              <slot :name="`${headerKey}-header`" :dataProps="dataProps"></slot>
-            </span>
-            <span class="name-column" v-else>
-              <span>{{header.name}}</span>
-              <slot name="icon-order" :dataProps="dataProps" :sortState="sortState" :columnSort="sortedColumn"
-                    :currentColumn="header.name"></slot>
-            </span>
-          </div>
-          <span v-if="header.resizable" @mousedown.prevent="resizeColumn($event)" class="span-resize"></span>
-        </div>
-        <div class="row"  v-for="(item, index, key) in filteredData" :key=key
-             :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
-             :selected="selectedLine === item" @mousedown.stop="clickLine($event, item, index)"
-             :style="`background-color: ${item.lineColor}`">
-          <template :class="`${headerKey} cel cel-${index}`" v-if="header['isCustomColumn']">
-            <slot :name="`${headerKey}-cel${index}`" :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
-                  :dataProps="dataProps" :obj="item"></slot>
-          </template>
-          <span :class="`${headerKey} cel cel-${index}`" v-else>
-                        {{item[headerKey]}}
-                    </span>
-        </div>
-      </div>
-    </div>
-    <footer class="pagination" v-if="pagination">
-      <slot v-if="$scopedSlots['custom-pagination']" name="custom-pagination" :page="pagination.page"
-            :total="pagination.total" :dataProps="dataProps"></slot>
-      <div v-else>
-        <button class="prev" :disabled="isPagination('prev')" v-on:click.stop="paginate(--pagination.page)">prev
-        </button>
-        <span class="prev">{{pagination.page}} de {{pagination.total}}</span>
-        <button class="next" :disabled="isPagination('next')" v-on:click.stop="paginate(++pagination.page)">next
-        </button>
-      </div>
-    </footer>
-  </section>
+	<section class="dgt-grid-component component">
+		<slot name="top-bar" :dataProps="dataProps"></slot>
+		<div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
+			<div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers"
+			    :key=headerKey :class="`col-${headerIndex}`"
+			    :column-type="headerKey" :id="`col-${headerIndex}`"
+			    @drop.prevent="drop($event)" @dragover="dragover($event)">
+				<div class="row row-header" :draggable="header.draggable"
+				    :sortable="header.sortable" @dragstart="drag($event)">
+					<div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]"
+					    @click="sortBy($event)">
+						<span class="name-column" v-if="header.isCustomColumn">
+							<slot :name="`${headerKey}-header`"
+							    :dataProps="dataProps"></slot>
+						</span>
+						<span class="name-column" v-else>
+							<span>{{header.name}}</span>
+							<slot name="icon-order" :dataProps="dataProps"
+							    :sortState="sortState" :columnSort="sortedColumn"
+							    :currentColumn="header.name"></slot>
+						</span>
+					</div>
+					<span v-if="header.resizable"
+					    @mousedown.prevent="resizeColumn($event)"
+					    class="span-resize"></span>
+				</div>
+				<div class="row" v-for="(item, index, key) in filteredData"
+				    :key=key :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
+				    :selected="selectedLine === item"
+				    @mousedown.stop="clickLine($event, item, index)"
+				    :style="`background-color: ${item.lineColor}`">
+					<template :class="`${headerKey} cel cel-${index}`"
+					    v-if="header['isCustomColumn']">
+						<slot :name="`${headerKey}-cel${index}`"
+						    :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
+						    :dataProps="dataProps" :obj="item"></slot>
+					</template>
+					<span :class="`${headerKey} cel cel-${index}`"
+					    v-else>
+						{{item[headerKey]}}
+					</span>
+				</div>
+			</div>
+		</div>
+		<footer class="pagination" v-if="pagination">
+			<slot v-if="$scopedSlots['custom-pagination']"
+			    name="custom-pagination" :page="pagination.page"
+			    :total="pagination.total" :dataProps="dataProps"></slot>
+			<div v-else>
+				<button class="prev" :disabled="isPagination('prev')"
+				    v-on:click.stop="paginate(--pagination.page)">prev
+				</button>
+				<span class="prev">{{pagination.page}} de
+					{{pagination.total}}</span>
+				<button class="next" :disabled="isPagination('next')"
+				    v-on:click.stop="paginate(++pagination.page)">next
+				</button>
+			</div>
+		</footer>
+	</section>
 </template>
 
 <script>
@@ -183,12 +199,6 @@ export default {
         this.init();
         this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
         this.gridRow = `1 / ${Object.keys(this.dataProps.headers).length}`;
-        [this.selectedLine] = this.dataProps.lines.filter((line) => {
-            if (line.selected) {
-                return line;
-            }
-            return false;
-        });
     },
     mounted() {
         let dgtGrid = document.querySelector('.dgt-grid');
@@ -216,6 +226,12 @@ export default {
             this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
+            [this.selectedLine] = this.dataProps.lines.filter((line) => {
+                if (line.selected) {
+                    return line;
+                }
+                return false;
+            });
         },
         sumWidthColumns(widthColumns) {
             return widthColumns.reduce((sum, current) => {
