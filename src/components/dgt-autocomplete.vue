@@ -64,7 +64,7 @@
                     @click="onEnter(result)"
                     class="autocomplete-result"
                     :class="{ 'is-active': i === arrowCounter }"
-                >{{ result }}</li>
+                >{{ result.label }}</li>
             </ul>
         </div>
     </div>
@@ -79,9 +79,10 @@ export default {
     props: {
         id: String,
         items: Array,
-        searchTag: String,
+        searchTag: {},
         showInput: Boolean,
         existingTags: {},
+        autoCompleteOnly: Boolean,
         minSearch: {
             type: Number,
             default: Number
@@ -116,7 +117,7 @@ export default {
         filterResults() {
             if (this.items) {
                 const resultados = this.items.filter(item => {
-                    return item.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
+                    return item.label.toLowerCase().indexOf(this.search.toLowerCase()) > -1;
                 });
                 this.results = resultados;
                 this.isOpen = !!this.results.length;
@@ -137,15 +138,27 @@ export default {
                 this.arrowCounter = this.arrowCounter - 1;
             }
         },
-        onEnter(param) {
+        onEnter() {
+            let selectedItem = null;
             if (this.arrowCounter >= 0) {
-                this.$emit('tag-selected', this.results[this.arrowCounter]);
-            } else if (param) {
-                this.$emit('tag-selected', param);
+                selectedItem = this.results[this.arrowCounter];
+            } else if (this.autoCompleteOnly) {
+                for (let i = 0; i < this.results.length; i++) {
+                    let item = this.results[i];
+                    if (selectedItem.label === item.label) {
+                        selectedItem = item;
+                        break;
+                    }
+                }
             } else {
-                this.$emit('tag-selected', this.search);
+                selectedItem = {
+                    label: this.search
+                };
             }
-            this.search = this.results[this.arrowCounter];
+            if (selectedItem) {
+                this.search = selectedItem.label;
+            }
+            this.$emit('tag-selected', selectedItem);
             this.isOpen = false;
             this.arrowCounter = -1;
         },
@@ -165,7 +178,7 @@ export default {
         searchTag() {
             if (!this.searchTag) this.isOpen = false;
             if (this.searchTag) {
-                this.search = this.searchTag;
+                this.search = this.searchTag.label;
                 this.isOpen = false;
                 if (this.search) {
                     this.onChange();

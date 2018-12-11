@@ -32,14 +32,38 @@
             return {
                 showInput: true,
                 items: [
-                    'Batman',
-                    'Super-Man',
-                    'Lex Luthor',
-                    'Lana Lang',
-                    'Arqueiro-Verde',
-                    'Aquaman',
-                    'Flash',
-                    'Mulher Maravilha'
+                    {
+                        id: 0,
+                        label: 'Batman'
+                    },
+                    {
+                        id: 1,
+                        label: 'Super-Man'
+                    },
+                    {
+                        id: 2,
+                        label: 'Lex Luthor'
+                    },
+                    {
+                        id: 3,
+                        label: 'Lana Lang'
+                    },
+                    {
+                        id: 4,
+                        label: 'Arqueiro-Verde'
+                    },
+                    {
+                        id: 5,
+                        label: 'Aquaman'
+                    },
+                    {
+                        id: 6,
+                        label: 'Flash'
+                    },
+                    {
+                        id: 7,
+                        label: 'Mulher Maravilha'
+                    }
                 ],
                 isOpen: false,
                 results: [],

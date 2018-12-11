@@ -90,11 +90,11 @@
             <ul>
                 <li
                     v-for="(tag, index) in tags"
-                    :key="tag"
+                    :key="index"
                     :class="'tag-'+index"
                     class="tag is-info"
                 >
-                    {{tag}}
+                    {{tag.label}}
                     <button class="delete is-small" @click="remove(index)"></button>
                 </li>
                 <li class="new-tag-input">
@@ -143,7 +143,9 @@
                 if (this.newTag === null || this.newTag.indexOf(',') === 0) {
                     return null;
                 }
-                return this.newTag.replace(',', '').trim();
+                return {
+                    label: this.newTag.replace(',', '').trim()
+                };
             }
         },
         created() {
@@ -163,9 +165,9 @@
             checkDuplicate(tag) {
                 if (!tag) return false;
                 const lowerTags = this.tags.map(item => {
-                    return item.toLowerCase();
+                    return item.label.toLowerCase();
                 });
-                return lowerTags.indexOf(tag.toLowerCase()) < 0;
+                return lowerTags.indexOf(tag.label.toLowerCase()) < 0;
             },
             onArrowUp() {
                 this.$emit('keyup');
