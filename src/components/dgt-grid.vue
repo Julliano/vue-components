@@ -109,12 +109,12 @@
 					<template :class="`${headerKey} cel cel-${index}`"
 					    v-if="header['isCustomColumn']">
 						<slot :name="`${headerKey}-cel${index}`"
-						    :index="`${headerKey} ${key}`" :itemKey="item[headerKey]"
+						    :index="`${headerKey} ${key}`" :itemKey="getCellValue(item, headerKey)"
 						    :dataProps="dataProps" :obj="item"></slot>
 					</template>
 					<span :class="`${headerKey} cel cel-${index}`"
 					    v-else>
-						{{item[headerKey]}}
+						{{getCellValue(item, headerKey)}}
 					</span>
 				</div>
 			</div>
@@ -409,6 +409,10 @@ export default {
                     break;
             }
             return false;
+        },
+        getCellValue(object, key) {
+            let path  = key.split('.');
+            return path.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, object);
         },
         paginate(page) {
             this.emitGeneral('pagination', page);

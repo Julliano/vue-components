@@ -189,7 +189,7 @@ const page2 = [
 const page1 = [
     {
         horario: 'horario3',
-        conta: 'conta3',
+        conta: 123456,
         url: 'url3',
         localidade: 'localidade3',
         data: 'data3',
@@ -202,7 +202,7 @@ const page1 = [
     },
     {
         horario: 'horario1',
-        conta: 'conta1',
+        conta: 123456,
         url: 'url1',
         data: 'data1',
         checked: false,
@@ -215,7 +215,7 @@ const page1 = [
     {
         rating: 3,
         horario: 'horario2',
-        conta: 'conta2',
+        conta: 123456,
         url: 'url2',
         localidade: 'localidade2',
         data: 'data2',
