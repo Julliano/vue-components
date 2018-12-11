@@ -39,7 +39,6 @@
     </div>
     <div class="field error">
       <dgt-autocomplete
-                         :auto-complete-only="true"
                          :items="tagProps.validsTags"
                          :search-tag="tagProps.search"
                          :existing-tags="tagProps.tags"
