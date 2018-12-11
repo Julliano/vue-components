@@ -9,6 +9,8 @@
 
 <template>
   <div class="dgt-container light padding">
+        <h3>Dgt-Layout</h3>
+        <dgt-layout-view></dgt-layout-view>
         <h3>Dgt-Star</h3>
         <dgt-star-view></dgt-star-view>
         <hr style="clear: both;">

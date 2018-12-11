@@ -8,16 +8,15 @@
       min-width: 300px;
   }
   .column-2{
-    min-width: 400px;
-    flex-basis: 30%;
     flex-grow: 1;
+    min-width: 400px;
     background: #d1d1d1;
   }
 </style>
 
 <template>
   <section class="dgt-resize-view">
-    <dgt-layout class="column-1" horizontal-resizable="true">
+    <dgt-layout class="column-1" :horizontal-resizable="true">
         Coluna 1
     </dgt-layout>
     <dgt-layout class="column-2">
