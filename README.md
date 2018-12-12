@@ -47,6 +47,8 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtTagInput](#DGTTagInput)
 1. [DgtTabs](#DGTTabs)
 1. [DgtPagination](#DGTPagination)
+1. [DgtLayout](#DGTLayout)
+1. [DgtToast](#DGTToast)
 
 ## DGTAutocomplete
 
@@ -811,3 +813,19 @@ Vamos deixar um exemplo aqui embaixo sendo uma coluna de 70% e outra de 30%:
 
 ```
 
+## DGTToast
+
+Para usar declare o componente no html, coloque um ref para ele:
+
+```
+<dgt-toast ref="toast"></dgt-toast>
+```
+
+Para exibir uma mensagem no toast utilize o metodo showMessage, abaixo exemplo de
+como invocar o método:
+
+
+```
+this.$refs.toast.showMessage('classe-css-para-estilizar', 'Mensagem a ser exibida', 'timeout (Integer - Opcional)')
+```
+O tempo de exibição default do toast é de 3 segundos (3000).
