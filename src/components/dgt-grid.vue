@@ -33,6 +33,7 @@
         .cel {
           display: inline;
           overflow-x: hidden;
+          text-overflow: ellipsis;
         }
         .header {
           width: 100%;
@@ -102,6 +103,7 @@
 					    class="span-resize"></span>
 				</div>
 				<div class="row" v-for="(item, index, key) in filteredData"
+                     :title="getCellValue(item, headerKey)"
 				    :key=key :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
 				    :selected="selectedLine === item"
 				    @mousedown.stop="clickLine($event, item, index)"
