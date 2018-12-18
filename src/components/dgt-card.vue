@@ -15,6 +15,12 @@
     margin: var(--dgt-card-icon-margin, auto 0);
     opacity: var(--dgt-card-icon-opacity, 0.5);
   }
+  img {
+      max-height: var(--dgt-card-icon-font-size, 50px);
+      width: var(--dgt-card-icon-width, 33%);
+      margin: var(--dgt-card-icon-margin, auto 0);
+      opacity: var(--dgt-card-icon-opacity, 0.5);
+  }
   .text-container {
     margin: auto;
     width: 67%;
@@ -31,7 +37,8 @@
 
 <template>
     <div class="dgt-card-component component" @click="emit(dataProps.emit)">
-        <i :class="`${dataProps.class}`">{{ dataProps.icon }}</i>
+        <i v-if="dataProps.class || dataProps.icon" :class="`${dataProps.class}`">{{ dataProps.icon }}</i>
+        <img v-if="dataProps.img" :src="dataProps.img"/>
         <div class="text-container">
             <h4 class="card-name">
                 {{ dataProps.name }}
