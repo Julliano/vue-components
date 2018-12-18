@@ -84,6 +84,10 @@
             showInput: Boolean,
             existingTags: {},
             autoCompleteOnly: Boolean,
+            labelField: {
+                type: String,
+                default: 'label'
+            },
             minSearch: {
                 type: Number,
                 default: Number
@@ -148,7 +152,7 @@
                 } else if (this.autoCompleteOnly) {
                     for (let i = 0; i < this.results.length; i++) {
                         let item = this.results[i];
-                        if (selectedItem.label === item.label) {
+                        if (selectedItem[this.labelField] === item[this.labelField]) {
                             selectedItem = item;
                             break;
                         }
@@ -159,7 +163,7 @@
                     };
                 }
                 if (selectedItem) {
-                    this.search = selectedItem.label;
+                    this.search = selectedItem[this.labelField];
                 }
                 this.$emit('tag-selected', selectedItem);
                 this.isOpen = false;
@@ -181,7 +185,7 @@
             searchTag() {
                 if (!this.searchTag) this.isOpen = false;
                 if (this.searchTag) {
-                    this.search = this.searchTag.label;
+                    this.search = this.searchTag[this.labelField];
                     this.isOpen = false;
                     if (this.search) {
                         this.onChange();
