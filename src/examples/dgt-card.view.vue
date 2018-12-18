@@ -29,6 +29,11 @@
                 <label>Icon material-icons</label>
                 <dgt-card @card-cliked="doSomething" :dataProps="data2" class="custom"></dgt-card>
             </div>
+
+            <div class="grid">
+                <label>Icon material-icons</label>
+                <dgt-card @card-cliked="doSomething" :dataProps="data3" class="custom"></dgt-card>
+            </div>
         </div>
     </div>
 </template>
@@ -48,6 +53,13 @@
         class: 'material-icons'
     };
 
+    const data3 = {
+        img: 'https://a.wattpad.com/useravatar/Kawaii_Doge09.128.860381.jpg',
+        name: 'Nova pesquisa...',
+        emit: 'New search',
+        class: 'material-icons'
+    };
+
     export default {
         name: 'dgtCardView',
         components: {
@@ -56,7 +68,8 @@
         data() {
             return {
                 data,
-                data2
+                data2,
+                data3
             };
         },
         methods: {
