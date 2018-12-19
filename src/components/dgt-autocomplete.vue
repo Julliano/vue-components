@@ -87,7 +87,8 @@
             minSearch: {
                 type: Number,
                 default: Number
-            }
+            },
+            debounce: 0
         },
         data() {
             return {
@@ -116,19 +117,21 @@
                 }
             },
             filterResults() {
-                if (this.items) {
-                    const resultados = this.items.filter(item => {
-                        return item.label.toLowerCase()
-                            .indexOf(this.search.toLowerCase()) > -1;
-                    });
-                    this.results = resultados;
-                    this.isOpen = !!this.results.length;
-                    if (this.existingTags) {
-                        this.results = resultados.filter(function(e) {
-                            return this.indexOf(e) < 0;
-                        }, this.existingTags);
+                setTimeout(() => {
+                    if (this.items) {
+                        const resultados = this.items.filter(item => {
+                            return item.label.toLowerCase()
+                                .indexOf(this.search.toLowerCase()) > -1;
+                        });
+                        this.results = resultados;
+                        if (this.existingTags) {
+                            this.results = resultados.filter(function(e) {
+                                return this.indexOf(e.id) < 0;
+                            }, this.existingTags.map(e2 => e2.id));
+                        }
+                        this.isOpen = !!this.results.length;
                     }
-                }
+                }, this.debounce);
             },
             onArrowDown() {
                 if (this.arrowCounter < this.results.length) {
@@ -177,6 +180,7 @@
                 if (val.length !== oldValue.length) {
                     this.results = val;
                 }
+                this.onChange();
             },
             searchTag() {
                 if (!this.searchTag) this.isOpen = false;
