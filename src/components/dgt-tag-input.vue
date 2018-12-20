@@ -108,7 +108,7 @@
                         @keyup.up="onArrowUp"
                         @keyup.enter="onEnter"
                         @keyup="onComma($event)"
-                        @keyup.delete="onDeleteTag"
+                        @keydown.delete="onDeleteTag"
                         v-model="newTag"
                     >
                 </li>

@@ -1,7 +1,7 @@
 {
     "name": "dgt-vue-components",
     "description": "Library of Dígitro vue components",
-    "version": "1.0.46",
+    "version": "1.0.48",
     "author": "digitro.com.br>",
     "baseURL": "http://localhost:8080",
     "scripts": {

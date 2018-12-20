@@ -62,6 +62,7 @@
                     v-for="(result, i) in results"
                     :key="i"
                     @click="onEnter(result)"
+                    @keyup.enter="onEnter(result)"
                     class="autocomplete-result"
                     :class="{ 'is-active': i === arrowCounter }"
                 >{{ result.label }}
@@ -143,18 +144,24 @@
                     this.arrowCounter = this.arrowCounter - 1;
                 }
             },
-            onEnter() {
+            onEnter(obj) {
                 let selectedItem = null;
-
+                if (obj && obj.label) selectedItem = obj;
                 if (this.arrowCounter >= 0) {
                     selectedItem = this.results[this.arrowCounter];
                 } else if (this.autoCompleteOnly) {
-                    for (let i = 0; i < this.results.length; i++) {
-                        let item = this.results[i];
-                        if (selectedItem.label === item.label) {
-                            selectedItem = item;
-                            break;
+                    if (selectedItem) {
+                        for (let i = 0; i < this.results.length; i++) {
+                            let item = this.results[i];
+                            if (selectedItem.label === item.label) {
+                                selectedItem = item;
+                                break;
+                            }
                         }
+                    } else {
+                        this.isOpen = false;
+                        this.search = '';
+                        return;
                     }
                 } else {
                     selectedItem = {
@@ -167,6 +174,7 @@
                 this.$emit('tag-selected', selectedItem);
                 this.isOpen = false;
                 this.arrowCounter = -1;
+                return;
             },
             handleClickOutside(evt) {
                 if (!this.$el.contains(evt.target)) {
@@ -183,10 +191,9 @@
                 this.onChange();
             },
             searchTag() {
-                if (!this.searchTag) this.isOpen = false;
+                this.isOpen = false;
                 if (this.searchTag) {
                     this.search = this.searchTag.label;
-                    this.isOpen = false;
                     if (this.search) {
                         this.onChange();
                     }

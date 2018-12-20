@@ -38,7 +38,7 @@
         "class-methods-use-this": "warn",
         "complexity": [
             "warn",
-            7
+            10
         ],
         "consistent-return": "warn",
         "no-caller": "error",
