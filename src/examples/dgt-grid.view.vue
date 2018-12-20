@@ -123,7 +123,7 @@
                 <i v-else class="mdi mdi-unfold-more-horizontal"></i>
             </template>
           <template :slot="`checkBox-cel${index-1}`" v-for="index in 3" slot-scope="slotProps">
-                <div class="checkbox">
+                <div class="checkbox" :key="index">
                       <input type="checkbox"
                             ref="checkbox"
                             for="checkbox"

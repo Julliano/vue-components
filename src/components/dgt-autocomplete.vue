@@ -56,6 +56,7 @@
                 @keyup.down="onArrowDown"
                 @keyup.up="onArrowUp"
                 @keyup.enter="onEnter"
+                @keyup.esc="handleClickOutside($event)"
             >
             <ul v-show="isOpen" class="autocomplete-results">
                 <li
@@ -139,11 +140,12 @@
                             }, this.existingTags.map(e2 => e2.id));
                         }
                         this.isOpen = !!this.results.length;
+                        this.arrowCounter = 0;
                     }
                 }, this.debounce);
             },
             onArrowDown() {
-                if (this.arrowCounter < this.results.length) {
+                if (this.arrowCounter < this.results.length - 1) {
                     this.arrowCounter = this.arrowCounter + 1;
                 }
             },
@@ -185,7 +187,7 @@
                 return;
             },
             handleClickOutside(evt) {
-                if (!this.$el.contains(evt.target)) {
+                if (!this.$el.contains(evt.target) || evt.key === 'Escape') {
                     this.isOpen = false;
                     this.arrowCounter = -1;
                 }
