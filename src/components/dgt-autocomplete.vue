@@ -96,7 +96,8 @@
                 isOpen: false,
                 results: [],
                 search: '',
-                arrowCounter: -1
+                arrowCounter: -1,
+                updateComponent: this.debounceTime(this.debounce, this.onChange)
             };
         },
         mounted() {
@@ -106,6 +107,13 @@
             document.removeEventListener('click', this.handleClickOutside);
         },
         methods: {
+            debounceTime(milliseconds, fn) {
+                let timer = 0;
+                return () => {
+                    clearTimeout(timer);
+                    timer = setTimeout(fn, milliseconds);
+                };
+            },
             onChange() {
                 this.$emit('changed');
                 if (!this.search) {
@@ -188,14 +196,14 @@
                 if (val.length !== oldValue.length) {
                     this.results = val;
                 }
-                this.onChange();
+                this.updateComponent();
             },
             searchTag() {
                 this.isOpen = false;
                 if (this.searchTag) {
                     this.search = this.searchTag.label;
                     if (this.search) {
-                        this.onChange();
+                        this.updateComponent();
                     }
                 }
             }
