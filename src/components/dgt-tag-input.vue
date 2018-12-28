@@ -123,7 +123,11 @@
         name: 'dgtTagInput',
         props: {
             tagArr: Array,
-            placeholder: String
+            placeholder: String,
+            id: {
+                type: String,
+                default: null
+            }
         },
         data() {
             return {
@@ -158,7 +162,7 @@
         methods: {
             remove(index) {
                 this.tags.splice(index, 1);
-                this.$emit('removed', index);
+                this.$emit('removed', index, this.id);
                 this.$el.querySelector('#input-tag').focus();
             },
             focusInputTag() {
@@ -191,7 +195,7 @@
             },
             onDeleteTag() {
                 if (this.newTag !== null && this.newTag !== '') return;
-                this.$emit('removed');
+                this.$emit('removed', null, this.id);
                 this.tags.pop();
             }
         },
