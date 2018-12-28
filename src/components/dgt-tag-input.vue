@@ -158,6 +158,7 @@
         methods: {
             remove(index) {
                 this.tags.splice(index, 1);
+                this.$emit('removed', index);
                 this.$el.querySelector('#input-tag').focus();
             },
             focusInputTag() {
@@ -190,6 +191,7 @@
             },
             onDeleteTag() {
                 if (this.newTag !== null && this.newTag !== '') return;
+                this.$emit('removed');
                 this.tags.pop();
             }
         },
