@@ -66,7 +66,8 @@
                     @keyup.enter="onEnter(result)"
                     class="autocomplete-result"
                     :class="{ 'is-active': i === arrowCounter }"
-                >{{ result.label }}
+                >
+                {{ result.label }}
                 </li>
             </ul>
         </div>
@@ -90,7 +91,10 @@
                 type: Number,
                 default: Number
             },
-            debounce: 0
+            debounce: {
+                type: Number,
+                default: 0
+            }
         },
         data() {
             return {
@@ -140,7 +144,7 @@
                             }, this.existingTags.map(e2 => e2.id));
                         }
                         this.isOpen = !!this.results.length;
-                        this.arrowCounter = 0;
+                        if (this.results.length) this.arrowCounter = 0;
                     }
                 }, this.debounce);
             },
@@ -154,10 +158,9 @@
                     this.arrowCounter = this.arrowCounter - 1;
                 }
             },
-            onEnter(obj) {
+            onEnter() {
                 let selectedItem = null;
-                if (obj && obj.label) selectedItem = obj;
-                if (this.arrowCounter >= 0) {
+                if (this.arrowCounter >= 0 && this.results.length) {
                     selectedItem = this.results[this.arrowCounter];
                 } else if (this.autoCompleteOnly) {
                     if (selectedItem) {
