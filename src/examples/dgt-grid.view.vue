@@ -9,7 +9,7 @@
     --dgt-grid-width:  auto;
     --dgt-grid-col-min-width: 30px;
     --dgt-grid-row-border-bottom: 1px solid #{$gray300};
-    --rowHeight:  31px;
+    --rowHeight:  26px;
     --dgt-grid-row-header-span-background-color: #{lighten($primary-color, 35%)};
     --dgt-grid-row-header-background-color: #{$gray100};
     --dgt-grid-row-selected-background-color:  #{lighten($primary-color, 55%)};

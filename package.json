@@ -18,7 +18,7 @@
         "not ie <= 8"
     ],
     "devDependencies": {
-        "@babel/core": "^7.1.5",
+        "@babel/core": "^7.2.2",
         "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
         "@vue/test-utils": "^1.0.0-beta.27",
         "babel-core": "^6.26.0",
@@ -28,7 +28,7 @@
         "chalk": "^1.1.3",
         "cross-env": "^5.0.5",
         "css-loader": "^0.28.7",
-        "eslint": "^5.10.0",
+        "eslint": "^5.11.1",
         "eslint-loader": "^2.1.1",
         "eslint-plugin-html": "^4.0.6",
         "file-loader": "^1.1.4",
@@ -53,6 +53,6 @@
         "webpack-dev-server": "^2.9.1"
     },
     "dependencies": {
-        "dgt-vitra": "^1.0.17"
+        "dgt-vitra": "^1.0.18"
     }
 }
