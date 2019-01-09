@@ -594,130 +594,58 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 
 ## DGTTabs
 
--dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja nessesário a alteração nativa do componente.
+-dgtTabs é um componente de tabs com funcionalidades básicas de uma tab e com possibilidades de customização sem que seja necessário a alteração nativa do componente.
 
 ```js
-dataTabs: {
-    dataProps: {
-        vertical: false,
-        position: '',
-        barAnimatedHidden: true,
-        barAnimatedSize: '2',
-        tabs: {
-            'Filtros lorem': {
-                block: true,
-                quantityContents: 10
-            },
-            'Filtros impsum': {
-                block: false,
-                quantityContents: 5
-            },
-            'Filtros Gerais': {
-                selected: true,
-                quantityContents: 3
-            },
-            'Filtros Específicos': {}
+{
+    position: '',
+    tabs: [
+        {
+            label: 'Filtros lorem',
+            disabled: true
+        },
+        {
+            label: 'Filtros impsum',
+            active: true
+        },
+        {
+            label: 'Filtros Gerais'
+        },
+        {
+            label: 'Filtros Específicos'
         }
-    }
-}
+    ]
+};
 ```
 
-O exemplo acima mostra todos os atributos que são enxergados pelo componente, mas apenas alguns são estritamente obrigatórios para o funcionamento correto do mesmo. O atributo block deternina se a tag será 'clicavel' ou não.
+O exemplo acima mostra todos os atributos que são enxergados pelo componente, podendo ser passado atributos opcionais para serem captados no evento @changed 
 
-### Abaixo a estrutura básica:
+### HTML equivalente para o objeto acima
 
-```js
-    tabs: {
-        'Filtros lorem': {},
-        'Filtros impsum': {},
-        'Filtros Gerais': {},
-        'Filtros Específicos': {selected: true}
-    }
-}
+```html
+
+ <dgt-tabs
+             :tabs="tabs"
+             :position="position"
+             @changed="swapTabs">
+             <dgt-tab>Conteúdo tab 1</dgt-tab>
+             <dgt-tab>Conteúdo tab 2</dgt-tab>
+             <dgt-tab>Conteúdo tab 3</dgt-tab>
+             <dgt-tab>Conteúdo tab 4</dgt-tab>
+         </dgt-tabs>   
+
 ```
-
-O componente envia um array via emit para fora com o nome da tab clicada e o próprio objeto da data recebido por props
-
 O atributo 'position' pode receber apenas dois valores:
 
 `position: 'vertical-left' | 'vertical-right'`
 
-para setar um desses valorer ao atributo position é necessário que o atributo 'vertical' esteja true, caso contrário mantenha o atributo 
-'position' com uma string vazio, assim como no exemplo.
+O atributo 'active' dentro do objeto da tab define qual estará selecionada por default.
 
-```js
-    {
-        vertical: false,
-        position: '',
-    }
-    {
-        vertical: true,
-        position: 'vertical-left',
-    }
-    {
-        vertical: true,
-        position: 'vertical-right',
-    }
-```
+O atributo 'disabled' dentro do objeto da tab define qual estará desativada por default;
 
-O atributo 'selected' dentro do objeto da tab define a tab que estará selecionada por default, nesse caso apenas uma tab deve conter este atributo.
+### CSS
 
-```js
-    'Filtros Gerais': {
-        selected: true
-    }
-```
-
-O atributo 'quantityContents' é apenas um atributo extra para a construção do componente na view, logo esse atributo não é enxergado pelo componente. Cada tab terá um slot dinamico para customização individual de cada tab
-
-### Exemplo em view:
-
-```html
-    <template :slot="key" slot-scope="slotProps" v-for="(tab, key) in dataTabs.tabs">
-        <span class="exceptional-content" :class="key" :key="key">{{tab.quantityContents}}</span>
-    </template>
-```
-
-É possível customizar o componente com algumas variáveis que podem ser passadas como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
-
-```css
-    {
-        --dgt-tabs-container-margin: 5px;
-        --dgt-tabs-cursor: default;
-        --dgt-tabs-before-opacity: 1;
-        --dgt-tabs-blocked-opacity: 0.4;
-        --dgt-tabs-blocked-color: #0f0f0f;
-        --dgt-tabs-selected-background-color: #cbcbcb;
-        --dgt-tabs-selected-color: #000;
-        --dgt-tabs-border-bottom: 0;
-        --dgt-tabs-background-color: #f9f9fa;
-        --dgt-tabs-margin-right: 3px;
-        --dgt-tabs-each-width: auto;
-        --dgt-tabs-text-margin: 10px 5px;
-        --dgt-tabs-text-padding: 3px;
-        --dgt-tabs-bar-animated-background-color: #000;
-        --dgt-tabs-bar-animated-background-color: #000;
-        --dgt-tabs-bar-animated-transition-timing-function: ease;
-    }
-```
-
-Para utilizar essa funcionalidade basta criar uma class, ex:
-
-    ```css
-        .custom {
-        --dgt-tabs-bar-animated-background-color: blue;
-        --dgt-tabs-border-bottom: 4px solid blue;
-        --dgt-tabs-text-margin: 10px 5px 6px;
-        }
-    ```
-
--Slot no componente:
-
-```html
-    <slot :name="key" :dataProps=dataTabs></slot>
-```
-
-O atributo 'key' no slot é o mesmo nome da tab definada no objeto tabs
+O componente já está estilizado para usar as classes do vitra.
 
 ## DGTPagination
 
