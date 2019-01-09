@@ -2,13 +2,11 @@ import VueSelector from 'testcafe-vue-selectors';
 import scenario from '../package.json';
 import { Selector } from 'testcafe';
 
-fixture`transmitter-message`.page`${scenario.baseURL}`;
+fixture`dgt-tabs`.page`${scenario.baseURL}`;
 
-test('swap between tabs', async t => {
-    let tabs = Selector('.tabs-list .tab');
-    const tabCount = await tabs.count;
-    for (let i = 0; i < tabCount; i++) {
-        const tab = Selector(`.tab.tab-${i}`);
-        await t.click(tab).wait(10);
-    }
+test('swap tab', async t => {
+    const tab = Selector('.dgt-tabs .dgt-tab-item:nth-of-type(3)');
+    await t.click(tab).wait(10);
+    const tabContent = Selector('.tab-content[active]');
+    await t.expect(tabContent.innerText).eql('Conteúdo tab 3');
 });
