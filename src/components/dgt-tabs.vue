@@ -45,7 +45,7 @@
 
 <template>
     <section class="dgt-tabs" :class="position">
-        <nav  class="dgt-tab">
+        <nav  class="dgt-tab" :class="{'spread-items' : spreadItems}">
             <span
                 tabindex="0"
                 v-for="tab in tabs"
@@ -70,6 +70,7 @@
         name: 'dgtTabs',
         props: {
             tabs: Array,
+            spreadItems: Boolean,
             position: String
         },
         data() {
