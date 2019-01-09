@@ -42,7 +42,7 @@
                          :items="tagProps.validsTags"
                          :search-tag="tagProps.search"
                          :existing-tags="tagProps.tags"
-                        @tag-selected="pushTag"
+                         @tag-selected="pushTag"
                          ref="childComplete">
         <template slot-scope="slotProps">
           <dgt-tag-input
@@ -99,7 +99,7 @@
               this.tagProps.search = param;
           },
           pushTag(param) {
-              if (param === null) {
+              if (!param) {
                   return;
               }
               this.tagProps.tags.push(param);

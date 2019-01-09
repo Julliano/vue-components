@@ -121,18 +121,18 @@
 				</div>
 			</div>
 		</div>
-		<footer class="pagination" v-if="pagination">
+		<footer class="pagination" v-if="paginations">
 			<slot v-if="$scopedSlots['custom-pagination']"
-			    name="custom-pagination" :page="pagination.page"
-			    :total="pagination.total" :dataProps="dataProps"></slot>
+			    name="custom-pagination" :page="paginations.page"
+			    :total="paginations.total" :dataProps="dataProps"></slot>
 			<div v-else>
 				<button class="prev" :disabled="isPagination('prev')"
-				    v-on:click.stop="paginate(--pagination.page)">prev
+				    v-on:click.stop="paginate(--paginations.page)">prev
 				</button>
-				<span class="prev">{{pagination.page}} de
-					{{pagination.total}}</span>
+				<span class="prev">{{paginations.page}} de
+					{{paginations.total}}</span>
 				<button class="next" :disabled="isPagination('next')"
-				    v-on:click.stop="paginate(++pagination.page)">next
+				    v-on:click.stop="paginate(++paginations.page)">next
 				</button>
 			</div>
 		</footer>
@@ -145,7 +145,7 @@ export default {
     props: {
         dataProps: {
             disableOrderColumns: Boolean,
-            pagination: {
+            paginations: {
                 page: Number,
                 total: Number
             },
@@ -193,7 +193,8 @@ export default {
             colWidthPos1: 0,
             colWidthPos2: 0,
             selectedLine: {},
-            headers: {}
+            headers: {},
+            paginations: {}
         };
     },
     beforeMount() {
@@ -224,7 +225,7 @@ export default {
     },
     methods: {
         init() {
-            this.pagination = this.dataProps.pagination;
+            this.paginations = this.dataProps.paginations;
             this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
@@ -404,10 +405,10 @@ export default {
         isPagination(direction) {
             switch (direction) {
                 case 'prev':
-                    if (this.pagination.page === 1) return true;
+                    if (this.paginations.page === 1) return true;
                     break;
                 case 'next':
-                    if (this.pagination.page === this.pagination.total) return true;
+                    if (this.paginations.page === this.paginations.total) return true;
                     break;
             }
             return false;

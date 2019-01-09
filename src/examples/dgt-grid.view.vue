@@ -228,7 +228,7 @@ const page1 = [
 ];
 const dataDgtGrid = {
     lineSelected: {},
-    pagination: {
+    paginations: {
         page: 1,
         total: 2
     },
@@ -347,7 +347,7 @@ export default {
         },
         pagination(page) {
             this.dataDgtGrid.lineSelected = null;
-            this.dataDgtGrid.pagination.page = page;
+            this.dataDgtGrid.paginations.page = page;
             this.toggleChecked('reset');
             this.dataDgtGrid.lines = page === 2 ? page2 : page1;
         },
