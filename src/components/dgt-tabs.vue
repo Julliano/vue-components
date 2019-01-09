@@ -73,27 +73,29 @@
             position: String
         },
         data() {
-            let currentTab = null;
-            let currentTabIndex = 0;
-            let oldTabIndex = 0;
-            for (let i = 0; i < this.tabs.length; i++) {
-                const tab = this.tabs[i];
-                if (tab.active) {
-                    currentTab = tab;
-                    currentTabIndex = i;
-                    break;
-                }
-            }
             return {
-                currentTab,
-                currentTabIndex,
-                oldTabIndex
+                currentTab: null,
+                currentTabIndex: 0,
+                oldTabIndex: 0,
+                currentTab: null,
+                currentTabIndex: 0
             };
         },
         mounted() {
+            this.init();
             this.selectedSlot();
         },
         methods: {
+            init() {
+                for (let i = 0; i < this.tabs.length; i++) {
+                    const tab = this.tabs[i];
+                    if (tab.active) {
+                        this.currentTab = tab;
+                        this.currentTabIndex = i;
+                        break;
+                    }
+                }
+            },
             isActive(tab) {
                 return this.currentTab === tab;
             },
