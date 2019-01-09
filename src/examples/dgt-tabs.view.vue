@@ -23,10 +23,10 @@
             :tabs="dataTabs.tabs"
             :position="dataTabs.position"
             @changed="swapTabs">
-            <dgt-tab>1</dgt-tab>
-            <dgt-tab>2</dgt-tab>
-            <dgt-tab>3</dgt-tab>
-            <dgt-tab>4</dgt-tab>
+            <dgt-tab>Conteúdo tab 1</dgt-tab>
+            <dgt-tab>Conteúdo tab 2</dgt-tab>
+            <dgt-tab>Conteúdo tab 3</dgt-tab>
+            <dgt-tab>Conteúdo tab 4</dgt-tab>
         </dgt-tabs>
     </div>
 </template>
