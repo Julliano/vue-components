@@ -627,7 +627,7 @@ O exemplo acima mostra todos os atributos que são enxergados pelo componente, p
  <dgt-tabs
              :tabs="tabs"
              :position="position"
-             :spread-item="Boolean"
+             :spread-items="Boolean"
              @changed="swapTabs">
              <dgt-tab>Conteúdo tab 1</dgt-tab>
              <dgt-tab>Conteúdo tab 2</dgt-tab>
