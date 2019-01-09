@@ -48,7 +48,8 @@
         <nav  class="dgt-tab" :class="{'spread-items' : spreadItems}">
             <span
                 tabindex="0"
-                v-for="tab in tabs"
+                v-for="(tab, index) in tabs"
+                :key="index"
                 @click="changeTab(tab)"
                 @keypress.enter="changeTab(tab)"
                 class="dgt-tab-item"
@@ -77,7 +78,7 @@
             return {
                 currentTab: null,
                 currentTabIndex: 0,
-                oldTabIndex: 0,
+                oldTabIndex: null,
                 currentTab: null,
                 currentTabIndex: 0
             };
@@ -113,7 +114,9 @@
                     return item.tag !== undefined  || false;
                 });
                 filteredSlots[this.currentTabIndex].elm.setAttribute('active', '');
-                filteredSlots[this.oldTabIndex].elm.removeAttribute('active');
+                if (this.oldTabIndex !== null) {
+                    filteredSlots[this.oldTabIndex].elm.removeAttribute('active');
+                }
             }
         }
     };
