@@ -104,11 +104,11 @@
                         class="tag-input"
                         type="text"
                         :placeholder="placeholder"
-                        autocomplete="false"
+                        autocomplete="off"
                         @keyup.down="onArrowDown"
                         @keyup.up="onArrowUp"
                         @keyup.enter="onEnter"
-                        @keyup="onComma($event)"
+                        @keyup.prevent="onComma($event)"
                         @keydown.delete="onDeleteTag"
                         v-model="newTag"
                     >

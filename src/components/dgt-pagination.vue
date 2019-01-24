@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 .dgt-pagination-component {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: var(--dgt-grid-template-columns, 1fr 1fr 1fr);
   .page-number-input{
     min-width: 60px;
     width: 60px;

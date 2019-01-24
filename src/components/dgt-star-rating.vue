@@ -21,6 +21,7 @@
 
 <template>
     <div :class="{'vue-star-rating-inline': inline}">
+        <slot></slot>
         <div @mouseleave="resetRating" class="vue-star-rating">
             <span v-for="(n, index) in maxRating" :key="n" :class="['star-'+index,'vue-star-rating-pointer','vue-star-rating-star']">
               <star :fill="fillLevel[n-1]" :size="starSize" :points="starPoints" :star-id="n" :step="step" 
@@ -146,6 +147,16 @@
                         this.$emit('rating-selected', this.selectedRating);
                         this.ratingSelected = true;
                     }
+                }
+            },
+            clearRating() {
+                if (!this.readOnly) {
+                    this.currentRating = 0;
+                    this.createStars();
+                    this.selectedRating = this.currentRating;
+                    // informa o component pai que o rating foi alterado;
+                    this.$emit('rating-selected', this.currentRating);
+                    this.ratingSelected = true;
                 }
             },
             resetRating() {

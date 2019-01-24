@@ -49,6 +49,7 @@
                 :id="id"
                 :name="id"
                 @blur="$emit('blur')"
+                autocomplete="off"
                 type="text"
                 class="inp"
                 @input="onChange"

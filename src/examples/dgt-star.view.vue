@@ -69,7 +69,11 @@
             </div>
         </div>
         <dgt-star-rating :increment="increment" :rating="rating" :active-color="activeColor"
-        :max-rating="maxRating" :padding="2" :star-size="size" :read-only="readOnly" :show-rating="showRating"></dgt-star-rating>
+        :max-rating="maxRating" :padding="2" :star-size="size" :read-only="readOnly" @rating-selected="setRating" :show-rating="showRating" ref="rating">
+            <template>
+                <button @click="clearRating()">Clear</button>
+            </template>
+        </dgt-star-rating>
     </div>
 </template>
 
@@ -96,6 +100,14 @@
                 selectedRating: 0,
                 ratingSelected: false
             };
+        },
+        methods: {
+            clearRating() {
+                this.$refs.rating && this.$refs.rating.clearRating();
+            },
+            setRating(rating) {
+                this.rating = rating;
+            }
         }
     };
 </script>

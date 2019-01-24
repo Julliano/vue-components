@@ -44,7 +44,7 @@
                          :existing-tags="tagProps.tags"
                          @tag-selected="pushTag"
                          ref="childComplete">
-        <template slot-scope="slotProps">
+        <template>
           <dgt-tag-input
                          @new-tag="newTag"
                          :tag-arr="tagProps.tags"

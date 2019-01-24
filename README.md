@@ -483,6 +483,8 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 
     Para funcionar, este componente necessita apenas do :rating para mostrar a nota atribuida ao obj (sendo rating um valor numerico), os outros atributos são todos customizações do componente, listadas abaixo.
 
+    O Component default não permite escolher o valor 0 para o rating uma vez o valor escolhido, na view existe um exemplo de como criar um botão para zerar o contador;
+
     Exemplo customizado:
 
     ```html
