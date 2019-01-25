@@ -53,14 +53,14 @@
                 @click="changeTab(tab)"
                 @keypress.enter="changeTab(tab)"
                 class="dgt-tab-item"
-                title="tab.title"
+                :title="tab.label"
                 :active="isActive(tab)"
                 :disabled="tab.disabled">
                     {{tab.label}}
             </span>
         </nav>
         <div class="tabs-content">
-                <slot></slot>
+            <slot></slot>
         </div>
     </section>
 
