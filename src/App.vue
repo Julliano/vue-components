@@ -9,6 +9,8 @@
 
 <template>
   <div class="dgt-container light padding">
+        <h3>Dgt-Switch</h3>
+        <dgt-switch-view></dgt-switch-view>
         <h3>Dgt-Toast</h3>
         <dgt-toast-view></dgt-toast-view>
         <h3>Dgt-Layout</h3>
@@ -55,10 +57,12 @@ import dgtTabsView from './examples/dgt-tabs.view';
 import dgtPaginationView from './examples/dgt-pagination.view';
 import dgtLayoutView from './examples/dgt-layout.view';
 import dgtToastView from './examples/dgt-toast.view';
+import DgtSwitchView from './examples/dgt-switch.view';
 
 export default {
     name: 'app',
     components: {
+        DgtSwitchView,
         dgtStarView,
         dgtGridView,
         dgtCardView,
