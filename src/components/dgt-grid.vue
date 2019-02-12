@@ -437,7 +437,7 @@ export default {
             }
         },
         toogleSelectedLine(event, item, rowIndex) {
-            if(this.dataProps.editMode) {
+            if (this.dataProps.editMode) {
                 this.selectedLine = item;
             }
             this.emitGeneral('selected-line', event, rowIndex);
