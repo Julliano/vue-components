@@ -144,6 +144,8 @@ export default {
     name: 'dgtGrid',
     props: {
         dataProps: {
+            editMode: false,
+            selectedLineIndex: Number,
             disableOrderColumns: Boolean,
             paginations: {
                 page: Number,
@@ -229,6 +231,10 @@ export default {
             this.originalState = this.dataProps.lines;
             this.filteredData = this.originalState;
             this.filteredData = this.filter();
+            if (this.dataProps.selectedLineIndex) {
+                this.selectedLine = this.dataProps.lines[this.dataProps.selectedLineIndex];
+                return;
+            }
             [this.selectedLine] = this.dataProps.lines.filter((line) => {
                 if (line.selected) {
                     return line;
@@ -423,16 +429,18 @@ export default {
         clickLine(event, item, rowIndex) {
             switch (event.button) {
                 case 0:
-                    this.toogleSelectedLine(item, rowIndex);
+                    this.toogleSelectedLine(event, item, rowIndex);
                     break;
                 case 2:
                     this.emitGeneral('right-click', event, item);
                     break;
             }
         },
-        toogleSelectedLine(item) {
-            this.selectedLine = item;
-            this.emitGeneral('selected-line', this.selectedLine);
+        toogleSelectedLine(event, item, rowIndex) {
+            if(this.dataProps.editMode) {
+                this.selectedLine = item;
+            }
+            this.emitGeneral('selected-line', event, rowIndex);
         },
         emitGeneral(emitFunc, ...args) {
             this.$emit(emitFunc, ...args);
@@ -441,6 +449,10 @@ export default {
     watch: {
         'dataProps.lines'() {
             this.init();
+        },
+        'dataProps.selectedLineIndex'(index) {
+            console.log('selectedLineIndex', index);
+            this.selectedLine = this.dataProps.lines[index];
         }
     }
 };

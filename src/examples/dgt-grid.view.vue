@@ -227,6 +227,7 @@ const page1 = [
     }
 ];
 const dataDgtGrid = {
+    selectedLineIndex: 2,
     lineSelected: {},
     paginations: {
         page: 1,
@@ -315,7 +316,8 @@ export default {
             dataDgtGrid,
             closedColumns: {},
             drawComponent: true,
-            showPopoverColumns: false
+            showPopoverColumns: false,
+            selectedLineIndex: 1
         };
     },
     methods: {
