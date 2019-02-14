@@ -227,7 +227,8 @@ const page1 = [
     }
 ];
 const dataDgtGrid = {
-    selectedLineIndex: 2,
+    editMode: true,
+    selectedLineIndex: 0,
     lineSelected: {},
     paginations: {
         page: 1,
@@ -344,8 +345,8 @@ export default {
             }
             return false;
         },
-        selectedLine(objLine) {
-            this.dataDgtGrid.lineSelected = objLine;
+        selectedLine(event, rowIndex) {
+            this.dataDgtGrid.selectedLineIndex = rowIndex;
         },
         pagination(page) {
             this.dataDgtGrid.lineSelected = null;

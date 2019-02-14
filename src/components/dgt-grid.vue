@@ -451,7 +451,6 @@ export default {
             this.init();
         },
         'dataProps.selectedLineIndex'(index) {
-            console.log('selectedLineIndex', index);
             this.selectedLine = this.dataProps.lines[index];
         }
     }
