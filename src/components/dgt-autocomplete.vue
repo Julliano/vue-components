@@ -63,8 +63,7 @@
                 <li
                     v-for="(result, i) in results"
                     :key="i"
-                    @click="onEnter(result)"
-                    @keyup.enter="onEnter(result)"
+                    @click.stop="onEnter(i)"
                     class="autocomplete-result"
                     :class="{ 'is-active': i === arrowCounter }"
                 >
@@ -159,9 +158,11 @@
                     this.arrowCounter = this.arrowCounter - 1;
                 }
             },
-            onEnter() {
+            onEnter(param) {
                 let selectedItem = null;
-                if (this.arrowCounter >= 0 && this.results.length) {
+                if (param) {
+                    selectedItem = this.results[param];
+                } else if (this.arrowCounter >= 0 && this.results.length) {
                     selectedItem = this.results[this.arrowCounter];
                 } else if (this.autoCompleteOnly) {
                     if (selectedItem) {
