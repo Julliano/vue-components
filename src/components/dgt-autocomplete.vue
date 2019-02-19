@@ -63,6 +63,7 @@
                 <li
                     v-for="(result, i) in results"
                     :key="i"
+                    @mouseover="arrow(i)"
                     @click.stop="onEnter(i)"
                     class="autocomplete-result"
                     :class="{ 'is-active': i === arrowCounter }"
@@ -158,38 +159,47 @@
                     this.arrowCounter = this.arrowCounter - 1;
                 }
             },
+            arrow(i) {
+                this.arrowCounter = i;
+            },
             onEnter(param) {
-                let selectedItem = null;
-                if (param) {
-                    selectedItem = this.results[param];
-                } else if (this.arrowCounter >= 0 && this.results.length) {
-                    selectedItem = this.results[this.arrowCounter];
-                } else if (this.autoCompleteOnly) {
-                    if (selectedItem) {
-                        for (let i = 0; i < this.results.length; i++) {
-                            let item = this.results[i];
-                            if (selectedItem.label === item.label) {
-                                selectedItem = item;
-                                break;
-                            }
+                if (this.isOpen) {
+                    let selectedItem = null;
+                    if (param) {
+                        selectedItem = this.results[param];
+                    } else if (this.arrowCounter >= 0 && this.results.length) {
+                        selectedItem = this.results[this.arrowCounter];
+                    } else if (this.autoCompleteOnly) {
+                        if (selectedItem) {
+                            selectedItem = this.findItem(selectedItem);
+                        } else {
+                            this.isOpen = false;
+                            this.search = '';
+                            return;
                         }
                     } else {
-                        this.isOpen = false;
+                        selectedItem = {
+                            label: this.search
+                        };
                         this.search = '';
-                        return;
                     }
-                } else {
-                    selectedItem = {
-                        label: this.search
-                    };
+                    if (selectedItem) {
+                        this.search = selectedItem.label;
+                    }
+                    this.$emit('tag-selected', selectedItem);
+                    this.isOpen = false;
+                    this.arrowCounter = -1;
                 }
-                if (selectedItem) {
-                    this.search = selectedItem.label;
-                }
-                this.$emit('tag-selected', selectedItem);
-                this.isOpen = false;
-                this.arrowCounter = -1;
                 return;
+            },
+            findItem(selectedItem) {
+                for (let i = 0; i < this.results.length; i++) {
+                    let item = this.results[i];
+                    if (selectedItem.label === item.label) {
+                        return item;
+                    }
+                }
+                return null;
             },
             handleClickOutside(evt) {
                 if (!this.$el.contains(evt.target) || evt.key === 'Escape') {
