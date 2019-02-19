@@ -143,10 +143,6 @@
 export default {
     name: 'dgtGrid',
     props: {
-        drawGrid: {
-            type: Boolean,
-            default: true
-        },
         dataProps: {
             editMode: false,
             selectedLineIndex: Number,
@@ -189,6 +185,7 @@ export default {
     },
     data() {
         return {
+            drawGrid: true,
             minWidthColumn: 10,
             gridTemplateColumns: '',
             gridRow: '',
@@ -456,6 +453,15 @@ export default {
         },
         'dataProps.selectedLineIndex'(index) {
             this.selectedLine = this.dataProps.lines[index];
+        },
+        'dataProps.headers': {
+            handler() {
+                this.drawGrid = false;
+                this.$nextTick(() => {
+                    this.drawGrid = true;
+                });
+            },
+            deep: true
         }
     }
 };

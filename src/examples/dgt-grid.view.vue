@@ -98,7 +98,7 @@
               </li>
           </ul>
         <button class="btn btn-primary right" @click.stop="saveCheckedItems"><i class="mdi mdi-content-save"></i> save item</button>
-        <dgt-grid class="dgt-grid-custom" :draw-grid="drawComponent" :data-props="dataDgtGrid" @selected-line="selectedLine"
+        <dgt-grid class="dgt-grid-custom" :data-props="dataDgtGrid" @selected-line="selectedLine"
             @pagination="pagination" @sort-column="sortColumn" @dragable-columns="dragableColumns" @resize="resizeColumn" @right-click="rightClick">
             <template slot="checkBox-header" slot-scope="slotProps">
                 <div class="checkbox">
