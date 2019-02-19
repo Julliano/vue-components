@@ -76,7 +76,7 @@
 </style>
 
 <template>
-	<section class="dgt-grid-component component">
+	<section class="dgt-grid-component component" v-if="drawGrid">
 		<slot name="top-bar" :dataProps="dataProps"></slot>
 		<div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
 			<div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers"
@@ -143,6 +143,10 @@
 export default {
     name: 'dgtGrid',
     props: {
+        drawGrid: {
+            type: Boolean,
+            default: true
+        },
         dataProps: {
             editMode: false,
             selectedLineIndex: Number,
