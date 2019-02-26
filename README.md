@@ -38,17 +38,18 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
 ## Components:
 
-1. [DgtAutocomplete](#DGTAutocomplete)
-1. [DgtCard](#DGTCard)
-1. [DgtList](#DGTList)
-1. [DgtComponentsGrid](#DGTComponentsGrid)
-1. [DgtGrid](#DGTGrid)
-1. [DgtStarRating](#DGTStarRating)
-1. [DgtTagInput](#DGTTagInput)
-1. [DgtTabs](#DGTTabs)
-1. [DgtPagination](#DGTPagination)
-1. [DgtLayout](#DGTLayout)
-1. [DgtToast](#DGTToast)
+1. [DgtAutocomplete](##DGTAutocomplete)
+1. [DgtCard](##DGTCard)
+1. [DgtList](##DGTList)
+1. [DgtComponentsGrid](##DGTComponentsGrid)
+1. [DgtGrid](##DGTGrid)
+1. [DgtStarRating](##DGTStarRating)
+1. [DgtTagInput](##DGTTagInput)
+1. [DgtTabs](##DGTTabs)
+1. [DgtPagination](##DGTPagination)
+1. [DgtLayout](##DGTLayout)
+1. [DgtToast](##DGTToast)
+1. [DgtTthumbnail](##DGTThumbnail)
 
 ## DGTAutocomplete
 
@@ -762,3 +763,24 @@ como invocar o método:
 this.$refs.toast.showMessage('classe-css-para-estilizar', 'Mensagem a ser exibida', 'timeout (Integer - Opcional)')
 ```
 O tempo de exibição default do toast é de 3 segundos (3000).
+
+## DGTThumbnail
+
+```
+            <dgt-thumbnail                            
+                           @selected="handleCheckbox"
+                           @click="handleClick"
+                            :src="String"
+                            :footer="String"
+                            :id="String"
+                           :index="Number"
+                           :selected="Boolean"
+                           :gif="String"
+                           :video-duration="String"
+            >
+            </dgt-thumbnail>
+
+```
+A exibição do gif começa após 2 segundos quando posicionado o mouse em cima da imagem.
+Você pode usar um css seu para montar a galeria do jeito que quiser, no exemplo nós usamos o mansory layout que agrupa 
+as imagens por colunas.
