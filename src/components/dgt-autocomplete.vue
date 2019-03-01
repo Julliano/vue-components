@@ -189,7 +189,9 @@
                     this.$emit('tag-selected', selectedItem);
                     this.isOpen = false;
                     this.arrowCounter = -1;
+                    return;
                 }
+                this.$emit('nothing-selected');
                 return;
             },
             findItem(selectedItem) {
