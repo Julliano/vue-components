@@ -11,6 +11,8 @@
   <div class="dgt-container light padding">
         <h3>Dgt-Thumbnail</h3>
       <dgt-thumbnail-view></dgt-thumbnail-view>
+        <h3>Dgt-Switch</h3>
+        <dgt-switch-view></dgt-switch-view>
         <h3>Dgt-Toast</h3>
         <dgt-toast-view></dgt-toast-view>
         <h3>Dgt-Layout</h3>
@@ -58,10 +60,12 @@ import dgtPaginationView from './examples/dgt-pagination.view';
 import dgtLayoutView from './examples/dgt-layout.view';
 import dgtToastView from './examples/dgt-toast.view';
 import dgtThumbnailView from './examples/dgt-thumbnail.view';
+import DgtSwitchView from './examples/dgt-switch.view';
 
 export default {
     name: 'app',
     components: {
+        DgtSwitchView,
         dgtStarView,
         dgtGridView,
         dgtCardView,

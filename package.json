@@ -53,6 +53,7 @@
         "webpack-dev-server": "^2.9.1"
     },
     "dependencies": {
-        "dgt-vitra": "^1.0.29"
+        "dgt-vitra": "^1.0.29",
+        "vue-router": "^3.0.2"
     }
 }
