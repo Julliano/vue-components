@@ -7,7 +7,7 @@
 <template>
     <div>
         <h5>Default</h5>
-        <dgt-switch v-model="s1Value"></dgt-switch>
+        <dgt-switch class="default-switch" v-model="s1Value"></dgt-switch>
         {{s1Value}}
         <hr/>
         <h5>Disabled</h5>
