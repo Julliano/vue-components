@@ -1,11 +1,11 @@
 <template>
-    <div class="thumbnail" :class="{'selected': selected}">
-        <div class="wrapper-checkbox">
+    <section class="thumbnail" :class="{'selected': selected}">
+        <header class="wrapper-checkbox">
             <div class="checkbox">
                 <input type="checkbox" :id="`thumb-${id}`" class="inp" :checked="checked">
                 <label :for="`thumb-${id}`" @click="handleCheckbox"></label>
             </div>
-        </div>
+        </header>
         <div class="video-duration" v-if="gif">
             <i class="mdi mdi-play"></i> {{videoDuration}}
         </div>
@@ -13,7 +13,7 @@
             <img class="thumb static" :src="src" v-if="!showGif">
         </div>
         <footer class="footer">{{footer}}</footer>
-    </div>
+    </section>
 </template>
 <script>
     export default {

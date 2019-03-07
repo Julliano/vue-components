@@ -16,6 +16,7 @@
     <div class="mansory">
             <dgt-thumbnail v-for="(thumb, index) in thumbs"
                            :key="index"
+                           title="Tooltip com detalhes"
                            @selected="handleCheckbox"
                            @click="handleClick"
                             :src="thumb.src"
