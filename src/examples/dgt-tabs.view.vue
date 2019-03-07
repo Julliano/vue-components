@@ -22,7 +22,7 @@
         <dgt-tabs
             :tabs="dataTabs.tabs"
             :position="dataTabs.position"
-            @changed="swapTabs">
+            @changed="swapTabs" @clicked="same">
             <dgt-tab>Conteúdo tab 1</dgt-tab>
             <dgt-tab>Conteúdo tab 2</dgt-tab>
             <dgt-tab>Conteúdo tab 3</dgt-tab>
@@ -67,6 +67,9 @@ export default {
     },
     methods: {
         swapTabs(tab) {
+            console.log(tab);
+        },
+        same(tab) {
             console.log(tab);
         },
         setConfig(position) {

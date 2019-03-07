@@ -105,9 +105,9 @@
                 this.oldTabIndex = this.currentTabIndex ;
                 this.currentTabIndex = this.tabs.indexOf(tab) ;
                 this.currentTab = tab;
-                if (this.oldTabIndex === this.currentTabIndex) return;
+                if (this.oldTabIndex === this.currentTabIndex) return this.$emit('clicked', tab);
                 this.selectedSlot();
-                this.$emit('changed', tab);
+                return this.$emit('changed', tab);
             },
             selectedSlot() {
                 const filteredSlots = this.$slots.default.filter((item) => {
