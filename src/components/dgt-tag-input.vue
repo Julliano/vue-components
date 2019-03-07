@@ -184,8 +184,10 @@
             onEnter() {
                 if (this.checkDuplicate(this.tag)) {
                     this.$emit('enter', this.tag);
+                    this.newTag = null;
+                } else {
+                    this.$emit('duplicated', this.tag);
                 }
-                this.newTag = null;
             },
             onComma(event) {
                 if (event.key !== ',') {

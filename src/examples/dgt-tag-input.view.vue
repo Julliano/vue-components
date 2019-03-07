@@ -51,6 +51,7 @@
                          @keyup="keyUp"
                          @keydown="keyDown"
                          @enter="keyEnter"
+                         @duplicated="handleDuplicated"
                          placeholder="Adicionar tag"
                          :style="'--dgt-background-tag: ' + `${tagProps.backgroundTag}`+'; --dgt-tag-font-size: ' + `${tagProps.fontSize}`+'px; --dgt-background-delete-tag: ' + `${tagProps.backgroundTagDelete}`+'; --dgt-delete-tag: '+ `${tagProps.xTagDelete}`">
           </dgt-tag-input>
@@ -111,13 +112,18 @@
               this.$refs.childComplete && this.$refs.childComplete.onArrowUp();
           },
           keyEnter(tag) {
-              if (this.$refs.childComplete) {
+              if (this.$refs.childComplete && this.$refs.childComplete.isOpen) {
                   this.$refs.childComplete.onEnter();
-              } else {
+              } else  if (!this.$refs.childComplete.autoCompleteOnly) {
                   this.tagProps.tags.push(tag);
               }
               document.getElementById('input-tag')
                   .focus();
+          },
+          handleDuplicated() {
+              if (this.$refs.childComplete && this.$refs.childComplete.isOpen) {
+                  this.$refs.childComplete.onEnter();
+              }
           }
       }
   };
