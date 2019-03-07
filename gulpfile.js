@@ -26,7 +26,8 @@ const componetsVueJs = [
     'dgt-pagination',
     'dgt-layout',
     'dgt-toast',
-    'dgt-thumbnail'];
+    'dgt-thumbnail',
+    'dgt-collapse'];
 const banner =
     `${'/*!\n' +
     ' * dgt-vue-components'}${version}\n` +

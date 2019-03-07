@@ -9,8 +9,10 @@
 
 <template>
   <div class="dgt-container light padding">
+        <he>Dgt-Collapse</he>
+        <dgt-collapse-view></dgt-collapse-view>
         <h3>Dgt-Thumbnail</h3>
-      <dgt-thumbnail-view></dgt-thumbnail-view>
+        <dgt-thumbnail-view></dgt-thumbnail-view>
         <h3>Dgt-Switch</h3>
         <dgt-switch-view></dgt-switch-view>
         <h3>Dgt-Toast</h3>
@@ -61,6 +63,7 @@ import dgtLayoutView from './examples/dgt-layout.view';
 import dgtToastView from './examples/dgt-toast.view';
 import dgtThumbnailView from './examples/dgt-thumbnail.view';
 import DgtSwitchView from './examples/dgt-switch.view';
+import dgtCollapseView from './examples/dgt-collapse.view';
 
 export default {
     name: 'app',
@@ -77,7 +80,8 @@ export default {
         dgtPaginationView,
         dgtLayoutView,
         dgtToastView,
-        dgtThumbnailView
+        dgtThumbnailView,
+        dgtCollapseView
     }
 };
 </script>

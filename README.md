@@ -50,6 +50,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtLayout](##DGTLayout)
 1. [DgtToast](##DGTToast)
 1. [DgtTthumbnail](##DGTThumbnail)
+1. [DgtCollapse](##DGTCollapse)
 
 ## DGTAutocomplete
 
@@ -784,3 +785,21 @@ O tempo de exibição default do toast é de 3 segundos (3000).
 A exibição do gif começa após 2 segundos quando posicionado o mouse em cima da imagem.
 Você pode usar um css seu para montar a galeria do jeito que quiser, no exemplo nós usamos o mansory layout que agrupa 
 as imagens por colunas.
+
+## DGTCollapse
+
+```
+<dgt-collapse 
+    @opened="handleOpened" 
+    @expanded="handleExpanded"
+    opened="Valor default false"
+    expanded="Valor default false">
+        <template slot="header">
+            Título
+        </template>
+        Aqui vai o conteúdo
+        <template slot="less-items">MENOS 2</template>
+        <template slot="more-items">MAIS 2</template>
+    </dgt-collapse>
+
+```
