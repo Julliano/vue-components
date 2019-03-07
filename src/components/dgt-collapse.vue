@@ -15,7 +15,7 @@
         <section class="collapse-content">
             <slot></slot>
         </section>
-        <footer class="collapse-footer" @click="expand" @keyup.enter="expand" tabindex="0">
+        <footer class="collapse-footer" v-show="showFooter" @click="expand" @keyup.enter="expand" tabindex="0">
             <span v-show="isExpanded">
                 <slot name="less-items"></slot>
             </span>
@@ -37,6 +37,10 @@
             expanded: {
                 type: Boolean,
                 default: false
+            },
+            showFooter: {
+                type: Boolean,
+                default: true
             }
         },
         data() {

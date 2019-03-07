@@ -792,8 +792,9 @@ as imagens por colunas.
 <dgt-collapse 
     @opened="handleOpened" 
     @expanded="handleExpanded"
-    opened="Valor default false"
-    expanded="Valor default false">
+    :opened="Valor default false"
+    :expanded="Valor default false"
+    :show-footer="Valor default true">
         <template slot="header">
             Título
         </template>
