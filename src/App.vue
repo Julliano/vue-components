@@ -9,7 +9,7 @@
 
 <template>
   <div class="dgt-container light padding">
-        <he>Dgt-Collapse</he>
+        <h3>Dgt-Collapse</h3>
         <dgt-collapse-view></dgt-collapse-view>
         <h3>Dgt-Thumbnail</h3>
         <dgt-thumbnail-view></dgt-thumbnail-view>

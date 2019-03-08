@@ -1,8 +1,8 @@
 <template>
-    <section class="thumbnail" :class="{'selected': selected}">
+    <section class="thumbnail" :class="[{'selected': selected}, {'checked': checked}]">
         <header class="wrapper-checkbox">
             <div class="checkbox">
-                <input type="checkbox" :id="`thumb-${id}`" class="inp" :checked="checked">
+                <input type="checkbox" :id="`thumb-${id}`" class="inp">
                 <label :for="`thumb-${id}`" @click="handleCheckbox"></label>
             </div>
         </header>
@@ -23,6 +23,10 @@
                 type: Boolean,
                 default: false
             },
+            checked: {
+                type: Boolean,
+                default: false
+            },
             src: String,
             id: String,
             videoDuration: String,
@@ -32,14 +36,13 @@
         },
         data() {
             return {
-                checked: false,
                 showGif: false,
                 timeout: null
             };
         },
         methods: {
             handleCheckbox() {
-                this.$emit('selected', this.index);
+                this.$emit('checked', this.index);
             },
             handleClick() {
                 this.$emit('click', this.$props);

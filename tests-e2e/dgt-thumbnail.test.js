@@ -3,10 +3,17 @@ import { Selector } from 'testcafe';
 
 fixture`dgt-thumbnail`.page`${scenario.baseURL}`;
 
-test('Is thumbnail selected?', async t => {
+test('Is thumbnail checked?', async t => {
     const thumbnail = await Selector('.thumbnail:nth-child(1)');
     const checkbox = await Selector('[for=thumb-0]');
     await t.hover(thumbnail).click(checkbox).wait(10);
+    await t.expect(thumbnail.hasClass('checked')).eql(true);
+});
+
+test('Is thumbnail selected?', async t => {
+    const thumbnail = await Selector('.thumbnail:nth-child(1)');
+    const thumbContainer = await Selector('.thumbnail:nth-child(1) .thumb-container');
+    await t.click(thumbContainer).wait(10);
     await t.expect(thumbnail.hasClass('selected')).eql(true);
 });
 

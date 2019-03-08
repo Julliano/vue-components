@@ -1,7 +1,7 @@
 {
     "name": "dgt-vue-components",
     "description": "Library of Dígitro vue components",
-    "version": "1.0.88",
+    "version": "1.0.89",
     "author": "digitro.com.br>",
     "baseURL": "http://localhost:8080",
     "scripts": {
@@ -53,7 +53,7 @@
         "webpack-dev-server": "^2.9.1"
     },
     "dependencies": {
-        "dgt-vitra": "^1.0.30",
+        "dgt-vitra": "^1.0.31",
         "vue-router": "^3.0.2"
     }
 }

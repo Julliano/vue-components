@@ -775,6 +775,7 @@ O tempo de exibição default do toast é de 3 segundos (3000).
                             :footer="String"
                             :id="String"
                            :index="Number"
+                           :checked="Boolean"
                            :selected="Boolean"
                            :gif="String"
                            :video-duration="String"
