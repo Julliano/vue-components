@@ -1,7 +1,9 @@
 <template>
     <div>
         <button @click="toggle">opened toggle</button>
-        <dgt-collapse :opened="opened">
+        <dgt-collapse
+            :opened="opened"
+        @opened="toggle">
             <template slot="header">
                 Contas
             </template>

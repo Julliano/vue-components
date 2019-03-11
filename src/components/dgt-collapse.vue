@@ -61,16 +61,16 @@
             },
             expand() {
                 this.isExpanded = !this.isExpanded;
-                this.$emit('exoanded', this.isExpanded);
+                this.$emit('expanded', this.isExpanded);
             }
         },
         watch: {
             opened() {
-                this.isOpened = !this.isOpened;
+                this.isOpened = this.opened;
                 if (!this.isOpened) this.isExpanded = false;
             },
             expanded() {
-                this.isExpanded = !this.isExpanded;
+                this.isExpanded = this.expanded;
             }
         }
     };
