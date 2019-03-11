@@ -45,9 +45,13 @@
         },
         data() {
             return {
-                isOpened: this.opened,
-                isExpanded: this.expanded
-            };
+                isOpened: false,
+                isExpanded: false
+            } ;
+        },
+        created() {
+            this.isOpened = this.opened;
+            this.isExpanded = this.expanded;
         },
         methods: {
             open() {
@@ -58,6 +62,15 @@
             expand() {
                 this.isExpanded = !this.isExpanded;
                 this.$emit('exoanded', this.isExpanded);
+            }
+        },
+        watch: {
+            opened() {
+                this.isOpened = !this.isOpened;
+                if (!this.isOpened) this.isExpanded = false;
+            },
+            expanded() {
+                this.isExpanded = !this.isExpanded;
             }
         }
     };
