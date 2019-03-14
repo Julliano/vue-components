@@ -13,12 +13,17 @@
         <h3>BC Components Showcase</h3>
         <hr/>
         <h4>bc-filter</h4>
+        <bc-filter></bc-filter>
     </div>
 </template>
 
 <script>
+    import bcFilter from './bc-components/bc-filter';
+
     export default {
         name: 'app',
-        components: {}
+        components: {
+            bcFilter
+        }
     };
 </script>

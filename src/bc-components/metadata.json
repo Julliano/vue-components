@@ -1,0 +1,35 @@
+{
+    "uis": [
+        {
+            "id": 1,
+            "name": "Pessoa"
+        },
+        {
+            "id": 2,
+            "name": "Pedido"
+        },
+        {
+            "id": 3,
+            "name": "Veiculo"
+        }
+    ],
+
+    "attribs": [
+        {
+            "id": 1,
+            "name": "Nome"
+        },
+        {
+            "id": 2,
+            "name": "Idade"
+        },
+        {
+            "id": 3,
+            "name": "Dt. Nascimento"
+        },
+        {
+            "id": 4,
+            "name": "Pai"
+        }
+    ]
+}

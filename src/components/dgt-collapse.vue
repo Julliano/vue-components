@@ -41,6 +41,9 @@
             showFooter: {
                 type: Boolean,
                 default: true
+            },
+            index: {
+                type: Number
             }
         },
         data() {
@@ -57,7 +60,10 @@
             open() {
                 this.isOpened = !this.isOpened;
                 if (!this.isOpened) this.isExpanded = false;
-                this.$emit('opened', this.isOpened);
+                this.$emit('opened', {
+                    isOpened: this.isOpened,
+                    index: this.index
+                });
             },
             expand() {
                 this.isExpanded = !this.isExpanded;
