@@ -40,11 +40,12 @@
             >
                 <bc-filter-attrib
                     v-for="(attrib, idx) in ui.attribs" :key="idx"
-                    @meta-attrib-selected="onMetaAttribSelected($event, attrib)"
+                    @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     :meta-attribs="attribs"
                     :attrib="attrib"
                 >
+                    <bc-filter-operators v-if="attrib && attrib.id" :tipo-operador="selectedAtribType(idx)" @meta-operator-selected="onMetaOperatorSelected"></bc-filter-operators>
                 </bc-filter-attrib>
             </bc-filter-group>
         </div>
@@ -54,11 +55,16 @@
 <script>
     import BcFilterGroup from './bc-filter-group';
     import BcFilterAttrib from './bc-filter-attib';
+    import BcFilterOperators from './bc-filter-operators';
     import metadata from './metadata';
 
     export default {
         name: 'bc-filter-ui',
-        components: {BcFilterAttrib, BcFilterGroup},
+        components: {
+            BcFilterAttrib,
+            BcFilterGroup,
+            BcFilterOperators
+        },
         props: {
             ui: Object,
             metaUis: Array,
@@ -66,7 +72,8 @@
         },
         data() {
             return {
-                attribs: metadata.attribs
+                attribs: metadata.attribs,
+                operators: []
             };
         },
         methods: {
@@ -77,9 +84,13 @@
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
-            onMetaAttribSelected(metaAttrib, attrib) {
+            selectedAtribType(idx) {
+                return this.operators[idx] ? this.operators[idx] : null;
+            },
+            onMetaAttribSelected(metaAttrib, attrib, idx) {
                 attrib.id = metaAttrib.id;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
+                this.operators[idx] = metaAttrib.tipo;
 
                 if (!emptyAttrib) {
                     // adiciona novo grupo de attribs
@@ -93,11 +104,15 @@
                 });
             },
             onAttribRemoved(idx) {
+                this.operators.splice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
                 });
+            },
+            onMetaOperatorSelected(operator) {
+                console.log(operator);
             }
         }
     };

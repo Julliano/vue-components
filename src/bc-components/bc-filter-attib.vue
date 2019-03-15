@@ -16,19 +16,16 @@
     <div>
         <div class="bc-filter-attrib">
             <div class="options-container">
-                <select class="inp" @change="fireAttribSelected">
+                <select class="inp" @change="fireAttribSelected" v-model="attrib.id">
                     <option value="" disabled :selected="attrib.id === null">Selecione</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
                             :value="idx"
-                            :selected="attrib.id === opt.id"
                     >
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter" v-if="attrib.id !== null">
-                    <i class="mdi mdi-close" @click="fireAttribRemoved"></i>
-                </button>
-                <button class="btn btn-small btn-filter" v-else>Novo grupo</button>
+                <button class="btn btn-small btn-filter" v-if="!attrib.id">Novo grupo</button>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -40,15 +37,13 @@
         props: {
             attrib: Object,
             metaAttribs: Array,
-            showSourceOption: Boolean
+            showSourceOption: Boolean,
+            chield: false
         },
         methods: {
             fireAttribSelected(e) {
                 const metaAttrib = this.metaAttribs[e.target.value];
                 this.$emit('meta-attrib-selected', metaAttrib);
-            },
-            fireAttribRemoved() {
-                this.$emit('meta-attrib-removed', this.attrib);
             }
         }
     };

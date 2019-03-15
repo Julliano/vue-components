@@ -17,19 +17,157 @@
     "attribs": [
         {
             "id": 1,
-            "name": "Nome"
+            "name": "Nome",
+            "tipo": "texto"
         },
         {
             "id": 2,
-            "name": "Idade"
+            "name": "Idade",
+            "tipo": "inteiro"
         },
         {
             "id": 3,
-            "name": "Dt. Nascimento"
+            "name": "Dt. Nascimento",
+            "tipo": "decimal"
         },
         {
             "id": 4,
-            "name": "Pai"
+            "name": "Pai",
+            "tipo": "meta_selecao"
+        }
+    ],
+
+    "operators": {
+        "texto": [
+            {
+                "id": 1,
+                "name": "Qualquer conteúdooooo",
+                "autoComplete": true
+            },
+            {
+                "id": 2,
+                "name": "Sem conteúdo",
+                "autoComplete": false
+            },
+            {
+                "id": 3,
+                "name": "Igual",
+                "autoComplete": true
+            },
+            {
+                "id": 4,
+                "name": "Contém",
+                "autoComplete": false
+            },
+            {
+                "id": 5,
+                "name": "Contém fonetizádo",
+                "autoComplete": true
+            }
+        ],
+        "inteiro": [
+            {
+                "id": 1,
+                "name": "Qualquer conteúdo",
+                "autoComplete": true
+            },
+            {
+                "id": 2,
+                "name": "Sem conteúdo",
+                "autoComplete": false
+            },
+            {
+                "id": 3,
+                "name": "Igual",
+                "autoComplete": true
+            },
+            {
+                "id": 4,
+                "name": "Contém",
+                "autoComplete": false
+            },
+            {
+                "id": 5,
+                "name": "Contém fonetizádo",
+                "autoComplete": true
+            }
+        ],
+        "decimal": [
+            {
+                "id": 1,
+                "name": "Qualquer conteúdo",
+                "autoComplete": true
+            },
+            {
+                "id": 2,
+                "name": "Sem conteúdo",
+                "autoComplete": false
+            },
+            {
+                "id": 3,
+                "name": "Igual",
+                "autoComplete": true
+            },
+            {
+                "id": 4,
+                "name": "Contém",
+                "autoComplete": false
+            },
+            {
+                "id": 5,
+                "name": "Contém fonetizádo",
+                "autoComplete": true
+            }
+        ],
+        "meta_selecao": [
+            {
+                "id": 1,
+                "name": "Qualquer conteúdo",
+                "autoComplete": true
+            },
+            {
+                "id": 2,
+                "name": "Sem conteúdo",
+                "autoComplete": false
+            },
+            {
+                "id": 3,
+                "name": "Igual",
+                "autoComplete": true
+            },
+            {
+                "id": 4,
+                "name": "Contém",
+                "autoComplete": false
+            },
+            {
+                "id": 5,
+                "name": "Contém fonetizádo",
+                "autoComplete": true
+            }
+        ]
+    },
+
+    "fields": [
+        {
+            "id": 1,
+            "name": "Qualquer conteúdo"
+        },
+        {
+            "id": 2,
+            "name": "Sem conteúdo"
+        },
+        {
+            "id": 3,
+            "name": "Igual"
+        },
+        {
+            "id": 4,
+            "name": "Contém"
+        },
+        {
+            "id": 5,
+            "name": "Contém fonetizádo"
         }
     ]
 }
