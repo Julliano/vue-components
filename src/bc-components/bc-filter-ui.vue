@@ -104,7 +104,7 @@
                 });
             },
             onAttribRemoved(idx) {
-                this.operators.splice(idx, 1);
+                this.operators.slice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{

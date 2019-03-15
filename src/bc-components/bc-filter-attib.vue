@@ -16,10 +16,10 @@
     <div>
         <div class="bc-filter-attrib">
             <div class="options-container">
-                <select class="inp" @change="fireAttribSelected" v-model="attrib.id">
+                <select class="inp" @change="fireAttribSelected">
                     <option value="" disabled :selected="attrib.id === null">Selecione</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
-                            :value="idx"
+                            :value="idx" :selected="attrib.id === opt.id"
                     >
                         {{opt.name}}
                     </option>
@@ -35,7 +35,9 @@
     export default {
         name: 'bc-filter-attrib',
         props: {
-            attrib: Object,
+            attrib: {
+                id: ''
+            },
             metaAttribs: Array,
             showSourceOption: Boolean,
             chield: false

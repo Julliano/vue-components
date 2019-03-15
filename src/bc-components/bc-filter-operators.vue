@@ -25,7 +25,7 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter" v-if="!operator.id">
+                <button class="btn btn-filter" v-if="!operator.id && operator.id !== 0">
                     <i class="mdi mdi-close" @click="fireOperatorRemoved"></i>
                 </button>
             </div>
