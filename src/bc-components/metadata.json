@@ -148,26 +148,56 @@
         ]
     },
 
-    "fields": [
-        {
-            "id": 1,
-            "name": "Qualquer conteúdo"
-        },
-        {
-            "id": 2,
-            "name": "Sem conteúdo"
-        },
-        {
-            "id": 3,
-            "name": "Igual"
-        },
-        {
-            "id": 4,
-            "name": "Contém"
-        },
-        {
-            "id": 5,
-            "name": "Contém fonetizádo"
-        }
-    ]
+    "texto": {
+        "fields": [
+            {
+                "id": 1,
+                "name": "Sem campo"
+            },
+            {
+                "id": 2,
+                "name": "TextCombo"
+            },
+            {
+                "id": 3,
+                "name": "TextField"
+            }
+        ],
+        "inteiro": [
+            {
+                "id": 1,
+                "name": "inteiro",
+                "qtd": 1
+            },
+            {
+                "id": 2,
+                "name": "inteiro",
+                "qtd": 2
+            }
+        ],
+        "decimal": [
+            {
+                "id": 1,
+                "name": "inteiro",
+                "qtd": 1
+            },
+            {
+                "id": 2,
+                "name": "inteiro",
+                "qtd": 2
+            }
+        ],
+        "meta_selecao": [
+            {
+                "id": 1,
+                "name": "inteiro",
+                "qtd": 1
+            },
+            {
+                "id": 2,
+                "name": "inteiro",
+                "qtd": 2
+            }
+        ]
+    }
 }

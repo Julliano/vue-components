@@ -42,9 +42,15 @@
             showSourceOption: Boolean,
             chield: false
         },
+        data() {
+            return {
+                atributo: {}
+            };
+        },
         methods: {
             fireAttribSelected(e) {
                 const metaAttrib = this.metaAttribs[e.target.value];
+                this.atributo = metaAttrib;
                 this.$emit('meta-attrib-selected', metaAttrib);
             }
         }

@@ -17,10 +17,10 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <select class="inp" @change="fireOperatorSelected" v-model="operator.id">
+                <select class="inp" @change="fireOperatorSelected">
                     <option value="" disabled :selected="operator.id === null">Selecione</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx"
-                            :value="idx"
+                            :value="idx" :selected="operator.id === opt.id"
                     >
                         {{opt.name}}
                     </option>
@@ -28,6 +28,7 @@
                 <button class="btn btn-filter" v-if="!operator.id && operator.id !== 0">
                     <i class="mdi mdi-close" @click="fireOperatorRemoved"></i>
                 </button>
+                <slot></slot>
             </div>
         </div>
     </div>
@@ -42,12 +43,13 @@
             tipoOperador: {
                 type: String,
                 default: null
-            }
+            },
+            index: Number
         },
         data() {
             return {
                 operator: {
-                    id: ''
+                    id: null
                 },
                 metaOperators: [],
                 render: true
@@ -59,16 +61,17 @@
         methods: {
             fireOperatorSelected(e) {
                 const metaOperator = this.metaOperators[e.target.value];
-                this.$emit('meta-operator-selected', metaOperator);
+                this.operator = metaOperator;
+                this.$emit('meta-operator-selected', metaOperator, this.index);
             },
             fireOperatorRemoved() {
-                this.$emit('meta-operator-removed', this.operator);
+                this.$emit('meta-operator-removed');
             }
         },
         watch: {
             tipoOperador() {
                 this.metaOperators = metadata.operators[this.tipoOperador];
-                this.operator = {id: ''};
+                this.operator = {id: null};
                 this.$forceUpdate();
             }
         }
