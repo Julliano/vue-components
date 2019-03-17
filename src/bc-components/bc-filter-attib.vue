@@ -25,19 +25,33 @@
                     </option>
                 </select>
                 <button class="btn btn-small btn-filter" v-if="!attrib.id">Novo grupo</button>
-                <slot></slot>
+                <bc-filter-operators v-if="atribType"
+                    :tipo-operador="atribType" :index="index"
+                    @meta-operator-selected="repassOperatorSelected"
+                    @meta-operator-removed="fireOperatorRemoved"
+                    @meta-field-selected="repassFieldSelected"
+                >
+                </bc-filter-operators>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+
+    import BcFilterOperators from './bc-filter-operators';
+
     export default {
         name: 'bc-filter-attrib',
+        components: {
+            BcFilterOperators
+        },
         props: {
             attrib: {
                 id: ''
             },
+            index: Number,
+            atribType: String,
             metaAttribs: Array,
             showSourceOption: Boolean,
             chield: false
@@ -52,6 +66,20 @@
                 const metaAttrib = this.metaAttribs[e.target.value];
                 this.atributo = metaAttrib;
                 this.$emit('meta-attrib-selected', metaAttrib);
+                this.$forceUpdate();
+            },
+            fireOperatorRemoved(idx) {
+                if (idx === this.index) {
+                    this.$emit('meta-attrib-removed');
+                }
+            },
+            repassOperatorSelected(index, obj) {
+                if (index === this.index) {
+                    this.$emit('meta-operator-selected', obj, this.index);
+                }
+            },
+            repassFieldSelected(param) {
+                this.$emit('meta-field-selected', param);
             }
         }
     };

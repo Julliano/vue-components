@@ -41,22 +41,12 @@
                 <bc-filter-attrib
                     v-for="(attrib, idx) in ui.attribs" :key="idx"
                     @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
-                    :meta-attribs="attribs"
-                    :attrib="attrib"
+                    @meta-attrib-removed="onAttribRemoved(idx)"
+                    @meta-operator-selected="onMetaOperatorSelected"
+                    @meta-field-selected="onMetaFieldSelected"
+                    :meta-attribs="attribs" :atrib-type="atribType[idx]"
+                    :attrib="attrib" :index="idx"
                 >
-                    <bc-filter-operators v-if="ui.attribs[idx] && ui.attribs[idx].id"
-                        :tipo-operador="selectedAtribType(idx)" :index="idx"
-                        @meta-operator-selected="onMetaOperatorSelected"
-                        @meta-operator-removed="onAttribRemoved(idx)"
-                    >
-                        <bc-filter-fields v-if="atribType[idx]"
-                            :tipo-operador="selectedAtribType(idx)"
-                            @meta-field-selected="onMetaFieldSelected"
-                            @meta-field-removed="onAttribRemoved(idx)"
-                            :operador="selectedOperator(idx)"
-                        >
-                        </bc-filter-fields>
-                    </bc-filter-operators>
                 </bc-filter-attrib>
             </bc-filter-group>
         </div>
@@ -66,17 +56,13 @@
 <script>
     import BcFilterGroup from './bc-filter-group';
     import BcFilterAttrib from './bc-filter-attib';
-    import BcFilterOperators from './bc-filter-operators';
-    import BcFilterFields from './bc-filter-fields';
     import metadata from './metadata';
 
     export default {
         name: 'bc-filter-ui',
         components: {
             BcFilterAttrib,
-            BcFilterGroup,
-            BcFilterOperators,
-            BcFilterFields
+            BcFilterGroup
         },
         props: {
             ui: Object,
@@ -98,16 +84,12 @@
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
-            selectedAtribType(idx) {
-                return this.atribType[idx] ? this.atribType[idx] : null;
-            },
-            selectedOperator(idx) {
-                return this.operators[idx] ? this.operators[idx] : null;
-            },
+
             onMetaAttribSelected(metaAttrib, attrib, idx) {
                 attrib.id = metaAttrib.id;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
                 this.atribType[idx] = metaAttrib.tipo;
+                if (this.operators[idx]) this.operators.splice(idx, 1);
 
                 if (!emptyAttrib) {
                     // adiciona novo grupo de attribs
@@ -121,15 +103,18 @@
                 });
             },
             onAttribRemoved(idx) {
-                this.atribType.slice(idx, 1);
+                this.atribType.splice(idx, 1);
+                this.operators.splice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
                 });
+
             },
             onMetaOperatorSelected(obj, idx) {
                 this.operators[idx] = obj;
+                this.$forceUpdate();
             },
             onMetaFieldSelected(obj) {
                 console.log(obj);

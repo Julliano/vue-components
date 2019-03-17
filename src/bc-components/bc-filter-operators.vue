@@ -28,17 +28,27 @@
                 <button class="btn btn-filter" v-if="!operator.id && operator.id !== 0">
                     <i class="mdi mdi-close" @click="fireOperatorRemoved"></i>
                 </button>
-                <slot></slot>
+                <bc-filter-fields v-if="operator && operator.id"
+                    @meta-field-selected="repassMetaFieldSelected"
+                    @meta-field-removed="fireOperatorRemoved"
+                    :operador="operator" :tipo-operador="tipoOperador"
+                    :index="index"
+                >
+                </bc-filter-fields>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import BcFilterFields from './bc-filter-fields';
     import metadata from './metadata';
 
     export default {
         name: 'bc-filter-operator',
+        components: {
+            BcFilterFields
+        },
         props: {
             tipoOperador: {
                 type: String,
@@ -62,18 +72,24 @@
             fireOperatorSelected(e) {
                 const metaOperator = this.metaOperators[e.target.value];
                 this.operator = metaOperator;
-                this.$emit('meta-operator-selected', metaOperator, this.index);
-            },
-            fireOperatorRemoved() {
-                this.$emit('meta-operator-removed');
-            }
-        },
-        watch: {
-            tipoOperador() {
-                this.metaOperators = metadata.operators[this.tipoOperador];
-                this.operator = {id: null};
+                this.$emit('meta-operator-selected', this.index, metaOperator);
                 this.$forceUpdate();
+            },
+            fireOperatorRemoved(idx) {
+                if (idx === this.index) {
+                    this.$emit('meta-operator-removed', this.index);
+                }
+            },
+            repassMetaFieldSelected(param) {
+                this.$emit('meta-field-selected', param);
             }
         }
+        // watch: {
+        //     tipoOperador() {
+        //         this.metaOperators = metadata.operators[this.tipoOperador];
+        //         this.operator = {id: null};
+        //         this.$forceUpdate();
+        //     }
+        // }
     };
 </script>

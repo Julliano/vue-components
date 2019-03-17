@@ -17,7 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <select class="inp" @change="fireFieldSelected">
+                <select class="inp">
                     <option value="" disabled :selected="field.id === null">Selecione</option>
                     <option v-for="(opt, idx) in metaFields" :key="idx"
                             :value="idx"
@@ -44,7 +44,8 @@
                 type: String,
                 default: null
             },
-            operador: Object
+            operador: Object,
+            index: Number
         },
         data() {
             return {
@@ -55,12 +56,8 @@
             };
         },
         methods: {
-            fireFieldSelected(e) {
-                const metaField = this.metaField[e.target.value];
-                this.$emit('meta-operator-selected', metaField);
-            },
             fireFieldRemoved() {
-                this.$emit('meta-field-removed');
+                this.$emit('meta-field-removed', this.index);
             }
         }
     };
