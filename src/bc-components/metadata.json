@@ -148,8 +148,8 @@
         ]
     },
 
-    "texto": {
-        "fields": [
+    "fields": {
+        "texto": [
             {
                 "id": 1,
                 "name": "Sem campo"

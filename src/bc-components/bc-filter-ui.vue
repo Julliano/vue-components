@@ -42,11 +42,21 @@
                     v-for="(attrib, idx) in ui.attribs" :key="idx"
                     @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
-                    @meta-operator-selected="onMetaOperatorSelected"
-                    @meta-field-selected="onMetaFieldSelected"
-                    :meta-attribs="attribs" :atrib-type="atribType[idx]"
-                    :attrib="attrib" :index="idx"
+                    :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
+                    <bc-filter-operators slot="operator" v-if="atribType[idx]"
+                        :tipo-operador="atribType[idx]"
+                        @meta-operator-selected="onMetaOperatorSelected($event, idx)"
+                        @meta-operator-removed="onAttribRemoved(idx)"
+                        ref="operator"
+                    >
+                        <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].id"
+                            @meta-field-selected="onMetaFieldSelected"
+                            @meta-field-removed="onAttribRemoved(idx)"
+                            :operador="operators[idx]" :tipo-operador="atribType[idx]"
+                        >
+                        </bc-filter-fields>
+                    </bc-filter-operators>
                 </bc-filter-attrib>
             </bc-filter-group>
         </div>
@@ -56,13 +66,17 @@
 <script>
     import BcFilterGroup from './bc-filter-group';
     import BcFilterAttrib from './bc-filter-attib';
+    import BcFilterOperators from './bc-filter-operators';
+    import BcFilterFields from './bc-filter-fields';
     import metadata from './metadata';
 
     export default {
         name: 'bc-filter-ui',
         components: {
             BcFilterAttrib,
-            BcFilterGroup
+            BcFilterGroup,
+            BcFilterOperators,
+            BcFilterFields
         },
         props: {
             ui: Object,
@@ -100,16 +114,19 @@
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
+                    this.$refs.operator[idx].attribChanged();
                 });
             },
             onAttribRemoved(idx) {
-                this.atribType.splice(idx, 1);
                 this.operators.splice(idx, 1);
+                this.atribType.splice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
+                    this.$refs.attrib[idx].attribRemoved();
                 });
+                this.$forceUpdate();
 
             },
             onMetaOperatorSelected(obj, idx) {

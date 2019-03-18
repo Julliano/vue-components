@@ -25,10 +25,10 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter" v-if="!field.id && field.id !== 0">
-                    <i class="mdi mdi-close" @click="fireFieldRemoved"></i>
+                <button class="btn btn-filter" @click="fireFieldRemoved"
+                    v-if="!field.id && field.id !== 0">
+                    <i class="mdi mdi-close"></i>
                 </button>
-                <slot></slot>
             </div>
         </div>
     </div>
@@ -44,20 +44,19 @@
                 type: String,
                 default: null
             },
-            operador: Object,
-            index: Number
+            operador: Object
         },
         data() {
             return {
                 field: {
                     id: null
                 },
-                metaFields: metadata.fields
+                metaFields: metadata.fields[this.tipoOperador]
             };
         },
         methods: {
             fireFieldRemoved() {
-                this.$emit('meta-field-removed', this.index);
+                this.$emit('meta-field-removed');
             }
         }
     };

@@ -17,38 +17,28 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <select class="inp" @change="fireOperatorSelected">
-                    <option value="" disabled :selected="operator.id === null">Selecione</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx"
-                            :value="idx" :selected="operator.id === opt.id"
-                    >
+                <select class="inp" @change="fireOperatorSelected" v-model="operator">
+                    <option value="" disabled :selected="operator.id === ''">Selecione</option>
+                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter" v-if="!operator.id && operator.id !== 0">
-                    <i class="mdi mdi-close" @click="fireOperatorRemoved"></i>
+                <button class="btn btn-filter" @click="fireOperatorRemoved"
+                    v-if="!operator.id && operator.id !== 0">
+                    <i class="mdi mdi-close"></i>
                 </button>
-                <bc-filter-fields v-if="operator && operator.id"
-                    @meta-field-selected="repassMetaFieldSelected"
-                    @meta-field-removed="fireOperatorRemoved"
-                    :operador="operator" :tipo-operador="tipoOperador"
-                    :index="index"
-                >
-                </bc-filter-fields>
+                <slot name="field"></slot>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import BcFilterFields from './bc-filter-fields';
+
     import metadata from './metadata';
 
     export default {
         name: 'bc-filter-operator',
-        components: {
-            BcFilterFields
-        },
         props: {
             tipoOperador: {
                 type: String,
@@ -59,7 +49,9 @@
         data() {
             return {
                 operator: {
-                    id: null
+                    id: null,
+                    autoComplete: Boolean,
+                    name: String
                 },
                 metaOperators: [],
                 render: true
@@ -67,29 +59,26 @@
         },
         created() {
             this.metaOperators = metadata.operators[this.tipoOperador];
+            if (this.operador) console.log('oi');
         },
         methods: {
-            fireOperatorSelected(e) {
-                const metaOperator = this.metaOperators[e.target.value];
-                this.operator = metaOperator;
-                this.$emit('meta-operator-selected', this.index, metaOperator);
+            fireOperatorSelected() {
+                // const metaOperator = this.metaOperators[e.target.value];
+                // this.operator = metaOperator;
+                this.$emit('meta-operator-selected', this.operator);
                 this.$forceUpdate();
             },
-            fireOperatorRemoved(idx) {
-                if (idx === this.index) {
-                    this.$emit('meta-operator-removed', this.index);
-                }
+            fireOperatorRemoved() {
+                this.$emit('meta-operator-removed');
             },
             repassMetaFieldSelected(param) {
                 this.$emit('meta-field-selected', param);
+            },
+            attribChanged() {
+                this.metaOperators = metadata.operators[this.tipoOperador];
+                this.operator = {id: null};
+                this.$forceUpdate();
             }
         }
-        // watch: {
-        //     tipoOperador() {
-        //         this.metaOperators = metadata.operators[this.tipoOperador];
-        //         this.operator = {id: null};
-        //         this.$forceUpdate();
-        //     }
-        // }
     };
 </script>
