@@ -45,15 +45,16 @@
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-operador="atribType[idx]"
+                        :tipo-operador="atribType[idx]" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
                         @meta-operator-removed="onAttribRemoved(idx)"
                         ref="operator"
                     >
                         <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].id"
-                            @meta-field-selected="onMetaFieldSelected"
+                            @meta-field-selected="onMetaFieldSelected($event, idx)"
                             @meta-field-removed="onAttribRemoved(idx)"
-                            :operador="operators[idx]" :tipo-operador="atribType[idx]"
+                            :hasField="fields[idx]" :operador="operators[idx]"
+                            :tipo-operador="atribType[idx]" ref="field"
                         >
                         </bc-filter-fields>
                     </bc-filter-operators>
@@ -87,7 +88,8 @@
             return {
                 attribs: metadata.attribs,
                 operators: [],
-                atribType: []
+                atribType: [],
+                fields: []
             };
         },
         methods: {
@@ -103,7 +105,10 @@
                 attrib.id = metaAttrib.id;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
                 this.atribType[idx] = metaAttrib.tipo;
-                if (this.operators[idx]) this.operators.splice(idx, 1);
+                if (this.operators[idx]) {
+                    this.operators.splice(idx, 1);
+                    this.fields.splice(idx, 1);
+                }
 
                 if (!emptyAttrib) {
                     // adiciona novo grupo de attribs
@@ -118,13 +123,13 @@
                 });
             },
             onAttribRemoved(idx) {
-                this.operators.splice(idx, 1);
+                this.fields.splice(idx, 1);
                 this.atribType.splice(idx, 1);
+                this.operators.splice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
-                    this.$refs.attrib[idx].attribRemoved();
                 });
                 this.$forceUpdate();
 
@@ -133,8 +138,9 @@
                 this.operators[idx] = obj;
                 this.$forceUpdate();
             },
-            onMetaFieldSelected(obj) {
-                console.log(obj);
+            onMetaFieldSelected(obj, idx) {
+                this.fields[idx] = obj;
+                this.$forceUpdate();
             }
         }
     };

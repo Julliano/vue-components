@@ -17,14 +17,15 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <select class="inp" @change="fireOperatorSelected" v-model="operator">
-                    <option value="" disabled :selected="operator.id === ''">Selecione</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
+                <select class="inp" @change="fireOperatorSelected">
+                    <option value="" disabled  :selected="operator.id === null">Selecione</option>
+                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
+                        :selected="operator.id === opt.id">
                         {{opt.name}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="!operator.id && operator.id !== 0">
+                    v-if="operator && !operator.id">
                     <i class="mdi mdi-close"></i>
                 </button>
                 <slot name="field"></slot>
@@ -44,27 +45,24 @@
                 type: String,
                 default: null
             },
-            index: Number
+            operador: {
+                id: null
+            }
         },
         data() {
             return {
                 operator: {
-                    id: null,
-                    autoComplete: Boolean,
-                    name: String
+                    id: null
                 },
-                metaOperators: [],
-                render: true
+                metaOperators: []
             };
         },
         created() {
             this.metaOperators = metadata.operators[this.tipoOperador];
-            if (this.operador) console.log('oi');
         },
         methods: {
-            fireOperatorSelected() {
-                // const metaOperator = this.metaOperators[e.target.value];
-                // this.operator = metaOperator;
+            fireOperatorSelected(e) {
+                this.operator = this.metaOperators[e.target.value];
                 this.$emit('meta-operator-selected', this.operator);
                 this.$forceUpdate();
             },
@@ -76,8 +74,15 @@
             },
             attribChanged() {
                 this.metaOperators = metadata.operators[this.tipoOperador];
-                this.operator = {id: null};
+                this.operator = { id: null };
                 this.$forceUpdate();
+            }
+        },
+        watch: {
+            operador() {
+                if (this.operador) {
+                    this.operator = this.operador;
+                }
             }
         }
     };

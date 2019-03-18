@@ -61,9 +61,6 @@
             },
             repassFieldSelected(param) {
                 this.$emit('meta-field-selected', param);
-            },
-            attribRemoved() {
-                this.$forceUpdate();
             }
         }
     };
