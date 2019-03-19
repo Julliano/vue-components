@@ -66,7 +66,7 @@
 
 <script>
     import BcFilterGroup from './bc-filter-group';
-    import BcFilterAttrib from './bc-filter-attib';
+    import BcFilterAttrib from './bc-filter-attrib';
     import BcFilterOperators from './bc-filter-operators';
     import BcFilterFields from './bc-filter-fields';
     import metadata from './metadata';

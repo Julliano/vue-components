@@ -17,13 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <select class="inp" @change="fireFieldSelected">
-                    <option value="" disabled :selected="field.id === null">Selecione</option>
-                    <option v-for="(opt, idx) in metaFields" :key="idx"
-                            :value="idx" :selected="field.id === opt.id">
-                        {{opt.name}}
-                    </option>
-                </select>
+                <component :is="dynamicComponent" :tipo="tipoOperador"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -34,9 +28,16 @@
 
 <script>
     import metadata from './metadata';
+    import textField from './bc-field-options/bc-text-field';
+    import textCombo from './bc-field-options/bc-text-combo';
+    import numberInput from './bc-field-options/bc-int-input';
+    import numberInputs from './bc-field-options/bc-int-inputs';
 
     export default {
         name: 'bc-filter-field',
+        components: {
+            textField
+        },
         props: {
             tipoOperador: {
                 type: String,
@@ -55,6 +56,20 @@
                 metaFields: metadata.fields[this.tipoOperador]
             };
         },
+        computed: {
+            dynamicComponent() {
+                switch (this.tipoOperador) {
+                    case 'texto':
+                        return this.checkTextField();
+                    case 'inteiro':
+                        return this.checkNumberField();
+                    case 'decimal':
+                        return this.checkNumberField();
+                    default:
+                        return null;
+                }
+            }
+        },
         methods: {
             fireFieldSelected(e) {
                 const metaField = this.metaFields[e.target.value];
@@ -64,6 +79,20 @@
             },
             fireFieldRemoved() {
                 this.$emit('meta-field-removed');
+            },
+            checkTextField() {
+                if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
+                    return null;
+                } else if (this.operador.autoComplete) {
+                    return textCombo;
+                }
+                return textField;
+            },
+            checkNumberField() {
+                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    return numberInputs;
+                }
+                return numberInput;
             }
         },
         watch: {
