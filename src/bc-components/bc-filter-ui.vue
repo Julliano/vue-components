@@ -101,8 +101,7 @@
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
                 this.$emit('meta-ui-selected', metaUI);
-                const {data} = await bcService.getAttibsFromUI(metaUI.id);
-                this.attribs = data;
+                this.attribs = await bcService.getAttibsFromUI(metaUI.id);
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);

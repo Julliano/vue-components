@@ -1,13 +1,16 @@
 import '@babel/polyfill';
-import axios from 'axios';
+import Dispatcher from '../utils/dispatcher.js';
 import metadata from '../metadata';
 
 /**
  * Criação das instâncias do Axios.
  */
-const axiosInstance = axios.create({
+
+Dispatcher.config({
     baseURL: '/bc/services/metadata/'
 });
+
+const dispatcher = new Dispatcher();
 
 export default {
     getLabelUIs(uis) {
@@ -20,7 +23,7 @@ export default {
     },
 
     async getAttibsFromUI(logicName) {
-        return await axiosInstance
-            .get(`${logicName}/attributes?fields=label,type&flags=filterable,visible`);
+        return await dispatcher
+            .doGet(`${logicName}/attributes?fields=label,type&flags=filterable,visible`);
     }
 };
