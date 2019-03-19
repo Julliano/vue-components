@@ -33,7 +33,7 @@
 </template>
 
 <script>
-    import metadata from './metadata';
+    import metadata from './metadata.json';
 
     export default {
         name: 'bc-filter-field',
