@@ -66,7 +66,7 @@
 
 <script>
     import BcFilterGroup from './bc-filter-group.vue';
-    import BcFilterAttrib from './bc-filter-attib.vue';
+    import BcFilterAttrib from './bc-filter-attrib.vue';
     import BcFilterOperators from './bc-filter-operators.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import metadata from './metadata.json';
