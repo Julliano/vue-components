@@ -1,16 +1,16 @@
 {
     "uis": [
         {
-            "id": 1,
-            "name": "Pessoa"
+            "id": "dc_arquivo",
+            "name": "Arquivo"
         },
         {
-            "id": 2,
-            "name": "Pedido"
+            "id": "dc_view_arquivo",
+            "name": "Midia"
         },
         {
-            "id": 3,
-            "name": "Veiculo"
+            "id": "dc_agenda",
+            "name": "Agenda"
         }
     ],
 

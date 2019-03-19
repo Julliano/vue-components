@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+require('dotenv').config();
 
 module.exports = {
     entry: './src/main.js',
@@ -84,7 +85,16 @@ module.exports = {
     devServer: {
         historyApiFallback: true,
         noInfo: true,
-        overlay: true
+        overlay: true,
+        proxy: {
+            '/bc': {
+                target: process.env.BC_API_BASE_URL,
+                secure: false,
+                headers: {
+                    Cookie: `SessionID=${process.env.SESSION_ID}`
+                }
+            }
+        }
     },
     performance: {
         hints: false
