@@ -11,6 +11,7 @@ const gulp = require('gulp');
 const jsonfile = require('jsonfile');
 const fs = require('fs');
 const glob = require('glob');
+const nodeResolve = require('rollup-plugin-node-resolve');
 
 const { version } = require('./package.json');
 const packageJson = jsonfile.readFileSync('./package.json');
@@ -71,7 +72,9 @@ gulp.task('compile-vue-components', async () => {
                         plugins: [
                             autoprefixer()
                         ]
-                    })
+                    }),
+                    json(),
+                    nodeResolve({module: true})
                 ].concat(config.plugins || [])
             };
             const bundle = await rollup(inputOptions);
@@ -121,7 +124,8 @@ gulp.task('compile-bc-components', async () => {
                         autoprefixer()
                     ]
                 }),
-                json()
+                json(),
+                nodeResolve({module: true})
             ].concat(config.plugins || [])
         };
         const bundle = await rollup(inputOptions);
