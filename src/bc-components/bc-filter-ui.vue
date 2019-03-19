@@ -102,16 +102,16 @@
                 const metaUI = this.uis[e.target.value];
                 this.$emit('meta-ui-selected', metaUI);
                 const {data} = await bcService.getAttibsFromUI(metaUI.id);
-                console.log(data);
+                this.attribs = data;
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
 
             onMetaAttribSelected(metaAttrib, attrib, idx) {
-                attrib.id = metaAttrib.id;
+                attrib.id = metaAttrib.name;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
-                this.atribType[idx] = metaAttrib.tipo;
+                this.atribType[idx] = metaAttrib.type;
                 if (this.operators[idx]) {
                     this.operators.splice(idx, 1);
                     this.fields.splice(idx, 1);

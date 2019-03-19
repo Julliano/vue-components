@@ -20,6 +20,7 @@ export default {
     },
 
     async getAttibsFromUI(logicName) {
-        return await axiosInstance.get(`${logicName}/attributes?fields=label,filterable`);
+        return await axiosInstance
+            .get(`${logicName}/attributes?fields=label,type&flags=filterable,visible`);
     }
 };

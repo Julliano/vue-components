@@ -19,9 +19,9 @@
                 <select class="inp" @change="fireAttribSelected">
                     <option value="" disabled :selected="attrib.id === null">Selecione</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
-                            :value="idx" :selected="attrib.id === opt.id"
+                            :value="idx" :selected="attrib.name === opt.name"
                     >
-                        {{opt.name}}
+                        {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-small btn-filter" v-if="!attrib.id">Novo grupo</button>
