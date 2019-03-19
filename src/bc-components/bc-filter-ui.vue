@@ -25,9 +25,7 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter-icon" v-if="showSourceOption">
-                    <i class="mdi mdi-database"></i>
-                </button>
+                <bc-filter-source-menu v-if="showSourceOption"></bc-filter-source-menu>
                 <button class="btn btn-filter-icon" v-if="ui.id !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
@@ -70,10 +68,12 @@
     import BcFilterOperators from './bc-filter-operators';
     import BcFilterFields from './bc-filter-fields';
     import metadata from './metadata';
+    import BcFilterSourceMenu from './bc-filter-source-menu';
 
     export default {
         name: 'bc-filter-ui',
         components: {
+            BcFilterSourceMenu,
             BcFilterAttrib,
             BcFilterGroup,
             BcFilterOperators,
@@ -91,6 +91,11 @@
                 atribType: [],
                 fields: []
             };
+        },
+        computed: {
+            pageText() {
+                return this.$store.state.i18n.languageText;
+            }
         },
         methods: {
             fireUISelected(e) {

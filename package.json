@@ -34,6 +34,7 @@
         "file-loader": "^1.1.4",
         "gulp": "^3.9.1",
         "gulp-vueify": "0.0.3",
+        "i18n-nodejs": "^3.0.0",
         "jest": "^23.6.0",
         "jsonfile": "^5.0.0",
         "node-sass": "^4.11.0",
@@ -54,6 +55,7 @@
     },
     "dependencies": {
         "dgt-vitra": "^1.0.31",
-        "vue-router": "^3.0.2"
+        "vue-router": "^3.0.2",
+        "vuex": "^3.1.0"
     }
 }

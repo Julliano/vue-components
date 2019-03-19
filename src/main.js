@@ -2,6 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import BCShowcase from './BCShowcase.vue';
 import VueRouter from 'vue-router';
+import store from './store';
 
 Vue.use(VueRouter);
 
@@ -15,5 +16,6 @@ const router = new VueRouter({
 
 new Vue({
     router,
+    store,
     template: '<router-view/>'
 }).$mount('#app');
