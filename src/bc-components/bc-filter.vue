@@ -14,10 +14,10 @@
 
 <script>
 
-    import metadata from './metadata';
+    import metadata from './metadata.json';
 
-    import BcFilterGroup from './bc-filter-group';
-    import BcFilterUi from './bc-filter-ui';
+    import BcFilterGroup from './bc-filter-group.vue';
+    import BcFilterUi from './bc-filter-ui.vue';
     export default {
         name: 'bc-filter',
         components: {BcFilterUi, BcFilterGroup},

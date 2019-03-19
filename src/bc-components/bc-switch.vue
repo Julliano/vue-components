@@ -21,7 +21,7 @@
 </template>
 
 <script>
-    import DgtSwitch from '../components/dgt-switch';
+    import DgtSwitch from '../components/dgt-switch.vue';
     export default {
         name: 'bc-switch',
         components: {DgtSwitch},
