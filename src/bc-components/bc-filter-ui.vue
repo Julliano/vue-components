@@ -64,11 +64,11 @@
 
 <script>
     import BcFilterGroup from './bc-filter-group';
-    import BcFilterAttrib from './bc-filter-attib';
+    import BcFilterAttrib from './bc-filter-attrib';
     import BcFilterOperators from './bc-filter-operators';
     import BcFilterFields from './bc-filter-fields';
-    import bcService from './services/bc-services.js';
     import BcFilterSourceMenu from './bc-filter-source-menu';
+    import bcService from './services/bc-services.js';
 
     export default {
         name: 'bc-filter-ui',

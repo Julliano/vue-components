@@ -83,8 +83,8 @@
         },
         watch: {
             isOpened: {
-                handler: () => {
-                    if (isOpened) setContextMenuPosition();
+                handler() {
+                    if (this.isOpened) this.setContextMenuPosition();
                 }
             }
         }
