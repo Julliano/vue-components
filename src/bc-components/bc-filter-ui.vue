@@ -25,9 +25,7 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <button class="btn btn-filter-icon" v-if="showSourceOption">
-                    <i class="mdi mdi-database"></i>
-                </button>
+                <bc-filter-source-menu v-if="showSourceOption"></bc-filter-source-menu>
                 <button class="btn btn-filter-icon" v-if="ui.id !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
@@ -65,15 +63,17 @@
 </template>
 
 <script>
-    import BcFilterGroup from './bc-filter-group.vue';
-    import BcFilterAttrib from './bc-filter-attrib.vue';
-    import BcFilterOperators from './bc-filter-operators.vue';
-    import BcFilterFields from './bc-filter-fields.vue';
+    import BcFilterGroup from './bc-filter-group';
+    import BcFilterAttrib from './bc-filter-attib';
+    import BcFilterOperators from './bc-filter-operators';
+    import BcFilterFields from './bc-filter-fields';
     import bcService from './services/bc-services.js';
+    import BcFilterSourceMenu from './bc-filter-source-menu';
 
     export default {
         name: 'bc-filter-ui',
         components: {
+            BcFilterSourceMenu,
             BcFilterAttrib,
             BcFilterGroup,
             BcFilterOperators,
@@ -96,6 +96,11 @@
         },
         created() {
             this.uis = bcService.getLabelUIs(this.logicNameUis);
+        },
+        computed: {
+            pageText() {
+                return this.$store.state.i18n.languageText;
+            }
         },
         methods: {
             async fireUISelected(e) {

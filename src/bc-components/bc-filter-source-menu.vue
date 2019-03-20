@@ -1,0 +1,106 @@
+<style lang="scss">
+    @import "../styles/_variables";
+    @import "../styles/_inputs";
+
+    .bc-filter-source-menu {
+        .popover {
+            padding: 10px;
+
+            .dgt-list-component {
+                padding: 0 0 15px 20px;
+                width: 100%;
+
+                .list {
+                    max-height: 120px !important;
+                    overflow-y: auto;
+                }
+            }
+        }
+    }
+</style>
+
+<template>
+    <dgt-context-menu :close-on-click="true" class="bc-filter-source-menu">
+        <template slot="button">
+            <i class="mdi mdi-database"></i>
+        </template>
+        <template slot="content">
+            <b>{{ pageText.sources }}</b>
+            <div class="field width-full input-search">
+                <i class="mdi mdi-magnify"></i>
+                <input type="search" v-model="searchInput" :placeholder="pageText.createSearch" class="inp big">
+            </div>
+            <dgt-list :list="sourcesList" class="custom">
+                <template slot="main-slot" slot-scope="slotProps">
+                    <table class="list">
+                        <tr class="source-item" v-for="(source, index) in sourcesList" :key="index">
+                            <td class="name-source">{{ source.name }}</td>
+                        </tr>
+                    </table>
+                </template>
+            </dgt-list>
+            <div class="text-center">
+                <button @click="save" class="btn btn-primary">{{ pageText.save }}</button>
+                <button @click="cancel" class="btn">{{ pageText.cancel }}</button>
+            </div>
+        </template>
+    </dgt-context-menu>
+</template>
+
+<script>
+
+    import dgtContextMenu from '../components/dgt-context-menu';
+    import dgtList from '../components/dgt-list';
+
+    const sources = [
+        {name: 'Google', id: 208, type: 'WEB_SERVICES'},
+        {name: 'Guardião', id: 0, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
+        {name: 'Apple', id: 209, type: 'WEB_SERVICES'}
+    ];
+
+    export default {
+        name: 'bc-filter-source-modal',
+        components: {
+            dgtContextMenu,
+            dgtList
+        },
+        props: {
+            searchProp: String,
+            sourcesProp: Array
+        },
+        data() {
+            return {
+                searchInput: this.searchProp || '',
+                sources: this.sourcesProp || sources
+            };
+        },
+        computed: {
+            pageText() {
+                return this.$store.state.i18n.languageText;
+            },
+            sourcesList() {
+                return this.sources;
+            }
+        },
+        methods: {
+            save() {
+                console.log('save');
+            },
+            cancel() {
+                console.log('cancel');
+            }
+        }
+    };
+</script>
