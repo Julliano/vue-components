@@ -101,7 +101,12 @@
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
                 this.$emit('meta-ui-selected', metaUI);
-                this.attribs = await bcService.getAttibsFromUI(metaUI.id);
+                this.attribs = await bcService.getAttribsFromUI(metaUI.id);
+                this.attribs.sort((e1, e2) => {
+                    const l1 = e1.label.normalize('NFD');
+                    const l2 = e2.label.normalize('NFD');
+                    return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
+                });
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);

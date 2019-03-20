@@ -22,7 +22,7 @@ export default {
         // return response.data.searchResult;
     },
 
-    async getAttibsFromUI(logicName) {
+    async getAttribsFromUI(logicName) {
         return await dispatcher
             .doGet(`${logicName}/attributes?fields=label,type&flags=filterable,visible`);
     }
