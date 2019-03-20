@@ -3,7 +3,7 @@
         <bc-filter-group v-model="operator" ref="uiGroup">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
                           :ui="ui"
-                          :meta-uis="metadata.uis"
+                          :logic-name-uis="listUis"
                           :show-source-option="ui.id !== null"
                           @meta-ui-selected="onMetaUISelected($event, ui)"
                           @meta-ui-removed="onMetaUIRemoved(idx)"
@@ -14,10 +14,10 @@
 
 <script>
 
-    import metadata from './metadata';
+    import metadata from './metadata.json';
 
-    import BcFilterGroup from './bc-filter-group';
-    import BcFilterUi from './bc-filter-ui';
+    import BcFilterGroup from './bc-filter-group.vue';
+    import BcFilterUi from './bc-filter-ui.vue';
     export default {
         name: 'bc-filter',
         components: {BcFilterUi, BcFilterGroup},
@@ -28,7 +28,8 @@
                 uis: [{
                     id: null,
                     attribs: []
-                }]
+                }],
+                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda']
             };
         },
         methods: {

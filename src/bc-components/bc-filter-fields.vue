@@ -33,10 +33,17 @@
 </template>
 
 <script>
-    import metadata from './metadata';
+    import metadata from './metadata.json';
+    import textField from './bc-field-options/bc-text-field.vue';
+    import textCombo from './bc-field-options/bc-text-combo.vue';
+    import numberInput from './bc-field-options/bc-int-input.vue';
+    import numberInputs from './bc-field-options/bc-int-inputs.vue';
 
     export default {
         name: 'bc-filter-field',
+        components: {
+            textField
+        },
         props: {
             tipoOperador: {
                 type: String,
@@ -55,6 +62,20 @@
                 metaFields: metadata.fields[this.tipoOperador]
             };
         },
+        computed: {
+            dynamicComponent() {
+                switch (this.tipoOperador) {
+                    case 'texto':
+                        return this.checkTextField();
+                    case 'inteiro':
+                        return this.checkNumberField();
+                    case 'decimal':
+                        return this.checkNumberField();
+                    default:
+                        return null;
+                }
+            }
+        },
         methods: {
             fireFieldSelected(e) {
                 const metaField = this.metaFields[e.target.value];
@@ -64,6 +85,20 @@
             },
             fireFieldRemoved() {
                 this.$emit('meta-field-removed');
+            },
+            checkTextField() {
+                if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
+                    return null;
+                } else if (this.operador.autoComplete) {
+                    return textCombo;
+                }
+                return textField;
+            },
+            checkNumberField() {
+                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    return numberInputs;
+                }
+                return numberInput;
             }
         },
         watch: {

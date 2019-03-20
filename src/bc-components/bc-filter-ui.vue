@@ -16,9 +16,9 @@
     <div>
         <div class="bc-filter-ui">
             <div>
-                <select class="inp" @change="fireUISelected">
+                <select class="inp" @change="fireUISelected" v-if="uis">
                     <option value="" disabled :selected="ui.id === null">Selecione</option>
-                    <option v-for="(opt, idx) in metaUis" :key="idx"
+                    <option v-for="(opt, idx) in uis" :key="idx"
                             :value="idx"
                             :selected="ui.id === opt.id"
                     >
@@ -67,7 +67,7 @@
     import BcFilterAttrib from './bc-filter-attib';
     import BcFilterOperators from './bc-filter-operators';
     import BcFilterFields from './bc-filter-fields';
-    import metadata from './metadata';
+    import bcService from './services/bc-services.js';
     import BcFilterSourceMenu from './bc-filter-source-menu';
 
     export default {
@@ -77,20 +77,25 @@
             BcFilterAttrib,
             BcFilterGroup,
             BcFilterOperators,
-            BcFilterFields
+            BcFilterFields,
+            bcService
         },
         props: {
             ui: Object,
-            metaUis: Array,
+            logicNameUis: Array,
             showSourceOption: Boolean
         },
         data() {
             return {
-                attribs: metadata.attribs,
+                attribs: [],
                 operators: [],
                 atribType: [],
-                fields: []
+                fields: [],
+                uis: []
             };
+        },
+        created() {
+            this.uis = bcService.getLabelUIs(this.logicNameUis);
         },
         computed: {
             pageText() {
@@ -98,18 +103,19 @@
             }
         },
         methods: {
-            fireUISelected(e) {
-                const metaUI = this.metaUis[e.target.value];
+            async fireUISelected(e) {
+                const metaUI = this.uis[e.target.value];
                 this.$emit('meta-ui-selected', metaUI);
+                this.attribs = await bcService.getAttibsFromUI(metaUI.id);
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
 
             onMetaAttribSelected(metaAttrib, attrib, idx) {
-                attrib.id = metaAttrib.id;
+                attrib.id = metaAttrib.name;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
-                this.atribType[idx] = metaAttrib.tipo;
+                this.atribType[idx] = metaAttrib.type;
                 if (this.operators[idx]) {
                     this.operators.splice(idx, 1);
                     this.fields.splice(idx, 1);

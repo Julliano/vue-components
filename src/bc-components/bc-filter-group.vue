@@ -78,7 +78,7 @@
 </template>
 
 <script>
-    import BcSwitch from './bc-switch';
+    import BcSwitch from './bc-switch.vue';
 
     export default {
         name: 'bc-filter-group',
