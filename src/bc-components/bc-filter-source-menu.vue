@@ -25,10 +25,10 @@
             <i class="mdi mdi-database"></i>
         </template>
         <template slot="content">
-            <b>{{ pageText.sources }}</b>
+            <b>{{ $t('sources') }}</b>
             <div class="field width-full input-search">
                 <i class="mdi mdi-magnify"></i>
-                <input type="search" v-model="searchInput" :placeholder="pageText.createSearch" class="inp big">
+                <input type="search" v-model="searchInput" :placeholder="$t('createSearch')" class="inp big">
             </div>
             <dgt-list :list="sourcesList" class="custom">
                 <template slot="main-slot" slot-scope="slotProps">
@@ -40,8 +40,8 @@
                 </template>
             </dgt-list>
             <div class="text-center">
-                <button @click="save" class="btn btn-primary">{{ pageText.save }}</button>
-                <button @click="cancel" class="btn">{{ pageText.cancel }}</button>
+                <button @click="save" class="btn btn-primary">{{$t('save')}}</button>
+                <button @click="cancel" class="btn">{{$t('cancel')}}</button>
             </div>
         </template>
     </dgt-context-menu>
@@ -87,9 +87,6 @@
             };
         },
         computed: {
-            pageText() {
-                return this.$store.state.i18n.languageText;
-            },
             sourcesList() {
                 return this.sources;
             }

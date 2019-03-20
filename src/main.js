@@ -3,10 +3,19 @@ import App from './App.vue';
 import BCShowcase from './BCShowcase.vue';
 import VueRouter from 'vue-router';
 import VueTheMask from 'vue-the-mask';
-import store from './store';
+import VueI18n from 'vue-i18n';
 
 Vue.use(VueRouter);
+Vue.use(VueI18n);
 Vue.use(VueTheMask);
+
+const messagesPt = require('.//i18n/pt_br.js');
+const messagesEs = require('.//i18n/es.js');
+const i18n = new VueI18n({
+    locale: 'pt_br',
+    fallbackLocale: 'pt_br',
+    messages: { pt_br: messagesPt, es: messagesEs }
+});
 
 const routes = [
     {path: '/', component: App},
@@ -18,6 +27,6 @@ const router = new VueRouter({
 
 new Vue({
     router,
-    store,
+    i18n,
     template: '<router-view/>'
 }).$mount('#app');
