@@ -29,6 +29,8 @@
 
 <script>
 
+    import VueTheMask from 'vue-the-mask';
+
     export default {
         name: 'bc-int-input',
         props: {

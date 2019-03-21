@@ -21,10 +21,12 @@
 <template>
     <div>
         <div class="bc-int-inputs">
-            <input id="date1" name="initialDate" type="date"
-                    class="inp big" v-model="initialDate">
-            <input id="date2" name="finalDate" type="date"
-                    class="inp big" v-model="finalDate">
+            <div class="options-container">
+                <input id="date1" name="initialDate" type="date"
+                        class="inp big" v-model="initialDate">
+                <input id="date2" name="finalDate" type="date"
+                        class="inp big" v-model="finalDate">
+            </div>
         </div>
     </div>
 </template>
