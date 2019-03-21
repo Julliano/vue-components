@@ -12,6 +12,7 @@ const jsonfile = require('jsonfile');
 const fs = require('fs');
 const glob = require('glob');
 const nodeResolve = require('rollup-plugin-node-resolve');
+const commonJs = require('rollup-plugin-commonjs');
 
 const { version } = require('./package.json');
 const packageJson = jsonfile.readFileSync('./package.json');
@@ -108,7 +109,6 @@ gulp.task('build', ['compile-vue-components', 'generate-dist-package-json', 'gen
 
 gulp.task('compile-bc-components', async () => {
     const bcFilter = bccPaths.src+'/bc-filter.vue';
-    console.log(bcFilter);
     Object.keys(configs).forEach(async function (key) {
         const config = configs[key];
         console.log(chalk.cyan(`Building ${key}: ${config.output}`));
@@ -125,6 +125,7 @@ gulp.task('compile-bc-components', async () => {
                     ]
                 }),
                 json(),
+                commonJs(),
                 nodeResolve({module: true})
             ].concat(config.plugins || [])
         };
@@ -138,7 +139,6 @@ gulp.task('compile-bc-components', async () => {
         };
         await bundle.write(outputOptions);
     });
-
 });
 
 gulp.task('copy-dist-package-json-bcc', () => {
