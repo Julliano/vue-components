@@ -17,14 +17,14 @@
         <div class="bc-filter-attrib">
             <div class="options-container">
                 <select class="inp" @change="fireAttribSelected">
-                    <option value="" disabled :selected="attrib.id === null">Selecione</option>
+                    <option value="" disabled :selected="attrib.id === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
                             :value="idx" :selected="attrib.name === opt.name"
                     >
                         {{opt.label}}
                     </option>
                 </select>
-                <button class="btn btn-small btn-filter" v-if="!attrib.id">Novo grupo</button>
+                <button class="btn btn-small btn-filter" v-if="!attrib.id">{{'newGroup' | i18n}}</button>
                 <slot name="operator"></slot>
             </div>
         </div>
@@ -33,8 +33,11 @@
 
 <script>
 
+    import i18n from './utils/i18n.js';
+
     export default {
         name: 'bc-filter-attrib',
+        mixins: [i18n.mixin],
         props: {
             attrib: {
                 id: ''

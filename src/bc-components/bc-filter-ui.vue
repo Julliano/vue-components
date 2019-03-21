@@ -17,7 +17,7 @@
         <div class="bc-filter-ui">
             <div>
                 <select class="inp" @change="fireUISelected" v-if="uis">
-                    <option value="" disabled :selected="ui.id === null">{{$t('select')}}</option>
+                    <option value="" disabled :selected="ui.id === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in uis" :key="idx"
                             :value="idx"
                             :selected="ui.id === opt.id"

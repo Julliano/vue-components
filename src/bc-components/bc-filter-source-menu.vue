@@ -25,10 +25,10 @@
             <i class="mdi mdi-database"></i>
         </template>
         <template slot="content">
-            <b>{{ $t('sources') }}</b>
+            <b>{{ 'sources' | i18n}}</b>
             <div class="field width-full input-search">
                 <i class="mdi mdi-magnify"></i>
-                <input type="search" v-model="searchInput" :placeholder="$t('createSearch')" class="inp big">
+                <input type="search" v-model="searchInput" :placeholder="'createSearch' | i18n" class="inp big">
             </div>
             <dgt-list :list="sourcesList" class="custom">
                 <template slot="main-slot" slot-scope="slotProps">
@@ -40,8 +40,8 @@
                 </template>
             </dgt-list>
             <div class="text-center">
-                <button @click="save" class="btn btn-primary">{{$t('save')}}</button>
-                <button @click="cancel" class="btn">{{$t('cancel')}}</button>
+                <button @click="save" class="btn btn-primary">{{'save' | i18n}}</button>
+                <button @click="cancel" class="btn">{{'cancel' | i18n}}</button>
             </div>
         </template>
     </dgt-context-menu>
@@ -51,6 +51,7 @@
 
     import dgtContextMenu from '../components/dgt-context-menu.vue';
     import dgtList from '../components/dgt-list.vue';
+    import i18n from './utils/i18n.js';
 
     const sources = [
         {name: 'Google', id: 208, type: 'WEB_SERVICES'},
@@ -72,6 +73,7 @@
 
     export default {
         name: 'bc-filter-source-modal',
+        mixins: [i18n.mixin],
         components: {
             dgtContextMenu,
             dgtList

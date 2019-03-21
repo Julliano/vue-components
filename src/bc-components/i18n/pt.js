@@ -4,7 +4,5 @@ export default {
     createSearch: 'Pesquisar',
     cancel: 'Cancelar',
     save: 'Salvar',
-    filter: {
-        label: 'Teste 2'
-    }
+    newGroup: 'Novo grupo'
 };

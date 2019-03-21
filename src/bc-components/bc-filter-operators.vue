@@ -18,7 +18,7 @@
         <div class="bc-filter-operator">
             <div class="options-container">
                 <select class="inp" @change="fireOperatorSelected">
-                    <option value="" disabled  :selected="operator.id === null">Selecione</option>
+                    <option value="" disabled  :selected="operator.id === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
                         :selected="operator.id === opt.id">
                         {{opt.name}}
@@ -37,9 +37,11 @@
 <script>
 
     import metadata from './metadata.json';
+    import i18n from './utils/i18n.js';
 
     export default {
         name: 'bc-filter-operator',
+        mixins: [i18n.mixin],
         props: {
             tipoOperador: {
                 type: String,
