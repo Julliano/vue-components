@@ -8,7 +8,7 @@
 
             .dgt-list-component {
                 padding: 0 0 15px 20px;
-                width: 100%;
+                width: 250px;
 
                 .list {
                     max-height: 120px !important;
@@ -20,7 +20,7 @@
 </style>
 
 <template>
-    <dgt-context-menu :close-on-click="true" class="bc-filter-source-menu">
+    <dgt-context-menu :close-on-click="false" class="bc-filter-source-menu" ref="menu">
         <template slot="button">
             <i class="mdi mdi-database"></i>
         </template>
@@ -88,15 +88,23 @@
         },
         computed: {
             sourcesList() {
-                return this.sources;
+                if (!this.searchInput) {
+                    return this.sources.slice();
+                }
+                return this.sources.filter((source) => {
+                    let searchText = this.searchInput.toLowerCase();
+                    return source.name && source.name.toLowerCase().indexOf(searchText) >= 0;
+                });
             }
         },
         methods: {
             save() {
                 console.log('save');
+                this.$refs.menu.onClickHeader();
             },
             cancel() {
                 console.log('cancel');
+                this.$refs.menu.onClickHeader();
             }
         }
     };

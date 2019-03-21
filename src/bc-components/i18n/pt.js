@@ -3,5 +3,8 @@ export default {
     sources: 'Fontes',
     createSearch: 'Pesquisar',
     cancel: 'Cancelar',
-    save: 'Salvar'
+    save: 'Salvar',
+    filter: {
+        label: 'Teste 2'
+    }
 };

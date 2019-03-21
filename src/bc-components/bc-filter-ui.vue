@@ -17,7 +17,7 @@
         <div class="bc-filter-ui">
             <div>
                 <select class="inp" @change="fireUISelected" v-if="uis">
-                    <option value="" disabled :selected="ui.id === null">Selecione</option>
+                    <option value="" disabled :selected="ui.id === null">{{$t('select')}}</option>
                     <option v-for="(opt, idx) in uis" :key="idx"
                             :value="idx"
                             :selected="ui.id === opt.id"
@@ -69,9 +69,11 @@
     import BcFilterFields from './bc-filter-fields.vue';
     import BcFilterSourceMenu from './bc-filter-source-menu.vue';
     import bcService from './services/bc-services.js';
+    import i18n from './utils/i18n.js';
 
     export default {
         name: 'bc-filter-ui',
+        mixins: [i18n.mixin],
         components: {
             BcFilterSourceMenu,
             BcFilterAttrib,
@@ -107,6 +109,9 @@
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+                this.operators = [];
+                this.atribType = [];
+                this.fields = [];
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);

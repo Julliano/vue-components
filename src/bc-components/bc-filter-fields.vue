@@ -17,13 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <select class="inp" @change="fireFieldSelected">
-                    <option value="" disabled :selected="field.id === null">Selecione</option>
-                    <option v-for="(opt, idx) in metaFields" :key="idx"
-                            :value="idx" :selected="field.id === opt.id">
-                        {{opt.name}}
-                    </option>
-                </select>
+                <component :is="dynamicComponent" :tipo="tipoOperador"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -38,6 +32,9 @@
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
+    import dateCombo from './bc-field-options/bc-date-combo.vue';
+    import dateInput from './bc-field-options/bc-date-input.vue';
+    import dateInputs from './bc-field-options/bc-date-inputs.vue';
 
     export default {
         name: 'bc-filter-field',
@@ -65,12 +62,20 @@
         computed: {
             dynamicComponent() {
                 switch (this.tipoOperador) {
-                    case 'texto':
+                    case '_texto_delimitado':
                         return this.checkTextField();
-                    case 'inteiro':
+                    case '_inteiro_32':
                         return this.checkNumberField();
-                    case 'decimal':
+                    case '_inteiro_64':
                         return this.checkNumberField();
+                    case '_decimal_32':
+                        return this.checkNumberField();
+                    case '_decimal_64':
+                        return this.checkNumberField();
+                    case '_data':
+                        return this.checkDataField();
+                    case '_data_hora':
+                        return this.checkDataField();
                     default:
                         return null;
                 }
@@ -99,6 +104,14 @@
                     return numberInputs;
                 }
                 return numberInput;
+            },
+            checkDataField() {
+                if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    return dateInputs;
+                } else if (this.operador.type === 'LESS_THAN') {
+                    return dateCombo;
+                }
+                return dateInput;
             }
         },
         watch: {

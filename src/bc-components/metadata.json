@@ -14,61 +14,8 @@
         }
     ],
 
-    "attribs": [
-        {
-            "id": 1,
-            "name": "Texto",
-            "tipo": "texto"
-        },
-        {
-            "id": 2,
-            "name": "Inteiro",
-            "tipo": "inteiro"
-        },
-        {
-            "id": 3,
-            "name": "Decimal",
-            "tipo": "decimal"
-        },
-        {
-            "id": 4,
-            "name": "Meta seleção",
-            "tipo": "meta_selecao"
-        },
-        {
-            "id": 5,
-            "name": "Meta seleção não valorada",
-            "tipo": "meta_selecao_nao_valorado"
-        },
-        {
-            "id": 6,
-            "name": "Data",
-            "tipo": "data"
-        },
-        {
-            "id": 7,
-            "name": "Ano",
-            "tipo": "ano"
-        },
-        {
-            "id": 8,
-            "name": "Horario",
-            "tipo": "horario"
-        },
-        {
-            "id": 9,
-            "name": "Data / hora",
-            "tipo": "data_hora"
-        },
-        {
-            "id": 10,
-            "name": "Outros",
-            "tipo": "outros"
-        }
-    ],
-
     "operators": {
-        "texto": [
+        "_texto_delimitado": [
             {
                 "id": 1,
                 "name": "Qualquer conteúdo",
@@ -100,7 +47,7 @@
                 "autoComplete": false
             }
         ],
-        "inteiro": [
+        "_inteiro_32": [
             {
                 "id": 1,
                 "name": "Diferente",
@@ -142,7 +89,7 @@
                 "type": "GREATHER_THAN_OR_EQUAL"
             }
         ],
-        "decimal": [
+        "_inteiro_64": [
             {
                 "id": 1,
                 "name": "Diferente",
@@ -184,7 +131,91 @@
                 "type": "GREATHER_THAN_OR_EQUAL"
             }
         ],
-        "meta_selecao": [
+        "_decimal_32": [
+            {
+                "id": 1,
+                "name": "Diferente",
+                "type": "NOT_EQUAL"
+            },
+            {
+                "id": 2,
+                "name": "Igual",
+                "type": "EQUAL"
+            },
+            {
+                "id": 3,
+                "name": "Intervalo",
+                "type": "INTERVAL"
+            },
+            {
+                "id": 4,
+                "name": "Fora do intervalo",
+                "type": "OUT_OF_INTERVAL"
+            },
+            {
+                "id": 5,
+                "name": "Menor que",
+                "type": "LESS_THAN"
+            },
+            {
+                "id": 6,
+                "name": "Menor ou igual",
+                "type": "LESS_THAN_OR_EQUAL"
+            },
+            {
+                "id": 7,
+                "name": "Maior que",
+                "type": "GREATHER_THAN"
+            },
+            {
+                "id": 8,
+                "name": "Maior ou igual",
+                "type": "GREATHER_THAN_OR_EQUAL"
+            }
+        ],
+        "_decimal_64": [
+            {
+                "id": 1,
+                "name": "Diferente",
+                "type": "NOT_EQUAL"
+            },
+            {
+                "id": 2,
+                "name": "Igual",
+                "type": "EQUAL"
+            },
+            {
+                "id": 3,
+                "name": "Intervalo",
+                "type": "INTERVAL"
+            },
+            {
+                "id": 4,
+                "name": "Fora do intervalo",
+                "type": "OUT_OF_INTERVAL"
+            },
+            {
+                "id": 5,
+                "name": "Menor que",
+                "type": "LESS_THAN"
+            },
+            {
+                "id": 6,
+                "name": "Menor ou igual",
+                "type": "LESS_THAN_OR_EQUAL"
+            },
+            {
+                "id": 7,
+                "name": "Maior que",
+                "type": "GREATHER_THAN"
+            },
+            {
+                "id": 8,
+                "name": "Maior ou igual",
+                "type": "GREATHER_THAN_OR_EQUAL"
+            }
+        ],
+        "_tipo_selecao": [
             {
                 "id": 1,
                 "name": "Diferente",
@@ -223,7 +254,7 @@
                 "type": "EQUAL"
             }
         ],
-        "data": [
+        "_data": [
             {
                 "id": 1,
                 "name": "Diferente",
@@ -354,7 +385,7 @@
                 "type": "GREATHER_THAN_OR_EQUAL"
             }
         ],
-        "data_hora": [
+        "_data_hora": [
             {
                 "id": 1,
                 "name": "Diferente",

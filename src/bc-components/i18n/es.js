@@ -1,5 +1,5 @@
 export default {
-    select: 'Selecione', // Todo tradução
+    select: 'Selecionar', // Todo tradução
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
