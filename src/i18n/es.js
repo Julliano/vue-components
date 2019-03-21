@@ -1,4 +1,4 @@
-export const spanish = {
+module.exports = {
     select: 'Selecione', // Todo tradução
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',

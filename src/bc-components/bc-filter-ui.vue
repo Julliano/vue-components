@@ -97,11 +97,6 @@
         created() {
             this.uis = bcService.getLabelUIs(this.logicNameUis);
         },
-        computed: {
-            pageText() {
-                return this.$store.state.i18n.languageText;
-            }
-        },
         methods: {
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];

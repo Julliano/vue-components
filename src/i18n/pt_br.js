@@ -1,4 +1,4 @@
-export const portuguese = {
+module.exports = {
     select: 'Selecione',
     sources: 'Fontes',
     createSearch: 'Pesquisar',
