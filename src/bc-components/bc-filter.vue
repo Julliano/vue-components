@@ -8,6 +8,7 @@
                           @meta-ui-selected="onMetaUISelected($event, ui)"
                           @meta-ui-removed="onMetaUIRemoved(idx)"
             ></bc-filter-ui>
+            {{'filter.label' | i18n }}
         </bc-filter-group>
     </div>
 </template>
@@ -18,8 +19,11 @@
 
     import BcFilterGroup from './bc-filter-group.vue';
     import BcFilterUi from './bc-filter-ui.vue';
+    import i18n from './utils/i18n.js';
+
     export default {
         name: 'bc-filter',
+        mixins: [i18n.mixin],
         components: {BcFilterUi, BcFilterGroup},
         data() {
             return {

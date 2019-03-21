@@ -1,5 +1,5 @@
 module.exports = {
-    select: 'Selecione', // Todo tradução
+    select: 'Seleccionar', // Todo tradução
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
