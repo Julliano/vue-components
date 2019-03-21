@@ -112,6 +112,9 @@
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+                this.operators = [];
+                this.atribType = [];
+                this.fields = [];
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);

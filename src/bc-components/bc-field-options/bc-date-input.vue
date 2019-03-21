@@ -6,9 +6,6 @@
         display: inline-flex;
         flex-direction: column;
         margin-left: 5px;
-        input {
-            width: 40px;
-        }
     }
     .options-container {
         display: inline-flex;
@@ -20,8 +17,8 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input class="inp" type="tel" v-mask="'#########'" v-model="field" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64'">
-                <input class="inp" type="number" :step="0.01" v-model="field" v-else>
+                <input id="date" name="finalDate" type="date"
+                    class="inp big" v-model="date">
             </div>
         </div>
     </div>
@@ -30,18 +27,15 @@
 <script>
 
     export default {
-        name: 'bc-int-input',
-        props: {
-            tipo: String
-        },
+        name: 'bc-date-input',
         data() {
             return {
-                field: ''
+                date: ''
             };
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.field);
+                this.$emit('meta-field-selected', this.date);
             }
         }
     };
