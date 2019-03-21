@@ -25,7 +25,8 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <bc-filter-source-menu v-if="showSourceOption"></bc-filter-source-menu>
+                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.name"
+                    @apply="applySelectedFilters" :sourcesSelectedProp="ui.sourcesSelected"></bc-filter-source-menu>
                 <button class="btn btn-filter-icon" v-if="ui.id !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
@@ -100,6 +101,10 @@
             this.uis = bcService.getLabelUIs(this.logicNameUis);
         },
         methods: {
+            applySelectedFilters(sourcesSelected) {
+                this.ui.sourcesSelected = sourcesSelected;
+                this.$forceUpdate();
+            },
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
                 this.$emit('meta-ui-selected', metaUI);
