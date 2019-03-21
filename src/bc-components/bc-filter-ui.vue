@@ -63,11 +63,11 @@
 </template>
 
 <script>
-    import BcFilterGroup from './bc-filter-group';
-    import BcFilterAttrib from './bc-filter-attrib';
-    import BcFilterOperators from './bc-filter-operators';
-    import BcFilterFields from './bc-filter-fields';
-    import BcFilterSourceMenu from './bc-filter-source-menu';
+    import BcFilterGroup from './bc-filter-group.vue';
+    import BcFilterAttrib from './bc-filter-attrib.vue';
+    import BcFilterOperators from './bc-filter-operators.vue';
+    import BcFilterFields from './bc-filter-fields.vue';
+    import BcFilterSourceMenu from './bc-filter-source-menu.vue';
     import bcService from './services/bc-services.js';
 
     export default {

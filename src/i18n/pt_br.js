@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     select: 'Selecione',
     sources: 'Fontes',
     createSearch: 'Pesquisar',

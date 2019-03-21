@@ -49,8 +49,8 @@
 
 <script>
 
-    import dgtContextMenu from '../components/dgt-context-menu';
-    import dgtList from '../components/dgt-list';
+    import dgtContextMenu from '../components/dgt-context-menu.vue';
+    import dgtList from '../components/dgt-list.vue';
 
     const sources = [
         {name: 'Google', id: 208, type: 'WEB_SERVICES'},

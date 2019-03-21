@@ -9,8 +9,8 @@ Vue.use(VueRouter);
 Vue.use(VueI18n);
 Vue.use(VueTheMask);
 
-const messagesPt = require('.//i18n/pt_br.js');
-const messagesEs = require('.//i18n/es.js');
+const messagesPt = require('./i18n/pt_br.js');
+const messagesEs = require('./i18n/es.js');
 const i18n = new VueI18n({
     locale: 'pt_br',
     fallbackLocale: 'pt_br',

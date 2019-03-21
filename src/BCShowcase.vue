@@ -18,22 +18,12 @@
 </template>
 
 <script>
-    import bcFilter from './bc-components/bc-filter';
+    import bcFilter from './bc-components/bc-filter.vue';
 
     export default {
         name: 'app',
         components: {
             bcFilter
-        },
-        created() {
-            switch (navigator.language) {
-                case 'es':
-                    this.$store.commit('setLanguageText', 'es');
-                    break;
-                default:
-                    this.$store.commit('setLanguageText', 'pt-BR');
-                    break;
-            }
         }
     };
 </script>
