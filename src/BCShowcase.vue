@@ -13,7 +13,7 @@
         <h3>BC Components Showcase</h3>
         <hr/>
         <h4>bc-filter</h4>
-        <bc-filter></bc-filter>
+        <bc-filter :list-uis="listUis"></bc-filter>
     </div>
 </template>
 
@@ -24,6 +24,11 @@
         name: 'app',
         components: {
             bcFilter
+        },
+        data() {
+            return {
+                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda']
+            };
         }
     };
 </script>
