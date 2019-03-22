@@ -2,7 +2,7 @@
     @import "../styles/variables";
     @import "../styles/buttons";
 
-    .bc-filter-operator {
+    .bc-date-combo {
         display: inline-flex;
         flex-direction: column;
         margin-left: 5px;
@@ -15,20 +15,15 @@
 
 <template>
     <div>
-        <div class="bc-filter-operator">
+        <div class="bc-date-combo">
             <div class="options-container">
-                <select class="inp" @change="fireOperatorSelected">
-                    <option value="" disabled  :selected="operator.id === null">Selecione</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
-                        :selected="operator.id === opt.id">
-                        {{opt.name}}
+                <select class="inp" @change="fireDateSelected">
+                    <option value="" disabled :selected="dateSelected.id === null">Selecione</option>
+                    <option v-for="(date, idx) in dates" :key="idx" :value="idx"
+                        :selected="dateSelected.id === date.id">
+                            {{date.label}}
                     </option>
                 </select>
-                <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="operator && !operator.id">
-                    <i class="mdi mdi-close"></i>
-                </button>
-                <slot name="field"></slot>
             </div>
         </div>
     </div>
@@ -36,53 +31,45 @@
 
 <script>
 
-    import metadata from '../metadata.json';
-
     export default {
         name: 'bc-date-combo',
-        props: {
-            tipoOperador: {
-                type: String,
-                default: null
-            },
-            operador: {
-                id: null
-            }
-        },
         data() {
             return {
-                operator: {
-                    id: null
-                },
-                metaOperators: []
+                dates: [
+                    {
+                        id: 1,
+                        label: 'Última semana'
+                    },
+                    {
+                        id: 2,
+                        label: 'Últimas 2 semanas'
+                    },
+                    {
+                        id: 3,
+                        label: 'Últimas 3 semanas'
+                    },
+                    {
+                        id: 4,
+                        label: 'Último mês'
+                    },
+                    {
+                        id: 5,
+                        label: 'Últimos 2 meses'
+                    },
+                    {
+                        id: 6,
+                        label: 'Últimos 3 meses'
+                    }
+                ],
+                dateSelected: {
+                    id: ''
+                }
             };
         },
-        created() {
-            this.metaOperators = metadata.operators[this.tipoOperador];
-        },
         methods: {
-            fireOperatorSelected(e) {
-                this.operator = this.metaOperators[e.target.value];
-                this.$emit('meta-operator-selected', this.operator);
-                this.$forceUpdate();
-            },
-            fireOperatorRemoved() {
-                this.$emit('meta-operator-removed');
-            },
-            repassMetaFieldSelected(param) {
-                this.$emit('meta-field-selected', param);
-            },
-            attribChanged() {
-                this.metaOperators = metadata.operators[this.tipoOperador];
-                this.operator = { id: null };
-                this.$forceUpdate();
-            }
-        },
-        watch: {
-            operador() {
-                if (this.operador) {
-                    this.operator = this.operador;
-                }
+            fireDateSelected(e) {
+                this.dateSelected = this.dates[e.target.value];
+                this.$emit('date-selected', this.dateSelected);
             }
         }
     };

@@ -7,7 +7,7 @@
         flex-direction: column;
         margin-left: 5px;
         input {
-            &:last-child {
+            &:not(:first-child) {
                 margin-left: 5px;
             }
         }
@@ -26,6 +26,8 @@
                         class="inp big" v-model="initialDate">
                 <input id="date2" name="finalDate" type="date"
                         class="inp big" v-model="finalDate">
+                <input id="hour" name="hour" type="time"
+                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
             </div>
         </div>
     </div>
@@ -41,12 +43,13 @@
         data() {
             return {
                 initialDate: '',
-                finalDate: ''
+                finalDate: '',
+                hour: ''
             };
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.initialDate, this.finalDate);
+                this.$emit('meta-field-selected', this.initialDate, this.finalDate, this.hour);
             }
         }
     };

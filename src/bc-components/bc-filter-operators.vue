@@ -58,7 +58,7 @@
             };
         },
         created() {
-            this.metaOperators = metadata.operators[this.tipoOperador];
+            this.metaOperators = metadata.operators[this.tipoOperador] ? metadata.operators[this.tipoOperador] : metadata.operators['outros'];
         },
         methods: {
             fireOperatorSelected(e) {

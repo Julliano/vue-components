@@ -17,7 +17,13 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <input class="inp" type="text" disabled v-model="field">
+                <select class="inp" @change="fireOperatorSelected" v-if="options">
+                    <option value="" disabled :selected="selectedOption.id === null">Selecione</option>
+                    <option v-for="(date, idx) in options" :key="idx" :value="idx"
+                        :selected="selectedOption.id === date.id">
+                            {{date.label}}
+                    </option>
+                </select>
             </div>
         </div>
     </div>
@@ -27,14 +33,20 @@
 
     export default {
         name: 'bc-text-combo',
+        props: {
+            options: Array
+        },
         data() {
             return {
-                field: 'Text Combo'
+                selectedOption: {
+                    id: ''
+                }
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('meta-field-selected', this.field);
+            fireFieldSelected(e) {
+                this.selectedOption = this.options[e.target.value];
+                this.$emit('option-selected', this.selectedOption);
             }
         }
     };

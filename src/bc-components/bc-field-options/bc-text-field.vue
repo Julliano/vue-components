@@ -17,7 +17,7 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field">
+                <input class="inp" type="text" v-model="field" @change="fireFieldSelected">
             </div>
         </div>
     </div>
@@ -34,7 +34,7 @@
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.field);
+                this.$emit('text-selected', this.field);
             }
         }
     };

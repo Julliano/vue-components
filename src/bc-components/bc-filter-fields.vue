@@ -17,6 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
+                <component :is="dynamicComponentDate" @data-option-selected="dateOptionSelected" @remove-fired="fireFieldRemoved"></component>
                 <component :is="dynamicComponent" :tipo="tipoOperador"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
@@ -32,6 +33,7 @@
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
+    import dateOptions from './bc-field-options/bc-date-options.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
     import dateInput from './bc-field-options/bc-date-input.vue';
     import dateInputs from './bc-field-options/bc-date-inputs.vue';
@@ -56,7 +58,8 @@
                 field: {
                     id: null
                 },
-                metaFields: metadata.fields[this.tipoOperador]
+                metaFields: metadata.fields[this.tipoOperador],
+                dateOption: {}
             };
         },
         computed: {
@@ -74,8 +77,20 @@
                         return this.checkNumberField();
                     case '_data':
                         return this.checkDataField();
+                    case '_hora':
+                        return this.checkNumberField();
                     case '_data_hora':
-                        return this.checkDataField();
+                        return this.checkDataHoraField();
+                    case 'outros':
+                        return textField;
+                    default:
+                        return null;
+                }
+            },
+            dynamicComponentDate() {
+                switch (this.tipoOperador) {
+                    case '_data':
+                        return dateOptions;
                     default:
                         return null;
                 }
@@ -90,6 +105,10 @@
             },
             fireFieldRemoved() {
                 this.$emit('meta-field-removed');
+            },
+            dateOptionSelected(option) {
+                this.dateOption = option;
+                this.$forceUpdate();
             },
             checkTextField() {
                 if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
@@ -106,9 +125,20 @@
                 return numberInput;
             },
             checkDataField() {
-                if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.dateOption.id) {
+                    if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                        return dateInputs;
+                    } else if (this.operador.type === 'PERIODO') {
+                        return dateCombo;
+                    }
+                    return dateInput;
+                }
+                return null;
+            },
+            checkDataHoraField() {
+                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
                     return dateInputs;
-                } else if (this.operador.type === 'LESS_THAN') {
+                } else if (this.operador.type === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;

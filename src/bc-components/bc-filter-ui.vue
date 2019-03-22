@@ -116,11 +116,38 @@
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
-
+            checkType(type) {
+                switch (type) {
+                    case '_texto_delimitado':
+                        return type;
+                    case '_inteiro_32':
+                        return type;
+                    case '_inteiro_64':
+                        return type;
+                    case '_decimal_32':
+                        return type;
+                    case '_decimal_64':
+                        return type;
+                    case '_tipo_selecao':
+                        return type;
+                    // case 'metaSelecaoValorada':
+                    //     return type;
+                    case '_data':
+                        return type;
+                    // case '_ano':
+                    //     return type;
+                    case '_hora':
+                        return type;
+                    case '_data_hora':
+                        return type;
+                    default:
+                        return 'outros';
+                }
+            },
             onMetaAttribSelected(metaAttrib, attrib, idx) {
                 attrib.id = metaAttrib.name;
                 const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
-                this.atribType[idx] = metaAttrib.type;
+                this.atribType[idx] = this.checkType(metaAttrib.type);
                 if (this.operators[idx]) {
                     this.operators.splice(idx, 1);
                     this.fields.splice(idx, 1);

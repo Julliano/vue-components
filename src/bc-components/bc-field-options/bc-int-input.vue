@@ -33,6 +33,9 @@
 
     export default {
         name: 'bc-int-input',
+        components: {
+            VueTheMask
+        },
         props: {
             tipo: String
         },

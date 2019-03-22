@@ -6,6 +6,9 @@
         display: inline-flex;
         flex-direction: column;
         margin-left: 5px;
+        #hour{
+            margin-left: 5px;
+        }
     }
     .options-container {
         display: inline-flex;
@@ -19,6 +22,8 @@
             <div class="options-container">
                 <input id="date" name="finalDate" type="date"
                     class="inp big" v-model="date">
+                <input id="hour" name="hour" type="time"
+                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
             </div>
         </div>
     </div>
@@ -28,14 +33,18 @@
 
     export default {
         name: 'bc-date-input',
+        props: {
+            tipo: String
+        },
         data() {
             return {
-                date: ''
+                date: '',
+                hour: ''
             };
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.date);
+                this.$emit('meta-field-selected', this.date, this.hour);
             }
         }
     };

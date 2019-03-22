@@ -40,6 +40,9 @@
 
     export default {
         name: 'bc-int-inputs',
+        components: {
+            VueTheMask
+        },
         props: {
             tipo: String
         },
@@ -51,7 +54,7 @@
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.field1, this.field2);
+                this.$emit('inputs-selected', this.field1, this.field2);
             }
         }
     };
