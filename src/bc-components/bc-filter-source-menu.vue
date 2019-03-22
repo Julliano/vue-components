@@ -39,11 +39,11 @@
                                     <input
                                         type="checkbox"
                                         class="inp"
-                                        :id="`${source.name}-${source.id}`"
+                                        :id="`${ui}-${source.name}-${source.id}`"
                                         :checked="source.checked"
                                         v-model="source.checked"
                                         :value="source.id">
-                                    <label :for="`${source.name}-${source.id}`">{{ source.name }}</label>
+                                    <label :for="`${ui}-${source.name}-${source.id}`">{{ source.name }}</label>
                                 </div>
                             </td>
                         </tr>
@@ -91,12 +91,14 @@
         },
         props: {
             searchProp: String,
+            uiProps: String,
             sourcesSelectedProp: Array
         },
         data() {
             return {
                 searchInput: this.searchProp || '',
-                sources: sourcesMock,
+                ui: this.uiProps,
+                sources: JSON.parse(JSON.stringify(sourcesMock)),
                 showList: true
             };
         },
@@ -115,7 +117,7 @@
             save() {
                 this.$refs.menu.onClickHeader();
                 this.searchInput = '';
-                this.$emit('apply', JSON.parse(JSON.stringify(this.sources.filter((source) => source.checked))));
+                this.$emit('apply', this.sources.filter((source) => source.checked));
             },
             cancel() {
                 outter: for (const source of this.sources || []) {

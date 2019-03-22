@@ -25,7 +25,7 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.name"
+                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.id"
                     @apply="applySelectedFilters" :sourcesSelectedProp="ui.sourcesSelected"></bc-filter-source-menu>
                 <button class="btn btn-filter-icon" v-if="ui.id !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
