@@ -17,7 +17,6 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponentDate" @data-option-selected="dateOptionSelected" @remove-fired="fireFieldRemoved"></component>
                 <component :is="dynamicComponent" :tipo="tipoOperador"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
@@ -33,7 +32,6 @@
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
-    import dateOptions from './bc-field-options/bc-date-options.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
     import dateInput from './bc-field-options/bc-date-input.vue';
     import dateInputs from './bc-field-options/bc-date-inputs.vue';
@@ -58,8 +56,7 @@
                 field: {
                     id: null
                 },
-                metaFields: metadata.fields[this.tipoOperador],
-                dateOption: {}
+                metaFields: metadata.fields[this.tipoOperador]
             };
         },
         computed: {
@@ -86,14 +83,6 @@
                     default:
                         return null;
                 }
-            },
-            dynamicComponentDate() {
-                switch (this.tipoOperador) {
-                    case '_data':
-                        return dateOptions;
-                    default:
-                        return null;
-                }
             }
         },
         methods: {
@@ -105,10 +94,6 @@
             },
             fireFieldRemoved() {
                 this.$emit('meta-field-removed');
-            },
-            dateOptionSelected(option) {
-                this.dateOption = option;
-                this.$forceUpdate();
             },
             checkTextField() {
                 if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
@@ -125,15 +110,12 @@
                 return numberInput;
             },
             checkDataField() {
-                if (this.dateOption.id) {
-                    if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
-                        return dateInputs;
-                    } else if (this.operador.type === 'PERIODO') {
-                        return dateCombo;
-                    }
-                    return dateInput;
+                if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    return dateInputs;
+                } else if (this.operador.type === 'PERIODO') {
+                    return dateCombo;
                 }
-                return null;
+                return dateInput;
             },
             checkDataHoraField() {
                 if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
