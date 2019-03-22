@@ -23,14 +23,14 @@
             <div class="options-container">
                 <component class="date-type" :is="dynamicComponentDate" @data-option-selected="dateOptionSelected"></component>
                 <select class="inp" @change="fireOperatorSelected" v-if="show">
-                    <option value="" disabled :selected="operator.id === null">{{'select' | i18n}}</option>
+                    <option value="" disabled :selected="operator.name === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
-                        :selected="operator.id === opt.id">
-                        {{opt.name}}
+                        :selected="operator.name === opt.name">
+                        {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="operator && !operator.id">
+                    v-if="operator && !operator.name">
                     <i class="mdi mdi-close"></i>
                 </button>
                 <slot name="field"></slot>
@@ -44,23 +44,28 @@
     import metadata from './metadata.json';
     import i18n from './utils/i18n.js';
     import dateOptions from './bc-field-options/bc-date-options.vue';
+    import bcService from './services/bc-services.js';
 
     export default {
         name: 'bc-filter-operator',
         mixins: [i18n.mixin],
         props: {
             tipoOperador: {
-                type: String,
-                default: null
+                type: String
             },
             operador: {
                 id: null
-            }
+            },
+            uiName: String,
+            attribName: String
+        },
+        components: {
+            bcService
         },
         data() {
             return {
                 operator: {
-                    id: null
+                    name: null
                 },
                 metaOperators: [],
                 dateOption: {},
@@ -80,7 +85,7 @@
             }
         },
         created() {
-            this.mountOperatorsDefault();
+            this.getOperators();
         },
         methods: {
             mountOperatorsDefault() {
@@ -90,6 +95,10 @@
                 this.operator = this.metaOperators[e.target.value];
                 this.$emit('meta-operator-selected', this.operator);
                 this.$forceUpdate();
+            },
+            async getOperators() {
+                this.metaOperators = await bcService.getOperators(this.uiName, this.attribName);
+                console.log(this.metaOperators);
             },
             fireOperatorRemoved() {
                 this.$emit('meta-operator-removed');
@@ -108,8 +117,8 @@
                 this.$emit('meta-field-selected', param);
             },
             attribChanged() {
-                this.metaOperators = metadata.operators[this.tipoOperador];
-                this.operator = { id: null };
+                this.getOperators();
+                this.operator = { name: null };
                 this.$forceUpdate();
             }
         },

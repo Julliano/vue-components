@@ -42,7 +42,7 @@
             textField
         },
         props: {
-            tipoOperador: {
+            tipoAttrib: {
                 type: String,
                 default: null
             },
@@ -56,12 +56,12 @@
                 field: {
                     id: null
                 },
-                metaFields: metadata.fields[this.tipoOperador]
+                metaFields: metadata.fields[this.tipoAttrib]
             };
         },
         computed: {
             dynamicComponent() {
-                switch (this.tipoOperador) {
+                switch (this.tipoAttrib) {
                     case '_texto_delimitado':
                         return this.checkTextField();
                     case '_inteiro_32':
@@ -96,7 +96,7 @@
                 this.$emit('meta-field-removed');
             },
             checkTextField() {
-                if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
+                if (this.operador.name === 'ANY_CONTENT' || this.operador.name === 'NO_CONTENT') {
                     return null;
                 } else if (this.operador.autoComplete) {
                     return textCombo;
@@ -104,23 +104,23 @@
                 return textField;
             },
             checkNumberField() {
-                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.operador.name === 'INTERVAL' || this.operador.name === 'OUT_OF_INTERVAL') {
                     return numberInputs;
                 }
                 return numberInput;
             },
             checkDataField() {
-                if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.operador.name === 'LESS_THAN' || this.operador.name === 'OUT_OF_INTERVAL') {
                     return dateInputs;
-                } else if (this.operador.type === 'PERIODO') {
+                } else if (this.operador.name === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;
             },
             checkDataHoraField() {
-                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.operador.name === 'INTERVAL' || this.operador.name === 'OUT_OF_INTERVAL') {
                     return dateInputs;
-                } else if (this.operador.type === 'PERIODO') {
+                } else if (this.operador.name === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;
@@ -129,7 +129,7 @@
         watch: {
             hasField() {
                 this.field = this.hasField;
-                this.metaFields = metadata.fields[this.tipoOperador];
+                this.metaFields = metadata.fields[this.tipoAttrib];
             }
         }
     };

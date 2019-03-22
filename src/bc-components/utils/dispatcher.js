@@ -16,7 +16,6 @@ export default class Dispatcher {
 
     doGet(url) {
         return new Promise((resolve, reject) => {
-            console.log(config);
             this.xhr.open('GET', config.baseURL + url, true);
             this.xhr.setRequestHeader('Content-Type', 'application/json');
             this.xhr.onload = function() {

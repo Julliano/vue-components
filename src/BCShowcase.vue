@@ -27,7 +27,7 @@
         },
         data() {
             return {
-                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda']
+                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda', 'bc_padrao', 'bc_unica']
             };
         }
     };

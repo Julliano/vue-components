@@ -23,7 +23,12 @@ export default {
     },
 
     async getAttribsFromUI(logicName) {
-        return await dispatcher
-            .doGet(`${logicName}/attributes?fields=label,type&flags=filterable,visible`);
+        const locale = navigator.language.slice(0, 2);
+        const params = `/attributes?fields=label,type&flags=filterable,visible&loc=${locale}`;
+        return await dispatcher.doGet(logicName + params);
+    },
+
+    getOperators(uiName, attribName) {
+        return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     }
 };

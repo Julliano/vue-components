@@ -44,16 +44,17 @@
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-operador="atribType[idx]" :operador="operators[idx]"
+                        :tipo-operador="atribType[idx]" :ui-name="ui.id" 
+                        :attrib-name="ui.attribs[idx].id" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
                         @meta-operator-removed="onAttribRemoved(idx)"
                         ref="operator"
                     >
-                        <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].id"
+                        <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].name"
                             @meta-field-selected="onMetaFieldSelected($event, idx)"
                             @meta-field-removed="onAttribRemoved(idx)"
                             :hasField="fields[idx]" :operador="operators[idx]"
-                            :tipo-operador="atribType[idx]" ref="field"
+                            :tipo-attrib="atribType[idx]" ref="field"
                         >
                         </bc-filter-fields>
                     </bc-filter-operators>
@@ -183,6 +184,7 @@
 
             },
             onMetaOperatorSelected(obj, idx) {
+                obj.name = obj.name.toUpperCase();
                 this.operators[idx] = obj;
                 this.$forceUpdate();
             },
