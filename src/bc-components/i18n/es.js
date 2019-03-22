@@ -1,7 +1,8 @@
 export default {
-    select: 'Selecionar', // Todo tradução
+    select: 'Selecione', // Todo tradução
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
-    save: 'Salvar' // Todo tradução
+    save: 'Salvar', // Todo tradução
+    newGroup: 'Novo grupo' // Todo tradução
 };
