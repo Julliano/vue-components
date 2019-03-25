@@ -9,13 +9,17 @@
         .bc-filter-group {
             margin-top: $normal-space;
         }
+
+        .bc-filter-ui-main {
+            white-space: nowrap;
+        }
     }
 </style>
 
 <template>
     <div>
         <div class="bc-filter-ui">
-            <div>
+            <div class="bc-filter-ui-main">
                 <select class="inp" @change="fireUISelected" v-if="uis">
                     <option value="" disabled :selected="ui.id === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in uis" :key="idx"
@@ -25,8 +29,8 @@
                         {{opt.name}}
                     </option>
                 </select>
-                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.id"
-                    @apply="applySelectedFilters" :sourcesSelectedProp="ui.sourcesSelected"></bc-filter-source-menu>
+                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.id" :uniqueId="Math.random()" :source-types="sourceTypes"
+                                       @apply="applySelectedFilters" :sourcesSelectedProp="ui.sourcesSelected"></bc-filter-source-menu>
                 <button class="btn btn-filter-icon" v-if="ui.id !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
@@ -44,7 +48,7 @@
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-operador="atribType[idx]" :ui-name="ui.id" 
+                        :tipo-operador="atribType[idx]" :ui-name="ui.id"
                         :attrib-name="ui.attribs[idx].id" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
                         @meta-operator-removed="onAttribRemoved(idx)"
@@ -87,6 +91,7 @@
         props: {
             ui: Object,
             logicNameUis: Array,
+            sourceTypes: Array,
             showSourceOption: Boolean
         },
         data() {

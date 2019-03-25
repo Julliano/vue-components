@@ -13,6 +13,9 @@ Dispatcher.config({
 const dispatcher = new Dispatcher();
 
 export default {
+    getLocale() {
+        return navigator.language.slice(0, 2);
+    },
     getLabelUIs(uis) {
 
         console.log(`getLabelUIs: ${uis}`);
@@ -23,12 +26,17 @@ export default {
     },
 
     async getAttribsFromUI(logicName) {
-        const locale = navigator.language.slice(0, 2);
+        const locale = this.getLocale();
         const params = `/attributes?fields=label,type&flags=filterable,visible&loc=${locale}`;
         return await dispatcher.doGet(logicName + params);
     },
 
     getOperators(uiName, attribName) {
         return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    },
+
+    async getSourcesForUI(logicName) {
+        return await dispatcher
+            .doGet(`${logicName}/sources?loc=${this.getLocale()}`);
     }
 };

@@ -13,7 +13,7 @@
         <h3>BC Components Showcase</h3>
         <hr/>
         <h4>bc-filter</h4>
-        <bc-filter :list-uis="listUis"></bc-filter>
+        <bc-filter :list-uis="listUis" :source-types="sourceTypes"></bc-filter>
     </div>
 </template>
 
@@ -27,7 +27,8 @@
         },
         data() {
             return {
-                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda', 'bc_padrao', 'bc_unica']
+                listUis: ['dc_arquivo, dc_view_arquivo, dc_agenda', 'bc_padrao', 'bc_unica'],
+                sourceTypes: ['WEB_SERVICES']
             };
         }
     };

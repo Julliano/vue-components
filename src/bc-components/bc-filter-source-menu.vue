@@ -16,6 +16,14 @@
                 }
             }
         }
+
+        .bc-filter-source-resume {
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+        }
+
     }
 </style>
 
@@ -23,6 +31,7 @@
     <dgt-context-menu :close-on-click="false" class="bc-filter-source-menu" ref="menu">
         <template slot="button">
             <i class="mdi mdi-database"></i>
+            <span class="bc-filter-source-resume">{{selectedSourceNames}}</span>
         </template>
         <template slot="content">
             <b>{{ 'sources' | i18n}}</b>
@@ -39,11 +48,11 @@
                                     <input
                                         type="checkbox"
                                         class="inp"
-                                        :id="`${ui}-${source.name}-${source.id}`"
+                                        :id="`${uniqueId}-${source.name}-${source.id}`"
                                         :checked="source.checked"
                                         v-model="source.checked"
                                         :value="source.id">
-                                    <label :for="`${ui}-${source.name}-${source.id}`">{{ source.name }}</label>
+                                    <label :for="`${uniqueId}-${source.name}-${source.id}`">{{ source.name }}</label>
                                 </div>
                             </td>
                         </tr>
@@ -63,24 +72,9 @@
     import dgtContextMenu from '../components/dgt-context-menu.vue';
     import dgtList from '../components/dgt-list.vue';
     import i18n from './utils/i18n.js';
+    import bcService from './services/bc-services.js';
 
-    const sourcesMock = [
-        {name: 'Google', id: 208, type: 'WEB_SERVICES'},
-        {name: 'Guardião', id: 0, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 3', id: 3, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 4', id: 4, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 5', id: 5, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 6', id: 6, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 7', id: 7, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 8', id: 8, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 9', id: 9, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 10', id: 10, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 11', id: 11, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 12', id: 12, type: 'BANCO_DE_DADOS'},
-        {name: 'Base de Conhecimento 13', id: 13, type: 'BANCO_DE_DADOS'},
-        {name: 'Apple', id: 209, type: 'WEB_SERVICES'}
-    ];
+    const BC = {name: 'Base de Conhecimento', id: -1, type: 'BANCO_DE_DADOS', checked: true};
 
     export default {
         name: 'bc-filter-source-modal',
@@ -91,16 +85,21 @@
         },
         props: {
             searchProp: String,
+            uniqueId: Number,
             uiProps: String,
+            sourceTypes: Array,
             sourcesSelectedProp: Array
         },
         data() {
             return {
                 searchInput: this.searchProp || '',
+                sources: [],
                 ui: this.uiProps,
-                sources: JSON.parse(JSON.stringify(sourcesMock)),
                 showList: true
             };
+        },
+        created() {
+            this.loadSources();
         },
         computed: {
             sourcesList() {
@@ -111,13 +110,36 @@
                     let searchText = this.searchInput.toLowerCase();
                     return source.name && source.name.toLowerCase().indexOf(searchText) >= 0;
                 });
+            },
+            selectedSourceNames() {
+                let names = '';
+                for (const source of this.getAppliedSources()) {
+                    names += `${source.name};`;
+                }
+                return names.slice(0, names.lastIndexOf(';'));
             }
         },
         methods: {
+            async loadSources() {
+                let sourcesTemp = await bcService.getSourcesForUI(this.ui);
+                this.sources = [JSON.parse(JSON.stringify(BC))];
+                for (const source of sourcesTemp) {
+                    if (this.sourceTypes.indexOf(source.type) !== -1) {
+                        this.sources.push(source);
+                    }
+                }
+            },
             save() {
                 this.$refs.menu.onClickHeader();
                 this.searchInput = '';
                 this.$emit('apply', this.sources.filter((source) => source.checked));
+            },
+            getAppliedSources() {
+                const srcs = (this.sourcesSelectedProp || []);
+                if (!this.sourcesSelectedProp) {
+                    srcs.push(BC);
+                }
+                return srcs;
             },
             cancel() {
                 outter: for (const source of this.sources || []) {

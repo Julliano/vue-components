@@ -4,6 +4,7 @@
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
                           :ui="ui"
                           :logic-name-uis="listUis"
+                          :source-types="sourceTypes"
                           :show-source-option="ui.id !== null"
                           @meta-ui-selected="onMetaUISelected($event, ui)"
                           @meta-ui-removed="onMetaUIRemoved(idx)"
@@ -23,7 +24,8 @@
         mixins: [i18n.mixin],
         components: {BcFilterUi, BcFilterGroup},
         props: {
-            listUis: Array
+            listUis: Array,
+            sourceTypes: Array
         },
         data() {
             return {
