@@ -5,7 +5,6 @@
     .bc-text-field {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
     }
     .options-container {
         display: inline-flex;

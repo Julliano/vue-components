@@ -38,5 +38,15 @@ export default {
     async getSourcesForUI(logicName) {
         return await dispatcher
             .doGet(`${logicName}/sources?loc=${this.getLocale()}`);
+    },
+
+    getAutocompleteFieldoptions() {
+        return [{name: 'teste'}, {name: 'abc'}, {name: 'def'}, {name: 'aab'}, {name: 'bbe'}];
+        // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    },
+
+    getTipoSelecaoOptions() {
+        return [{id: 1, name: 'Sem campo'}, {id: 2, name: 'TextCombo'}, {id: 3, name: 'TextField'}];
+        // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     }
 };

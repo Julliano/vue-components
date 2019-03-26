@@ -20,7 +20,7 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input class="inp" type="tel" v-mask="'#########'" v-model="field" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64'">
+                <input class="inp" type="tel" v-mask="'#########'" v-model="field" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
                 <input class="inp" type="number" :step="0.01" v-model="field" v-else>
             </div>
         </div>

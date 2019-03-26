@@ -48,17 +48,18 @@
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-operador="atribType[idx]" :ui-name="ui.id"
+                        :tipo-attrib="atribType[idx]" :ui-name="ui.id"
                         :attrib-name="ui.attribs[idx].id" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
                         @meta-operator-removed="onAttribRemoved(idx)"
+                        @data-option-selected="onDataOptionSelected($event, idx)"
                         ref="operator"
                     >
                         <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].name"
                             @meta-field-selected="onMetaFieldSelected($event, idx)"
                             @meta-field-removed="onAttribRemoved(idx)"
                             :hasField="fields[idx]" :operador="operators[idx]"
-                            :tipo-attrib="atribType[idx]" ref="field"
+                            :tipo-attrib="atribType[idx]" :date-option="dataType[idx]" ref="field"
                         >
                         </bc-filter-fields>
                     </bc-filter-operators>
@@ -100,6 +101,7 @@
                 operators: [],
                 atribType: [],
                 fields: [],
+                dataType: [],
                 uis: []
             };
         },
@@ -113,7 +115,6 @@
             },
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
-                this.$emit('meta-ui-selected', metaUI);
                 this.attribs = await bcService.getAttribsFromUI(metaUI.id);
                 this.attribs.sort((e1, e2) => {
                     const l1 = e1.label.normalize('NFD');
@@ -123,6 +124,7 @@
                 this.operators = [];
                 this.atribType = [];
                 this.fields = [];
+                this.$emit('meta-ui-selected', metaUI);
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
@@ -180,6 +182,7 @@
                 this.fields.splice(idx, 1);
                 this.atribType.splice(idx, 1);
                 this.operators.splice(idx, 1);
+                this.operators.splice(idx, 1);
                 this.ui.attribs.splice(idx, 1);
 
                 this.$nextTick(()=>{
@@ -189,12 +192,18 @@
 
             },
             onMetaOperatorSelected(obj, idx) {
-                obj.name = obj.name.toUpperCase();
+
                 this.operators[idx] = obj;
                 this.$forceUpdate();
             },
             onMetaFieldSelected(obj, idx) {
                 this.fields[idx] = obj;
+                this.$forceUpdate();
+            },
+            onDataOptionSelected(obj, idx) {
+                this.dataType[idx] = obj;
+                this.operators.splice(idx, 1);
+                this.fields.splice(idx, 1);
                 this.$forceUpdate();
             }
         }

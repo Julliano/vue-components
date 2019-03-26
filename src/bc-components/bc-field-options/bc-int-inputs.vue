@@ -22,7 +22,7 @@
 <template>
     <div>
         <div class="bc-int-inputs">
-            <div class="options-container" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64'">
+            <div class="options-container" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
                 <input class="inp" type="tel" v-mask="'#########'" v-model="field1">
                 <input class="inp" type="tel" v-mask="'#########'" v-model="field2">
             </div>

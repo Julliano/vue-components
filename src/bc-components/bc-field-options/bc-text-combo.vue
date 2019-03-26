@@ -5,7 +5,6 @@
     .bc-text-field {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
     }
     .options-container {
         display: inline-flex;
@@ -17,11 +16,11 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <select class="inp" @change="fireOperatorSelected" v-if="options">
+                <select class="inp" @change="fireFieldSelected">
                     <option value="" disabled :selected="selectedOption.id === null">Selecione</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="idx"
                         :selected="selectedOption.id === date.id">
-                            {{date.label}}
+                            {{date.name}}
                     </option>
                 </select>
             </div>
@@ -31,17 +30,21 @@
 
 <script>
 
+    import bcService from '../services/bc-services.js';
+
     export default {
         name: 'bc-text-combo',
-        props: {
-            options: Array
-        },
         data() {
             return {
                 selectedOption: {
-                    id: ''
-                }
+                    id: null
+                },
+                options: []
             };
+        },
+        created() {
+            // ajustar request (está retornando dados mocados)
+            this.options = bcService.getTipoSelecaoOptions();
         },
         methods: {
             fireFieldSelected(e) {

@@ -7,6 +7,7 @@
         flex-direction: column;
         margin-left: 5px;
         input {
+            height: 24px !important;
             &:not(:first-child) {
                 margin-left: 5px;
             }
