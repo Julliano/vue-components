@@ -46,7 +46,7 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-postcss": "^1.6.3",
     "rollup-plugin-uglify": "^3.0.0",
-    "rollup-plugin-vue": "^2.3.0",
+    "rollup-plugin-vue": "^4.7.2",
     "sass-loader": "^6.0.6",
     "testcafe": "^0.22.0",
     "testcafe-vue-selectors": "^3.0.1",
