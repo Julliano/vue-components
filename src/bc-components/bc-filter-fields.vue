@@ -17,7 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoOperador"></component>
+                <component :is="dynamicComponent" :tipo="tipoAttrib"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -29,9 +29,12 @@
 <script>
     import metadata from './metadata.json';
     import textField from './bc-field-options/bc-text-field.vue';
+    import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
+    import hourInput from './bc-field-options/bc-hour-input.vue';
+    import hourInputs from './bc-field-options/bc-hour-inputs.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
     import dateInput from './bc-field-options/bc-date-input.vue';
     import dateInputs from './bc-field-options/bc-date-inputs.vue';
@@ -49,7 +52,8 @@
             operador: Object,
             hasField: {
                 id: null
-            }
+            },
+            dateOption: Object
         },
         data() {
             return {
@@ -60,6 +64,7 @@
             };
         },
         computed: {
+            // eslint-disable-next-line
             dynamicComponent() {
                 switch (this.tipoAttrib) {
                     case '_texto_delimitado':
@@ -78,10 +83,12 @@
                         return this.checkNumberField();
                     case '_data_hora':
                         return this.checkDataHoraField();
+                    case '_tipo_selecao':
+                        return textCombo;
                     case 'outros':
                         return textField;
                     default:
-                        return null;
+                        return textField;
                 }
             }
         },
@@ -96,31 +103,39 @@
                 this.$emit('meta-field-removed');
             },
             checkTextField() {
-                if (this.operador.name === 'ANY_CONTENT' || this.operador.name === 'NO_CONTENT') {
+                if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
                     return null;
                 } else if (this.operador.autoComplete) {
-                    return textCombo;
+                    return textAutocompleteField;
                 }
                 return textField;
             },
             checkNumberField() {
-                if (this.operador.name === 'INTERVAL' || this.operador.name === 'OUT_OF_INTERVAL') {
+                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
                     return numberInputs;
                 }
                 return numberInput;
             },
             checkDataField() {
-                if (this.operador.name === 'LESS_THAN' || this.operador.name === 'OUT_OF_INTERVAL') {
-                    return dateInputs;
-                } else if (this.operador.name === 'PERIODO') {
-                    return dateCombo;
+                if (this.dateOption.label === 'Data') {
+                    if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                        return dateInputs;
+                    } else if (this.operador.type === 'PERIODO') {
+                        return dateCombo;
+                    }
+                    return dateInput;
+                } else if (this.dateOption.label === 'Ano') {
+                    if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                        return hourInputs;
+                    }
+                    return hourInput;
                 }
-                return dateInput;
+                return null;
             },
             checkDataHoraField() {
-                if (this.operador.name === 'INTERVAL' || this.operador.name === 'OUT_OF_INTERVAL') {
+                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
                     return dateInputs;
-                } else if (this.operador.name === 'PERIODO') {
+                } else if (this.operador.type === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;

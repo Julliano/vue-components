@@ -2,15 +2,15 @@
     @import "../styles/variables";
     @import "../styles/buttons";
 
-    .bc-int-input {
+    .bc-hours-inputs {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
         .options-container {
             display: inline-flex;
             align-items: center;
             input {
                 height: 24px !important;
+                padding: 2px;
                 &:not(:first-child) {
                     margin-left: 5px;
                 }
@@ -21,12 +21,12 @@
 
 <template>
     <div>
-        <div class="bc-int-input">
+        <div class="bc-hours-inputs">
             <div class="options-container">
-                <input id="date" name="finalDate" type="date"
-                    class="inp big" v-model="date">
                 <input id="hour" name="hour" type="time"
-                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
+                    class="inp big" v-model="hour">
+                <input id="hour2" name="hour2" type="time"
+                    class="inp big" v-model="hour2">
             </div>
         </div>
     </div>
@@ -35,19 +35,19 @@
 <script>
 
     export default {
-        name: 'bc-date-input',
+        name: 'bc-hours-inputs',
         props: {
             tipo: String
         },
         data() {
             return {
-                date: '',
-                hour: ''
+                hour: '',
+                hour2: ''
             };
         },
         methods: {
             fireFieldSelected() {
-                this.$emit('meta-field-selected', this.date, this.hour);
+                this.$emit('meta-field-selected', this.hour, this.hour2);
             }
         }
     };

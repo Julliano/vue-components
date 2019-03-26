@@ -26,7 +26,7 @@
                     <option value="" disabled :selected="operator.name === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
                         :selected="operator.name === opt.name">
-                        {{opt.label}}
+                        {{opt.name}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
@@ -50,7 +50,7 @@
         name: 'bc-filter-operator',
         mixins: [i18n.mixin],
         props: {
-            tipoOperador: {
+            tipoAttrib: {
                 type: String
             },
             operador: {
@@ -74,7 +74,7 @@
         },
         computed: {
             dynamicComponentDate() {
-                switch (this.tipoOperador) {
+                switch (this.tipoAttrib) {
                     case '_data':
                         this.show = false;
                         return dateOptions;
@@ -88,9 +88,6 @@
             this.getOperators();
         },
         methods: {
-            mountOperatorsDefault() {
-                this.metaOperators = metadata.operators[this.tipoOperador] ? metadata.operators[this.tipoOperador] : metadata.operators['outros'];
-            },
             fireOperatorSelected(e) {
                 this.operator = this.metaOperators[e.target.value];
                 this.$emit('meta-operator-selected', this.operator);
@@ -98,7 +95,9 @@
             },
             async getOperators() {
                 this.metaOperators = await bcService.getOperators(this.uiName, this.attribName);
-                console.log(this.metaOperators);
+                this.metaOperators.forEach(op => {
+                    op.name = op.name.toUpperCase();
+                });
             },
             fireOperatorRemoved() {
                 this.$emit('meta-operator-removed');
@@ -109,8 +108,10 @@
                 if (option.id === 2) {
                     this.metaOperators = metadata.operators['ano'];
                 } else {
-                    this.mountOperatorsDefault();
+                    this.getOperators();
                 }
+                this.operator = { name: null };
+                this.$emit('data-option-selected', option);
                 this.$forceUpdate();
             },
             repassMetaFieldSelected(param) {
