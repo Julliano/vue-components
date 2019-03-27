@@ -4,5 +4,13 @@ export default {
     createSearch: 'Pesquisar',
     cancel: 'Cancelar',
     save: 'Salvar',
-    newGroup: 'Novo grupo'
+    newGroup: 'Novo grupo',
+    profileOptions: {
+        save: 'Salvar',
+        saveAs: 'Salvar como',
+        rename: 'Renomear',
+        default: 'Definir como padrão',
+        exclude: 'Excluir',
+        actions: 'Ações'
+    }
 };

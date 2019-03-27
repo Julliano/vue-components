@@ -48,6 +48,10 @@
             closeOnClick: {
                 type: Boolean,
                 default: false
+            },
+            changeOpen: {
+                type: Boolean,
+                default: true
             }
         },
         data() {
@@ -65,7 +69,9 @@
         },
         methods: {
             onClickHeader() {
-                this.isOpened = !this.isOpened;
+                if (this.changeOpen) {
+                    this.isOpened = !this.isOpened;
+                }
             },
             setContextMenuPosition() {
                 const topParent = this.$el.getBoundingClientRect().top + this.$el.clientHeight;

@@ -4,5 +4,13 @@ export default {
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
     save: 'Salvar', // Todo tradução
-    newGroup: 'Novo grupo' // Todo tradução
+    newGroup: 'Novo grupo', // Todo tradução
+    profileOptions: {
+        save: 'Salvar',
+        saveAs: 'Salvar como',
+        rename: 'Renomear',
+        default: 'Definir como padrão',
+        exclude: 'Excluir',
+        actions: 'Ações'
+    }
 };

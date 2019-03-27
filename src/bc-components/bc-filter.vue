@@ -1,7 +1,9 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="mockyBalboaProfiles" @change="onProfileSelected"></bc-filter-profile>
-        <bc-filter-group v-model="operator" ref="uiGroup">
+        <bc-filter-profile :profiles="mockyBalboaProfiles"
+            @change="onProfileSelected">
+        </bc-filter-profile>
+        <bc-filter-group v-model="operator" :profile-selected="profile" ref="uiGroup">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
                           :ui="ui"
                           :logic-name-uis="listUis"
@@ -55,7 +57,8 @@
                 uis: [{
                     id: null,
                     attribs: []
-                }]
+                }],
+                profile: {}
             };
         },
         methods: {
@@ -83,8 +86,8 @@
                     this.$refs.uiGroup.updateGroups();
                 });
             },
-            onProfileSelected(e) {
-                console.log(e.target.value);
+            onProfileSelected(obj) {
+                this.profile = obj;
             }
         }
     };
