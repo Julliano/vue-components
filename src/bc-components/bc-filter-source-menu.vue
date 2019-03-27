@@ -17,21 +17,18 @@
             }
         }
 
-        .bc-filter-source-resume {
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 100%;
+        .mdi {
+            &.blue {
+                color: $blue;
+            }
         }
-
     }
 </style>
 
 <template>
     <dgt-context-menu :close-on-click="false" class="bc-filter-source-menu" ref="menu">
         <template slot="button">
-            <i class="mdi mdi-database"></i>
-            <span class="bc-filter-source-resume">{{selectedSourceNames}}</span>
+            <i class="mdi mdi-database" :class="{'blue': hasSourceSelected}"></i>
         </template>
         <template slot="content">
             <b>{{ 'sources' | i18n}}</b>
@@ -104,19 +101,20 @@
         computed: {
             sourcesList() {
                 if (!this.searchInput) {
-                    return this.sources.slice();
+                    return this.sources;
                 }
                 return this.sources.filter((source) => {
                     let searchText = this.searchInput.toLowerCase();
                     return source.name && source.name.toLowerCase().indexOf(searchText) >= 0;
                 });
             },
-            selectedSourceNames() {
-                let names = '';
+            hasSourceSelected() {
                 for (const source of this.getAppliedSources()) {
-                    names += `${source.name};`;
+                    if (source.type !== BC.type) {
+                        return true;
+                    }
                 }
-                return names.slice(0, names.lastIndexOf(';'));
+                return false;
             }
         },
         methods: {
@@ -132,7 +130,7 @@
             save() {
                 this.$refs.menu.onClickHeader();
                 this.searchInput = '';
-                this.$emit('apply', this.sources.filter((source) => source.checked));
+                this.$emit('apply', JSON.parse(JSON.stringify(this.sources.filter((source) => source.checked))));
             },
             getAppliedSources() {
                 const srcs = (this.sourcesSelectedProp || []);
