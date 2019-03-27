@@ -103,7 +103,7 @@
                 this.$emit('meta-field-removed');
             },
             checkTextField() {
-                if (this.operador.type === 'ANY_CONTENT' || this.operador.type === 'NO_CONTENT') {
+                if (this.operador.name === 'ANY_CONTENT' || this.operador.name === 'NO_CONTENT') {
                     return null;
                 } else if (this.operador.autoComplete) {
                     return textAutocompleteField;
@@ -111,21 +111,21 @@
                 return textField;
             },
             checkNumberField() {
-                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
                     return numberInputs;
                 }
                 return numberInput;
             },
             checkDataField() {
                 if (this.dateOption.label === 'Data') {
-                    if (this.operador.type === 'LESS_THAN' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    if (this.operador.name === 'LESS_THAN' || this.operador.name === 'OUT_OF_RANGE') {
                         return dateInputs;
-                    } else if (this.operador.type === 'PERIODO') {
+                    } else if (this.operador.name === 'PERIODO') {
                         return dateCombo;
                     }
                     return dateInput;
                 } else if (this.dateOption.label === 'Ano') {
-                    if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                    if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
                         return hourInputs;
                     }
                     return hourInput;
@@ -133,9 +133,9 @@
                 return null;
             },
             checkDataHoraField() {
-                if (this.operador.type === 'INTERVAL' || this.operador.type === 'OUT_OF_INTERVAL') {
+                if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
                     return dateInputs;
-                } else if (this.operador.type === 'PERIODO') {
+                } else if (this.operador.name === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;

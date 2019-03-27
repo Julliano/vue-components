@@ -5,7 +5,6 @@
     .bc-int-inputs {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
         input {
             width: 40px;
             &:last-child {
