@@ -48,5 +48,29 @@ export default {
     getTipoSelecaoOptions() {
         return [{id: 1, name: 'Sem campo'}, {id: 2, name: 'TextCombo'}, {id: 3, name: 'TextField'}];
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    },
+
+    getSearchProfiles() {
+        return [{ label: 'Busca Impossível', value: 1, id: 1, default: true },
+            { label: 'Perfil de Lado', value: 2, id: 2 },
+            { label: 'Perfil não salvo', value: 3}
+        ];
+    },
+
+    saveSearchProfiles(param) {
+        console.log(`Salvar o perfil de nome: ${param.label}`);
+    },
+
+    renameSearchProfiles(param, name) {
+        console.log(`Renomear o perfil de id: ${param.id}, para ${name}`);
+    },
+
+    deleteSearchProfiles(param) {
+        console.log(`Deletar o perfil de id: ${param.id}`);
+    },
+
+    setDefaultProfile(param) {
+        console.log(`Setar como default o perfil de id: ${param.id}`);
     }
+
 };
