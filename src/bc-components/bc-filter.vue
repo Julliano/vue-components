@@ -47,8 +47,10 @@
                 profile: {}
             };
         },
-        created() {
-            this.profiles = bcService.getSearchProfiles();
+        async created() {
+            let response = await bcService.getSearchProfiles();
+            response.uis[1].flg_default.valor = 'Sim';
+            this.profiles = response.uis;
         },
         methods: {
             onMetaUISelected(metaUI, ui) {

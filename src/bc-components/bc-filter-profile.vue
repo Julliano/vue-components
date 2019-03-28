@@ -22,14 +22,14 @@
 <template>
     <div class="bc-filter-profile field" v-if="show">
         <select name="profiles" class="inp" @change="fireProfileSelected">
-            <option value="" disabled :selected="selectedProfile.id === null">{{'select' | i18n}}</option>
+            <option value="" disabled :selected="selectedProfile.id_cnfg_usua_app_pes === null">{{'select' | i18n}}</option>
             <option v-for="(profile, idx) in profiles" :key="idx"
-                    :value="idx" :selected="selectedProfile.label === profile.label">
-                {{profile.label}}
+                    :value="idx" :selected="selectedProfile.descricao === profile.descricao">
+                    {{profile.descricao}}
             </option>
         </select>
-        <dgt-context-menu :close-on-click="true" :change-open="!!selectedProfile.value">
-            <button slot="button" class="btn-icon" :class="{'disabled-button': !selectedProfile.value}">
+        <dgt-context-menu :close-on-click="true" :change-open="!!selectedProfile.id_cnfg_usua_app_pes">
+            <button slot="button" class="btn-icon" :class="{'disabled-button': !selectedProfile.id_cnfg_usua_app_pes}">
                 <i class="mdi mdi-settings"></i>
             </button>
             <div slot="content">
@@ -73,7 +73,7 @@
                 showModal: false,
                 modalType: 'saveAs',
                 selectedProfile: {
-                    id: null
+                    id_cnfg_usua_app_pes: null
                 },
                 optionSelected: {
                     id: null
@@ -89,14 +89,14 @@
             };
         },
         created() {
-            if (this.profiles) {
+            if (this.profiles.length) {
                 this.setDefault();
             }
         },
         methods: {
             setDefault() {
                 let defaultProfile = this.profiles.filter(profile => {
-                    return profile.default === true;
+                    return profile.flg_default.valor === 'Sim';
                 });
                 if (defaultProfile.length) {
                     [this.selectedProfile] = [...defaultProfile];
@@ -134,40 +134,41 @@
             },
             checkDefault(option) {
                 if (option.label === 'default') {
-                    return this.selectedProfile.default;
+                    return this.selectedProfile.flg_default && this.selectedProfile.flg_default.valor === 'Sim';
                 }
                 return null;
             },
             checkDisabled(option) {
                 if (option.label === 'default') {
-                    if (this.selectedProfile.default) return true;
-                    if (!this.selectedProfile.id) return true;
+                    if (this.selectedProfile.flg_default &&
+                        this.selectedProfile.flg_default.valor === 'Sim') return true;
+                    if (!this.selectedProfile.id_cnfg_usua_app_pes) return true;
                 } else if (option.label !== 'saveAs') {
-                    return !this.selectedProfile.id;
+                    return !this.selectedProfile.id_cnfg_usua_app_pes;
                 }
                 return null;
             },
             closeModal() {
                 this.showModal = false;
             },
-            fireProfileSaved(option) {
+            fireProfileSaved() {
                 //necessário passar o json junto para salvar os filtros da pesquisa;
-                bcService.saveSearchProfiles(option);
+                bcService.saveSearchProfiles(this.selectedProfile);
             },
             fireProfileSavedAs(name) {
                 this.showModal = false;
                 //necessário passar o json junto para salvar os filtros da pesquisa;
-                bcService.saveSearchProfiles({label: name});
+                bcService.saveSearchProfiles({descricao: name});
             },
-            fireProfileDefault(option) {
-                bcService.setDefaultProfile(option);
+            fireProfileDefault() {
+                bcService.setDefaultProfile(this.selectedProfile);
             },
             fireProfileRenamed(name) {
                 this.showModal = false;
-                bcService.renameSearchProfiles(this.optionSelected, name);
+                bcService.renameSearchProfiles(this.selectedProfile, name);
             },
-            fireProfileRemoved(option) {
-                bcService.deleteSearchProfiles(option);
+            fireProfileRemoved() {
+                bcService.deleteSearchProfiles(this.selectedProfile);
             }
         }
     };
