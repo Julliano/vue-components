@@ -1,7 +1,6 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="mockyBalboaProfiles"
-            @change="onProfileSelected">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected">
         </bc-filter-profile>
         <bc-filter-group v-model="operator" :profile-selected="profile" ref="uiGroup">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
@@ -18,29 +17,17 @@
 
 <script>
 
-    const mockyBalboaProfiles = [
-        {
-            label: 'Busca Impossível',
-            value: 1,
-            id: 1
-        },
-        {
-            label: 'Perfil de Lado',
-            value: 2,
-            id: 2
-        }
-    ];
-
-    import metadata from './metadata.json';
     import BcFilterGroup from './bc-filter-group.vue';
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
+    import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
     export default {
         name: 'bc-filter',
         mixins: [i18n.mixin],
         components: {
+            bcService,
             BcFilterUi,
             BcFilterGroup,
             BcFilterProfile
@@ -51,15 +38,17 @@
         },
         data() {
             return {
-                metadata,
-                mockyBalboaProfiles,
                 operator: 'AND',
                 uis: [{
                     id: null,
                     attribs: []
                 }],
+                profiles: [],
                 profile: {}
             };
+        },
+        created() {
+            this.profiles = bcService.getSearchProfiles();
         },
         methods: {
             onMetaUISelected(metaUI, ui) {

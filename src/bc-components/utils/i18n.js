@@ -37,7 +37,6 @@ const registerFilter = (component) => {
     const {filters} = component.$options;
     const key = 'i18n';
     if (key in filters) {
-        console.error(`filter ${key} already defined in component ${component.$options['name']}`);
         return;
     }
     filters[key] = getString;
