@@ -84,14 +84,14 @@ export default {
     async getSearchProfiles() {
         let response = await dispatcher.doPost('objectQuery', getProfileParams);
         return response;
-        // return [{ label: 'Busca Impossível', value: 1, id: 1, default: true },
-        //     { label: 'Perfil de Lado', value: 2, id: 2 },
-        //     { label: 'Perfil não salvo', value: 3}
-        // ];
     },
 
-    saveSearchProfiles(param) {
-        console.log(`Salvar o perfil de nome: ${param.descricao}`);
+    saveSearchProfiles(obj, param = null) {
+        if (param) {
+            return console.log(`Salvar o perfil de id:\n
+                ${obj.id_cnfg_usua_app_pes} com o novo nome : ${param.descricao}`);
+        }
+        return console.log(`Salvar o perfil de nome: ${param.descricao}`);
     },
 
     renameSearchProfiles(param, name) {

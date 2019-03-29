@@ -28,8 +28,8 @@
                     {{profile.descricao}}
             </option>
         </select>
-        <dgt-context-menu :close-on-click="true" :change-open="!!selectedProfile.id_cnfg_usua_app_pes">
-            <button slot="button" class="btn-icon" :class="{'disabled-button': !selectedProfile.id_cnfg_usua_app_pes}">
+        <dgt-context-menu :close-on-click="true" :change-open="!!selectedProfile.descricao">
+            <button slot="button" class="btn-icon" :class="{'disabled-button': !selectedProfile.descricao}">
                 <i class="mdi mdi-settings"></i>
             </button>
             <div slot="content">
@@ -87,11 +87,6 @@
                     { id: 5, label: 'exclude' }
                 ]
             };
-        },
-        created() {
-            if (this.profiles.length) {
-                this.setDefault();
-            }
         },
         methods: {
             setDefault() {
@@ -158,7 +153,7 @@
             fireProfileSavedAs(name) {
                 this.showModal = false;
                 //necessário passar o json junto para salvar os filtros da pesquisa;
-                bcService.saveSearchProfiles({descricao: name});
+                bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
             },
             fireProfileDefault() {
                 bcService.setDefaultProfile(this.selectedProfile);
@@ -169,6 +164,13 @@
             },
             fireProfileRemoved() {
                 bcService.deleteSearchProfiles(this.selectedProfile);
+            }
+        },
+        watch: {
+            profiles() {
+                if (this.profiles.length) {
+                    this.setDefault();
+                }
             }
         }
     };

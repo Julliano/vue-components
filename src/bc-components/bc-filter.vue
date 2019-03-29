@@ -23,6 +23,17 @@
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
+    let defaultProfile = {
+        aplicacao_id_aplicacao: null,
+        descricao: 'Nova pesquisa',
+        flg_default: {
+            valor: null
+        },
+        id_cnfg_usua_app_pes: null,
+        id_tipo_pesquisa: null,
+        xml_config: null
+    };
+
     export default {
         name: 'bc-filter',
         mixins: [i18n.mixin],
@@ -49,8 +60,15 @@
         },
         async created() {
             let response = await bcService.getSearchProfiles();
-            response.uis[1].flg_default.valor = 'Sim';
-            this.profiles = response.uis;
+            // inicio da logica para testar a tarefa de iniciar na pesquisa default (apagar no fim da tarefa)
+            if (response && response.uis) {
+                response.uis[1].flg_default.valor = 'Sim';
+            }
+            // fim da logica;
+            this.profiles.push(defaultProfile);
+            response.uis.forEach(ui => {
+                this.profiles.push(ui);
+            });
         },
         methods: {
             onMetaUISelected(metaUI, ui) {
