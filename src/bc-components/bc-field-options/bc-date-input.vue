@@ -23,9 +23,9 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input id="date" name="finalDate" type="date"
+                <input id="date" name="finalDate" type="date" @change="change"
                     class="inp big" v-model="date">
-                <input id="hour" name="hour" type="time"
+                <input id="hour" name="hour" type="time" @change="change"
                     class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
             </div>
         </div>
@@ -46,8 +46,8 @@
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('meta-field-selected', this.date, this.hour);
+            change() {
+                this.$emit('change', [this.date, this.hour]);
             }
         }
     };

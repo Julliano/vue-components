@@ -54,8 +54,8 @@
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('inputs-selected', this.field1, this.field2);
+            change() {
+                this.$emit('change', [this.field1, this.field2]);
             }
         }
     };

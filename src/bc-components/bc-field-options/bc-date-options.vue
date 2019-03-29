@@ -17,7 +17,7 @@
     <div>
         <div class="bc-date-options">
             <div class="options-container">
-                <select class="inp" @change="fireOptionSelected">
+                <select class="inp" @change="change">
                     <option value="" disabled  :selected="option.id === null">Selecione</option>
                     <option v-for="(opt, idx) in options" :key="idx" :value="idx"
                         :selected="option.id === opt.id">
@@ -51,9 +51,9 @@
             };
         },
         methods: {
-            fireOptionSelected(e) {
+            change(e) {
                 this.option = this.options[e.target.value];
-                this.$emit('data-option-selected', this.option);
+                this.$emit('change', [this.option]);
             },
             fireRemoved() {
                 this.$emit('remove-fired');

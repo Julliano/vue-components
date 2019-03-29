@@ -1,15 +1,19 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="profiles" @change="onProfileSelected">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
+            @renamed="getProfiles">
         </bc-filter-profile>
-        <bc-filter-group v-model="operator" :profile-selected="profile" ref="uiGroup">
+        <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
+                          :operator="operator"
+                          :idx="idx"
                           :ui="ui"
                           :logic-name-uis="listUis"
                           :source-types="sourceTypes"
                           :show-source-option="ui.id !== null"
                           @meta-ui-selected="onMetaUISelected($event, ui)"
                           @meta-ui-removed="onMetaUIRemoved(idx)"
+                          @operator-changed="onOperatorChanged"
             ></bc-filter-ui>
         </bc-filter-group>
     </div>
@@ -43,12 +47,13 @@
                     id: null,
                     attribs: []
                 }],
+                filterData: [],
                 profiles: [],
                 profile: {}
             };
         },
-        created() {
-            this.profiles = bcService.getSearchProfiles();
+        async created() {
+            await this.getProfiles();
         },
         methods: {
             onMetaUISelected(metaUI, ui) {
@@ -75,9 +80,40 @@
                     this.$refs.uiGroup.updateGroups();
                 });
             },
+            onProfileSelected(e) {
+                console.log(e.target.value);
+            },
+            removeChangedUi(uiId) {
+                if (!this.lastMetaUiSelected) {
+                    return;
+                }
+                let keys = Object.keys(this.newFilter);
+                delete this.newFilter[keys[this.idx]];
+                this.lastMetaUiSelected = uiId;
+            },
+            onTypeChanged(type) {
+                this.operator = type;
+            },
+            onOperatorChanged(value) {
+                this.filterData.push(value);
+                console.log(this.filterData);
+            },
             onProfileSelected(obj) {
                 this.profile = obj;
+            },
+            async getProfiles() {
+                this.profiles = [];
+                let response = await bcService.getSearchProfiles();
+                // inicio da logica para testar a tarefa de iniciar na pesquisa default (apagar no fim da tarefa)
+                if (response && response.uis) {
+                    response.uis[1].flg_default.valor = 'Sim';
+                }
+                // fim da logica;
+                response.uis.forEach(ui => {
+                    this.profiles.push(ui);
+                });
             }
+
         }
     };
 </script>

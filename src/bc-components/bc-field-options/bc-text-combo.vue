@@ -16,7 +16,7 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <select class="inp" @change="fireFieldSelected">
+                <select class="inp" @change="change">
                     <option value="" disabled :selected="selectedOption.id === null">Selecione</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="idx"
                         :selected="selectedOption.id === date.id">
@@ -47,9 +47,9 @@
             this.options = bcService.getTipoSelecaoOptions();
         },
         methods: {
-            fireFieldSelected(e) {
+            change(e) {
                 this.selectedOption = this.options[e.target.value];
-                this.$emit('option-selected', this.selectedOption);
+                this.$emit('change', [this.selectedOption]);
             }
         }
     };

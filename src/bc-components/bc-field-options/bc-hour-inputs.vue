@@ -23,9 +23,9 @@
     <div>
         <div class="bc-hours-inputs">
             <div class="options-container">
-                <input id="hour" name="hour" type="time"
+                <input id="hour" name="hour" type="time" @change="change"
                     class="inp big" v-model="hour">
-                <input id="hour2" name="hour2" type="time"
+                <input id="hour2" name="hour2" type="time" @change="change"
                     class="inp big" v-model="hour2">
             </div>
         </div>
@@ -46,8 +46,8 @@
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('meta-field-selected', this.hour, this.hour2);
+            change() {
+                this.$emit('change', [this.hour, this.hour2]);
             }
         }
     };

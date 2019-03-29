@@ -6,6 +6,9 @@
             width: 350px;
             max-width: 650px;
         }
+        .modal-title {
+            margin-right: auto;
+        }
     }
 </style>
 
