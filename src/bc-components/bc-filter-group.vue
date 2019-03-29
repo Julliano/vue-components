@@ -82,7 +82,12 @@
 
     export default {
         name: 'bc-filter-group',
-        components: {BcSwitch},
+        components: {
+            BcSwitch
+        },
+        props: {
+            profileSelected: Object
+        },
         data() {
             return {
                 type: 'AND',
