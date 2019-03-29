@@ -19,8 +19,10 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input class="inp" type="tel" v-mask="'#########'" v-model="field" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
-                <input class="inp" type="number" :step="0.01" v-model="field" v-else>
+                <input class="inp" type="tel" v-mask="'#########'" @change="change"
+                       v-model="field"
+                       v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
+                <input class="inp" type="number" :step="0.01" v-model="field" @change="change" v-else>
             </div>
         </div>
     </div>
@@ -46,8 +48,8 @@
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('meta-field-selected', this.field);
+            change() {
+                this.$emit('change', [this.field]);
             }
         }
     };

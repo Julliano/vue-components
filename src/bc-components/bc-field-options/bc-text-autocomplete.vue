@@ -72,9 +72,6 @@
             this.data = bcService.getAutocompleteFieldoptions();
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('text-selected', this.field);
-            },
             filterOptions() {
                 if (this.field.trim().length === 0) {
                     this.options = [];
@@ -90,7 +87,6 @@
                 }
                 this.selectedItem = this.options[idx];
                 this.field = this.selectedItem.name;
-                console.log(this.options[idx]);
                 this.options = [];
                 this.arrowCounter = -1;
             },
@@ -107,6 +103,12 @@
             arrow(idx) {
                 this.arrowCounter = idx;
             }
+        },
+        watch: {
+            field() {
+                this.$emit('change', [this.field]);
+            }
         }
+
     };
 </script>

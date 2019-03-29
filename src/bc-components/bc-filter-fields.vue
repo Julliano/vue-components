@@ -17,7 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoAttrib"></component>
+                <component :is="dynamicComponent" :tipo="tipoAttrib" @change="change"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -139,7 +139,11 @@
                     return dateCombo;
                 }
                 return dateInput;
+            },
+            change(value) {
+                this.$emit('change', value);
             }
+
         },
         watch: {
             hasField() {

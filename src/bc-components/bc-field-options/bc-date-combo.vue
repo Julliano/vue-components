@@ -17,7 +17,7 @@
     <div>
         <div class="bc-date-combo">
             <div class="options-container">
-                <select class="inp" @change="fireDateSelected">
+                <select class="inp" @change="change">
                     <option value="" disabled :selected="dateSelected.id === null">Selecione</option>
                     <option v-for="(date, idx) in dates" :key="idx" :value="idx"
                         :selected="dateSelected.id === date.id">
@@ -67,9 +67,9 @@
             };
         },
         methods: {
-            fireDateSelected(e) {
+            change(e) {
                 this.dateSelected = this.dates[e.target.value];
-                this.$emit('date-selected', this.dateSelected);
+                this.$emit('change', [this.dateSelected]);
             }
         }
     };

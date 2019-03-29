@@ -3,14 +3,17 @@
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
             @renamed="getProfiles">
         </bc-filter-profile>
-        <bc-filter-group v-model="operator" :profile-selected="profile" ref="uiGroup">
+        <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
+                          :operator="operator"
+                          :idx="idx"
                           :ui="ui"
                           :logic-name-uis="listUis"
                           :source-types="sourceTypes"
                           :show-source-option="ui.id !== null"
                           @meta-ui-selected="onMetaUISelected($event, ui)"
                           @meta-ui-removed="onMetaUIRemoved(idx)"
+                          @operator-changed="onOperatorChanged"
             ></bc-filter-ui>
         </bc-filter-group>
     </div>
@@ -44,6 +47,7 @@
                     id: null,
                     attribs: []
                 }],
+                filterData: [],
                 profiles: [],
                 profile: {}
             };
@@ -76,6 +80,24 @@
                     this.$refs.uiGroup.updateGroups();
                 });
             },
+            onProfileSelected(e) {
+                console.log(e.target.value);
+            },
+            removeChangedUi(uiId) {
+                if (!this.lastMetaUiSelected) {
+                    return;
+                }
+                let keys = Object.keys(this.newFilter);
+                delete this.newFilter[keys[this.idx]];
+                this.lastMetaUiSelected = uiId;
+            },
+            onTypeChanged(type) {
+                this.operator = type;
+            },
+            onOperatorChanged(value) {
+                this.filterData.push(value);
+                console.log(this.filterData);
+            },
             onProfileSelected(obj) {
                 this.profile = obj;
             },
@@ -91,6 +113,7 @@
                     this.profiles.push(ui);
                 });
             }
+
         }
     };
 </script>
