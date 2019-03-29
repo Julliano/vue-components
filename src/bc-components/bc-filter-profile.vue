@@ -160,7 +160,12 @@
             },
             fireProfileRenamed(name) {
                 this.showModal = false;
-                bcService.renameSearchProfiles(this.selectedProfile, name);
+                try {
+                    bcService.renameSearchProfiles(this.selectedProfile, name);
+                } catch (error) {
+                    return alert('Não foi possível renomear a pesquisa.');
+                }
+                return this.$emit('renamed');
             },
             fireProfileRemoved() {
                 bcService.deleteSearchProfiles(this.selectedProfile);

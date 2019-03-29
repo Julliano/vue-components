@@ -1,6 +1,7 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="profiles" @change="onProfileSelected">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
+            @renamed="getProfiles">
         </bc-filter-profile>
         <bc-filter-group v-model="operator" :profile-selected="profile" ref="uiGroup">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
@@ -22,17 +23,6 @@
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
-
-    let defaultProfile = {
-        aplicacao_id_aplicacao: null,
-        descricao: 'Nova pesquisa',
-        flg_default: {
-            valor: null
-        },
-        id_cnfg_usua_app_pes: null,
-        id_tipo_pesquisa: null,
-        xml_config: null
-    };
 
     export default {
         name: 'bc-filter',
@@ -59,16 +49,7 @@
             };
         },
         async created() {
-            let response = await bcService.getSearchProfiles();
-            // inicio da logica para testar a tarefa de iniciar na pesquisa default (apagar no fim da tarefa)
-            if (response && response.uis) {
-                response.uis[1].flg_default.valor = 'Sim';
-            }
-            // fim da logica;
-            this.profiles.push(defaultProfile);
-            response.uis.forEach(ui => {
-                this.profiles.push(ui);
-            });
+            await this.getProfiles();
         },
         methods: {
             onMetaUISelected(metaUI, ui) {
@@ -97,6 +78,18 @@
             },
             onProfileSelected(obj) {
                 this.profile = obj;
+            },
+            async getProfiles() {
+                this.profiles = [];
+                let response = await bcService.getSearchProfiles();
+                // inicio da logica para testar a tarefa de iniciar na pesquisa default (apagar no fim da tarefa)
+                if (response && response.uis) {
+                    response.uis[1].flg_default.valor = 'Sim';
+                }
+                // fim da logica;
+                response.uis.forEach(ui => {
+                    this.profiles.push(ui);
+                });
             }
         }
     };

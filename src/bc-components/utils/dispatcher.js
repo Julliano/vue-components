@@ -40,4 +40,7 @@ export default class Dispatcher {
     doPost(url, param) {
         return this.doRequest(url, 'POST', JSON.stringify(param));
     }
+    doPut(url, param) {
+        return this.doRequest(url, 'PUT', JSON.stringify(param));
+    }
 }

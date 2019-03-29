@@ -36,7 +36,8 @@ let getProfileParams = {
         'flg_default',
         'id_tipo_pesquisa',
         'aplicacao_id_aplicacao.id_aplicacao',
-        'xml_config'
+        'xml_config',
+        'data_ultima_alteracao'
     ],
     offset: 0,
     limit: 1000
@@ -95,7 +96,16 @@ export default {
     },
 
     renameSearchProfiles(param, name) {
-        console.log(`Renomear o perfil de id: ${param.id_cnfg_usua_app_pes}, para ${name}`);
+        let obj = {
+            cnfg_usua_app_pes: [
+                {
+                    id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
+                    descricao: name,
+                    data_ultima_alteracao: param.data_ultima_alteracao
+                }
+            ]
+        };
+        return dispatcher.doPut('persistence', obj);
     },
 
     deleteSearchProfiles(param) {
