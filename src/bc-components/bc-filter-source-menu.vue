@@ -26,7 +26,7 @@
 </style>
 
 <template>
-    <dgt-context-menu :close-on-click="false" class="bc-filter-source-menu" ref="menu">
+    <dgt-context-menu :close-on-click="false" class="bc-filter-source-menu" ref="menu" v-if="showSourceOption">
         <template slot="button">
             <i class="mdi mdi-database" :class="{'blue': hasSourceSelected}"></i>
         </template>
@@ -115,6 +115,14 @@
                     }
                 }
                 return false;
+            },
+            showSourceOption() {
+                for (const source of this.sources) {
+                    if (source.type !== BC.type) {
+                        return true;
+                    }
+                }
+                return false;
             }
         },
         methods: {
@@ -141,7 +149,7 @@
             },
             cancel() {
                 outter: for (const source of this.sources || []) {
-                    for (const sourceProp of this.sourcesSelectedProp  || []) {
+                    for (const sourceProp of this.getAppliedSources()) {
                         if (sourceProp.id === source.id) {
                             source.checked = sourceProp.checked;
                             continue outter;

@@ -96,7 +96,6 @@
             ui: Object,
             logicNameUis: Array,
             sourceTypes: Array,
-            showSourceOption: Boolean,
             idx: Number,
             operator: String
         },
@@ -115,6 +114,19 @@
         },
         created() {
             this.uis = bcService.getLabelUIs(this.logicNameUis);
+        },
+        computed: {
+            showSourceOption() {
+                if (!this.sourceTypes || this.ui.id === null) {
+                    return false;
+                }
+                for (const sourceType of this.sourceTypes) {
+                    if (sourceType !== 'BANCO_DE_DADOS') {
+                        return true;
+                    }
+                }
+                return false;
+            }
         },
         methods: {
             applySelectedFilters(sourcesSelected) {
