@@ -39,7 +39,7 @@
                  v-if="ui.attribs && ui.attribs.length > 0"
                  class="bc-filter-group"
                  ref="attribsGroup"
-
+                 @type-changed="onTypeChanged"
             >
                 <bc-filter-attrib
                     v-for="(attrib, idx) in ui.attribs" :key="idx"
@@ -58,6 +58,7 @@
                         <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].name"
                             @meta-field-selected="onMetaFieldSelected($event, idx)"
                             @meta-field-removed="onAttribRemoved(idx)"
+                            @change="onMetaFieldFilled($event, idx)"
                             :hasField="fields[idx]" :operador="operators[idx]"
                             :tipo-attrib="atribType[idx]" :date-option="dataType[idx]" ref="field"
                         >
@@ -70,6 +71,7 @@
 </template>
 
 <script>
+
     import BcFilterGroup from './bc-filter-group.vue';
     import BcFilterAttrib from './bc-filter-attrib.vue';
     import BcFilterOperators from './bc-filter-operators.vue';
@@ -77,6 +79,7 @@
     import BcFilterSourceMenu from './bc-filter-source-menu.vue';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
+    import rename from './utils/rename-key.js';
 
     export default {
         name: 'bc-filter-ui',
@@ -93,7 +96,9 @@
             ui: Object,
             logicNameUis: Array,
             sourceTypes: Array,
-            showSourceOption: Boolean
+            showSourceOption: Boolean,
+            idx: Number,
+            operator: String
         },
         data() {
             return {
@@ -102,7 +107,10 @@
                 atribType: [],
                 fields: [],
                 dataType: [],
-                uis: []
+                uis: [],
+                newFilter: {},
+                lastMetaUiSelected: null,
+                type: 'AND'
             };
         },
         created() {
@@ -113,8 +121,32 @@
                 this.ui.sourcesSelected = sourcesSelected;
                 this.$forceUpdate();
             },
+            buildBaseObject(uiId) {
+                this.newFilter[uiId] = {};
+                this.newFilter[uiId][this.type] = [];
+            },
+            renameKey(obj, oldName, newName) {
+                if (oldName === newName) {
+                    return obj;
+                }
+                if (obj.hasOwnProperty(oldName)) {
+                    obj[newName] = obj[oldName];
+                    delete obj[oldName];
+                }
+                return obj;
+            },
+            removeChangedUi(uiId) {
+                if (!this.lastMetaUiSelected) {
+                    return;
+                }
+                delete this.newFilter[this.lastMetaUiSelected];
+                this.lastMetaUiSelected = uiId;
+            },
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
+                this.removeChangedUi();
+                this.lastMetaUiSelected = metaUI.id;
+                this.buildBaseObject(metaUI.id);
                 this.attribs = await bcService.getAttribsFromUI(metaUI.id);
                 this.attribs.sort((e1, e2) => {
                     const l1 = e1.label.normalize('NFD');
@@ -125,6 +157,14 @@
                 this.atribType = [];
                 this.fields = [];
                 this.$emit('meta-ui-selected', metaUI);
+                console.log(this.newFilter);
+                /*
+                this.$emit('meta-ui-selected', {
+                    newFilter: this.newFilter,
+                    ids: this.idx
+                });
+
+                 */
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
@@ -192,7 +232,6 @@
 
             },
             onMetaOperatorSelected(obj, idx) {
-
                 this.operators[idx] = obj;
                 this.$forceUpdate();
             },
@@ -205,6 +244,16 @@
                 this.operators.splice(idx, 1);
                 this.fields.splice(idx, 1);
                 this.$forceUpdate();
+            },
+            onMetaFieldFilled($event, idx) {
+                console.log($event, idx);
+            },
+            onTypeChanged(type) {
+                this.newFilter[this.lastMetaUiSelected] = rename(this.type,
+                    type, this.newFilter[this.lastMetaUiSelected]);
+                this.type = type;
+                console.log(this.newFilter);
+                this.$emit('operator-changed', this.newFilter);
             }
         }
     };

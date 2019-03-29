@@ -23,11 +23,11 @@
     <div>
         <div class="bc-int-inputs">
             <div class="options-container">
-                <input id="date1" name="initialDate" type="date"
+                <input id="date1" name="initialDate" type="date" @change="change"
                         class="inp big" v-model="initialDate">
-                <input id="date2" name="finalDate" type="date"
+                <input id="date2" name="finalDate" type="date" @change="change"
                         class="inp big" v-model="finalDate">
-                <input id="hour" name="hour" type="time"
+                <input id="hour" name="hour" type="time" @change="change"
                     class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
             </div>
         </div>
@@ -49,8 +49,8 @@
             };
         },
         methods: {
-            fireFieldSelected() {
-                this.$emit('meta-field-selected', this.initialDate, this.finalDate, this.hour);
+            change() {
+                this.$emit('change', [this.initialDate, this.finalDate, this.hour]);
             }
         }
     };
