@@ -147,28 +147,48 @@
                 this.showModal = false;
             },
             fireProfileSaved() {
-                //necessário passar o json junto para salvar os filtros da pesquisa;
-                bcService.saveSearchProfiles(this.selectedProfile);
+                try {
+                    //necessário passar o json junto para salvar os filtros da pesquisa;
+                    bcService.editProfile(this.selectedProfile);
+                    return this.$emit('reload-profiles');
+                } catch (error) {
+                    return console.error('Erro ao salvar perfil');
+                }
             },
-            fireProfileSavedAs(name) {
+            async fireProfileSavedAs(name) {
                 this.showModal = false;
                 //necessário passar o json junto para salvar os filtros da pesquisa;
-                bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
+                try {
+                    await bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
+                    return this.$emit('reload-profiles');
+                } catch (error) {
+                    return console.error('Erro ao salvar perfil como');
+                }
             },
-            fireProfileDefault() {
-                bcService.setDefaultProfile(this.selectedProfile);
+            async fireProfileDefault() {
+                try {
+                    await bcService.setDefaultProfile(this.selectedProfile);
+                    return this.$emit('reload-profiles');
+                } catch (error) {
+                    return console.error('Erro ao setar default');
+                }
             },
-            fireProfileRenamed(name) {
+            async fireProfileRenamed(name) {
                 this.showModal = false;
                 try {
-                    bcService.renameSearchProfiles(this.selectedProfile, name);
+                    await bcService.renameSearchProfiles(this.selectedProfile, name);
+                    return this.$emit('reload-profiles');
                 } catch (error) {
                     return alert('Não foi possível renomear a pesquisa.');
                 }
-                return this.$emit('renamed');
             },
-            fireProfileRemoved() {
-                bcService.deleteSearchProfiles(this.selectedProfile);
+            async fireProfileRemoved() {
+                try {
+                    await bcService.deleteSearchProfiles(this.selectedProfile);
+                    return this.$emit('reload-profiles');
+                } catch (error) {
+                    return alert('Não foi possível excluir a pesquisa.');
+                }
             }
         },
         watch: {

@@ -1,7 +1,7 @@
 <template>
     <div class="bc-filter-component">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
-            @renamed="getProfiles">
+            @reload-profiles="getProfiles">
         </bc-filter-profile>
         <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
@@ -38,7 +38,9 @@
         },
         props: {
             listUis: Array,
-            sourceTypes: Array
+            sourceTypes: Array,
+            idAplicacao: String,
+            idTipoPesquisa: String
         },
         data() {
             return {
@@ -102,13 +104,8 @@
                 this.profile = obj;
             },
             async getProfiles() {
-                this.profiles = [];
                 let response = await bcService.getSearchProfiles();
-                // inicio da logica para testar a tarefa de iniciar na pesquisa default (apagar no fim da tarefa)
-                if (response && response.uis) {
-                    response.uis[1].flg_default.valor = 'Sim';
-                }
-                // fim da logica;
+                this.profiles = [];
                 response.uis.forEach(ui => {
                     this.profiles.push(ui);
                 });

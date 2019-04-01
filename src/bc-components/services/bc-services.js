@@ -6,6 +6,10 @@ import metadata from '../metadata';
  * Criação das instâncias do Axios.
  */
 
+let userId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : 'usuario|bc|0';
+let idAplicacao = 'aplicacao|bc|140';
+let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
+
 Dispatcher.config({
     baseURL: '/bc/services/'
 });
@@ -21,7 +25,12 @@ let getProfileParams = {
                     {
                         oper: 'EQUAL',
                         attr: 'cnfg_usua_app_pes.aplicacao_id_aplicacao.id_aplicacao',
-                        val: ['aplicacao|bc|140']
+                        val: [idAplicacao]
+                    },
+                    {
+                        oper: 'EQUAL',
+                        attr: 'cnfg_usua_app_pes.usuario_id_pessoa._id',
+                        val: [userId]
                     }
                 ]
             }
@@ -41,6 +50,12 @@ let getProfileParams = {
     ],
     offset: 0,
     limit: 1000
+};
+
+let include = {
+    oper: 'EQUAL',
+    attr: 'cnfg_usua_app_pes.flg_default',
+    val: ['S']
 };
 
 export default {
@@ -87,15 +102,22 @@ export default {
         return response;
     },
 
-    saveSearchProfiles(obj, param = null) {
+    async saveSearchProfiles(obj, param = null) {
         if (param) {
-            return console.log(`Salvar o perfil de id:\n
-                ${obj.id_cnfg_usua_app_pes} com o novo nome : ${param.descricao}`);
+            obj.descricao = param.descricao;
+            delete obj.flg_default;
+            delete obj.id_cnfg_usua_app_pes;
+            if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
         }
-        return console.log(`Salvar o perfil de nome: ${param.descricao}`);
+        let json = {
+            cnfg_usua_app_pes: [
+                obj
+            ]
+        };
+        return await dispatcher.doPost('persistence', json);
     },
 
-    renameSearchProfiles(param, name) {
+    async renameSearchProfiles(param, name) {
         let obj = {
             cnfg_usua_app_pes: [
                 {
@@ -105,15 +127,79 @@ export default {
                 }
             ]
         };
-        return dispatcher.doPut('persistence', obj);
+        return await dispatcher.doPut('persistence', obj);
     },
 
-    deleteSearchProfiles(param) {
-        console.log(`Deletar o perfil de id: ${param.id_cnfg_usua_app_pes}`);
+    async editProfile(obj) {
+        let json = {
+            cnfg_usua_app_pes: [
+                {
+                    id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
+                    descricao: obj.descricao,
+                    data_ultima_alteracao: obj.data_ultima_alteracao,
+                    xml_config: obj.xml_config
+                }
+            ]
+        };
+        try {
+            return await dispatcher.doPut('persistence', json);
+        } catch (error) {
+            return console.log('Erro no salvar');
+        }
     },
 
-    setDefaultProfile(param) {
-        console.log(`Setar como default o perfil de id: ${param.id_cnfg_usua_app_pes}`);
+    async deleteSearchProfiles(param) {
+        await dispatcher.doDelete(`delete/cnfg_usua_app_pes/${param.id_cnfg_usua_app_pes}`);
+    },
+
+    async setDefaultProfile(param) {
+        await this.getDefaultsAndSetAsNotDefault();
+        let obj = {
+            cnfg_usua_app_pes: [
+                {
+                    id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
+                    descricao: param.descricao,
+                    data_ultima_alteracao: param.data_ultima_alteracao,
+                    flg_default: 'S'
+                }
+            ]
+        };
+        await dispatcher.doPut('persistence', obj);
+    },
+
+    async getDefaultsAndSetAsNotDefault() {
+        let count = 0;
+        let params = JSON.parse(JSON.stringify(getProfileParams));
+        params.filter.AND[0].AND.push(include);
+        let response = await dispatcher.doPost('objectQuery', params);
+        let obj = {
+            cnfg_usua_app_pes: [
+            ]
+        };
+        if (response.uis.length) {
+            response.uis.forEach(ui => {
+                if (ui.flg_default.valor === 'Sim') {
+                    obj = this.resetDefaultValue(obj, ui);
+                    count += 1;
+                }
+            });
+        }
+        if (count) {
+            await dispatcher.doPut('persistence', obj);
+        }
+        return;
+    },
+
+    resetDefaultValue(obj, ui) {
+        obj.cnfg_usua_app_pes.push(
+            {
+                id_cnfg_usua_app_pes: ui.id_cnfg_usua_app_pes,
+                descricao: ui.descricao,
+                data_ultima_alteracao: ui.data_ultima_alteracao,
+                flg_default: 'N'
+            }
+        );
+        return obj;
     }
 
 };

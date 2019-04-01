@@ -18,7 +18,7 @@ export default class Dispatcher {
         return new Promise((resolve, reject) => {
             this.xhr.open(type, config.baseURL + url, true);
             this.xhr.setRequestHeader('Content-Type', 'application/json');
-            this.xhr.setRequestHeader('SessionId', '-5140556664156173233');
+            this.xhr.setRequestHeader('SessionId', '9031378129736105629');
             this.xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(this.response));
@@ -42,5 +42,8 @@ export default class Dispatcher {
     }
     doPut(url, param) {
         return this.doRequest(url, 'PUT', JSON.stringify(param));
+    }
+    doDelete(url) {
+        return this.doRequest(url, 'DELETE');
     }
 }
