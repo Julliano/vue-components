@@ -1,6 +1,5 @@
 import '@babel/polyfill';
 import Dispatcher from '../utils/dispatcher.js';
-import metadata from '../metadata';
 
 /**
  * Criação das instâncias do Axios.
@@ -62,13 +61,11 @@ export default {
     getLocale() {
         return navigator.language.slice(0, 2);
     },
-    getLabelUIs(uis) {
-
-        console.log(`getLabelUIs: ${uis}`);
-        // console.log(axiosInstance);
-        return metadata.uis;
-        // const response = await axiosInstance.post('uis/', uis);
-        // return response.data.searchResult;
+    async getLabelUIs(uis) {
+        const locale = this.getLocale();
+        const url = `metadata?loc=${locale}`;
+        const allMetaUis = await dispatcher.doGet(url);
+        return allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
     },
 
     async getAttribsFromUI(logicName) {
