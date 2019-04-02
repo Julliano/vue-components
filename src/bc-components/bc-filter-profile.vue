@@ -28,8 +28,8 @@
                     {{profile.descricao}}
             </option>
         </select>
-        <dgt-context-menu :close-on-click="true" :change-open="!!selectedProfile.descricao">
-            <button slot="button" class="btn-icon" :class="{'disabled-button': !selectedProfile.descricao}">
+        <dgt-context-menu :close-on-click="true" :change-open="selectedProfile.id">
+            <button slot="button" class="btn-icon" :class="{'disabled-button': selectedProfile.id}">
                 <i class="mdi mdi-settings"></i>
             </button>
             <div slot="content">
@@ -41,7 +41,7 @@
             </div>
         </dgt-context-menu>
         <bc-save-search-modal v-if="showModal" :type="modalType"
-            @cancel="closeModal" @confirm="handleConfirm"
+            @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
         ></bc-save-search-modal>
     </div>
 </template>
@@ -66,6 +66,7 @@
                 type: Boolean,
                 default: true
             },
+            json: {},
             profiles: Array
         },
         data() {
@@ -76,7 +77,7 @@
                     id_cnfg_usua_app_pes: null
                 },
                 optionSelected: {
-                    id: null
+                    id: ''
                 },
                 enableDefaultOption: true,
                 options: [
@@ -150,45 +151,76 @@
                 try {
                     //necessário passar o json junto para salvar os filtros da pesquisa;
                     bcService.editProfile(this.selectedProfile);
+                    this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
+                    this.$emit('error', 'save');
                     return console.error('Erro ao salvar perfil');
                 }
             },
             async fireProfileSavedAs(name) {
-                this.showModal = false;
                 //necessário passar o json junto para salvar os filtros da pesquisa;
-                try {
-                    await bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
-                    return this.$emit('reload-profiles');
-                } catch (error) {
-                    return console.error('Erro ao salvar perfil como');
+                this.selectedProfile = this.selectedProfile.descricao ?
+                    this.selectedProfile : this.json;
+                if (this.checkSameProfileName(name)) {
+                    try {
+                        await bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
+                        this.showModal = false;
+                        this.$emit('success', 'saveAs');
+                        return this.$emit('reload-profiles');
+                    } catch (error) {
+                        this.$emit('error', 'saveAs');
+                        return console.error('Erro ao salvar perfil como');
+                    }
                 }
+                this.$emit('error', 'saveAs');
+                return alert('Erro ao salvar perfil com o mesmo nome');
             },
             async fireProfileDefault() {
                 try {
                     await bcService.setDefaultProfile(this.selectedProfile);
+                    this.$emit('success', 'default');
                     return this.$emit('reload-profiles');
                 } catch (error) {
+                    this.$emit('error', 'default');
                     return console.error('Erro ao setar default');
                 }
             },
             async fireProfileRenamed(name) {
-                this.showModal = false;
-                try {
-                    await bcService.renameSearchProfiles(this.selectedProfile, name);
-                    return this.$emit('reload-profiles');
-                } catch (error) {
-                    return alert('Não foi possível renomear a pesquisa.');
+                if (this.checkSameProfileName(name)) {
+                    try {
+                        await bcService.renameSearchProfiles(this.selectedProfile, name);
+                        this.showModal = false;
+                        this.$emit('success', 'renamed');
+                        return this.$emit('reload-profiles');
+                    } catch (error) {
+                        this.$emit('error', 'renamed');
+                        return alert('Não foi possível renomear a pesquisa.');
+                    }
                 }
+                this.$emit('error', 'renamed');
+                return alert('Erro ao salvar perfil com o mesmo nome');
             },
             async fireProfileRemoved() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
+                    this.$emit('success', 'removed');
                     return this.$emit('reload-profiles');
                 } catch (error) {
+                    this.$emit('error', 'removed');
                     return alert('Não foi possível excluir a pesquisa.');
                 }
+            },
+            checkSameProfileName(name) {
+                if (this.profiles.length > 1) {
+                    let defaultProfile = this.profiles.filter(profile => {
+                        return profile.descricao === name;
+                    });
+                    if (defaultProfile.length) {
+                        return false;
+                    }
+                }
+                return true;
             }
         },
         watch: {

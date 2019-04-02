@@ -48,12 +48,16 @@
             type: {
                 type: String,
                 default: 'saveAs'
-            }
+            },
+            defaultName: String
         },
         data() {
             return {
                 nome: null
             };
+        },
+        created() {
+            if (this.defaultName) this.nome = this.defaultName;
         },
         methods: {
             closeSaveSearchModal() {

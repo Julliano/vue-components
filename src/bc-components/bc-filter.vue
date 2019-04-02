@@ -1,7 +1,7 @@
 <template>
     <div class="bc-filter-component">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
-            @reload-profiles="getProfiles">
+            @reload-profiles="getProfiles" :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
         </bc-filter-profile>
         <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
             <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
@@ -51,7 +51,10 @@
                 }],
                 filterData: [],
                 profiles: [],
-                profile: {}
+                profile: {},
+                jsonMounted: {
+                    descricao: ''
+                }
             };
         },
         async created() {
@@ -109,8 +112,11 @@
                 response.uis.forEach(ui => {
                     this.profiles.push(ui);
                 });
+            },
+            handleEvent(msg, type) {
+                var event = new CustomEvent(type, {detail: msg});
+                document.dispatchEvent(event);
             }
-
         }
     };
 </script>

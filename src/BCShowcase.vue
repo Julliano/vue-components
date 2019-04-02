@@ -33,6 +33,16 @@
                 idAplicacao: 'aplicacao|bc|140',
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados'
             };
+        },
+        created() {
+            // eventos para capturar os requests do component filter;
+            document.addEventListener('success', function(e) {
+                console.log(e.detail);
+            }, false);
+            // eventos para capturar os requests do component filter;
+            document.addEventListener('error', function(e) {
+                console.log(e.detail);
+            }, false);
         }
     };
 </script>

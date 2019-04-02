@@ -18,7 +18,7 @@ export default class Dispatcher {
         return new Promise((resolve, reject) => {
             this.xhr.open(type, config.baseURL + url, true);
             this.xhr.setRequestHeader('Content-Type', 'application/json');
-            this.xhr.setRequestHeader('SessionId', '9031378129736105629');
+            this.xhr.setRequestHeader('SessionId', '-8919380069497678553');
             this.xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(this.response));
