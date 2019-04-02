@@ -170,10 +170,14 @@
                         return this.$emit('reload-profiles');
                     } catch (error) {
                         this.$emit('error', 'saveAs');
+                        this.selectedProfile.id_cnfg_usua_app_pes = null;
+                        this.$forceUpdate();
                         return console.error('Erro ao salvar perfil como');
                     }
                 }
                 this.$emit('error', 'saveAs');
+                this.selectedProfile.id_cnfg_usua_app_pes = null;
+                this.$forceUpdate();
                 return alert('Erro ao salvar perfil com o mesmo nome');
             },
             async fireProfileDefault() {
@@ -195,10 +199,12 @@
                         return this.$emit('reload-profiles');
                     } catch (error) {
                         this.$emit('error', 'renamed');
+                        this.selectedProfile.id_cnfg_usua_app_pes = null;
                         return alert('Não foi possível renomear a pesquisa.');
                     }
                 }
                 this.$emit('error', 'renamed');
+                this.selectedProfile.id_cnfg_usua_app_pes = null;
                 return alert('Erro ao salvar perfil com o mesmo nome');
             },
             async fireProfileRemoved() {
