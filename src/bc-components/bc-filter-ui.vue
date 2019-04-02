@@ -26,7 +26,7 @@
                             :value="idx"
                             :selected="ui.id === opt.id"
                     >
-                        {{opt.name}}
+                        {{opt.label}}
                     </option>
                 </select>
                 <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.id" :uniqueId="Math.random()" :source-types="sourceTypes"
@@ -113,7 +113,7 @@
             };
         },
         created() {
-            this.uis = bcService.getLabelUIs(this.logicNameUis);
+            this.loadMetadada();
         },
         computed: {
             showSourceOption() {
@@ -129,6 +129,9 @@
             }
         },
         methods: {
+            async loadMetadada() {
+                this.uis = await bcService.getLabelUIs(this.logicNameUis);
+            },
             applySelectedFilters(sourcesSelected) {
                 this.ui.sourcesSelected = sourcesSelected;
                 this.$forceUpdate();
