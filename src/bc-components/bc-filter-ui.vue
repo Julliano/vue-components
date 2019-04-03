@@ -160,9 +160,9 @@
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
                 this.removeChangedUi();
-                this.lastMetaUiSelected = metaUI.id;
-                this.buildBaseObject(metaUI.id);
-                this.attribs = await bcService.getAttribsFromUI(metaUI.id);
+                this.lastMetaUiSelected = metaUI.name;
+                this.buildBaseObject(metaUI.name);
+                this.attribs = await bcService.getAttribsFromUI(metaUI.name);
                 this.attribs.sort((e1, e2) => {
                     const l1 = e1.label.normalize('NFD');
                     const l2 = e2.label.normalize('NFD');
