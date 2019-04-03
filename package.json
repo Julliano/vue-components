@@ -1,7 +1,7 @@
 {
   "name": "dgt-vue-components",
   "description": "Library of Dígitro vue components",
-  "version": "1.0.92",
+  "version": "1.0.94",
   "author": "digitro.com.br>",
   "baseURL": "http://localhost:8080",
   "baseBCURL": "http://localhost:8080/#/bc",

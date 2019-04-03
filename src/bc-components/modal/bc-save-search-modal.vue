@@ -57,7 +57,7 @@
             };
         },
         created() {
-            if (this.defaultName) this.nome = this.defaultName;
+            if (this.type === 'rename' && this.defaultName) this.nome = this.defaultName;
         },
         methods: {
             closeSaveSearchModal() {

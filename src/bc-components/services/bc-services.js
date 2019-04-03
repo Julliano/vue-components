@@ -8,6 +8,7 @@ import Dispatcher from '../utils/dispatcher.js';
 let userId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : 'usuario|bc|0';
 let idAplicacao = 'aplicacao|bc|140';
 let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
+let pathId = 10;
 
 Dispatcher.config({
     baseURL: '/bc/services/'
@@ -95,8 +96,7 @@ export default {
     },
 
     async getSearchProfiles() {
-        let response = await dispatcher.doPost('objectQuery', getProfileParams);
-        return response;
+        return await dispatcher.doPost('objectQuery', getProfileParams);
     },
 
     async saveSearchProfiles(obj, param = null) {
@@ -104,8 +104,14 @@ export default {
             obj.descricao = param.descricao;
             delete obj.flg_default;
             delete obj.id_cnfg_usua_app_pes;
+            obj['_diretorios'] = {
+                add: [pathId]
+            };
             if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
         }
+        obj.usuario_id_pessoa = {
+            id_usuario: userId
+        };
         let json = {
             cnfg_usua_app_pes: [
                 obj
@@ -120,7 +126,10 @@ export default {
                 {
                     id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
                     descricao: name,
-                    data_ultima_alteracao: param.data_ultima_alteracao
+                    data_ultima_alteracao: param.data_ultima_alteracao,
+                    _diretorios: {
+                        add: [pathId]
+                    }
                 }
             ]
         };
@@ -134,15 +143,14 @@ export default {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
                     descricao: obj.descricao,
                     data_ultima_alteracao: obj.data_ultima_alteracao,
-                    xml_config: obj.xml_config
+                    xml_config: obj.xml_config,
+                    _diretorios: {
+                        add: [pathId]
+                    }
                 }
             ]
         };
-        try {
-            return await dispatcher.doPut('persistence', json);
-        } catch (error) {
-            return console.log('Erro no salvar');
-        }
+        return await dispatcher.doPut('persistence', json);
     },
 
     async deleteSearchProfiles(param) {
@@ -157,7 +165,10 @@ export default {
                     id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
                     descricao: param.descricao,
                     data_ultima_alteracao: param.data_ultima_alteracao,
-                    flg_default: 'S'
+                    flg_default: 'S',
+                    _diretorios: {
+                        add: [pathId]
+                    }
                 }
             ]
         };
@@ -193,7 +204,10 @@ export default {
                 id_cnfg_usua_app_pes: ui.id_cnfg_usua_app_pes,
                 descricao: ui.descricao,
                 data_ultima_alteracao: ui.data_ultima_alteracao,
-                flg_default: 'N'
+                flg_default: 'N',
+                _diretorios: {
+                    add: [pathId]
+                }
             }
         );
         return obj;

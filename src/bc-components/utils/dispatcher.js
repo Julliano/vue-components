@@ -14,12 +14,13 @@ export default class Dispatcher {
         config = cfg;
     }
 
-    doRequest(url, type, param = undefined) {
+    // eslint-disable-next-line class-methods-use-this
+    doRequest(xhr, url, type, param = undefined) {
         return new Promise((resolve, reject) => {
-            this.xhr.open(type, config.baseURL + url, true);
-            this.xhr.setRequestHeader('Content-Type', 'application/json');
-            this.xhr.setRequestHeader('SessionId', '-8919380069497678553');
-            this.xhr.onload = function() {
+            xhr.open(type, config.baseURL + url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.setRequestHeader('SessionId', '847394656470301487');
+            xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(this.response));
                 } else {
@@ -30,20 +31,24 @@ export default class Dispatcher {
                     });
                 }
             };
-            this.xhr.send(param);
+            xhr.send(param);
         });
     }
 
-    doGet(url) {
-        return this.doRequest(url, 'GET');
+    async doGet(url) {
+        let xhr = new XMLHttpRequest();
+        return await this.doRequest(xhr, url, 'GET');
     }
-    doPost(url, param) {
-        return this.doRequest(url, 'POST', JSON.stringify(param));
+    async doPost(url, param) {
+        let xhr = new XMLHttpRequest();
+        return await this.doRequest(xhr, url, 'POST', JSON.stringify(param));
     }
     doPut(url, param) {
-        return this.doRequest(url, 'PUT', JSON.stringify(param));
+        let xhr = new XMLHttpRequest();
+        return this.doRequest(xhr, url, 'PUT', JSON.stringify(param));
     }
     doDelete(url) {
-        return this.doRequest(url, 'DELETE');
+        let xhr = new XMLHttpRequest();
+        return this.doRequest(xhr, url, 'DELETE');
     }
 }

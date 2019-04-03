@@ -112,8 +112,8 @@
                 type: 'AND'
             };
         },
-        created() {
-            this.loadMetadada();
+        async created() {
+            await this.loadMetadada();
         },
         computed: {
             showSourceOption() {
