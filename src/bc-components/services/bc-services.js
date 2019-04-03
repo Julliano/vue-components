@@ -66,7 +66,7 @@ export default {
         const locale = this.getLocale();
         const url = `metadata?loc=${locale}`;
         const allMetaUis = await dispatcher.doGet(url);
-        return allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
+        return !uis ? allMetaUis : allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
     },
 
     async getAttribsFromUI(logicName) {
