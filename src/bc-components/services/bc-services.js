@@ -4,14 +4,16 @@ import Dispatcher from '../utils/dispatcher.js';
 /**
  * Criação das instâncias do Axios.
  */
-
-let userId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : 'usuario|bc|0';
+let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_ID}` :
+    `usuario|bc|${parent.loginClientDTO.loginId}`;
+let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
 let idAplicacao = 'aplicacao|bc|140';
 let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
 let pathId = 10;
 
 Dispatcher.config({
-    baseURL: '/bc/services/'
+    baseURL: '/bc/services/',
+    sessionID: sessionId
 });
 
 const dispatcher = new Dispatcher();

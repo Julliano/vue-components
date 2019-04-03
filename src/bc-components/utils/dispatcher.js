@@ -2,10 +2,6 @@ let config;
 
 export default class Dispatcher {
 
-    constructor() {
-        this.xhr = new XMLHttpRequest();
-    }
-
     static config(cfg) {
         if (!cfg) return;
         if (config) {
@@ -19,7 +15,7 @@ export default class Dispatcher {
         return new Promise((resolve, reject) => {
             xhr.open(type, config.baseURL + url, true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.setRequestHeader('SessionId', '847394656470301487');
+            xhr.setRequestHeader('SessionID', config.sessionID);
             xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
                     resolve(JSON.parse(this.response));
