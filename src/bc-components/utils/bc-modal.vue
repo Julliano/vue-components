@@ -1,6 +1,6 @@
 <style lang="scss" scoped>
 
-    @import '../../styles/_variables.scss';
+    @import '../../styles/variables.scss';
     .modal-mask {
         position: fixed;
         z-index: 9;

@@ -1,5 +1,5 @@
 <style scoped lang="scss">
-    @import '../styles/_variables.scss';
+    @import '../styles/variables.scss';
     .bc-filter-profile{
         display: flex;
         align-items: center;
