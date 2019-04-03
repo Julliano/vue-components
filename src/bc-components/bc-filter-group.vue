@@ -1,5 +1,5 @@
 <style scoped lang="scss">
-    @import "styles/variables";
+    @import "./styles/variables";
     @import "../styles/variables";
 
     $disabled-color: lightgray;
