@@ -1,6 +1,6 @@
 <style lang="scss">
-    @import "../styles/variables";
-    @import "../styles/inputs";
+    @import "../styles/variables.scss";
+    @import "../styles/inputs.scss";
 
     .bc-filter-source-menu {
         .popover {

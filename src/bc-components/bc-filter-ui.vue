@@ -1,6 +1,6 @@
 <style scoped lang="scss">
-    @import "../styles/variables";
-    @import "styles/buttons";
+    @import "../styles/variables.scss";
+    @import "styles/buttons.scss";
 
     .bc-filter-ui {
         display: inline-flex;

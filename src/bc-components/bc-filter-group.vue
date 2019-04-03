@@ -1,6 +1,6 @@
 <style scoped lang="scss">
-    @import "./styles/variables";
-    @import "../styles/variables";
+    @import "./styles/variables.scss";
+    @import "../styles/variables.scss";
 
     $disabled-color: lightgray;
     $group-line: 2px;
