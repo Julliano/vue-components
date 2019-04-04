@@ -14,7 +14,7 @@
         <hr/>
         <h4>bc-filter</h4>
         <bc-filter :list-uis="listUis" :source-types="sourceTypes"
-            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa"></bc-filter>
+            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter"></bc-filter>
     </div>
 </template>
 
@@ -31,6 +31,13 @@
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'bc_padrao', 'bc_unica'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
+                filter: [
+                    {
+                        ui: 'dc_arquivo',
+                        sources: [],
+                        filter: {}
+                    }
+                ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados'
             };
         },

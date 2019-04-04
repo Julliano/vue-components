@@ -1,21 +1,21 @@
 <template>
     <div class="bc-filter-component">
+        <h4>Perfil</h4>
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
             @reload-profiles="getProfiles" :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
         </bc-filter-profile>
-        <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
-            <bc-filter-ui v-for="(ui, idx) in uis" :key="idx"
-                          :operator="operator"
-                          :idx="idx"
-                          :ui="ui"
-                          :logic-name-uis="listUis"
-                          :source-types="sourceTypes"
-                          :show-source-option="ui.id !== null"
-                          @meta-ui-selected="onMetaUISelected($event, ui)"
-                          @meta-ui-removed="onMetaUIRemoved(idx)"
-                          @operator-changed="onOperatorChanged"
-            ></bc-filter-ui>
-        </bc-filter-group>
+        <hr/>
+        <h4>Filtro</h4>
+        <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="idx"
+                        :idx="idx"
+                        :uiFilter="uiFilter"
+                        :logic-name-uis="listUis"
+                        :source-types="sourceTypes"
+                        :show-source-option="uiFilter.ui !== null"
+                        @meta-ui-selected="onMetaUISelected($event, uiFilter)"
+                        @meta-ui-removed="onMetaUIRemoved(idx)"
+                        @operator-changed="onOperatorChanged"
+        ></bc-filter-ui>
     </div>
 </template>
 
@@ -25,6 +25,7 @@
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
+    import {bcFilterToView} from './utils/transform-filter.js';
     import i18n from './utils/i18n.js';
 
     export default {
@@ -40,35 +41,50 @@
             listUis: Array,
             sourceTypes: Array,
             idAplicacao: String,
-            idTipoPesquisa: String
+            idTipoPesquisa: String,
+            filter: Array
         },
         data() {
             return {
-                operator: 'AND',
-                uis: [{
-                    id: null,
-                    attribs: []
-                }],
+                uis: null,
                 filterData: [],
                 profiles: [],
                 profile: {},
                 jsonMounted: {
                     descricao: ''
-                }
+                },
+                emptyFilter: [{
+                    ui: null,
+                    operator: null,
+                    criteria: [],
+                    sources: []
+                }]
+
             };
         },
         async created() {
             await this.getProfiles();
+            this.uis = this.loadData();
         },
         methods: {
+            loadData() {
+                return this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
+            },
             onMetaUISelected(metaUI, ui) {
                 ui.id = metaUI.id;
 
-                const emptyUi = this.uis.find((e)=>e.id === null);
+                const emptyUi = this.uis.find((e)=>e.ui === null);
 
                 if (!emptyUi) {
                     // adiciona novo grupo de ui
-                    this.uis.push({id: null, attribs: []});
+                    this.uis.push(
+                        {
+                            ui: null,
+                            criteria: [],
+                            operator: null,
+                            sources: []
+                        }
+                    );
                 }
 
                 this.$nextTick(()=>{

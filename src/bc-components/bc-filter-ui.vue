@@ -21,33 +21,33 @@
         <div class="bc-filter-ui">
             <div class="bc-filter-ui-main">
                 <select class="inp" @change="fireUISelected" v-if="uis">
-                    <option value="" disabled :selected="ui.id === null">{{'select' | i18n}}</option>
+                    <option value="" disabled :selected="uiFilter.ui === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in uis" :key="idx"
                             :value="idx"
-                            :selected="ui.id === opt.id"
+                            :selected="uiFilter.ui === opt.name"
                     >
                         {{opt.label}}
                     </option>
                 </select>
-                <bc-filter-source-menu v-if="showSourceOption" :uiProps="ui.id" :uniqueId="Math.random()" :source-types="sourceTypes"
-                                       @apply="applySelectedFilters" :sourcesSelectedProp="ui.sourcesSelected"></bc-filter-source-menu>
-                <button class="btn btn-filter-icon" v-if="ui.id !== null">
+                <bc-filter-source-menu v-if="showSourceOption" :uiProps="uiFilter.ui" :uniqueId="Math.random()" :source-types="sourceTypes"
+                                       @apply="applySelectedFilters" :sourcesSelectedProp="uiFilter.sources"></bc-filter-source-menu>
+                <button class="btn btn-filter-icon" v-if="uiFilter.ui !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
             </div>
             <bc-filter-group
-                 v-if="ui.attribs && ui.attribs.length > 0"
+                 v-if="uiFilter.criteria"
                  class="bc-filter-group"
                  ref="attribsGroup"
                  @type-changed="onTypeChanged"
             >
                 <bc-filter-attrib
-                    v-for="(attrib, idx) in ui.attribs" :key="idx"
+                    v-for="(attrib, idx) in uiFilter.criteria" :key="idx"
                     @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
-                    <bc-filter-operators slot="operator" v-if="atribType[idx]"
+                    <!-- <bc-filter-operators slot="operator" v-if="atribType[idx]"
                         :tipo-attrib="atribType[idx]" :ui-name="ui.id"
                         :attrib-name="ui.attribs[idx].id" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
@@ -63,9 +63,10 @@
                             :tipo-attrib="atribType[idx]" :date-option="dataType[idx]" ref="field"
                         >
                         </bc-filter-fields>
-                    </bc-filter-operators>
+                    </bc-filter-operators> -->
                 </bc-filter-attrib>
             </bc-filter-group>
+            <br/>
         </div>
     </div>
 </template>
@@ -93,7 +94,7 @@
             bcService
         },
         props: {
-            ui: Object,
+            uiFilter: Object,
             logicNameUis: Array,
             sourceTypes: Array,
             idx: Number,
@@ -114,10 +115,11 @@
         },
         async created() {
             await this.loadMetadada();
+            // this.ckeckEmptyCriteria();
         },
         computed: {
             showSourceOption() {
-                if (!this.sourceTypes || this.ui.id === null) {
+                if (!this.sourceTypes || this.uiFilter.ui === null) {
                     return false;
                 }
                 for (const sourceType of this.sourceTypes) {
@@ -129,6 +131,11 @@
             }
         },
         methods: {
+            // ckeckEmptyCriteria() {
+            //     if (!this.uiFilter.criteria.length) {
+            //         this.uiFilter.criteria.push({});
+            //     };
+            // },
             async loadMetadada() {
                 this.uis = await bcService.getLabelUIs(this.logicNameUis);
             },
