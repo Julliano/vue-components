@@ -18,8 +18,7 @@
     }
 
     .container {
-        margin-left: $normal-space;
-        margin-top: $normal-space;
+        margin-left: $big-space;
 
         &.and {
             border-color: $and-color;
@@ -49,7 +48,7 @@
 
         }
 
-        > :before {
+        > :before{
             content: '';
             position: relative;
             bottom: $input-height/2;
@@ -60,11 +59,22 @@
             border-color: inherit;
             height: 50%;
         }
+        > .group {
+            .container {
+                margin-left: $big-space*2;
+                margin-top: $small-space;
+            }
+            .switch {
+                display: inline-block;
+                vertical-align: sub;
+            }
+        }
+
     }
 </style>
 
 <template>
-    <div>
+    <div class="group">
         <bc-switch v-model="type" :disabled="itemCount < 3" @input="onOperatorChanged"></bc-switch>
         <div class="container"
             :class="{

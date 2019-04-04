@@ -6,6 +6,7 @@
         </bc-filter-profile>
         <hr/>
         <h4>Filtro</h4>
+        {{uis}}
         <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="idx"
                         :idx="idx"
                         :uiFilter="uiFilter"
@@ -65,33 +66,29 @@
         async created() {
             await this.getProfiles();
             this.uis = this.loadData();
+            if (this.uis) {
+                this.createEmptyUi();
+            }
         },
         methods: {
             loadData() {
                 return this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
             },
-            onMetaUISelected(metaUI, ui) {
-                ui.id = metaUI.id;
-
-                const emptyUi = this.uis.find((e)=>e.ui === null);
-
-                if (!emptyUi) {
-                    // adiciona novo grupo de ui
-                    this.uis.push(
-                        {
-                            ui: null,
-                            criteria: [],
-                            operator: null,
-                            sources: []
-                        }
-                    );
-                }
-
-                this.$nextTick(()=>{
-                    this.$refs.uiGroup.updateGroups();
-                });
-                // limpa os atributos da ui
-                ui.attribs = [{id: null}];
+            createEmptyUi() {
+                // adiciona novo grupo de ui
+                this.uis.push(
+                    {
+                        ui: null,
+                        criteria: [],
+                        operator: null,
+                        sources: []
+                    }
+                );
+            },
+            onMetaUISelected(e, uiFilter) {
+                uiFilter.ui = e.name;
+                uiFilter.criteria.push({});
+                this.createEmptyUi();
             },
 
             onMetaUIRemoved(idx) {

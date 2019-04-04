@@ -36,25 +36,35 @@
                 </button>
             </div>
             <bc-filter-group
-                 v-if="uiFilter.criteria"
+                 v-if="uiFilter.criteria[0]"
                  class="bc-filter-group"
                  ref="attribsGroup"
                  @type-changed="onTypeChanged"
             >
+                <bc-attrib-group
+                    v-if="showAttribGroup"
+                    :ui-filter="uiFilter"
+                    :attrib="attrib"
+                    :attribs="attribs"
+                >
+                </bc-attrib-group>
+
                 <bc-filter-attrib
                     v-for="(attrib, idx) in uiFilter.criteria" :key="idx"
                     @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
+                    @new-group="onNewGroup"
                     :meta-attribs="attribs" :attrib="attrib" ref="attrib"
                 >
-                    <!-- <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-attrib="atribType[idx]" :ui-name="ui.id"
-                        :attrib-name="ui.attribs[idx].id" :operador="operators[idx]"
+                    <!--
+                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
+                        :tipo-attrib="atribType[idx]" :ui-name="uiFilter.ui"
+                        :attrib-name="attribs[idx].id" :operador="operators[idx]"
                         @meta-operator-selected="onMetaOperatorSelected($event, idx)"
                         @meta-operator-removed="onAttribRemoved(idx)"
                         @data-option-selected="onDataOptionSelected($event, idx)"
                         ref="operator"
-                    >
+                     ></bc-filter-operators>
                         <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].name"
                             @meta-field-selected="onMetaFieldSelected($event, idx)"
                             @meta-field-removed="onAttribRemoved(idx)"
@@ -66,7 +76,7 @@
                     </bc-filter-operators> -->
                 </bc-filter-attrib>
             </bc-filter-group>
-            <br/>
+            <br>
         </div>
     </div>
 </template>
@@ -78,6 +88,7 @@
     import BcFilterOperators from './bc-filter-operators.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import BcFilterSourceMenu from './bc-filter-source-menu.vue';
+    import BcAttribGroup from './bc-attrib-group.vue';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
     import rename from './utils/rename-key.js';
@@ -91,7 +102,8 @@
             BcFilterGroup,
             BcFilterOperators,
             BcFilterFields,
-            bcService
+            bcService,
+            BcAttribGroup
         },
         props: {
             uiFilter: Object,
@@ -110,12 +122,16 @@
                 uis: [],
                 newFilter: {},
                 lastMetaUiSelected: null,
-                type: 'AND'
+                type: 'AND',
+                ui: null,
+                showAttribGroup: false
             };
         },
         async created() {
             await this.loadMetadada();
-            // this.ckeckEmptyCriteria();
+            if (this.uiFilter.ui) {
+                await this.getAttribsFromUI(this.uiFilter.ui);
+            }
         },
         computed: {
             showSourceOption() {
@@ -131,21 +147,12 @@
             }
         },
         methods: {
-            // ckeckEmptyCriteria() {
-            //     if (!this.uiFilter.criteria.length) {
-            //         this.uiFilter.criteria.push({});
-            //     };
-            // },
             async loadMetadada() {
                 this.uis = await bcService.getLabelUIs(this.logicNameUis);
             },
             applySelectedFilters(sourcesSelected) {
                 this.ui.sourcesSelected = sourcesSelected;
                 this.$forceUpdate();
-            },
-            buildBaseObject(uiId) {
-                this.newFilter[uiId] = {};
-                this.newFilter[uiId][this.type] = [];
             },
             renameKey(obj, oldName, newName) {
                 if (oldName === newName) {
@@ -164,22 +171,21 @@
                 delete this.newFilter[this.lastMetaUiSelected];
                 this.lastMetaUiSelected = uiId;
             },
-            async fireUISelected(e) {
-                const metaUI = this.uis[e.target.value];
-                this.removeChangedUi();
-                this.lastMetaUiSelected = metaUI.name;
-                this.buildBaseObject(metaUI.name);
-                this.attribs = await bcService.getAttribsFromUI(metaUI.name);
+            async getAttribsFromUI(name) {
+                this.attribs = await bcService.getAttribsFromUI(name);
                 this.attribs.sort((e1, e2) => {
                     const l1 = e1.label.normalize('NFD');
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+            },
+            async fireUISelected(e) {
+                const metaUI = this.uis[e.target.value];
+                await this.getAttribsFromUI(metaUI.name);
                 this.operators = [];
                 this.atribType = [];
                 this.fields = [];
                 this.$emit('meta-ui-selected', metaUI);
-                console.log(this.newFilter);
                 /*
                 this.$emit('meta-ui-selected', {
                     newFilter: this.newFilter,
@@ -220,8 +226,9 @@
                 }
             },
             onMetaAttribSelected(metaAttrib, attrib, idx) {
-                attrib.id = metaAttrib.name;
-                const emptyAttrib = this.ui.attribs.find((e)=>e.id === null);
+                attrib.id = metaAttrib.id;
+                attrib.name = metaAttrib.name;
+                const emptyAttrib = this.attribs.find((e)=>e.id === null);
                 this.atribType[idx] = this.checkType(metaAttrib.type);
                 if (this.operators[idx]) {
                     this.operators.splice(idx, 1);
@@ -230,7 +237,7 @@
 
                 if (!emptyAttrib) {
                     // adiciona novo grupo de attribs
-                    this.ui.attribs.push({id: null});
+                    this.attribs.push({id: null});
                 }
 
                 this.$forceUpdate();
@@ -276,6 +283,9 @@
                 this.type = type;
                 console.log(this.newFilter);
                 this.$emit('operator-changed', this.newFilter);
+            },
+            onNewGroup() {
+                this.showAttribGroup = true;
             }
         }
     };
