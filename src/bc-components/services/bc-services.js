@@ -9,7 +9,6 @@ let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_
 let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
 let idAplicacao = 'aplicacao|bc|140';
 let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
-let pathId = 10;
 
 Dispatcher.config({
     baseURL: '/bc/services/',
@@ -101,13 +100,18 @@ export default {
         return await dispatcher.doPost('objectQuery', getProfileParams);
     },
 
+    async getProfileDirectory() {
+        return await dispatcher
+            .doGet('access/userDataDirectory');
+    },
     async saveSearchProfiles(obj, param = null) {
         if (param) {
+            let response = await this.getProfileDirectory();
             obj.descricao = param.descricao;
             delete obj.flg_default;
             delete obj.id_cnfg_usua_app_pes;
             obj['_diretorios'] = {
-                add: [pathId]
+                add: [response.id]
             };
             if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
         }
@@ -128,10 +132,7 @@ export default {
                 {
                     id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
                     descricao: name,
-                    data_ultima_alteracao: param.data_ultima_alteracao,
-                    _diretorios: {
-                        add: [pathId]
-                    }
+                    data_ultima_alteracao: param.data_ultima_alteracao
                 }
             ]
         };
@@ -145,10 +146,7 @@ export default {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
                     descricao: obj.descricao,
                     data_ultima_alteracao: obj.data_ultima_alteracao,
-                    xml_config: obj.xml_config,
-                    _diretorios: {
-                        add: [pathId]
-                    }
+                    xml_config: obj.xml_config
                 }
             ]
         };
@@ -167,10 +165,7 @@ export default {
                     id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
                     descricao: param.descricao,
                     data_ultima_alteracao: param.data_ultima_alteracao,
-                    flg_default: 'S',
-                    _diretorios: {
-                        add: [pathId]
-                    }
+                    flg_default: 'S'
                 }
             ]
         };
@@ -206,10 +201,7 @@ export default {
                 id_cnfg_usua_app_pes: ui.id_cnfg_usua_app_pes,
                 descricao: ui.descricao,
                 data_ultima_alteracao: ui.data_ultima_alteracao,
-                flg_default: 'N',
-                _diretorios: {
-                    add: [pathId]
-                }
+                flg_default: 'N'
             }
         );
         return obj;
