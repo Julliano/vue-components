@@ -74,6 +74,7 @@ gulp.task('compile-vue-components', async () => {
                             autoprefixer()
                         ]
                     }),
+                    commonJs(),
                     json(),
                     nodeResolve({module: true})
                 ].concat(config.plugins || [])
@@ -81,7 +82,7 @@ gulp.task('compile-vue-components', async () => {
             const bundle = await rollup(inputOptions);
             const componentName = componentsVueJs[i].split('components/')[1].replace('.vue', '');
             const outputOptions = {
-                file: path.join(__dirname, 'dist', `${componentName}${config.output}`),
+                file: path.join(__dirname, paths.dist, `${componentName}${config.output}`),
                 format: config.format,
                 banner,
                 name: componentName
