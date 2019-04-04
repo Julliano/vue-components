@@ -114,6 +114,15 @@ export default {
                 add: [response.id]
             };
             if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
+            if (!obj.xml_config) {
+                obj.xml_config = '{ui: "dc_arquivo",sources:[\'fonte\'],operator: null,criteria: {}}';
+            }
+            if (!obj.aplicacao_id_aplicacao) {
+                obj.aplicacao_id_aplicacao = {id_aplicacao: idAplicacao};
+            }
+            // if (!obj.data_ultima_alteracao) {
+            //     obj.data_ultima_alteracao = '';
+            // }
         }
         obj.usuario_id_pessoa = {
             id_usuario: userId
@@ -159,17 +168,19 @@ export default {
 
     async setDefaultProfile(param) {
         await this.getDefaultsAndSetAsNotDefault();
-        let obj = {
-            cnfg_usua_app_pes: [
-                {
-                    id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
-                    descricao: param.descricao,
-                    data_ultima_alteracao: param.data_ultima_alteracao,
-                    flg_default: 'S'
-                }
-            ]
-        };
-        await dispatcher.doPut('persistence', obj);
+        if (param.flg_default && param.flg_default.valor === 'Não') {
+            let obj = {
+                cnfg_usua_app_pes: [
+                    {
+                        id_cnfg_usua_app_pes: param.id_cnfg_usua_app_pes,
+                        descricao: param.descricao,
+                        data_ultima_alteracao: param.data_ultima_alteracao,
+                        flg_default: 'S'
+                    }
+                ]
+            };
+            await dispatcher.doPut('persistence', obj);
+        }
     },
 
     async getDefaultsAndSetAsNotDefault() {

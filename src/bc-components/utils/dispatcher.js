@@ -18,7 +18,10 @@ export default class Dispatcher {
             xhr.setRequestHeader('SessionID', config.sessionID);
             xhr.onload = function() {
                 if (this.status >= 200 && this.status < 300) {
-                    resolve(JSON.parse(this.response));
+                    if (this.response) {
+                        resolve(JSON.parse(this.response));
+                    }
+                    resolve();
                 } else {
                     // eslint-disable-next-line prefer-promise-reject-errors
                     reject({
