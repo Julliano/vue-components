@@ -43,6 +43,7 @@
         <bc-save-search-modal v-if="showModal" :type="modalType"
             @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
         ></bc-save-search-modal>
+        <hr>
     </div>
 </template>
 

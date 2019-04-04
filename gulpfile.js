@@ -16,10 +16,10 @@ const commonJs = require('rollup-plugin-commonjs');
 
 const { version } = require('./package.json');
 const packageJson = jsonfile.readFileSync('./package.json');
-const paths = { src: 'src/components/**/*.vue', dist: 'dist' };
+const paths = { src: 'src/components/**/*.vue', dist: 'dist-component' };
 const bccPaths = {
     src: './src/bc-components',
-    dist: './src/bc-components/dist'
+    dist: 'dist-bc-component'
 };
 const componentsVueJs = glob.sync('./src/components/**/*.vue');
 const banner =
