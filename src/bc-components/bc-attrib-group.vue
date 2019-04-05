@@ -1,16 +1,15 @@
 <template>
-    <div>
-        <bc-filter-group v-for="(attrib, idx) in criterias" :key="idx"
+        <bc-filter-group 
             class="bc-filter-group"
         >
             <bc-filter-attrib
+                v-for="(attrib, idx) in criterias" :key="idx"
                 @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
                 @meta-attrib-removed="onAttribRemoved(idx)"
                 @new-group="onNewGroup"
                 :meta-attribs="attribs" :attrib="attrib" ref="attrib"
             ></bc-filter-attrib>
         </bc-filter-group>
-    </div>
 </template>
 
 <script>

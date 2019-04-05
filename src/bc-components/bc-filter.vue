@@ -1,11 +1,9 @@
 <template>
     <div class="bc-filter-component">
-        <h4>Perfil</h4>
-        <bc-filter-profile :profiles="profiles" @change="onProfileSelected"
-            @reload-profiles="getProfiles" :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles"
+            :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
         </bc-filter-profile>
-        <hr/>
-        <h4>Filtro</h4>
+         <h4> {{ 'searchProfile' | i18n }} </h4>
         {{uis}}
         <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="idx"
                         :idx="idx"
@@ -98,9 +96,6 @@
                     this.$refs.uiGroup.updateGroups();
                 });
             },
-            onProfileSelected(e) {
-                console.log(e.target.value);
-            },
             removeChangedUi(uiId) {
                 if (!this.lastMetaUiSelected) {
                     return;
@@ -118,6 +113,7 @@
             },
             onProfileSelected(obj) {
                 this.profile = obj;
+                console.log(obj);
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();
@@ -125,6 +121,7 @@
                 response.uis.forEach(ui => {
                     this.profiles.push(ui);
                 });
+                this.$forceUpdate();
             },
             handleEvent(msg, type) {
                 var event = new CustomEvent(type, {detail: msg});

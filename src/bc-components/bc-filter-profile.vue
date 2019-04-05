@@ -1,48 +1,66 @@
 <style scoped lang="scss">
-    @import '../styles/variables';
-    .bc-filter-profile{
-        display: flex;
-        align-items: center;
-        button {
-            text-align: left;
-            &:nth-child(3) {
-                border-top-color: $gray400;
-                border-bottom-color: $gray400;
-            }
-            &.disabled-button{
-                cursor: default;
-                pointer-events: none;
-                color: $gray900;
-                opacity: 0.4;
-            }
-        }
+@import '../styles/variables';
+.bc-filter-profile{
+  display: block;
+  align-items: center;
+  h4 {
+    margin: 0px;
+  }
+  .inline {
+      display: flex;
+  }
+  button {
+    &.btn-icon {
+      margin-top: -2px;
     }
+    &.popover-item {
+      &:nth-child(3) {
+        border-top-color: $gray400;
+        border-bottom-color: $gray400;
+      }
+    }
+    text-align: left;
+    &.disabled-button{
+      cursor: default;
+      pointer-events: none;
+      color: $gray900;
+      opacity: 0.4;
+    }
+  }
+}
 </style>
 
 <template>
     <div class="bc-filter-profile field" v-if="show">
-        <select name="profiles" class="inp" @change="fireProfileSelected">
-            <option value="" disabled :selected="selectedProfile.id_cnfg_usua_app_pes === null">{{'select' | i18n}}</option>
-            <option v-for="(profile, idx) in profiles" :key="idx"
-                    :value="idx" :selected="selectedProfile.descricao === profile.descricao">
-                    {{profile.descricao}}
-            </option>
-        </select>
-        <dgt-context-menu :close-on-click="true" :change-open="selectedProfile.id">
-            <button slot="button" class="btn-icon" :class="{'disabled-button': selectedProfile.id}">
-                <i class="mdi mdi-settings"></i>
-            </button>
-            <div slot="content">
-                <button v-for="(option, idx) in options" :key="idx" class="btn popover-item"
-                        :class="{'disabled-button': checkDisabled(option)}" @click="fireOptionSelected(option)">
-                        <i v-if="checkDefault(option)" class="mdi mdi-check"></i>
-                        {{ `profileOptions.${option.label}` | i18n }}
+        <h4> {{ 'profile' | i18n }} </h4>
+        <div class="inline">
+            <select name="profiles" class="inp" @change="fireProfileSelected">
+                <option value="" disabled :selected="selectedProfile.id_cnfg_usua_app_pes === null">{{'select' | i18n}}</option>
+                <option v-for="(profile, idx) in profiles" :key="idx"
+                        :value="idx" :selected="selectedProfile.descricao === profile.descricao">
+                        {{profile.descricao}}
+                </option>
+            </select>
+            <dgt-context-menu :close-on-click="true" :change-open="selectedProfile.id">
+                <button slot="button" class="btn-icon" :class="{'disabled-button': selectedProfile.id}">
+                    <i class="mdi mdi-settings"></i>
                 </button>
-            </div>
-        </dgt-context-menu>
-        <bc-save-search-modal v-if="showModal" :type="modalType"
-            @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
-        ></bc-save-search-modal>
+                <div slot="content">
+                    <button v-for="(option, idx) in options" :key="idx" class="btn popover-item"
+                            :class="{'disabled-button': checkDisabled(option)}" @click="fireOptionSelected(option)">
+                            <i v-if="checkDefault(option)" class="mdi mdi-check"></i>
+                            {{ handleLabel(option) | i18n }}
+                    </button>
+                </div>
+            </dgt-context-menu>
+            <button class="btn" @click="newProfile">
+                {{ 'new' | i18n }}
+            </button>
+            <bc-save-search-modal v-if="showModal" :type="modalType"
+                @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
+            ></bc-save-search-modal>
+        </div>
+        <hr/>
     </div>
 </template>
 
@@ -90,14 +108,39 @@
             };
         },
         methods: {
-            setDefault() {
-                let defaultProfile = this.profiles.filter(profile => {
-                    return profile.flg_default.valor === 'Sim';
-                });
-                if (defaultProfile.length) {
-                    [this.selectedProfile] = [...defaultProfile];
-                    this.$emit('change', this.selectedProfile);
+            newProfile() {
+                this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                this.$emit('change', this.selectedProfile);
+            },
+            handleLabel(option) {
+                if (option.label === 'default') {
+                    if (this.selectedProfile.flg_default &&
+                            this.selectedProfile.flg_default.valor === 'Sim') {
+                        return 'profileOptions.removeDefault';
+                    }
                 }
+                return `profileOptions.${option.label}`;
+            },
+            setDefault() {
+                if (!this.selectedProfile.descricao) {
+                    let defaultProfile = this.profiles.filter(profile => {
+                        return profile.flg_default.valor === 'Sim';
+                    });
+                    if (defaultProfile.length) {
+                        [this.selectedProfile] = [...defaultProfile];
+                        this.$emit('change', this.selectedProfile);
+                    } else {
+                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
+                    }
+                } else {
+                    let initialProfile = this.profiles.filter(profile => {
+                        return profile.descricao === this.selectedProfile.descricao;
+                    });
+                    if (initialProfile.length) {
+                        [this.selectedProfile] = [...initialProfile];
+                    }
+                }
+                this.$forceUpdate();
             },
             fireProfileSelected(e) {
                 this.selectedProfile = this.profiles[e.target.value];
@@ -136,11 +179,9 @@
             },
             checkDisabled(option) {
                 if (option.label === 'default') {
-                    if (this.selectedProfile.flg_default &&
-                        this.selectedProfile.flg_default.valor === 'Sim') return true;
-                    if (!this.selectedProfile.id_cnfg_usua_app_pes) return true;
+                    if (!this.selectedProfile.descricao) return true;
                 } else if (option.label !== 'saveAs') {
-                    return !this.selectedProfile.id_cnfg_usua_app_pes;
+                    return !this.selectedProfile.descricao;
                 }
                 return null;
             },
@@ -166,17 +207,17 @@
                     try {
                         await bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
                         this.showModal = false;
+                        this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
                         this.$emit('error', 'saveAs');
-                        this.selectedProfile.id_cnfg_usua_app_pes = null;
                         this.$forceUpdate();
                         return console.error('Erro ao salvar perfil como');
                     }
                 }
                 this.$emit('error', 'saveAs');
-                this.selectedProfile.id_cnfg_usua_app_pes = null;
+                this.selectedProfile = {id_cnfg_usua_app_pes: null};
                 this.$forceUpdate();
                 return alert('Erro ao salvar perfil com o mesmo nome');
             },
@@ -195,22 +236,22 @@
                     try {
                         await bcService.renameSearchProfiles(this.selectedProfile, name);
                         this.showModal = false;
+                        this.selectedProfile.descricao = name;
                         this.$emit('success', 'renamed');
                         return this.$emit('reload-profiles');
                     } catch (error) {
                         this.$emit('error', 'renamed');
-                        this.selectedProfile.id_cnfg_usua_app_pes = null;
                         return alert('Não foi possível renomear a pesquisa.');
                     }
                 }
                 this.$emit('error', 'renamed');
-                this.selectedProfile.id_cnfg_usua_app_pes = null;
                 return alert('Erro ao salvar perfil com o mesmo nome');
             },
             async fireProfileRemoved() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
                     this.$emit('success', 'removed');
+                    this.selectedProfile = { id_cnfg_usua_app_pes: null };
                     return this.$emit('reload-profiles');
                 } catch (error) {
                     this.$emit('error', 'removed');
@@ -220,7 +261,8 @@
             checkSameProfileName(name) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {
-                        return profile.descricao === name;
+                        return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
+                            name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
                     });
                     if (defaultProfile.length) {
                         return false;

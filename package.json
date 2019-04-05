@@ -8,8 +8,8 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "prod": "cross-env NODE_ENV=production webpack --progress --hide-modules",
-    "build:theme": "npm run lint && rm -rf dist/* && node node_modules/gulp/bin/gulp.js build",
-    "build:bcc": "rm -rf src/bc-components/dist/* && npm run lint  && node node_modules/gulp/bin/gulp.js build-bcc",
+    "build:theme": "rm -rf dist-component/* && npm run lint && node node_modules/gulp/bin/gulp.js build",
+    "build:bcc": "rm -rf dist-bc-component/* && npm run lint  && node node_modules/gulp/bin/gulp.js build-bcc",
     "lint": "eslint --ext .js,.vue src",
     "test-ui": "jest",
     "test-e2e": "testcafe firefox tests-e2e --app 'npm run dev' --app-init-delay 10000"

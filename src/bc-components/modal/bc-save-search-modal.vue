@@ -24,7 +24,7 @@
             <div slot="body" class="field width-full">
                 <label>
                     {{ `search.name` | i18n }}
-                    <input name="operation" autocomplete="off" type="text" class="inp big" v-model="nome">
+                    <input name="operation" autocomplete="off" type="text" class="inp big" v-model="nome" maxlength="100">
                 </label>
             </div>
             <footer slot="footer" class="text-right">
