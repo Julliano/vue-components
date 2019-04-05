@@ -4,7 +4,10 @@
             :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
         </bc-filter-profile>
          <h4> {{ 'searchProfile' | i18n }} </h4>
-        {{uis}}
+        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+            {{JSON.stringify(uis, null,8)}}
+
+        </textarea>
         <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="idx"
                         :idx="idx"
                         :uiFilter="uiFilter"
@@ -13,7 +16,6 @@
                         :show-source-option="uiFilter.ui !== null"
                         @meta-ui-selected="onMetaUISelected($event, uiFilter)"
                         @meta-ui-removed="onMetaUIRemoved(idx)"
-                        @operator-changed="onOperatorChanged"
         ></bc-filter-ui>
     </div>
 </template>
@@ -46,7 +48,6 @@
         data() {
             return {
                 uis: null,
-                filterData: [],
                 profiles: [],
                 profile: {},
                 jsonMounted: {
@@ -73,6 +74,9 @@
                 return this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
             },
             createEmptyUi() {
+                const hasEmptyUI = this.uis.filter(item => item.ui === null);
+
+                if (hasEmptyUI.length) return;
                 // adiciona novo grupo de ui
                 this.uis.push(
                     {
@@ -85,7 +89,8 @@
             },
             onMetaUISelected(e, uiFilter) {
                 uiFilter.ui = e.name;
-                uiFilter.criteria.push({});
+                uiFilter.criteria = [{}];
+                uiFilter.operator = 'and';
                 this.createEmptyUi();
             },
 
@@ -103,13 +108,6 @@
                 let keys = Object.keys(this.newFilter);
                 delete this.newFilter[keys[this.idx]];
                 this.lastMetaUiSelected = uiId;
-            },
-            onTypeChanged(type) {
-                this.operator = type;
-            },
-            onOperatorChanged(value) {
-                this.filterData.push(value);
-                console.log(this.filterData);
             },
             onProfileSelected(obj) {
                 this.profile = obj;

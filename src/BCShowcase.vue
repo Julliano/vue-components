@@ -35,7 +35,38 @@
                     {
                         ui: 'dc_arquivo',
                         sources: [],
-                        filter: {}
+                        filter: {
+                            or: [
+                                {
+                                    attr: 'dc_comentario',
+                                    oper: 'EQUAL',
+                                    val: ['João']
+                                },
+                                {
+                                    attr: 'alvo',
+                                    oper: 'EQUAL',
+                                    val: ['João']
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        ui: 'dc_agenda',
+                        sources: [],
+                        filter: {
+                            or: [
+                                {
+                                    attr: 'nome',
+                                    oper: 'EQUAL',
+                                    val: ['João']
+                                },
+                                {
+                                    attr: 'alvo',
+                                    oper: 'EQUAL',
+                                    val: ['João']
+                                }
+                            ]
+                        }
                     }
                 ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados'

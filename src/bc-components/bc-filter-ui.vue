@@ -39,22 +39,16 @@
                  v-if="uiFilter.criteria[0]"
                  class="bc-filter-group"
                  ref="attribsGroup"
-                 @type-changed="onTypeChanged"
+                 :criteria-size="uiFilter.criteria.length"
+                 :operator="uiFilter.operator"
+                 @operator-changed="onOperatorChanged"
             >
-                <bc-attrib-group
-                    v-if="showAttribGroup"
-                    :ui-filter="uiFilter"
-                    :attrib="attrib"
-                    :attribs="attribs"
-                >
-                </bc-attrib-group>
-
                 <bc-filter-attrib
-                    v-for="(attrib, idx) in uiFilter.criteria" :key="idx"
-                    @meta-attrib-selected="onMetaAttribSelected($event, attrib, idx)"
+                    v-for="(criteria, idx) in uiFilter.criteria" :key="idx"
+                    @meta-attrib-selected="onMetaAttribSelected($event, criteria)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     @new-group="onNewGroup"
-                    :meta-attribs="attribs" :attrib="attrib" ref="attrib"
+                    :meta-attribs="attribs" :criteria="criteria" ref="attrib"
                 >
                     <!--
                      <bc-filter-operators slot="operator" v-if="atribType[idx]"
@@ -82,7 +76,7 @@
 </template>
 
 <script>
-
+    import Vue from 'vue';
     import BcFilterGroup from './bc-filter-group.vue';
     import BcFilterAttrib from './bc-filter-attrib.vue';
     import BcFilterOperators from './bc-filter-operators.vue';
@@ -91,7 +85,6 @@
     import BcAttribGroup from './bc-attrib-group.vue';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
-    import rename from './utils/rename-key.js';
 
     export default {
         name: 'bc-filter-ui',
@@ -132,6 +125,7 @@
             if (this.uiFilter.ui) {
                 await this.getAttribsFromUI(this.uiFilter.ui);
             }
+            this.insertEmptyCriteria();
         },
         computed: {
             showSourceOption() {
@@ -147,6 +141,17 @@
             }
         },
         methods: {
+            insertEmptyCriteria() {
+                if (!this.uiFilter.criteria instanceof Array) return;
+                for (let item of this.uiFilter.criteria) {
+                    if (!Object.entries(item).length) {
+                        return;
+                    }
+                }
+                if (this.uiFilter.ui) {
+                    this.uiFilter.criteria.push({});
+                }
+            },
             async loadMetadada() {
                 this.uis = await bcService.getLabelUIs(this.logicNameUis);
             },
@@ -225,27 +230,30 @@
                         return 'outros';
                 }
             },
-            onMetaAttribSelected(metaAttrib, attrib, idx) {
-                attrib.id = metaAttrib.id;
-                attrib.name = metaAttrib.name;
-                const emptyAttrib = this.attribs.find((e)=>e.id === null);
-                this.atribType[idx] = this.checkType(metaAttrib.type);
-                if (this.operators[idx]) {
-                    this.operators.splice(idx, 1);
-                    this.fields.splice(idx, 1);
-                }
+            onMetaAttribSelected(metaAttrib, criteria) {
+                Vue.set(criteria, 'attr', metaAttrib.name);
+                this.insertEmptyCriteria();
 
-                if (!emptyAttrib) {
-                    // adiciona novo grupo de attribs
-                    this.attribs.push({id: null});
-                }
+                // attrib.id = metaAttrib.id;
+                // attrib.name = metaAttrib.name;
+                // const emptyAttrib = this.attribs.find((e)=>e.id === null);
+                // this.atribType[idx] = this.checkType(metaAttrib.type);
+                // if (this.operators[idx]) {
+                //     this.operators.splice(idx, 1);
+                //     this.fields.splice(idx, 1);
+                // }
 
-                this.$forceUpdate();
+                // if (!emptyAttrib) {
+                //     // adiciona novo grupo de attribs
+                //     this.attribs.push({id: null});
+                // }
 
-                this.$nextTick(()=>{
-                    this.$refs.attribsGroup.updateGroups();
-                    this.$refs.operator[idx].attribChanged();
-                });
+                // this.$forceUpdate();
+
+                // this.$nextTick(()=>{
+                //     this.$refs.attribsGroup.updateGroups();
+                //     this.$refs.operator[idx].attribChanged();
+                // });
             },
             onAttribRemoved(idx) {
                 this.fields.splice(idx, 1);
@@ -277,12 +285,9 @@
             onMetaFieldFilled($event, idx) {
                 console.log($event, idx);
             },
-            onTypeChanged(type) {
-                this.newFilter[this.lastMetaUiSelected] = rename(this.type,
-                    type, this.newFilter[this.lastMetaUiSelected]);
-                this.type = type;
-                console.log(this.newFilter);
-                this.$emit('operator-changed', this.newFilter);
+            onOperatorChanged(operator) {
+                this.uiFilter.operator = operator;
+                this.$emit('operator-changed', operator);
             },
             onNewGroup() {
                 this.showAttribGroup = true;

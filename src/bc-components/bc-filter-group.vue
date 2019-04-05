@@ -75,12 +75,12 @@
 
 <template>
     <div class="group">
-        <bc-switch v-model="type" :disabled="itemCount < 3" @input="onOperatorChanged"></bc-switch>
+        <bc-switch v-model="type" :disabled="itemCount < 2" @input="onOperatorChanged"></bc-switch>
         <div class="container"
             :class="{
-                'and': type === 'AND',
-                'or': type === 'OR',
-                'disabled-switch': itemCount < 3
+                'and': type === 'and',
+                'or': type === 'or',
+                'disabled-switch': itemCount < 2
             }">
             <slot></slot>
         </div>
@@ -96,24 +96,39 @@
             BcSwitch
         },
         props: {
-            profileSelected: Object
+            profileSelected: Object,
+            operator: String,
+            criteriaSize: Number
         },
         data() {
             return {
-                type: 'AND',
+                type: this.operator || '',
                 itemCount: 0
             };
         },
         mounted() {
             this.updateGroups();
+            this.verifyOperator();
         },
         methods: {
+            verifyOperator() {
+                this.type = this.operator ? this.operator : 'and';
+                this.onOperatorChanged(this.type);
+            },
             updateGroups() {
                 this.itemCount = this.$slots.default.length;
             },
             onOperatorChanged(type) {
                 this.type = type;
-                this.$emit('type-changed', this.type);
+                this.$emit('operator-changed', this.type);
+            }
+        },
+        watch: {
+            criteriaSize(value) {
+                this.itemCount = value;
+            },
+            operator(value) {
+                this.type = value;
             }
         }
     };

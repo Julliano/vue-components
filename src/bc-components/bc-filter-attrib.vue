@@ -15,16 +15,17 @@
 <template>
     <div>
         <div class="bc-filter-attrib">
-            <div class="options-container">
+            <div class="options-container" v-for="(item, index) in checkLevel()" :key="index">
                 <select class="inp" @change="fireAttribSelected">
-                    <option value="" disabled :selected="attrib.id === undefined">{{'select' | i18n}}</option>
+                    <option value="" disabled :selected="verifyEmptyCriteria()">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
-                            :value="idx" :selected="attrib.name === opt.name"
+                            :value="idx" 
+                            :selected="item.attr === opt.name"
                     >
-                        {{opt.label}}
+                      {{opt.label}}
                     </option>
                 </select>
-                <button class="btn btn-small btn-filter" v-if="!attrib.id" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
+                <button class="btn btn-small btn-filter" v-if="!criteria.id" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
                 <slot name="operator"></slot>
             </div>
         </div>
@@ -39,20 +40,24 @@
         name: 'bc-filter-attrib',
         mixins: [i18n.mixin],
         props: {
-            attrib: {
-                id: ''
-            },
-            metaAttribs: Array,
-            showSourceOption: Boolean,
-            child: false
+            criteria: null,
+            metaAttribs: Array
         },
         data() {
             return {
-
                 render: true
             };
         },
         methods: {
+            async verifyEmptyCriteria() {
+                return await new Promise(resolve => {
+                    setTimeout(() => {
+                        if (this.criteria[0]) {
+                            resolve(Object.entries(this.criteria[0]).length);
+                        }
+                    }, 0);
+                });
+            },
             fireAttribSelected(e) {
                 const metaAttrib = this.metaAttribs[e.target.value];
                 this.$emit('meta-attrib-selected', metaAttrib);
@@ -62,10 +67,16 @@
                 this.$emit('meta-attrib-removed');
             },
             fireNewGroup() {
-                this.$emit('new-group', this.attrib);
+                this.$emit('new-group', this.criteria);
             },
             repassFieldSelected(param) {
                 this.$emit('meta-field-selected', param);
+            },
+            checkLevel() {
+                if (this.criteria.operator) {
+                    console.log('tem criteria');
+                }
+                return [this.criteria];
             }
         }
     };
