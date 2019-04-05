@@ -138,6 +138,7 @@
                     });
                     if (initialProfile.length) {
                         [this.selectedProfile] = [...initialProfile];
+                        this.$emit('change', this.selectedProfile);
                     }
                 }
                 this.$forceUpdate();
@@ -195,8 +196,7 @@
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'save');
-                    return console.error('Erro ao salvar perfil');
+                    return this.$emit('error', 'save');
                 }
             },
             async fireProfileSavedAs(name) {
@@ -211,15 +211,12 @@
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$emit('error', 'saveAs');
                         this.$forceUpdate();
-                        return console.error('Erro ao salvar perfil como');
+                        return this.$emit('error', 'saveAs');
                     }
                 }
-                this.$emit('error', 'saveAs');
                 this.selectedProfile = {id_cnfg_usua_app_pes: null};
-                this.$forceUpdate();
-                return alert('Erro ao salvar perfil com o mesmo nome');
+                return this.$emit('error', 'saveAs');
             },
             async fireProfileDefault() {
                 try {
@@ -227,8 +224,7 @@
                     this.$emit('success', 'default');
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'default');
-                    return console.error('Erro ao setar default');
+                    return this.$emit('error', 'default');
                 }
             },
             async fireProfileRenamed(name) {
@@ -240,22 +236,19 @@
                         this.$emit('success', 'renamed');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$emit('error', 'renamed');
-                        return alert('Não foi possível renomear a pesquisa.');
+                        return this.$emit('error', 'renamed');
                     }
                 }
-                this.$emit('error', 'renamed');
-                return alert('Erro ao salvar perfil com o mesmo nome');
+                return this.$emit('error', 'renamed');
             },
             async fireProfileRemoved() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
-                    this.$emit('success', 'removed');
                     this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                    this.$emit('success', 'removed');
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'removed');
-                    return alert('Não foi possível excluir a pesquisa.');
+                    return this.$emit('error', 'removed');
                 }
             },
             checkSameProfileName(name) {

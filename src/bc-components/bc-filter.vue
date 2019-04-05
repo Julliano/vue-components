@@ -1,7 +1,7 @@
 <template>
     <div class="bc-filter-component">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles"
-            :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
+            :json="jsonMounted" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
         <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
