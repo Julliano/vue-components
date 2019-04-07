@@ -1,7 +1,7 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles"
-            :json="jsonMounted" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
+            :profile="jsonMounted" :json="jsonFilter" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
         <bc-filter-group v-model="operator" ref="uiGroup" @type-changed="onTypeChanged">
@@ -41,7 +41,16 @@
             listUis: Array,
             sourceTypes: Array,
             idAplicacao: String,
-            idTipoPesquisa: String
+            idTipoPesquisa: String,
+            show: {
+                type: Boolean,
+                default: true
+            },
+            profileSeleted: {
+                type: Object,
+                default: {}
+            },
+            jsonFilter: Object
         },
         data() {
             return {
@@ -53,15 +62,24 @@
                 filterData: [],
                 profiles: [],
                 profile: {},
-                jsonMounted: {
-                    descricao: ''
-                }
+                jsonMounted: this.profileSeleted ? this.profileSeleted : this.defaultObj()
             };
         },
         async created() {
             await this.getProfiles();
         },
         methods: {
+            defaultObj() {
+                return {
+                    aplicacao_id_aplicacao: {},
+                    data_ultima_alteracao: '',
+                    descricao: '',
+                    flg_default: {},
+                    id_cnfg_usua_app_pes: '',
+                    id_tipo_pesquisa: {},
+                    xml_config: {}
+                };
+            },
             onMetaUISelected(metaUI, ui) {
                 ui.id = metaUI.id;
 
@@ -99,11 +117,9 @@
             },
             onOperatorChanged(value) {
                 this.filterData.push(value);
-                console.log(this.filterData);
             },
             onProfileSelected(obj) {
                 this.profile = obj;
-                console.log(obj);
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();
