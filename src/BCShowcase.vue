@@ -13,8 +13,8 @@
         <h3>BC Components Showcase</h3>
         <hr/>
         <h4>bc-filter</h4>
-        <bc-filter :list-uis="listUis" :source-types="sourceTypes"
-            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter"></bc-filter>
+        <bc-filter :list-uis="listUis" :source-types="sourceTypes" :profile-seleted="profile"
+            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :json-filter="jsonFilter" :filter="filter"></bc-filter>
     </div>
 </template>
 
@@ -26,6 +26,7 @@
         components: {
             bcFilter
         },
+        // eslint-disable-next-line max-lines-per-function
         data() {
             return {
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
@@ -69,7 +70,32 @@
                         }
                     }
                 ],
-                idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados'
+                idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
+                jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
+                profile: {
+                    aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
+                    data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
+                    descricao: 'Muahaha',
+                    flg_default: {
+                        ids: {
+                            ID_SIM_NAO: 'N'
+                        },
+                        valor: 'Não'
+                    },
+                    id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
+                    id_tipo_pesquisa: {
+                        ids: {
+                            ID_TIPO_PESQUISA: 'E'
+                        },
+                        valor: 'Perfil de pesquisa avançado de dados coletados'
+                    },
+                    xml_config: {
+                        ui: 'dc_arquivo',
+                        sources: ['fonte'],
+                        operator: null,
+                        criteria: {}
+                    }
+                }
             };
         },
         created() {

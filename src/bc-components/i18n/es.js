@@ -16,7 +16,9 @@ export default {
         default: 'Definir como padrão',
         removeDefault: 'Desmarcar opção default',
         exclude: 'Excluir',
-        actions: 'Ações'
+        actions: 'Ações',
+        confirm: 'Confirmação',
+        really: 'Você deseja substituir a pesquisa já existente com o mesmo nome?'
     },
     search: {    // Todo tradução
         saveAs: 'Salvar pesquisa como',

@@ -59,6 +59,7 @@
             <bc-save-search-modal v-if="showModal" :type="modalType"
                 @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
             ></bc-save-search-modal>
+            <bc-save-search-confirm v-if="confirmModal" @cancel="closeConfirmModal" @confirm="handleReplace"></bc-save-search-confirm>
         </div>
         <hr/>
     </div>
@@ -67,6 +68,7 @@
 <script>
 
     import bcSaveSearchModal from './modal/bc-save-search-modal.vue';
+    import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
@@ -77,15 +79,18 @@
         components: {
             bcService,
             dgtContextMenu,
-            bcSaveSearchModal
+            bcSaveSearchModal,
+            bcSaveSearchConfirm
         },
         props: {
             show: {
                 type: Boolean,
                 default: true
             },
-            json: {},
-            profiles: Array
+            profile: Object,
+            json: Object,
+            profiles: Array,
+            tipoPesquisa: String
         },
         data() {
             return {
@@ -97,6 +102,7 @@
                 optionSelected: {
                     id: ''
                 },
+                confirmModal: false,
                 enableDefaultOption: true,
                 options: [
                     { id: 1, label: 'save' },
@@ -104,7 +110,9 @@
                     { id: 3, label: 'default' },
                     { id: 4, label: 'rename' },
                     { id: 5, label: 'exclude' }
-                ]
+                ],
+                first: true,
+                newName: ''
             };
         },
         methods: {
@@ -122,23 +130,30 @@
                 return `profileOptions.${option.label}`;
             },
             setDefault() {
-                if (!this.selectedProfile.descricao) {
-                    let defaultProfile = this.profiles.filter(profile => {
-                        return profile.flg_default.valor === 'Sim';
-                    });
-                    if (defaultProfile.length) {
-                        [this.selectedProfile] = [...defaultProfile];
-                        this.$emit('change', this.selectedProfile);
+                if (this.profile.id_cnfg_usua_app_pes && !this.first) {
+                    if (!this.selectedProfile.descricao) {
+                        let defaultProfile = this.profiles.filter(profile => {
+                            return profile.flg_default.valor === 'Sim';
+                        });
+                        if (defaultProfile.length) {
+                            [this.selectedProfile] = [...defaultProfile];
+                            this.$emit('change', this.selectedProfile);
+                        } else {
+                            if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
+                        }
                     } else {
-                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
+                        let initialProfile = this.profiles.filter(profile => {
+                            return profile.descricao === this.selectedProfile.descricao;
+                        });
+                        if (initialProfile.length) {
+                            [this.selectedProfile] = [...initialProfile];
+                            this.$emit('change', this.selectedProfile);
+                        }
                     }
                 } else {
-                    let initialProfile = this.profiles.filter(profile => {
-                        return profile.descricao === this.selectedProfile.descricao;
-                    });
-                    if (initialProfile.length) {
-                        [this.selectedProfile] = [...initialProfile];
-                    }
+                    this.first = false;
+                    this.selectedProfile = this.profile;
+                    this.$emit('change', this.selectedProfile);
                 }
                 this.$forceUpdate();
             },
@@ -188,38 +203,57 @@
             closeModal() {
                 this.showModal = false;
             },
+            closeConfirmModal() {
+                return this.confirmModal = false;
+            },
+            async handleReplace() {
+                let profileFound = this.profiles.filter(profile => {
+                    return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
+                        this.newName.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                });
+                if (this.newName && profileFound.length) {
+                    try {
+                        await bcService.replaceSearchProfiles(profileFound[0], this.json);
+                        this.confirmModal = false;
+                        this.showModal = false;
+                        this.selectedProfile.descricao = name;
+                        this.newName = '';
+                        this.$emit('success', 'saveAs');
+                        return this.$emit('reload-profiles');
+                    } catch (error) {
+                        this.$forceUpdate();
+                        this.confirmModal = false;
+                        return this.$emit('error', 'saveAs');
+                    }
+                }
+                return null;
+            },
             fireProfileSaved() {
                 try {
-                    //necessário passar o json junto para salvar os filtros da pesquisa;
-                    bcService.editProfile(this.selectedProfile);
+                    bcService.editProfile(this.selectedProfile, this.json);
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'save');
-                    return console.error('Erro ao salvar perfil');
+                    return this.$emit('error', 'save');
                 }
             },
             async fireProfileSavedAs(name) {
-                //necessário passar o json junto para salvar os filtros da pesquisa;
                 this.selectedProfile = this.selectedProfile.descricao ?
-                    this.selectedProfile : this.json;
-                if (this.checkSameProfileName(name)) {
+                    this.selectedProfile : this.profile;
+                if (this.checkSameProfileName(name, 'save')) {
                     try {
-                        await bcService.saveSearchProfiles(this.selectedProfile, {descricao: name});
+                        await bcService.saveSearchProfiles(this.selectedProfile,
+                            {descricao: name}, this.json);
                         this.showModal = false;
                         this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$emit('error', 'saveAs');
                         this.$forceUpdate();
-                        return console.error('Erro ao salvar perfil como');
+                        return this.$emit('error', 'saveAs');
                     }
                 }
-                this.$emit('error', 'saveAs');
-                this.selectedProfile = {id_cnfg_usua_app_pes: null};
-                this.$forceUpdate();
-                return alert('Erro ao salvar perfil com o mesmo nome');
+                return null;
             },
             async fireProfileDefault() {
                 try {
@@ -227,8 +261,7 @@
                     this.$emit('success', 'default');
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'default');
-                    return console.error('Erro ao setar default');
+                    return this.$emit('error', 'default');
                 }
             },
             async fireProfileRenamed(name) {
@@ -240,31 +273,34 @@
                         this.$emit('success', 'renamed');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$emit('error', 'renamed');
-                        return alert('Não foi possível renomear a pesquisa.');
+                        return this.$emit('error', 'renamed');
                     }
                 }
-                this.$emit('error', 'renamed');
-                return alert('Erro ao salvar perfil com o mesmo nome');
+                return this.$emit('error', 'renamed');
             },
             async fireProfileRemoved() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
+                    this.selectedProfile = { id_cnfg_usua_app_pes: null };
                     this.$emit('success', 'removed');
                     this.selectedProfile = { id_cnfg_usua_app_pes: null };
                     return this.$emit('reload-profiles');
                 } catch (error) {
-                    this.$emit('error', 'removed');
-                    return alert('Não foi possível excluir a pesquisa.');
+                    return this.$emit('error', 'removed');
                 }
             },
-            checkSameProfileName(name) {
+            checkSameProfileName(name, save) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {
                         return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
                             name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
                     });
                     if (defaultProfile.length) {
+                        if (save) {
+                            this.confirmModal = true;
+                            this.newName = name;
+                            return false;
+                        }
                         return false;
                     }
                 }

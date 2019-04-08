@@ -1,7 +1,7 @@
 <template>
     <div class="bc-filter-component">
-        <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles"
-            :json="jsonMounted" @sucess="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')">
+        <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
+            :profile="jsonMounted" :json="jsonFilter" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
          <h4> {{ 'searchProfile' | i18n }} </h4>
         <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
@@ -43,23 +43,29 @@
             sourceTypes: Array,
             idAplicacao: String,
             idTipoPesquisa: String,
-            filter: Array
+            filter: Array,
+            show: {
+                type: Boolean,
+                default: true
+            },
+            profileSeleted: {
+                type: Object,
+                default: {}
+            },
+            jsonFilter: Object
         },
         data() {
             return {
                 uis: null,
                 profiles: [],
                 profile: {},
-                jsonMounted: {
-                    descricao: ''
-                },
                 emptyFilter: [{
                     ui: null,
                     operator: null,
                     criteria: [],
                     sources: []
-                }]
-
+                }],
+                jsonMounted: this.profileSeleted ? this.profileSeleted : this.defaultObj()
             };
         },
         async created() {
@@ -75,6 +81,27 @@
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
+            },
+            defaultObj() {
+                return {
+                    aplicacao_id_aplicacao: {},
+                    data_ultima_alteracao: '',
+                    descricao: '',
+                    flg_default: {},
+                    id_cnfg_usua_app_pes: '',
+                    id_tipo_pesquisa: {},
+                    xml_config: {}
+                };
+            },
+            onMetaUISelected(metaUI, ui) {
+                ui.id = metaUI.id;
+
+                const emptyUi = this.uis.find((e)=>e.id === null);
+
+                if (!emptyUi) {
+                    // adiciona novo grupo de ui
+                    this.uis.push({id: null, attribs: []});
+                }
 
                 if (hasEmptyUI.length) return;
                 // adiciona novo grupo de ui
@@ -96,6 +123,10 @@
 
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);
+
+                this.$nextTick(()=>{
+                    this.$refs.uiGroup.updateGroups();
+                });
             },
             removeChangedUi(uiId) {
                 if (!this.lastMetaUiSelected) {
@@ -104,6 +135,12 @@
                 let keys = Object.keys(this.newFilter);
                 delete this.newFilter[keys[this.idx]];
                 this.lastMetaUiSelected = uiId;
+            },
+            onTypeChanged(type) {
+                this.operator = type;
+            },
+            onOperatorChanged(value) {
+                this.filterData.push(value);
             },
             onProfileSelected(obj) {
                 this.profile = obj;

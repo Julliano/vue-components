@@ -1,6 +1,5 @@
 <style lang="scss">
     @import "../styles/variables";
-
     .bc-save-search-modal {
         .modal-container {
             width: 350px;
@@ -16,21 +15,19 @@
     <div>
         <bc-modal class="bc-save-search-modal">
             <template slot="header">
-                <h3 class="modal-title"> {{ `search.${type}` | i18n }} </h3>
+                <h3 class="modal-title"> {{ 'profileOptions.confirm' | i18n }} </h3>
                 <button class="btn-icon btn-close" @click="closeSaveSearchModal">
                     <i class="mdi mdi-close"></i>
                 </button>
             </template>
             <div slot="body" class="field width-full">
-                <label>
-                    {{ `search.name` | i18n }}
-                    <input name="operation" autocomplete="off" tabindex="1" autofocus
-                    type="text" class="inp big" v-model="nome" maxlength="100">
-                </label>
+                <h3>
+                    {{ `profileOptions.really` | i18n }}
+                </h3>
             </div>
             <footer slot="footer" class="text-right">
                 <button @click="closeSaveSearchModal" class="btn" tabindex="1"> {{ 'cancel' | i18n }} </button>
-                <button @click="checkSearchName" :disabled="!nome" class="btn btn-primary" tabindex="1"> {{ `confirm` | i18n }} </button>
+                <button @click="checkSearchName" class="btn btn-primary" tabindex="1"> {{ `confirm` | i18n }} </button>
             </footer>
         </bc-modal>
     </div>
@@ -45,27 +42,12 @@
         components: {
             bcModal
         },
-        props: {
-            type: {
-                type: String,
-                default: 'saveAs'
-            },
-            defaultName: String
-        },
-        data() {
-            return {
-                nome: null
-            };
-        },
-        created() {
-            if (this.type === 'rename' && this.defaultName) this.nome = this.defaultName;
-        },
         methods: {
             closeSaveSearchModal() {
                 this.$emit('cancel');
             },
             checkSearchName() {
-                this.$emit('confirm', this.nome, this.type);
+                this.$emit('confirm');
             }
         }
     };

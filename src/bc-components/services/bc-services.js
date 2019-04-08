@@ -104,7 +104,7 @@ export default {
         return await dispatcher
             .doGet('access/userDataDirectory');
     },
-    async saveSearchProfiles(obj, param = null) {
+    async saveSearchProfiles(obj, param = null, xml = null) {
         if (param) {
             let response = await this.getProfileDirectory();
             obj.descricao = param.descricao;
@@ -114,15 +114,10 @@ export default {
                 add: [response.id]
             };
             if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
-            if (!obj.xml_config) {
-                obj.xml_config = '{ui: "dc_arquivo",sources:[\'fonte\'],operator: null,criteria: {}}';
-            }
+            obj.xml_config = JSON.stringify(xml);
             if (!obj.aplicacao_id_aplicacao) {
                 obj.aplicacao_id_aplicacao = {id_aplicacao: idAplicacao};
             }
-            // if (!obj.data_ultima_alteracao) {
-            //     obj.data_ultima_alteracao = '';
-            // }
         }
         obj.usuario_id_pessoa = {
             id_usuario: userId
@@ -133,6 +128,18 @@ export default {
             ]
         };
         return await dispatcher.doPost('persistence', json);
+    },
+    async replaceSearchProfiles(obj, xml) {
+        let json = {
+            cnfg_usua_app_pes: [
+                {
+                    id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
+                    xml_config: JSON.stringify(xml),
+                    data_ultima_alteracao: obj.data_ultima_alteracao
+                }
+            ]
+        };
+        return await dispatcher.doPut('persistence', json);
     },
 
     async renameSearchProfiles(param, name) {
@@ -148,14 +155,14 @@ export default {
         return await dispatcher.doPut('persistence', obj);
     },
 
-    async editProfile(obj) {
+    async editProfile(obj, xml) {
         let json = {
             cnfg_usua_app_pes: [
                 {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
                     descricao: obj.descricao,
                     data_ultima_alteracao: obj.data_ultima_alteracao,
-                    xml_config: obj.xml_config
+                    xml_config: JSON.stringify(xml)
                 }
             ]
         };
