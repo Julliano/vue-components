@@ -73,7 +73,7 @@ export default {
     async getAttribsFromUI(logicName) {
         const locale = this.getLocale();
         // eslint-disable-next-line
-        const url = `metadata/${logicName}/attributes?fields=label,type&flags=filterable,visible&loc=${locale}`;
+        const url = `metadata/${logicName}/attributes?fields=label,autocomplete,type&flags=filterable,visible&loc=${locale}`;
         return await dispatcher.doGet(url);
     },
 

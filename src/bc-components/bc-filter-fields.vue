@@ -17,7 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoAttrib" @change="change"></component>
+                <component :is="dynamicComponent" :tipo="tipoAttrib" :val="val" @change="change"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -29,12 +29,10 @@
 <script>
     import metadata from './metadata.json';
     import textField from './bc-field-options/bc-text-field.vue';
-    import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
+    // import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
-    import hourInput from './bc-field-options/bc-hour-input.vue';
-    import hourInputs from './bc-field-options/bc-hour-inputs.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
     import dateInput from './bc-field-options/bc-date-input.vue';
     import dateInputs from './bc-field-options/bc-date-inputs.vue';
@@ -49,11 +47,12 @@
                 type: String,
                 default: null
             },
-            operador: Object,
-            hasField: {
-                id: null
-            },
-            dateOption: Object
+            autoComplete: Boolean,
+            operator: String,
+            val: {
+                type: Array,
+                default: () => []
+            }
         },
         data() {
             return {
@@ -68,6 +67,8 @@
             dynamicComponent() {
                 switch (this.tipoAttrib) {
                     case '_texto_delimitado':
+                        return this.checkTextField();
+                    case '_texto_livre':
                         return this.checkTextField();
                     case '_inteiro_32':
                         return this.checkNumberField();
@@ -103,51 +104,44 @@
                 this.$emit('meta-field-removed');
             },
             checkTextField() {
-                if (this.operador.name === 'ANY_CONTENT' || this.operador.name === 'NO_CONTENT') {
+                if (this.operator === 'ANY_CONTENT' || this.operator === 'NO_CONTENT') {
                     return null;
-                } else if (this.operador.autoComplete) {
-                    return textAutocompleteField;
                 }
+                // ajustar autocomplete
+                // else if (this.operador.autoComplete) {
+                //     return textAutocompleteField;
+                // }
                 return textField;
             },
             checkNumberField() {
-                if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
+                if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
                     return numberInputs;
                 }
                 return numberInput;
             },
             checkDataField() {
-                if (this.dateOption.label === 'Data') {
-                    if (this.operador.name === 'LESS_THAN' || this.operador.name === 'OUT_OF_RANGE') {
-                        return dateInputs;
-                    } else if (this.operador.name === 'PERIODO') {
-                        return dateCombo;
-                    }
-                    return dateInput;
-                } else if (this.dateOption.label === 'Ano') {
-                    if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
-                        return hourInputs;
-                    }
-                    return hourInput;
-                }
-                return null;
-            },
-            checkDataHoraField() {
-                if (this.operador.name === 'RANGE' || this.operador.name === 'OUT_OF_RANGE') {
+                if (this.operator === 'LESS_THAN' || this.operator === 'OUT_OF_RANGE') {
                     return dateInputs;
-                } else if (this.operador.name === 'PERIODO') {
+                } else if (this.operator === 'PERIODO') {
                     return dateCombo;
                 }
                 return dateInput;
             },
-            change(value) {
-                this.$emit('change', value);
+            checkDataHoraField() {
+                if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
+                    return dateInputs;
+                } else if (this.operator === 'PERIODO') {
+                    return dateCombo;
+                }
+                return dateInput;
+            },
+            change(val) {
+                this.$emit('change', val);
             }
-
         },
         watch: {
-            hasField() {
-                this.field = this.hasField;
+            val() {
+                this.field = this.val;
                 this.metaFields = metadata.fields[this.tipoAttrib];
             }
         }

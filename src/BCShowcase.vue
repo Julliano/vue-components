@@ -28,7 +28,7 @@
         },
         data() {
             return {
-                listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'bc_padrao', 'bc_unica'],
+                listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
                 filter: [

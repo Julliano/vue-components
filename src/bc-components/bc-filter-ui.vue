@@ -48,26 +48,8 @@
                     @meta-attrib-selected="onMetaAttribSelected($event, criteria)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     @new-group="onNewGroup"
-                    :meta-attribs="attribs" :criteria="criteria" ref="attrib"
-                >
-                    <!--
-                     <bc-filter-operators slot="operator" v-if="atribType[idx]"
-                        :tipo-attrib="atribType[idx]" :ui-name="uiFilter.ui"
-                        :attrib-name="attribs[idx].id" :operador="operators[idx]"
-                        @meta-operator-selected="onMetaOperatorSelected($event, idx)"
-                        @meta-operator-removed="onAttribRemoved(idx)"
-                        @data-option-selected="onDataOptionSelected($event, idx)"
-                        ref="operator"
-                     ></bc-filter-operators>
-                        <bc-filter-fields slot="field" v-if="operators[idx] && operators[idx].name"
-                            @meta-field-selected="onMetaFieldSelected($event, idx)"
-                            @meta-field-removed="onAttribRemoved(idx)"
-                            @change="onMetaFieldFilled($event, idx)"
-                            :hasField="fields[idx]" :operador="operators[idx]"
-                            :tipo-attrib="atribType[idx]" :date-option="dataType[idx]" ref="field"
-                        >
-                        </bc-filter-fields>
-                    </bc-filter-operators> -->
+                    :meta-attribs="attribs" :criteria="criteria" 
+                    :ui="uiFilter.ui" ref="attrib">
                 </bc-filter-attrib>
             </bc-filter-group>
             <br>
@@ -76,11 +58,8 @@
 </template>
 
 <script>
-    import Vue from 'vue';
     import BcFilterGroup from './bc-filter-group.vue';
     import BcFilterAttrib from './bc-filter-attrib.vue';
-    import BcFilterOperators from './bc-filter-operators.vue';
-    import BcFilterFields from './bc-filter-fields.vue';
     import BcFilterSourceMenu from './bc-filter-source-menu.vue';
     import BcAttribGroup from './bc-attrib-group.vue';
     import bcService from './services/bc-services.js';
@@ -93,8 +72,6 @@
             BcFilterSourceMenu,
             BcFilterAttrib,
             BcFilterGroup,
-            BcFilterOperators,
-            BcFilterFields,
             bcService,
             BcAttribGroup
         },
@@ -115,7 +92,7 @@
                 uis: [],
                 newFilter: {},
                 lastMetaUiSelected: null,
-                type: 'AND',
+                type: 'and',
                 ui: null,
                 showAttribGroup: false
             };
@@ -187,80 +164,17 @@
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];
                 await this.getAttribsFromUI(metaUI.name);
-                this.operators = [];
-                this.atribType = [];
-                this.fields = [];
                 this.$emit('meta-ui-selected', metaUI);
-                /*
-                this.$emit('meta-ui-selected', {
-                    newFilter: this.newFilter,
-                    ids: this.idx
-                });
-
-                 */
             },
             fireUIRemoved() {
                 this.$emit('meta-ui-removed', this.attrib);
             },
-            checkType(type) {
-                switch (type) {
-                    case '_texto_delimitado':
-                        return type;
-                    case '_inteiro_32':
-                        return type;
-                    case '_inteiro_64':
-                        return type;
-                    case '_decimal_32':
-                        return type;
-                    case '_decimal_64':
-                        return type;
-                    case '_tipo_selecao':
-                        return type;
-                    // case 'metaSelecaoValorada':
-                    //     return type;
-                    case '_data':
-                        return type;
-                    // case '_ano':
-                    //     return type;
-                    case '_hora':
-                        return type;
-                    case '_data_hora':
-                        return type;
-                    default:
-                        return 'outros';
-                }
-            },
             onMetaAttribSelected(metaAttrib, criteria) {
-                Vue.set(criteria, 'attr', metaAttrib.name);
+                this.$set(criteria, 'attr', metaAttrib.name);
                 this.insertEmptyCriteria();
-
-                // attrib.id = metaAttrib.id;
-                // attrib.name = metaAttrib.name;
-                // const emptyAttrib = this.attribs.find((e)=>e.id === null);
-                // this.atribType[idx] = this.checkType(metaAttrib.type);
-                // if (this.operators[idx]) {
-                //     this.operators.splice(idx, 1);
-                //     this.fields.splice(idx, 1);
-                // }
-
-                // if (!emptyAttrib) {
-                //     // adiciona novo grupo de attribs
-                //     this.attribs.push({id: null});
-                // }
-
-                // this.$forceUpdate();
-
-                // this.$nextTick(()=>{
-                //     this.$refs.attribsGroup.updateGroups();
-                //     this.$refs.operator[idx].attribChanged();
-                // });
             },
             onAttribRemoved(idx) {
-                this.fields.splice(idx, 1);
-                this.atribType.splice(idx, 1);
-                this.operators.splice(idx, 1);
-                this.operators.splice(idx, 1);
-                this.ui.attribs.splice(idx, 1);
+                this.$delete(this.uiFilter.criteria, idx);
 
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
@@ -268,22 +182,11 @@
                 this.$forceUpdate();
 
             },
-            onMetaOperatorSelected(obj, idx) {
-                this.operators[idx] = obj;
-                this.$forceUpdate();
-            },
-            onMetaFieldSelected(obj, idx) {
-                this.fields[idx] = obj;
-                this.$forceUpdate();
-            },
             onDataOptionSelected(obj, idx) {
                 this.dataType[idx] = obj;
                 this.operators.splice(idx, 1);
                 this.fields.splice(idx, 1);
                 this.$forceUpdate();
-            },
-            onMetaFieldFilled($event, idx) {
-                console.log($event, idx);
             },
             onOperatorChanged(operator) {
                 this.uiFilter.operator = operator;

@@ -16,17 +16,24 @@
     <div>
         <div class="bc-filter-attrib">
             <div class="options-container" v-for="(item, index) in checkLevel()" :key="index">
-                <select class="inp" @change="fireAttribSelected">
-                    <option value="" disabled :selected="verifyEmptyCriteria()">{{'select' | i18n}}</option>
+                <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
+                    <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
-                            :value="idx" 
-                            :selected="item.attr === opt.name"
+                            :value="opt" 
                     >
                       {{opt.label}}
                     </option>
                 </select>
-                <button class="btn btn-small btn-filter" v-if="!criteria.id" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
-                <slot name="operator"></slot>
+                <button class="btn btn-small btn-filter" v-if="!item.attr" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
+                <bc-filter-operators v-else-if="selectedAttrib"
+                    :auto-complete="selectedAttrib.autocomplete"
+                    :tipo-attrib="selectedAttrib.type" :ui-name="ui"
+                    :attrib-name="selectedAttrib.name" :criteria="item"
+                    @meta-operator-selected="onMetaOperatorSelected($event, item)"
+                    @meta-operator-removed="fireAttribRemoved"
+                    @data-option-selected="onDataOptionSelected($event, idx)"
+                    ref="operator"                  
+                ></bc-filter-operators>
             </div>
         </div>
     </div>
@@ -35,17 +42,23 @@
 <script>
 
     import i18n from './utils/i18n.js';
+    import BcFilterOperators from './bc-filter-operators.vue';
 
     export default {
         name: 'bc-filter-attrib',
         mixins: [i18n.mixin],
+        components: {
+            BcFilterOperators
+        },
         props: {
             criteria: null,
-            metaAttribs: Array
+            metaAttribs: Array,
+            ui: String
         },
         data() {
             return {
-                render: true
+                render: true,
+                selectedAttrib: null
             };
         },
         methods: {
@@ -58,16 +71,22 @@
                     }, 0);
                 });
             },
-            fireAttribSelected(e) {
-                const metaAttrib = this.metaAttribs[e.target.value];
-                this.$emit('meta-attrib-selected', metaAttrib);
-                this.$forceUpdate();
+            fireAttribSelected(idx) {
+                this.$emit('meta-attrib-selected', this.selectedAttrib);
+                this.$refs.operator[idx].attribChanged();
             },
-            fireOperatorRemoved() {
+            fireAttribRemoved() {
                 this.$emit('meta-attrib-removed');
             },
             fireNewGroup() {
                 this.$emit('new-group', this.criteria);
+            },
+            onMetaOperatorSelected(operator, criteria) {
+                if (!operator) {
+                    this.$delete(criteria, 'val');
+                    return this.$delete(criteria, 'oper');
+                }
+                return this.$set(criteria, 'oper', operator.name);
             },
             repassFieldSelected(param) {
                 this.$emit('meta-field-selected', param);
@@ -76,7 +95,19 @@
                 if (this.criteria.operator) {
                     console.log('tem criteria');
                 }
+                for (const attrib of this.metaAttribs) {
+                    if (attrib.name === this.criteria.attr) {
+                        this.selectedAttrib = attrib;
+                        break;
+                    }
+                }
                 return [this.criteria];
+            }
+        },
+        watch: {
+            criteria() {
+                if (Object.entries(this.criteria).length) return;
+                this.selectedAttrib = null;
             }
         }
     };

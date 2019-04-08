@@ -96,10 +96,6 @@
 
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);
-
-                this.$nextTick(()=>{
-                    this.$refs.uiGroup.updateGroups();
-                });
             },
             removeChangedUi(uiId) {
                 if (!this.lastMetaUiSelected) {

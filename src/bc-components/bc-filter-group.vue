@@ -75,12 +75,12 @@
 
 <template>
     <div class="group">
-        <bc-switch v-model="type" :disabled="itemCount < 2" @input="onOperatorChanged"></bc-switch>
+        <bc-switch v-model="type" :disabled="itemCount < 3" @input="onOperatorChanged"></bc-switch>
         <div class="container"
             :class="{
                 'and': type === 'and',
                 'or': type === 'or',
-                'disabled-switch': itemCount < 2
+                'disabled-switch': itemCount < 3
             }">
             <slot></slot>
         </div>
@@ -117,6 +117,9 @@
             },
             updateGroups() {
                 this.itemCount = this.$slots.default.length;
+                if (this.itemCount < 3) {
+                    this.type = 'and';
+                }
             },
             onOperatorChanged(type) {
                 this.type = type;
