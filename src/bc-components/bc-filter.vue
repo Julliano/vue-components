@@ -81,6 +81,17 @@
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
+
+                if (hasEmptyUI.length) return;
+                // adiciona novo grupo de ui
+                this.uis.push(
+                    {
+                        ui: null,
+                        criteria: [],
+                        operator: null,
+                        sources: []
+                    }
+                );
             },
             defaultObj() {
                 return {
@@ -102,17 +113,6 @@
                     // adiciona novo grupo de ui
                     this.uis.push({id: null, attribs: []});
                 }
-
-                if (hasEmptyUI.length) return;
-                // adiciona novo grupo de ui
-                this.uis.push(
-                    {
-                        ui: null,
-                        criteria: [],
-                        operator: null,
-                        sources: []
-                    }
-                );
             },
             onMetaUISelected(e, uiFilter) {
                 uiFilter.ui = e.name;
