@@ -33,6 +33,11 @@ let getProfileParams = {
                         attr: 'cnfg_usua_app_pes.usuario_id_pessoa._id',
                         val: [userId]
                     }
+                    // {
+                    //     oper: 'EQUAL',
+                    //     attr: 'cnfg_usua_app_pes.id_tipo_pesquisa',
+                    //     val: ['Perfil de pesquisa avançado de dados coletados']
+                    // }
                 ]
             }
         ]

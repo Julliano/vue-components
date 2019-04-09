@@ -88,7 +88,7 @@
                 default: true
             },
             profile: Object,
-            json: Object,
+            json: Array,
             profiles: Array,
             tipoPesquisa: String
         },
@@ -130,31 +130,31 @@
                 return `profileOptions.${option.label}`;
             },
             setDefault() {
-                if (this.profile.id_cnfg_usua_app_pes && !this.first) {
-                    if (!this.selectedProfile.descricao) {
-                        let defaultProfile = this.profiles.filter(profile => {
-                            return profile.flg_default.valor === 'Sim';
-                        });
-                        if (defaultProfile.length) {
-                            [this.selectedProfile] = [...defaultProfile];
-                            this.$emit('change', this.selectedProfile);
-                        } else {
-                            if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
-                        }
+                // if (this.profile.id_cnfg_usua_app_pes && !this.first) {
+                if (!this.selectedProfile.descricao) {
+                    let defaultProfile = this.profiles.filter(profile => {
+                        return profile.flg_default.valor === 'Sim';
+                    });
+                    if (defaultProfile.length) {
+                        [this.selectedProfile] = [...defaultProfile];
+                        this.$emit('change', this.selectedProfile);
                     } else {
-                        let initialProfile = this.profiles.filter(profile => {
-                            return profile.descricao === this.selectedProfile.descricao;
-                        });
-                        if (initialProfile.length) {
-                            [this.selectedProfile] = [...initialProfile];
-                            this.$emit('change', this.selectedProfile);
-                        }
+                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
                     }
                 } else {
-                    this.first = false;
-                    this.selectedProfile = this.profile;
-                    this.$emit('change', this.selectedProfile);
+                    let initialProfile = this.profiles.filter(profile => {
+                        return profile.descricao === this.selectedProfile.descricao;
+                    });
+                    if (initialProfile.length) {
+                        [this.selectedProfile] = [...initialProfile];
+                        this.$emit('change', this.selectedProfile);
+                    }
                 }
+                // } else {
+                //     this.first = false;
+                //     this.selectedProfile = this.profile;
+                //     this.$emit('change', this.selectedProfile);
+                // }
                 this.$forceUpdate();
             },
             fireProfileSelected(e) {
