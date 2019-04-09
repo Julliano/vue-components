@@ -77,14 +77,14 @@
                 // profile: {
                 //     aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
                 //     data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
-                //     descricao: 'Muahaha',
+                //     descricao: 'Novo modelo',
                 //     flg_default: {
                 //         ids: {
                 //             ID_SIM_NAO: 'N'
                 //         },
                 //         valor: 'Não'
                 //     },
-                //     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
+                //     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|176',
                 //     id_tipo_pesquisa: {
                 //         ids: {
                 //             ID_TIPO_PESQUISA: 'E'

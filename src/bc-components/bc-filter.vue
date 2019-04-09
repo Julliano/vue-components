@@ -144,7 +144,7 @@
             },
             onProfileSelected(obj) {
                 console.log(obj.xml_config);
-                // this.uis = bcFilterToView([JSON.parse(obj.xml_config)]);
+                this.uis = JSON.parse(obj.xml_config);
                 this.profile = obj;
             },
             async getProfiles() {

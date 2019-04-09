@@ -8,7 +8,7 @@ let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_
     `usuario|bc|${parent.loginClientDTO.loginId}`;
 let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
 let idAplicacao = 'aplicacao|bc|140';
-let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
+let tipoPesquisa = 'E';
 
 Dispatcher.config({
     baseURL: '/bc/services/',
@@ -32,12 +32,12 @@ let getProfileParams = {
                         oper: 'EQUAL',
                         attr: 'cnfg_usua_app_pes.usuario_id_pessoa._id',
                         val: [userId]
+                    },
+                    {
+                        oper: 'EQUAL',
+                        attr: 'cnfg_usua_app_pes.id_tipo_pesquisa',
+                        val: [tipoPesquisa]
                     }
-                    // {
-                    //     oper: 'EQUAL',
-                    //     attr: 'cnfg_usua_app_pes.id_tipo_pesquisa',
-                    //     val: ['Perfil de pesquisa avançado de dados coletados']
-                    // }
                 ]
             }
         ]

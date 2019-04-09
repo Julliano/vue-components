@@ -130,7 +130,20 @@
                 return `profileOptions.${option.label}`;
             },
             setDefault() {
-                // if (this.profile.id_cnfg_usua_app_pes && !this.first) {
+                if (Object.entries(this.profile).length) {
+                    if (this.profile && this.profile.id_cnfg_usua_app_pes && this.first) {
+                        this.first = false;
+                        this.selectedProfile = this.profile;
+                        this.$emit('change', this.selectedProfile);
+                    } else if (this.profile.id_cnfg_usua_app_pes && !this.first) {
+                        this.initialState();
+                    }
+                } else {
+                    this.initialState();
+                }
+                this.$forceUpdate();
+            },
+            initialState() {
                 if (!this.selectedProfile.descricao) {
                     let defaultProfile = this.profiles.filter(profile => {
                         return profile.flg_default.valor === 'Sim';
@@ -150,12 +163,6 @@
                         this.$emit('change', this.selectedProfile);
                     }
                 }
-                // } else {
-                //     this.first = false;
-                //     this.selectedProfile = this.profile;
-                //     this.$emit('change', this.selectedProfile);
-                // }
-                this.$forceUpdate();
             },
             fireProfileSelected(e) {
                 this.selectedProfile = this.profiles[e.target.value];
@@ -310,7 +317,9 @@
         watch: {
             profiles() {
                 if (this.profiles.length) {
-                    this.setDefault();
+                    setTimeout(() => {
+                        this.setDefault();
+                    }, 300);
                 }
             }
         }
