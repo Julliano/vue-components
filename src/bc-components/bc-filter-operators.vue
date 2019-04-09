@@ -119,6 +119,10 @@
                 return null;
             },
             fireOperatorSelected() {
+                switch (this.tipoAttrib) {
+                    case '_inteiro_64':
+                        this.$set(this.criteria, 'val', []);
+                }
                 if (!this.criteria.val) {
                     this.$set(this.criteria, 'val', []);
                 }

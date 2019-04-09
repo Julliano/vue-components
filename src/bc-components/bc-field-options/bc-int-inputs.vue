@@ -45,6 +45,7 @@
             VueTheMask
         },
         props: {
+            val: Array,
             tipo: String
         },
         data() {
@@ -54,8 +55,24 @@
             };
         },
         methods: {
-            change() {
-                this.$emit('change', [this.field1, this.field2]);
+            handleValue() {
+                let localField1 = null;
+                let localField2 = null;
+                if (this.field1 !== '') {
+                    localField1 = this.field1;
+                }
+                if (this.field2 !== '') {
+                    localField2 = this.field2;
+                }
+                return this.$emit('change', [localField1, localField2]);
+            }
+        },
+        watch: {
+            field1() {
+                this.handleValue();
+            },
+            field2() {
+                this.handleValue();
             }
         }
     };

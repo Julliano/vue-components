@@ -40,14 +40,25 @@
                         filter: {
                             or: [
                                 {
-                                    attr: 'dc_comentario',
+                                    attr: 'flg_armazenar',
                                     oper: 'EQUAL',
-                                    val: ['João']
+                                    val: [
+                                        'S'
+                                    ]
                                 },
                                 {
-                                    attr: 'alvo',
+                                    attr: 'extensao',
                                     oper: 'EQUAL',
-                                    val: ['João']
+                                    val: [
+                                        'N'
+                                    ]
+                                },
+                                {
+                                    attr: 'comentario',
+                                    val: [
+                                        'TUDOOOOO'
+                                    ],
+                                    oper: 'CONTAINS'
                                 }
                             ]
                         }
