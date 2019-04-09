@@ -243,9 +243,9 @@
                 }
                 return null;
             },
-            fireProfileSaved() {
+            async fireProfileSaved() {
                 try {
-                    bcService.editProfile(this.selectedProfile, this.json);
+                    await bcService.editProfile(this.selectedProfile, this.json);
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
