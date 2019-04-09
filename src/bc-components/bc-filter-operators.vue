@@ -121,7 +121,7 @@
             fireOperatorSelected() {
                 switch (this.tipoAttrib) {
                     case '_inteiro_64':
-                        this.$set(this.criteria, 'val', []);
+                        this.handleInt64();
                 }
                 if (!this.criteria.val) {
                     this.$set(this.criteria, 'val', []);
@@ -131,6 +131,15 @@
                 }
                 this.$emit('meta-operator-selected', this.localOperator);
                 this.$forceUpdate();
+            },
+            handleInt64() {
+                if (this.localOperator.name === 'OUT_OF_RANGE' || this.localOperator.name === 'RANGE') {
+                    if (this.criteria.val && this.criteria.val.length > 1) {
+                        this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
+                    }
+                } else if (this.criteria.val && this.criteria.val.length > 1) {
+                    this.criteria.val.pop();
+                }
             },
             async getOperators() {
                 this.metaOperators = await bcService.getOperators(this.uiName, this.attribName);

@@ -50,8 +50,8 @@
         },
         data() {
             return {
-                field1: '',
-                field2: ''
+                field1: this.val[0] || '',
+                field2: this.val[1] || ''
             };
         },
         methods: {
