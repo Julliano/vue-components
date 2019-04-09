@@ -26,15 +26,14 @@
                     :val="criteria.val"
                     @change="change">
                 </component>
-                <select class="inp" @change="fireOperatorSelected" v-if="show">
-                    <option value="" disabled :selected="localOperator === null">{{'select' | i18n}}</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
-                        :selected="localOperator === opt.name">
+                <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
+                    <option :value="null" disabled>{{'select' | i18n}}</option>
+                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
                         {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="!localOperator">
+                    v-if="!localOperator || !show">
                     <i class="mdi mdi-close"></i>
                 </button>
                 <bc-filter-fields slot="field" v-else-if="show"
@@ -55,7 +54,7 @@
     
     import i18n from './utils/i18n.js';
     import dateOptions from './bc-field-options/bc-date-options.vue';
-    import textCombo from './bc-field-options/bc-text-combo.vue';
+    import metaSelection from './bc-field-options/bc-meta-selection.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
 
@@ -66,7 +65,6 @@
             tipoAttrib: {
                 type: String
             },
-            operator: String,
             uiName: String,
             autoComplete: Boolean,
             attribName: String,
@@ -78,7 +76,7 @@
         },
         data() {
             return {
-                localOperator: this.criteria.oper || null,
+                localOperator: null,
                 metaOperators: [],
                 dateOption: {},
                 show: true
@@ -96,19 +94,37 @@
                         if (!this.criteria.val) {
                             this.$set(this.criteria, 'val', []);
                         }
-                        return textCombo;
+                        return metaSelection;
                     default:
                         this.show = true;
                         return null;
                 }
             }
         },
-        created() {
-            this.getOperators();
+        async created() {
+            await this.getOperators();
+            this.localOperator = this.checkOperator();
         },
         methods: {
-            fireOperatorSelected(e) {
-                this.localOperator = this.metaOperators[e.target.value];
+            checkOperator() {
+                if (this.criteria.oper) {
+                    let obj = this.metaOperators.find(ope => {
+                        return ope.name === this.criteria.oper;
+                    });
+                    if (obj) {
+                        return this.localOperator = obj;
+                    }
+                    return null;
+                }
+                return null;
+            },
+            fireOperatorSelected() {
+                if (!this.criteria.val) {
+                    this.$set(this.criteria, 'val', []);
+                }
+                if (this.localOperator.name === 'ANY_CONTENT' || this.localOperator.name === 'NO_CONTENT') {
+                    this.$delete(this.criteria, 'val');
+                }
                 this.$emit('meta-operator-selected', this.localOperator);
                 this.$forceUpdate();
             },
@@ -119,7 +135,6 @@
                 });
             },
             fireOperatorRemoved() {
-                this.$delete(this.criteria, 'val');
                 this.$emit('meta-operator-removed');
             },
             dateOptionSelected(option) {
@@ -143,17 +158,7 @@
                 this.$forceUpdate();
             },
             change(val) {
-                if (!val) {
-                    return delete this.$delete(this.criteria, 'val');
-                }
-                return this.$set(this.criteria, 'val', val);
-            }
-        },
-        watch: {
-            operator() {
-                if (this.operador) {
-                    this.localOperator = this.criteria.oper;
-                }
+                this.criteria.val = val;
             }
         }
     };

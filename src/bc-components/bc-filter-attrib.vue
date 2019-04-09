@@ -15,7 +15,7 @@
 <template>
     <div>
         <div class="bc-filter-attrib">
-            <div class="options-container" v-for="(item, index) in checkLevel()" :key="item">
+            <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
@@ -30,7 +30,7 @@
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
                     :attrib-name="selectedAttrib.name" :criteria="item"
                     @meta-operator-selected="onMetaOperatorSelected($event, item)"
-                    @meta-operator-removed="fireAttribRemoved($event, item)"
+                    @meta-operator-removed="fireAttribRemoved"
                     @data-option-selected="onDataOptionSelected($event, idx)"
                     ref="operator"                  
                 ></bc-filter-operators>
@@ -68,8 +68,7 @@
                     this.$refs.operator[idx].attribChanged();
                 }
             },
-            fireAttribRemoved(e, item) {
-                this.$delete(item, 'oper');
+            fireAttribRemoved() {
                 this.$emit('meta-attrib-removed');
             },
             fireNewGroup() {
@@ -96,6 +95,9 @@
                     }
                 }
                 return [this.criteria];
+            },
+            generateHash() {
+                return Math.random();
             }
         },
         watch: {

@@ -8,7 +8,7 @@
             {{JSON.stringify(uis, null,8)}}
 
         </textarea>
-        <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="idx"
+        <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                         :idx="idx"
                         :uiFilter="uiFilter"
                         :logic-name-uis="listUis"
@@ -63,7 +63,8 @@
                     ui: null,
                     operator: null,
                     criteria: [],
-                    sources: []
+                    sources: [],
+                    hash: Math.random()
                 }],
                 jsonMounted: this.profileSeleted ? this.profileSeleted : this.defaultObj()
             };
@@ -77,7 +78,12 @@
         },
         methods: {
             loadData() {
-                return this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
+                let criterios = this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
+                for (const criterio of criterios) {
+                    if (criterio.hash) continue;
+                    criterio.hash = Math.random();
+                }
+                return criterios;
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
@@ -120,10 +126,9 @@
                 uiFilter.operator = 'and';
                 this.createEmptyUi();
             },
-
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);
-
+                if (!this.$refs.uiGroup) return;
                 this.$nextTick(()=>{
                     this.$refs.uiGroup.updateGroups();
                 });
@@ -158,6 +163,9 @@
             handleEvent(msg, type) {
                 var event = new CustomEvent(type, {detail: msg});
                 document.dispatchEvent(event);
+            },
+            generateHash() {
+                return (new Date()).valueOf();
             }
         }
     };

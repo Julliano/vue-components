@@ -19,7 +19,7 @@
                 <select class="inp" v-model="field">
                     <option value="" disabled>Selecione</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">
-                            {{date.name}}
+                            {{date.value}}
                     </option>
                 </select>
             </div>
@@ -51,7 +51,7 @@
                 if (this.field === '') {
                     return this.$emit('change', null);
                 }
-                return this.$emit('change', [this.field]);
+                return this.$emit('change', [this.field.id]);
             }
         },
         watch: {

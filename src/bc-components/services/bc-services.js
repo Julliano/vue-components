@@ -97,7 +97,10 @@ export default {
     },
 
     getTipoSelecaoOptions() {
-        return [{id: 1, name: 'Sem campo'}, {id: 2, name: 'TextCombo'}, {id: 3, name: 'TextField'}];
+        return [
+            {id: 'S', value: 'Sim'},
+            {id: 'N', value: 'Não'}
+        ];
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 

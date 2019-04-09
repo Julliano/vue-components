@@ -30,7 +30,7 @@
     import metadata from './metadata.json';
     import textField from './bc-field-options/bc-text-field.vue';
     import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
-    import textCombo from './bc-field-options/bc-text-combo.vue';
+    import metaSelection from './bc-field-options/bc-meta-selection.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
@@ -85,7 +85,7 @@
                     case '_data_hora':
                         return this.checkDataHoraField();
                     case '_tipo_selecao':
-                        return textCombo;
+                        return metaSelection;
                     case 'outros':
                         return textField;
                     default:
