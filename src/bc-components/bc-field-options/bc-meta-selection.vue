@@ -17,7 +17,7 @@
         <div class="bc-text-field margin-left">
             <div class="options-container">
                 <select class="inp" v-model="field">
-                    <option value="" disabled>Selecione</option>
+                    <option :value="null" disabled>Selecione</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">
                             {{date.value}}
                     </option>
@@ -32,21 +32,32 @@
     import bcService from '../services/bc-services.js';
 
     export default {
-        name: 'bc-text-combo',
+        name: 'bc-meta-selection',
         props: {
             val: Array
         },
         data() {
             return {
-                field: this.val[0] || '',
+                field: null,
                 options: []
             };
         },
-        created() {
+        async created() {
             // ajustar request (está retornando dados mocados)
-            this.options = bcService.getTipoSelecaoOptions();
+            this.options = await bcService.getTipoSelecaoOptions();
+            this.checkVal();
         },
         methods: {
+            checkVal() {
+                if (this.val[0]) {
+                    let option = this.options.filter(op => {
+                        return op.id === this.val[0];
+                    });
+                    if (option) {
+                        [this.field] = [...option];
+                    }
+                }
+            },
             handleValue() {
                 if (this.field === '') {
                     return this.$emit('change', null);
