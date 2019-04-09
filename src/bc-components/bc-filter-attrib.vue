@@ -15,7 +15,7 @@
 <template>
     <div>
         <div class="bc-filter-attrib">
-            <div class="options-container" v-for="(item, index) in checkLevel()" :key="index">
+            <div class="options-container" v-for="(item, index) in checkLevel()" :key="item">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
@@ -30,7 +30,7 @@
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
                     :attrib-name="selectedAttrib.name" :criteria="item"
                     @meta-operator-selected="onMetaOperatorSelected($event, item)"
-                    @meta-operator-removed="fireAttribRemoved"
+                    @meta-operator-removed="fireAttribRemoved($event, item)"
                     @data-option-selected="onDataOptionSelected($event, idx)"
                     ref="operator"                  
                 ></bc-filter-operators>
@@ -62,20 +62,14 @@
             };
         },
         methods: {
-            async verifyEmptyCriteria() {
-                return await new Promise(resolve => {
-                    setTimeout(() => {
-                        if (this.criteria[0]) {
-                            resolve(Object.entries(this.criteria[0]).length);
-                        }
-                    }, 0);
-                });
-            },
             fireAttribSelected(idx) {
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
-                this.$refs.operator[idx].attribChanged();
+                if (this.$refs.operator && this.$refs.operator.length > 0) {
+                    this.$refs.operator[idx].attribChanged();
+                }
             },
-            fireAttribRemoved() {
+            fireAttribRemoved(e, item) {
+                this.$delete(item, 'oper');
                 this.$emit('meta-attrib-removed');
             },
             fireNewGroup() {

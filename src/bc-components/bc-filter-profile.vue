@@ -88,7 +88,7 @@
                 default: true
             },
             profile: Object,
-            json: Object,
+            json: Array,
             profiles: Array,
             tipoPesquisa: String
         },

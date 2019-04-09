@@ -175,12 +175,10 @@
             },
             onAttribRemoved(idx) {
                 this.$delete(this.uiFilter.criteria, idx);
-
                 this.$nextTick(()=>{
                     this.$refs.attribsGroup.updateGroups();
                 });
                 this.$forceUpdate();
-
             },
             onDataOptionSelected(obj, idx) {
                 this.dataType[idx] = obj;

@@ -21,7 +21,11 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <component class="date-type" :is="dynamicComponentDate" @data-option-selected="dateOptionSelected"></component>
+                <component class="date-type" :is="dynamicComponentDate" 
+                    @data-option-selected="dateOptionSelected" 
+                    :val="criteria.val"
+                    @change="change">
+                </component>
                 <select class="inp" @change="fireOperatorSelected" v-if="show">
                     <option value="" disabled :selected="localOperator === null">{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
@@ -33,7 +37,7 @@
                     v-if="!localOperator">
                     <i class="mdi mdi-close"></i>
                 </button>
-                <bc-filter-fields slot="field" v-else
+                <bc-filter-fields slot="field" v-else-if="show"
                     @meta-field-selected="onMetaFieldSelected($event, idx)"
                     @meta-field-removed="fireOperatorRemoved"
                     @change="change"
@@ -48,9 +52,10 @@
 </template>
 
 <script>
-
+    
     import i18n from './utils/i18n.js';
     import dateOptions from './bc-field-options/bc-date-options.vue';
+    import textCombo from './bc-field-options/bc-text-combo.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
 
@@ -85,6 +90,13 @@
                     case '_data':
                         this.show = false;
                         return dateOptions;
+                    case '_tipo_selecao':
+                        this.show = false;
+                        this.$set(this.criteria, 'oper', 'EQUAL');
+                        if (!this.criteria.val) {
+                            this.$set(this.criteria, 'val', []);
+                        }
+                        return textCombo;
                     default:
                         this.show = true;
                         return null;
@@ -107,6 +119,7 @@
                 });
             },
             fireOperatorRemoved() {
+                this.$delete(this.criteria, 'val');
                 this.$emit('meta-operator-removed');
             },
             dateOptionSelected(option) {
