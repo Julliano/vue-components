@@ -29,7 +29,7 @@
 <script>
     import metadata from './metadata.json';
     import textField from './bc-field-options/bc-text-field.vue';
-    // import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
+    import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
     import textCombo from './bc-field-options/bc-text-combo.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
@@ -106,11 +106,9 @@
             checkTextField() {
                 if (this.operator === 'ANY_CONTENT' || this.operator === 'NO_CONTENT') {
                     return null;
+                } else if (this.autoComplete) {
+                    return textAutocompleteField;
                 }
-                // ajustar autocomplete
-                // else if (this.operador.autoComplete) {
-                //     return textAutocompleteField;
-                // }
                 return textField;
             },
             checkNumberField() {

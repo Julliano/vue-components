@@ -14,12 +14,11 @@
 
 <template>
     <div>
-        <div class="bc-text-field">
+        <div class="bc-text-field margin-left">
             <div class="options-container">
-                <select class="inp" @change="change">
-                    <option value="" disabled :selected="selectedOption.id === null">Selecione</option>
-                    <option v-for="(date, idx) in options" :key="idx" :value="idx"
-                        :selected="selectedOption.id === date.id">
+                <select class="inp" v-model="field">
+                    <option value="" disabled>Selecione</option>
+                    <option v-for="(date, idx) in options" :key="idx" :value="date">
                             {{date.name}}
                     </option>
                 </select>
@@ -34,11 +33,12 @@
 
     export default {
         name: 'bc-text-combo',
+        props: {
+            val: Array
+        },
         data() {
             return {
-                selectedOption: {
-                    id: null
-                },
+                field: this.val[0] || '',
                 options: []
             };
         },
@@ -47,9 +47,16 @@
             this.options = bcService.getTipoSelecaoOptions();
         },
         methods: {
-            change(e) {
-                this.selectedOption = this.options[e.target.value];
-                this.$emit('change', [this.selectedOption]);
+            handleValue() {
+                if (this.field === '') {
+                    return this.$emit('change', null);
+                }
+                return this.$emit('change', [this.field]);
+            }
+        },
+        watch: {
+            field() {
+                this.handleValue();
             }
         }
     };
