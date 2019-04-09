@@ -48,7 +48,7 @@
                     @meta-attrib-selected="onMetaAttribSelected($event, criteria)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     @new-group="onNewGroup"
-                    :meta-attribs="attribs" :criteria="criteria" 
+                    :meta-attribs="attribs" :criteria="criteria"
                     :ui="uiFilter.ui" ref="attrib">
                 </bc-filter-attrib>
             </bc-filter-group>
@@ -192,6 +192,13 @@
             },
             onNewGroup() {
                 this.showAttribGroup = true;
+            }
+        },
+        watch: {
+            async uiFilter() {
+                if (this.uiFilter.ui) {
+                    await this.getAttribsFromUI(this.uiFilter.ui);
+                }
             }
         }
     };

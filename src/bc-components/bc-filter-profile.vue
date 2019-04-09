@@ -117,7 +117,15 @@
         },
         methods: {
             newProfile() {
-                this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                this.selectedProfile = {
+                    aplicacao_id_aplicacao: null,
+                    data_ultima_alteracao: null,
+                    descricao: null,
+                    flg_default: null,
+                    id_cnfg_usua_app_pes: null,
+                    id_tipo_pesquisa: null,
+                    xml_config: null
+                };
                 this.$emit('change', this.selectedProfile);
             },
             handleLabel(option) {
