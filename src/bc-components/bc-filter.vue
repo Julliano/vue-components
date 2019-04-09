@@ -142,7 +142,11 @@
                 this.filterData.push(value);
             },
             onProfileSelected(obj) {
-                this.uis = JSON.parse(obj.xml_config);
+                if (!obj.xml_config) {
+                    this.uis = [];
+                    return this.createEmptyUi();
+                }
+                return this.uis = JSON.parse(obj.xml_config);
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();
