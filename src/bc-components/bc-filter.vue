@@ -143,8 +143,9 @@
                 this.filterData.push(value);
             },
             onProfileSelected(obj) {
+                console.log(obj.xml_config);
+                // this.uis = bcFilterToView([JSON.parse(obj.xml_config)]);
                 this.profile = obj;
-                console.log(obj);
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();

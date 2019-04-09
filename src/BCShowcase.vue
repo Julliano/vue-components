@@ -32,6 +32,7 @@
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
+                // filter: [],
                 filter: [
                     {
                         ui: 'dc_arquivo',
@@ -72,30 +73,31 @@
                 ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
-                profile: {
-                    aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
-                    data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
-                    descricao: 'Muahaha',
-                    flg_default: {
-                        ids: {
-                            ID_SIM_NAO: 'N'
-                        },
-                        valor: 'Não'
-                    },
-                    id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
-                    id_tipo_pesquisa: {
-                        ids: {
-                            ID_TIPO_PESQUISA: 'E'
-                        },
-                        valor: 'Perfil de pesquisa avançado de dados coletados'
-                    },
-                    xml_config: {
-                        ui: 'dc_arquivo',
-                        sources: ['fonte'],
-                        operator: null,
-                        criteria: {}
-                    }
-                }
+                profile: {}
+                // profile: {
+                //     aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
+                //     data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
+                //     descricao: 'Muahaha',
+                //     flg_default: {
+                //         ids: {
+                //             ID_SIM_NAO: 'N'
+                //         },
+                //         valor: 'Não'
+                //     },
+                //     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
+                //     id_tipo_pesquisa: {
+                //         ids: {
+                //             ID_TIPO_PESQUISA: 'E'
+                //         },
+                //         valor: 'Perfil de pesquisa avançado de dados coletados'
+                //     },
+                //     xml_config: {
+                //         ui: 'dc_arquivo',
+                //         sources: ['fonte'],
+                //         operator: null,
+                //         criteria: {}
+                //     }
+                // }
             };
         },
         created() {
