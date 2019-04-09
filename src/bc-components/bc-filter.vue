@@ -58,7 +58,6 @@
             return {
                 uis: null,
                 profiles: [],
-                profile: {},
                 emptyFilter: [{
                     ui: null,
                     operator: null,
@@ -143,9 +142,7 @@
                 this.filterData.push(value);
             },
             onProfileSelected(obj) {
-                console.log(obj.xml_config);
                 this.uis = JSON.parse(obj.xml_config);
-                this.profile = obj;
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();
