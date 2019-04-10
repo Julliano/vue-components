@@ -25,7 +25,7 @@
                     </option>
                 </select>
                 <button class="btn btn-small btn-filter" v-if="!item.attr" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
-                <bc-filter-operators v-else-if="selectedAttrib"
+                <bc-filter-operators v-else-if="selectedAttrib && selectedAttrib.type !== '_meta_ui'"
                     :auto-complete="selectedAttrib.autocomplete"
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
                     :attrib-name="selectedAttrib.name" :criteria="item"
