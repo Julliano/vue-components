@@ -122,6 +122,11 @@
                 switch (this.tipoAttrib) {
                     case '_inteiro_64':
                         this.handleInt64();
+                        break;
+                    case '_data_ref':
+                        this.handleDateHour();
+                    case '_data_hora':
+                        this.handleDateHour();
                 }
                 if (!this.criteria.val) {
                     this.$set(this.criteria, 'val', []);
@@ -139,6 +144,13 @@
                     }
                 } else if (this.criteria.val && this.criteria.val.length > 1) {
                     this.criteria.val.pop();
+                }
+            },
+            handleDateHour() {
+                if (this.localOperator.name === 'OUT_OF_RANGE' || this.localOperator.name === 'RANGE') {
+                    if (this.criteria.val && this.criteria.val.length > 1) {
+                        this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
+                    }
                 }
             },
             async getOperators() {

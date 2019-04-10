@@ -84,6 +84,8 @@
                         return this.checkNumberField();
                     case '_data_hora':
                         return this.checkDataHoraField();
+                    case '_data_ref':
+                        return this.checkDataHoraField();
                     case '_tipo_selecao':
                         return metaSelection;
                     case 'outros':

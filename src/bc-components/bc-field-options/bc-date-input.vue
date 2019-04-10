@@ -23,10 +23,10 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input id="date" name="finalDate" type="date" @change="change"
+                <input id="date" name="finalDate" type="date"
                     class="inp big" v-model="date">
-                <input id="hour" name="hour" type="time" @change="change"
-                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
+                <input id="hour" name="hour" type="time"
+                    class="inp big" v-model="hour" v-if="tipo === '_data_hora' || tipo === '_data_ref'">
             </div>
         </div>
     </div>
@@ -37,17 +37,34 @@
     export default {
         name: 'bc-date-input',
         props: {
-            tipo: String
+            tipo: String,
+            val: Array
         },
         data() {
             return {
-                date: '',
-                hour: ''
+                date: this.val[0] || '',
+                hour: this.val[1] || ''
             };
         },
         methods: {
-            change() {
-                this.$emit('change', [this.date, this.hour]);
+            handleValue() {
+                let localDate = null;
+                let localHour = null;
+                if (this.date !== '') {
+                    localDate = this.date;
+                }
+                if (this.hour !== '') {
+                    localHour = this.hour;
+                }
+                return this.$emit('change', [localDate, localHour]);
+            }
+        },
+        watch: {
+            date() {
+                this.handleValue();
+            },
+            hour() {
+                this.handleValue();
             }
         }
     };
