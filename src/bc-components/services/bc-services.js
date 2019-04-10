@@ -70,9 +70,9 @@ export default {
     },
     async getLabelUIs(uis) {
         const locale = this.getLocale();
-        const url = `metadata?loc=${locale}`;
+        const url = `metadata?flags=filterable,visible&loc=${locale}`;
         const allMetaUis = await dispatcher.doGet(url);
-        return !uis ? [] : allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
+        return !uis ? allMetaUis : allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
     },
 
     async getAttribsFromUI(logicName) {
