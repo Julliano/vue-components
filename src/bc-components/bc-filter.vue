@@ -4,10 +4,10 @@
             :profile="jsonMounted" :json="uis" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
          <h4> {{ 'searchProfile' | i18n }} </h4>
-        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea> -->
+        </textarea>
         <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                         :idx="idx"
                         :uiFilter="uiFilter"
@@ -52,7 +52,6 @@
                 type: Object,
                 default: {}
             },
-            jsonFilter: Object,
             tipoPesquisa: String
         },
         data() {
@@ -87,7 +86,6 @@
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
-
                 if (hasEmptyUI.length) return;
                 // adiciona novo grupo de ui
                 this.uis.push(

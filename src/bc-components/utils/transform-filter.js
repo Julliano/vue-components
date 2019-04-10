@@ -47,7 +47,7 @@ export function bcFilterToView(bcFilter, returnFilter = [], isRecursive = false)
 }
 
 // eslint-disable-next-line
-export function viewToBcFilter(viewFilter, first = true) {
+export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
     for (const uiFilter of viewFilter) {
         let blockFilter = {};
         const {operator} = {...uiFilter};
@@ -55,7 +55,7 @@ export function viewToBcFilter(viewFilter, first = true) {
             blockFilter.filter = uiFilter.criteria;
             blockFilter.ui = uiFilter.ui;
             blockFilter.sources = uiFilter.sources;
-            viewFilter.push(blockFilter);
+            returnFilter.push(blockFilter);
             break;
         } else {
             if (first) {
@@ -64,7 +64,7 @@ export function viewToBcFilter(viewFilter, first = true) {
                 blockFilter.sources = uiFilter.sources;
                 blockFilter.filter[operator] = uiFilter.criteria;
                 if (blockFilter.filter[operator] instanceof Array) {
-                    viewToBcFilter(blockFilter.filter[operator], false);
+                    viewToBcFilter(blockFilter.filter[operator], returnFilter, false);
                 }
             } else {
                 if (uiFilter.criteria) {
@@ -73,7 +73,7 @@ export function viewToBcFilter(viewFilter, first = true) {
                     delete uiFilter.operator;
                 }
                 if (blockFilter[operator] instanceof Array) {
-                    viewToBcFilter(uiFilter[operator], false);
+                    viewToBcFilter(uiFilter[operator], returnFilter, false);
                 }
                 continue;
             }
@@ -81,11 +81,11 @@ export function viewToBcFilter(viewFilter, first = true) {
         }
 
         if (Object.keys(blockFilter).length && blockFilter.filter[operator]) {
-            viewFilter.push(blockFilter);
+            returnFilter.push(blockFilter);
         }
     }
 
     if (Object.keys(viewFilter).length) {
-        return viewFilter;
+        return returnFilter;
     }
 }
