@@ -169,7 +169,7 @@ export default {
                 {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
                     descricao: obj.descricao,
-                    data_ultima_alteracao: obj.data_ultima_alteracao,
+                    data_ultima_alteracao: '2019-04-10T18:00:55.443Z',
                     xml_config: JSON.stringify(xml)
                 }
             ]

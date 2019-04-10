@@ -151,7 +151,8 @@
                     this.uis = [];
                     return this.createEmptyUi();
                 }
-                return this.uis = JSON.parse(obj.xml_config);
+                let xml = JSON.parse(obj.xml_config);
+                return this.uis = xml.jsonView;
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles();
