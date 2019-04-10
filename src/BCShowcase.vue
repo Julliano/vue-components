@@ -13,7 +13,7 @@
         <h3>BC Components Showcase</h3>
         <hr/>
         <h4>bc-filter</h4>
-        <bc-filter :list-uis="listUis" :source-types="sourceTypes" :profile-seleted="profile"
+        <bc-filter :list-uis="listUis" :source-types="sourceTypes" :profile-seleted="profile" :tipo-pesquisa="tipoBusca"
             :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :json-filter="jsonFilter" :filter="filter"></bc-filter>
     </div>
 </template>
@@ -82,6 +82,7 @@
                     }
                 ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
+                tipoBusca: 'E',
                 jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
                 profile: {}
             };

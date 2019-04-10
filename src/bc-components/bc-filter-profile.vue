@@ -268,7 +268,7 @@
                 if (this.checkSameProfileName(name, 'save')) {
                     try {
                         await bcService.saveSearchProfiles(this.selectedProfile,
-                            {descricao: name}, this.json);
+                            {descricao: name}, this.json, this.tipoPesquisa);
                         this.showModal = false;
                         this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');

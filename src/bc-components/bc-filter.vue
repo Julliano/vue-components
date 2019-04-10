@@ -52,7 +52,8 @@
                 type: Object,
                 default: {}
             },
-            jsonFilter: Object
+            jsonFilter: Object,
+            tipoPesquisa: String
         },
         data() {
             return {
@@ -155,7 +156,7 @@
                 return this.uis = xml.jsonView;
             },
             async getProfiles() {
-                let response = await bcService.getSearchProfiles();
+                let response = await bcService.getSearchProfiles(this.tipoPesquisa);
                 this.profiles = [];
                 response.uis.forEach(ui => {
                     this.profiles.push(ui);

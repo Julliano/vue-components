@@ -8,7 +8,7 @@ let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_
     `usuario|bc|${parent.loginClientDTO.loginId}`;
 let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
 let idAplicacao = 'aplicacao|bc|140';
-let tipoPesquisa = 'E';
+let tipoPesquisa = '';
 
 Dispatcher.config({
     baseURL: '/bc/services/',
@@ -104,7 +104,8 @@ export default {
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 
-    async getSearchProfiles() {
+    async getSearchProfiles(param) {
+        getProfileParams.filter.AND[0].AND[2].val[0] = param;
         return await dispatcher.doPost('objectQuery', getProfileParams);
     },
 
@@ -112,7 +113,7 @@ export default {
         return await dispatcher
             .doGet('access/userDataDirectory');
     },
-    async saveSearchProfiles(obj, param = null, xml = null) {
+    async saveSearchProfiles(obj, param = null, xml = null, idTipoPesquisa = '') {
         if (param) {
             let response = await this.getProfileDirectory();
             obj.descricao = param.descricao;
@@ -121,7 +122,7 @@ export default {
             obj['_diretorios'] = {
                 add: [response.id]
             };
-            if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
+            obj.id_tipo_pesquisa = idTipoPesquisa;
             obj.xml_config = JSON.stringify(xml);
             if (!obj.aplicacao_id_aplicacao) {
                 obj.aplicacao_id_aplicacao = {id_aplicacao: idAplicacao};
