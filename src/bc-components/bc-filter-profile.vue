@@ -180,6 +180,10 @@
                 this.optionSelected = obj;
                 switch (obj.label) {
                     case 'save':
+                        if (!this.selectedProfile.descricao) {
+                            this.modalType = 'saveAs';
+                            return this.showModal = true;
+                        }
                         return this.fireProfileSaved(obj);
                     case 'saveAs':
                         this.modalType = 'saveAs';
@@ -210,7 +214,7 @@
             checkDisabled(option) {
                 if (option.label === 'default') {
                     if (!this.selectedProfile.descricao) return true;
-                } else if (option.label !== 'saveAs') {
+                } else if (option.label !== 'save') {
                     return !this.selectedProfile.descricao;
                 }
                 return null;
@@ -280,7 +284,7 @@
                 }
             },
             async fireProfileRenamed(name) {
-                if (this.checkSameProfileName(name)) {
+                if (this.checkSameProfileName(name, 'rename')) {
                     try {
                         await bcService.renameSearchProfiles(this.selectedProfile, name);
                         this.showModal = false;
@@ -291,7 +295,7 @@
                         return this.$emit('error', 'renamed');
                     }
                 }
-                return this.$emit('error', 'renamed');
+                return this.$emit('error', 'renamed-same-name');
             },
             async fireProfileRemoved() {
                 try {
@@ -304,16 +308,18 @@
                     return this.$emit('error', 'removed');
                 }
             },
-            checkSameProfileName(name, save) {
+            checkSameProfileName(name, param) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {
                         return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
                             name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
                     });
                     if (defaultProfile.length) {
-                        if (save) {
+                        if (param === 'save') {
                             this.confirmModal = true;
                             this.newName = name;
+                            return false;
+                        } else if (param === 'rename') {
                             return false;
                         }
                         return false;
