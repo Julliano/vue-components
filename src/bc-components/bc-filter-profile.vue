@@ -70,6 +70,7 @@
     import bcSaveSearchModal from './modal/bc-save-search-modal.vue';
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
+    import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
@@ -249,7 +250,12 @@
             },
             async fireProfileSaved() {
                 try {
-                    await bcService.editProfile(this.selectedProfile, this.json);
+                    let copyJson = JSON.parse(JSON.stringify(this.json));
+                    let xml = {
+                        jsonView: this.json,
+                        jsonBc: viewToBcFilter(copyJson)
+                    };
+                    await bcService.editProfile(this.selectedProfile, xml);
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
