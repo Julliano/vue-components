@@ -9,6 +9,10 @@
     .options-container {
         display: inline-flex;
         align-items: center;
+        flex-wrap: wrap;
+    }
+    .meta-ui{
+        flex-basis: 100%;
     }
 </style>
 
@@ -35,6 +39,15 @@
                     ref="operator"                  
                 ></bc-filter-operators>
             </div>
+            <div class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'" >
+                <bc-attrib-group                                       
+                    :meta-attribs="metaAttribs" 
+                    :filter="criteria"
+                    :ui="selectedAttrib.metaType"
+                    :selectedAttrib = "selectedAttrib"
+                    ref="attribGroup">
+                </bc-attrib-group>
+            </div>
         </div>
     </div>
 </template>
@@ -43,22 +56,25 @@
 
     import i18n from './utils/i18n.js';
     import BcFilterOperators from './bc-filter-operators.vue';
+    import BcAttribGroup from './bc-attrib-group.vue';
 
     export default {
         name: 'bc-filter-attrib',
         mixins: [i18n.mixin],
         components: {
-            BcFilterOperators
+            BcFilterOperators,
+            BcAttribGroup
         },
         props: {
             criteria: null,
             metaAttribs: Array,
-            ui: String
+            ui: String,
+            recursiveAttrib: Object
         },
         data() {
             return {
                 render: true,
-                selectedAttrib: null
+                selectedAttrib: this.recursiveAttrib || null
             };
         },
         methods: {
@@ -85,19 +101,46 @@
                 this.$emit('meta-field-selected', param);
             },
             checkLevel() {
-                if (this.criteria.operator) {
-                    console.log('tem criteria');
+                let {attr} = {...this.criteria};
+                if (!Object.entries(this.criteria).length) {
+                    return [{}];
+                }
+                const isOtherUI = this.criteria.attr.indexOf('.');
+                if (isOtherUI !== -1) {
+                    attr = this.criteria.attr.substr(0, isOtherUI);
                 }
                 for (const attrib of this.metaAttribs) {
-                    if (attrib.name === this.criteria.attr) {
+                    if (attrib.name === attr) {
                         this.selectedAttrib = attrib;
+                        if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI();
                         break;
                     }
                 }
                 return [this.criteria];
             },
-            generateHash() {
-                return Math.random();
+            mountCriteriaByOtherUI() {
+                const isOtherUI = this.criteria.attr.indexOf('.');
+                if (isOtherUI === -1) {
+                    return;
+                }
+                const ui = this.criteria.attr.substr(0, isOtherUI);
+
+                this.$set(this.criteria, 'operator', 'and');
+                this.$set(this.criteria, 'criteria', [{
+                    attr: this.criteria.attr.substr(isOtherUI + 1, this.criteria.attr.length),
+                    oper: this.criteria.oper,
+                    val: this.criteria.val
+                }]);
+                this.$set(this.criteria, 'attr', ui);
+
+                this.$delete(this.criteria, 'oper');
+                this.$delete(this.criteria, 'val');
+            },
+            generateHash(item) {
+                if (item.hash) {
+                    return item.hash;
+                }
+                return item.hash = Math.random();
             }
         },
         watch: {

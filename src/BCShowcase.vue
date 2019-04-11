@@ -34,35 +34,6 @@
                 idAplicacao: 'aplicacao|bc|140',
                 filter: [
                     {
-                        ui: 'dc_arquivo',
-                        sources: [],
-                        filter: {
-                            or: [
-                                {
-                                    attr: 'flg_armazenar',
-                                    oper: 'EQUAL',
-                                    val: [
-                                        'S'
-                                    ]
-                                },
-                                {
-                                    attr: 'extensao',
-                                    oper: 'EQUAL',
-                                    val: [
-                                        'N'
-                                    ]
-                                },
-                                {
-                                    attr: 'comentario',
-                                    val: [
-                                        'TUDOOOOO'
-                                    ],
-                                    oper: 'CONTAINS'
-                                }
-                            ]
-                        }
-                    },
-                    {
                         ui: 'dc_agenda',
                         sources: [],
                         filter: {
@@ -73,9 +44,9 @@
                                     val: ['João']
                                 },
                                 {
-                                    attr: 'alvo',
+                                    attr: 'alvo.nome',
                                     oper: 'EQUAL',
-                                    val: ['João']
+                                    val: ['João11111111111111111']
                                 }
                             ]
                         }
