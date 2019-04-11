@@ -1,11 +1,11 @@
 <template>
     <div class="bc-filter-component">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
-            :profile="jsonMounted" :json="uis" @success="handleEvent($event, 'sucess')" @error="handleEvent($event, 'error')" :show="show">
+            :profile="jsonMounted" :json="uis" @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
          <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
-            {{JSON.stringify(uis, null,8)}}
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+            {{JSON.stringify(uis, null,8)}} -->
 
         </textarea>
         <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"

@@ -301,7 +301,7 @@
                         return this.$emit('error', 'renamed');
                     }
                 }
-                return this.$emit('error', 'renamed-same-name');
+                return this.$emit('error', 'renamedSameName');
             },
             async fireProfileRemoved() {
                 try {
