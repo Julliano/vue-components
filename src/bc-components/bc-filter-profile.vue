@@ -289,7 +289,7 @@
                 }
             },
             async fireProfileRenamed(name) {
-                if (this.checkSameProfileName(name, 'rename')) {
+                if (this.checkSameProfileName(name, 'rename', this.selectedProfile.id_cnfg_usua_app_pes)) {
                     try {
                         await bcService.renameSearchProfiles(this.selectedProfile, name);
                         this.showModal = false;
@@ -313,11 +313,15 @@
                     return this.$emit('error', 'removed');
                 }
             },
-            checkSameProfileName(name, param) {
+
+            checkSameProfileName(name, param, id = null) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {
-                        return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
-                            name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        if (id !== profile.id_cnfg_usua_app_pes) {
+                            return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
+                                name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        }
+                        return null;
                     });
                     if (defaultProfile.length) {
                         if (param === 'save') {
