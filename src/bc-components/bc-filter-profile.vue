@@ -143,16 +143,11 @@
                     if (this.profile && this.profile.id_cnfg_usua_app_pes && this.first) {
                         this.first = false;
                         this.selectedProfile = this.profile;
-                        this.$emit('change', this.selectedProfile);
+                        return this.$emit('change', this.selectedProfile);
                     }
-                    // else if (this.profile.id_cnfg_usua_app_pes && !this.first) {
-                    //     this.initialState();
-                    // }
-                    this.initialState();
-                } else {
-                    this.initialState();
                 }
-                this.$forceUpdate();
+                this.initialState();
+                return this.$forceUpdate();
             },
             initialState() {
                 if (!this.selectedProfile.descricao) {
@@ -306,8 +301,9 @@
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
                     this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                    this.newProfile();
+                    this.setDefault();
                     this.$emit('success', 'removed');
-                    this.selectedProfile = { id_cnfg_usua_app_pes: null };
                     return this.$emit('reload-profiles');
                 } catch (error) {
                     return this.$emit('error', 'removed');
