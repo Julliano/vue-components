@@ -144,9 +144,11 @@
                         this.first = false;
                         this.selectedProfile = this.profile;
                         this.$emit('change', this.selectedProfile);
-                    } else if (this.profile.id_cnfg_usua_app_pes && !this.first) {
-                        this.initialState();
                     }
+                    // else if (this.profile.id_cnfg_usua_app_pes && !this.first) {
+                    //     this.initialState();
+                    // }
+                    this.initialState();
                 } else {
                     this.initialState();
                 }
@@ -233,10 +235,10 @@
                 });
                 if (this.newName && profileFound.length) {
                     try {
-                        await bcService.replaceSearchProfiles(profileFound[0], this.json);
+                        let xml = this.mountXml();
+                        await bcService.replaceSearchProfiles(profileFound[0], xml);
                         this.confirmModal = false;
                         this.showModal = false;
-                        this.selectedProfile.descricao = name;
                         this.newName = '';
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
@@ -250,11 +252,7 @@
             },
             async fireProfileSaved() {
                 try {
-                    let copyJson = JSON.parse(JSON.stringify(this.json));
-                    let xml = {
-                        jsonView: this.json,
-                        jsonBc: viewToBcFilter(copyJson)
-                    };
+                    let xml = this.mountXml();
                     await bcService.editProfile(this.selectedProfile, xml);
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
@@ -267,8 +265,9 @@
                     this.selectedProfile : this.profile;
                 if (this.checkSameProfileName(name, 'save')) {
                     try {
+                        let xml = this.mountXml();
                         await bcService.saveSearchProfiles(this.selectedProfile,
-                            {descricao: name}, this.json, this.tipoPesquisa);
+                            {descricao: name}, xml, this.tipoPesquisa);
                         this.showModal = false;
                         this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');
@@ -332,6 +331,14 @@
                     }
                 }
                 return true;
+            },
+            mountXml() {
+                let copyJson = JSON.parse(JSON.stringify(this.json));
+                let xml = {
+                    jsonView: this.json,
+                    jsonBc: viewToBcFilter(copyJson)
+                };
+                return xml;
             }
         },
         watch: {
