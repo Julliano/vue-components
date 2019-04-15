@@ -34,7 +34,8 @@
     export default {
         name: 'bc-meta-selection',
         props: {
-            val: Array
+            val: Array,
+            lookUp: String
         },
         data() {
             return {
@@ -43,8 +44,10 @@
             };
         },
         async created() {
-            // ajustar request (está retornando dados mocados)
-            this.options = await bcService.getTipoSelecaoOptions();
+            // emitir evendo de erro caso de treta
+            if (this.lookUp) {
+                this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
+            }
             this.checkVal();
         },
         methods: {

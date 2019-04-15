@@ -1,5 +1,5 @@
 <template>
-    <div class="bc-filter-component">
+    <div class="bc-filter-component margin">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
             :profile="jsonMounted" :json="uis" @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>

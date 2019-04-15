@@ -5,7 +5,6 @@
     .bc-int-input {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
         .options-container {
             display: inline-flex;
             align-items: center;

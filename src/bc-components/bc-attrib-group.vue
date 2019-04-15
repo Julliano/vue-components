@@ -7,14 +7,14 @@
             :operator="filter.operator"
             @operator-changed="onOperatorChanged"
         >
-            <component :is="bcFilterAttrib"                                      
-                v-for="(localCriteria, idx) in filter.criteria" :key="idx"
-                @meta-attrib-selected="onMetaAttribSelected($event, idx)"
-                @meta-attrib-removed="onAttribRemoved(idx)"
-                :meta-attribs="localMetaAttribs"
-                :criteria="localCriteria"
-                :ui="ui" ref="attrib">
-            </component>
+        <component :is="bcFilterAttrib"                                      
+            v-for="(localCriteria, idx) in filter.criteria" :key="idx"
+            @meta-attrib-selected="onMetaAttribSelected($event, idx)"
+            @meta-attrib-removed="onAttribRemoved(idx)"
+            :meta-attribs="localMetaAttribs"
+            :criteria="localCriteria"
+            :ui="ui" ref="attrib">
+        </component>
         </bc-filter-group>
 </template>
 

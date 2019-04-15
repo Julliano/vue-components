@@ -96,11 +96,12 @@ export default {
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 
-    getTipoSelecaoOptions() {
-        return [
-            {id: 'S', value: 'Sim'},
-            {id: 'N', value: 'Não'}
-        ];
+    getTipoSelecaoOptions(tipoSelec) {
+        return dispatcher.doGet(`lookup/${tipoSelec}`);
+        // return [
+        //     {id: 'S', value: 'Sim'},
+        //     {id: 'N', value: 'Não'}
+        // ];
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 
