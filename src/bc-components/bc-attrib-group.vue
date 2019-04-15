@@ -1,20 +1,20 @@
 <template>
         <bc-filter-group
-            v-if="filter.criteria[0]"
+            v-if="filter.criteria && filter.criteria[0]"
             class="bc-filter-group"
             ref="attribsGroup"
             :criteria-size="filter.criteria.length"
             :operator="filter.operator"
             @operator-changed="onOperatorChanged"
         >
-            <bc-filter-attrib                                        
+            <component :is="bcFilterAttrib"
                 v-for="(localCriteria, idx) in filter.criteria" :key="idx"
                 @meta-attrib-selected="onMetaAttribSelected"
                 @meta-attrib-removed="onAttribRemoved(idx)"
                 :meta-attribs="metaAttribs" :criteria="localCriteria"
                 :recursive-attrib="localAttrib"
                 :ui="ui" ref="attrib">
-            </bc-filter-attrib>
+            </component>
         </bc-filter-group>
 </template>
 
@@ -38,17 +38,16 @@
         data() {
             return {
                 metaAttribs: [],
-                localAttrib: this.selectedAttrib || {}
+                localAttrib: this.selectedAttrib || {},
+                bcFilterAttrib
             };
-        },
-        beforeCreate() {
-            this.$options.components.bcFilterAttrib = require('./bc-filter-attrib.vue').default;
         },
         destroyed() {
             this.$delete(this.filter, 'criteria');
             this.$delete(this.filter, 'operator');
         },
         created() {
+            console.log(this.$data);
             if (!this.filter.criteria) {
                 this.insertEmptyCriteria();
             }

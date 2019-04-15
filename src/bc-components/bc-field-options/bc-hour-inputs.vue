@@ -8,6 +8,7 @@
         .options-container {
             display: inline-flex;
             align-items: center;
+            .panel-heading > i{ vertical-align: middle !important; }
             input {
                 height: 24px !important;
                 padding: 2px;

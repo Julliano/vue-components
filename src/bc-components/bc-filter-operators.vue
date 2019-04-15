@@ -10,8 +10,8 @@
             display: inline-flex;
             align-items: center;
             .date-type {
-                margin-right: 5px;
-                margin-left: -5px;
+                // margin-right: 5px;
+                margin-left: -8px;
             }
         }
     }
@@ -21,9 +21,9 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <component class="date-type" :is="dynamicComponentDate" 
-                    @data-option-selected="dateOptionSelected" 
-                    :val="criteria.val"
+                <component class="date-type" :is="dynamicComponentDate"
+                    @data-option-selected="dateOptionSelected"
+                    :val="criteria.val" :lookUp="lookUp"
                     @change="change">
                 </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-    
+
     import i18n from './utils/i18n.js';
     import dateOptions from './bc-field-options/bc-date-options.vue';
     import metaSelection from './bc-field-options/bc-meta-selection.vue';
@@ -68,7 +68,8 @@
             uiName: String,
             autoComplete: Boolean,
             attribName: String,
-            criteria: Object
+            criteria: Object,
+            lookUp: String
         },
         components: {
             bcService,

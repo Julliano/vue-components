@@ -23,25 +23,25 @@
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaAttribs" :key="idx"
-                            :value="opt" 
+                            :value="opt"
                     >
                       {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-small btn-filter" v-if="!item.attr" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
                 <bc-filter-operators v-else-if="selectedAttrib && selectedAttrib.type !== '_meta_ui'"
-                    :auto-complete="selectedAttrib.autocomplete"
+                    :auto-complete="selectedAttrib.autocomplete" :look-up="selectedAttrib.lookup"
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
                     :attrib-name="selectedAttrib.name" :criteria="item"
                     @meta-operator-selected="onMetaOperatorSelected($event, item)"
                     @meta-operator-removed="fireAttribRemoved"
                     @data-option-selected="onDataOptionSelected($event, idx)"
-                    ref="operator"                  
+                    ref="operator"
                 ></bc-filter-operators>
             </div>
             <div class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'" >
-                <bc-attrib-group                                       
-                    :meta-attribs="metaAttribs" 
+                <bc-attrib-group
+                    :meta-attribs="metaAttribs"
                     :filter="criteria"
                     :ui="selectedAttrib.metaType"
                     :selectedAttrib = "selectedAttrib"
