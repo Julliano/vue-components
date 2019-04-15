@@ -39,15 +39,14 @@
                     ref="operator"                  
                 ></bc-filter-operators>
             </div>
-            <div class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'" >
-                <bc-attrib-group                                       
-                    :meta-attribs="metaAttribs" 
-                    :filter="criteria"
-                    :ui="selectedAttrib.metaType"
-                    :selectedAttrib = "selectedAttrib"
-                    ref="attribGroup">
-                </bc-attrib-group>
-            </div>
+            <bc-attrib-group
+                class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'"                                      
+                :meta-attribs="metaAttribs" 
+                :filter="criteria"
+                :ui="selectedAttrib.metaType"
+                :selectedAttrib = "selectedAttrib"
+                ref="attribGroup">
+            </bc-attrib-group>
         </div>
     </div>
 </template>
@@ -68,13 +67,11 @@
         props: {
             criteria: null,
             metaAttribs: Array,
-            ui: String,
-            recursiveAttrib: Object
+            ui: String
         },
         data() {
             return {
-                render: true,
-                selectedAttrib: this.recursiveAttrib || null
+                selectedAttrib: null
             };
         },
         methods: {
@@ -130,9 +127,8 @@
                     attr: this.criteria.attr.substr(isOtherUI + 1, this.criteria.attr.length),
                     oper: this.criteria.oper,
                     val: this.criteria.val
-                }]);
+                }, {}]);
                 this.$set(this.criteria, 'attr', ui);
-
                 this.$delete(this.criteria, 'oper');
                 this.$delete(this.criteria, 'val');
             },
