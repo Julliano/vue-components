@@ -38,17 +38,13 @@
                     data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
                     descricao: 'Muahaha',
                     flg_default: {
-                        ids: {
-                            ID_SIM_NAO: 'N'
-                        },
-                        valor: 'Não'
+                        id: 'N',
+                        value: 'Não'
                     },
                     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
                     id_tipo_pesquisa: {
-                        ids: {
-                            ID_TIPO_PESQUISA: 'E'
-                        },
-                        valor: 'Perfil de pesquisa avançado de dados coletados'
+                        id: 'E',
+                        value: 'Perfil de pesquisa avançado de dados coletados'
                     },
                     xml_config: {
                         ui: 'dc_arquivo',
