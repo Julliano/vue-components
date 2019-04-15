@@ -170,6 +170,7 @@
                 this.$emit('meta-ui-removed', this.attrib);
             },
             onMetaAttribSelected(metaAttrib, criteria) {
+                this.$delete(criteria, 'attr');
                 this.$set(criteria, 'attr', metaAttrib.name);
                 this.insertEmptyCriteria();
             },

@@ -187,6 +187,11 @@
             change(val) {
                 this.criteria.val = val;
             }
+        },
+        watch: {
+            attribName() {
+                this.getOperators();
+            }
         }
     };
 </script>

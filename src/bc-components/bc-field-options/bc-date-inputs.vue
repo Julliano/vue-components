@@ -25,10 +25,12 @@
             <div class="options-container">
                 <input id="date1" name="initialDate" type="date" @change="change"
                         class="inp big" v-model="initialDate">
+                <input id="hour1" name="hour1" type="time" @change="change"
+                    class="inp big" v-model="hour1" v-if="tipo === '_data_hora'">
                 <input id="date2" name="finalDate" type="date" @change="change"
                         class="inp big" v-model="finalDate">
-                <input id="hour" name="hour" type="time" @change="change"
-                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
+                <input id="hour2" name="hour2" type="time" @change="change"
+                    class="inp big" v-model="hour2" v-if="tipo === '_data_hora'">
             </div>
         </div>
     </div>
@@ -45,12 +47,13 @@
             return {
                 initialDate: '',
                 finalDate: '',
-                hour: ''
+                hour1: '',
+                hour2: ''
             };
         },
         methods: {
             change() {
-                this.$emit('change', [this.initialDate, this.finalDate, this.hour]);
+                this.$emit('change', [this.initialDate, this.finalDate, this.hour1, this.hour2]);
             }
         }
     };

@@ -78,11 +78,11 @@
             };
         },
         methods: {
-            fireAttribSelected(idx) {
+            fireAttribSelected() {
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
-                if (this.$refs.operator && this.$refs.operator.length > 0) {
-                    this.$refs.operator[idx].attribChanged();
-                }
+                // if (this.$refs.operator && this.$refs.operator.length > 0) {
+                //     this.$refs.operator[idx].attribChanged();
+                // }
             },
             fireAttribRemoved() {
                 this.$emit('meta-attrib-removed');
