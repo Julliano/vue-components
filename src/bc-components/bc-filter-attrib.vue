@@ -22,7 +22,7 @@
             <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
-                    <option v-for="(opt, idx) in metaAttribs" :key="idx"
+                    <option v-for="(opt, idx) in localAttribs || metaAttribs" :key="idx"
                             :value="opt"
                     >
                       {{opt.label}}
@@ -40,8 +40,8 @@
                 ></bc-filter-operators>
             </div>
             <bc-attrib-group
-                class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'"                                      
-                :meta-attribs="metaAttribs" 
+                class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'"
+                :meta-attribs="metaAttribs"
                 :filter="criteria"
                 :ui="selectedAttrib.metaType"
                 :selectedAttrib = "selectedAttrib"
@@ -56,13 +56,15 @@
     import i18n from './utils/i18n.js';
     import BcFilterOperators from './bc-filter-operators.vue';
     import BcAttribGroup from './bc-attrib-group.vue';
+    import bcService from './services/bc-services.js';
 
     export default {
         name: 'bc-filter-attrib',
         mixins: [i18n.mixin],
         components: {
             BcFilterOperators,
-            BcAttribGroup
+            BcAttribGroup,
+            bcService
         },
         props: {
             criteria: null,
@@ -71,6 +73,7 @@
         },
         data() {
             return {
+                localAttribs: null,
                 selectedAttrib: null
             };
         },
@@ -86,6 +89,14 @@
             },
             fireNewGroup() {
                 this.$emit('new-group', this.criteria);
+            },
+            async getAttribsFromUI() {
+                this.localAttribs = await bcService.getAttribsFromUI(this.ui);
+                this.localAttribs.sort((e1, e2) => {
+                    const l1 = e1.label.normalize('NFD');
+                    const l2 = e2.label.normalize('NFD');
+                    return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
+                });
             },
             onMetaOperatorSelected(operator, criteria) {
                 if (!operator) {
@@ -143,6 +154,9 @@
             criteria() {
                 if (Object.entries(this.criteria).length) return;
                 this.selectedAttrib = null;
+            },
+            ui() {
+                this.getAttribsFromUI();
             }
         }
     };

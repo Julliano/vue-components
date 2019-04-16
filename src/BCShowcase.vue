@@ -47,7 +47,26 @@
                                     attr: 'alvo.nome',
                                     oper: 'EQUAL',
                                     val: ['João11111111111111111']
+                                },
+                                {
+                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                    oper: 'EQUAL',
+                                    val: ['4']
                                 }
+                                // {
+                                //     and: [
+                                //         {
+                                //             attr: 'alvo.nome',
+                                //             oper: 'EQUAL',
+                                //             val: ['João11111111111111111']
+                                //         },
+                                //         {
+                                //             attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                //             oper: 'EQUAL',
+                                //             val: ['4']
+                                //         }
+                                //     ]
+                                // }
                             ]
                         }
                     }

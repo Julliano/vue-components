@@ -7,7 +7,7 @@
             :operator="filter.operator"
             @operator-changed="onOperatorChanged"
         >
-        <component :is="bcFilterAttrib"                                      
+        <component :is="bcFilterAttrib"
             v-for="(localCriteria, idx) in filter.criteria" :key="idx"
             @meta-attrib-selected="onMetaAttribSelected($event, idx)"
             @meta-attrib-removed="onAttribRemoved(idx)"
@@ -96,6 +96,7 @@
                 if (!hashEmptyObject.length) {
                     this.filter.criteria.push({});
                 }
+
                 // this.localMetaAttribs = [];
                 //this.getAttribsFromUI(localAttrib.metaType);
             },
