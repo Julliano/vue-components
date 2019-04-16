@@ -91,7 +91,8 @@
             profile: Object,
             json: Array,
             profiles: Array,
-            tipoPesquisa: String
+            tipoPesquisa: String,
+            idAplicacao: String
         },
         data() {
             return {
@@ -262,7 +263,7 @@
                     try {
                         let xml = this.mountXml();
                         await bcService.saveSearchProfiles(this.selectedProfile,
-                            {descricao: name}, xml, this.tipoPesquisa);
+                            {descricao: name}, xml, this.tipoPesquisa, this.idAplicacao);
                         this.showModal = false;
                         this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');
@@ -276,7 +277,7 @@
             },
             async fireProfileDefault() {
                 try {
-                    await bcService.setDefaultProfile(this.selectedProfile);
+                    await bcService.setDefaultProfile(this.selectedProfile, this.idAplicacao);
                     this.$emit('success', 'default');
                     return this.$emit('reload-profiles');
                 } catch (error) {
@@ -300,7 +301,7 @@
             async fireProfileRemoved() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
-                    this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                    this.removeFromProfiles(this.selectedProfile);
                     this.newProfile();
                     this.setDefault();
                     this.$emit('success', 'removed');
@@ -309,7 +310,13 @@
                     return this.$emit('error', 'removed');
                 }
             },
-
+            removeFromProfiles(obj) {
+                this.profiles.map((profile, idx, object) => {
+                    if (profile.id_cnfg_usua_app_pes === obj.id_cnfg_usua_app_pes) {
+                        object.splice(idx, 1);
+                    }
+                });
+            },
             checkSameProfileName(name, param, id = null) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {

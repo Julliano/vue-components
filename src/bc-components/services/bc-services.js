@@ -7,7 +7,6 @@ import Dispatcher from '../utils/dispatcher.js';
 let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_ID}` :
     `usuario|bc|${parent.loginClientDTO.loginId}`;
 let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
-let idAplicacao = 'aplicacao|bc|140';
 let tipoPesquisa = '';
 
 Dispatcher.config({
@@ -26,7 +25,7 @@ let getProfileParams = {
                     {
                         oper: 'EQUAL',
                         attr: 'cnfg_usua_app_pes.aplicacao_id_aplicacao.id_aplicacao',
-                        val: [idAplicacao]
+                        val: []
                     },
                     {
                         oper: 'EQUAL',
@@ -105,8 +104,9 @@ export default {
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 
-    async getSearchProfiles(param) {
+    async getSearchProfiles(param, idAplicacao) {
         getProfileParams.filter.AND[0].AND[2].val[0] = param;
+        getProfileParams.filter.AND[0].AND[0].val[0] = idAplicacao;
         return await dispatcher.doPost('objectQuery', getProfileParams);
     },
 
@@ -114,7 +114,7 @@ export default {
         return await dispatcher
             .doGet('access/userDataDirectory');
     },
-    async saveSearchProfiles(obj, param = null, xml = null, idTipoPesquisa = '') {
+    async saveSearchProfiles(obj, param = null, xml = null, idTipoPesquisa = '', idAplicacao) {
         if (param) {
             let response = await this.getProfileDirectory();
             obj.descricao = param.descricao;
@@ -183,8 +183,8 @@ export default {
         await dispatcher.doDelete(`delete/cnfg_usua_app_pes/${param.id_cnfg_usua_app_pes}`);
     },
 
-    async setDefaultProfile(param) {
-        await this.getDefaultsAndSetAsNotDefault();
+    async setDefaultProfile(param, idAplicacao) {
+        await this.getDefaultsAndSetAsNotDefault(idAplicacao);
         if (param.flg_default && param.flg_default.valor === 'Não') {
             let obj = {
                 cnfg_usua_app_pes: [
@@ -204,6 +204,7 @@ export default {
         let count = 0;
         let params = JSON.parse(JSON.stringify(getProfileParams));
         params.filter.AND[0].AND.push(include);
+        // params.filter.AND[0].AND[0].val[0] = param;
         let response = await dispatcher.doPost('objectQuery', params);
         let obj = {
             cnfg_usua_app_pes: [
