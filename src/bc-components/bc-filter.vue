@@ -1,23 +1,35 @@
+<style lang="scss" scoped>
+    .bc-filter-component {
+      height: 100%;
+      .middle-filter {
+        overflow: auto;
+        height: 250px;;
+      }
+    }
+</style>
+
 <template>
     <div class="bc-filter-component margin">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
             :profile="jsonMounted" :json="uis" :id-aplicacao="idAplicacao"
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
-         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <h4> {{ 'searchProfile' | i18n }} </h4>
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
-        <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
-                        :idx="idx"
-                        :uiFilter="uiFilter"
-                        :logic-name-uis="listUis"
-                        :source-types="sourceTypes"
-                        :show-source-option="uiFilter.ui !== null"
-                        @meta-ui-selected="onMetaUISelected($event, uiFilter)"
-                        @meta-ui-removed="onMetaUIRemoved(idx)"
-        ></bc-filter-ui>
+        </textarea> -->
+        <div class="middle-filter">
+            <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
+                            :idx="idx"
+                            :uiFilter="uiFilter"
+                            :logic-name-uis="listUis"
+                            :source-types="sourceTypes"
+                            :show-source-option="uiFilter.ui !== null"
+                            @meta-ui-selected="onMetaUISelected($event, uiFilter)"
+                            @meta-ui-removed="onMetaUIRemoved(idx)"
+            ></bc-filter-ui>
+        </div>
     </div>
 </template>
 
