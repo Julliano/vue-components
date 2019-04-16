@@ -24,17 +24,17 @@ let getProfileParams = {
                 AND: [
                     {
                         oper: 'EQUAL',
-                        attr: 'cnfg_usua_app_pes.aplicacao_id_aplicacao.id_aplicacao',
+                        attr: 'aplicacao_id_aplicacao.id_aplicacao',
                         val: []
                     },
                     {
                         oper: 'EQUAL',
-                        attr: 'cnfg_usua_app_pes.usuario_id_pessoa._id',
+                        attr: 'usuario_id_pessoa._id',
                         val: [userId]
                     },
                     {
                         oper: 'EQUAL',
-                        attr: 'cnfg_usua_app_pes.id_tipo_pesquisa',
+                        attr: 'id_tipo_pesquisa',
                         val: [tipoPesquisa]
                     }
                 ]
@@ -59,7 +59,7 @@ let getProfileParams = {
 
 let include = {
     oper: 'EQUAL',
-    attr: 'cnfg_usua_app_pes.flg_default',
+    attr: 'flg_default',
     val: ['S']
 };
 
@@ -107,7 +107,7 @@ export default {
     async getSearchProfiles(param, idAplicacao) {
         getProfileParams.filter.AND[0].AND[2].val[0] = param;
         getProfileParams.filter.AND[0].AND[0].val[0] = idAplicacao;
-        return await dispatcher.doPost('objectQuery', getProfileParams);
+        return await dispatcher.doPost('query/search', getProfileParams);
     },
 
     async getProfileDirectory() {
@@ -185,7 +185,8 @@ export default {
 
     async setDefaultProfile(param, idAplicacao) {
         await this.getDefaultsAndSetAsNotDefault(idAplicacao);
-        if (param.flg_default && param.flg_default.valor === 'Não') {
+        console.log('oi');
+        if (param.flg_default && param.flg_default.value === 'Não') {
             let obj = {
                 cnfg_usua_app_pes: [
                     {
@@ -205,14 +206,14 @@ export default {
         let params = JSON.parse(JSON.stringify(getProfileParams));
         params.filter.AND[0].AND.push(include);
         // params.filter.AND[0].AND[0].val[0] = param;
-        let response = await dispatcher.doPost('objectQuery', params);
+        let response = await dispatcher.doPost('query/search', params);
         let obj = {
             cnfg_usua_app_pes: [
             ]
         };
-        if (response.uis.length) {
-            response.uis.forEach(ui => {
-                if (ui.flg_default.valor === 'Sim') {
+        if (response[0] && response[0].data.length) {
+            response[0].data.forEach(ui => {
+                if (ui.flg_default.value === 'Sim') {
                     obj = this.resetDefaultValue(obj, ui);
                     count += 1;
                 }

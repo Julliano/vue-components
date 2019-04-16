@@ -133,7 +133,7 @@
             handleLabel(option) {
                 if (option.label === 'default') {
                     if (this.selectedProfile.flg_default &&
-                            this.selectedProfile.flg_default.valor === 'Sim') {
+                            this.selectedProfile.flg_default.value === 'Sim') {
                         return 'profileOptions.removeDefault';
                     }
                 }
@@ -153,13 +153,13 @@
             initialState() {
                 if (!this.selectedProfile.descricao) {
                     let defaultProfile = this.profiles.filter(profile => {
-                        return profile.flg_default.valor === 'Sim';
+                        return profile.flg_default.value === 'Sim';
                     });
                     if (defaultProfile.length) {
                         [this.selectedProfile] = [...defaultProfile];
                         this.$emit('change', this.selectedProfile);
                     } else {
-                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
+                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.value = 'Não';
                     }
                 } else {
                     let initialProfile = this.profiles.filter(profile => {
@@ -206,7 +206,7 @@
             },
             checkDefault(option) {
                 if (option.label === 'default') {
-                    return this.selectedProfile.flg_default && this.selectedProfile.flg_default.valor === 'Sim';
+                    return this.selectedProfile.flg_default && this.selectedProfile.flg_default.value === 'Sim';
                 }
                 return null;
             },

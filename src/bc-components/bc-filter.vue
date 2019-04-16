@@ -3,7 +3,7 @@
       height: 100%;
       .middle-filter {
         overflow: auto;
-        height: 250px;;
+        height: var(--bc-height-limit, 550px);
       }
     }
 </style>
@@ -168,11 +168,13 @@
             },
             async getProfiles() {
                 let response = await bcService.getSearchProfiles(this.tipoPesquisa, this.idAplicacao);
-                this.profiles = [];
-                response.uis.forEach(ui => {
-                    this.profiles.push(ui);
-                });
-                this.$forceUpdate();
+                if (response[0] && response[0].data) {
+                    this.profiles = [];
+                    response[0].data.forEach(ui => {
+                        this.profiles.push(ui);
+                    });
+                    this.$forceUpdate();
+                }
             },
             handleEvent(msg, type) {
                 var event = new CustomEvent(type, {detail: msg});
