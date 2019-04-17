@@ -24,8 +24,8 @@
             <div class="options-container">
                 <input id="date" name="finalDate" type="date"
                     class="inp big" v-model="date">
-                <input id="hour" name="hour" type="time"
-                    class="inp big" v-model="hour" v-if="tipo === '_data_hora' || tipo === '_data_ref'">
+                <input id="hour1" name="hour1" type="time"
+                    class="inp big" v-model="hour1">
             </div>
         </div>
     </div>
@@ -42,7 +42,7 @@
         data() {
             return {
                 date: this.val[0] || '',
-                hour: this.val[1] || ''
+                hour1: this.val[1] || ''
             };
         },
         methods: {
@@ -52,8 +52,8 @@
                 if (this.date !== '') {
                     localDate = this.date;
                 }
-                if (this.hour !== '') {
-                    localHour = this.hour;
+                if (this.hour1 !== '') {
+                    localHour = this.hour1;
                 }
                 return this.$emit('change', [localDate, localHour]);
             }
@@ -62,7 +62,7 @@
             date() {
                 this.handleValue();
             },
-            hour() {
+            hour1() {
                 this.handleValue();
             }
         }

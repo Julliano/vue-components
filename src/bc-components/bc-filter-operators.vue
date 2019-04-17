@@ -53,7 +53,6 @@
 <script>
 
     import i18n from './utils/i18n.js';
-    import dateOptions from './bc-field-options/bc-date-options.vue';
     import metaSelection from './bc-field-options/bc-meta-selection.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
@@ -87,8 +86,9 @@
             dynamicComponentDate() {
                 switch (this.tipoAttrib) {
                     case '_data':
-                        this.show = false;
-                        return dateOptions;
+                        this.$set(this.criteria, 'oper', 'DATE');
+                        this.show = true;
+                        return null;
                     case '_tipo_selecao':
                         this.show = false;
                         this.$set(this.criteria, 'oper', 'EQUAL');
