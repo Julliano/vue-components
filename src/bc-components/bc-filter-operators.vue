@@ -190,7 +190,7 @@
         },
         watch: {
             attribName() {
-                this.getOperators();
+                this.attribChanged();
             }
         }
     };

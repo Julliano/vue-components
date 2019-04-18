@@ -80,9 +80,6 @@
         methods: {
             fireAttribSelected() {
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
-                // if (this.$refs.operator && this.$refs.operator.length > 0) {
-                //     this.$refs.operator[idx].attribChanged();
-                // }
             },
             fireAttribRemoved() {
                 this.$emit('meta-attrib-removed');
@@ -109,39 +106,55 @@
                 this.$emit('meta-field-selected', param);
             },
             checkLevel() {
-                let {attr} = {...this.criteria};
-                if (!Object.entries(this.criteria).length) {
-                    return [{}];
-                }
-                const isOtherUI = this.criteria.attr.indexOf('.');
-                if (isOtherUI !== -1) {
-                    attr = this.criteria.attr.substr(0, isOtherUI);
-                }
-                for (const attrib of this.metaAttribs) {
-                    if (attrib.name === attr) {
-                        this.selectedAttrib = attrib;
-                        if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI();
-                        break;
+                if (this.criteria.criteria) {
+                    // this.mountCriteriaByOtherUIRecursive(this.criteria.criteria);
+                } else {
+                    let {attr} = {...this.criteria};
+                    if (!Object.entries(this.criteria).length) {
+                        return [{}];
+                    }
+                    const isOtherUI = this.criteria.attr.indexOf('.');
+                    if (isOtherUI !== -1) {
+                        attr = this.criteria.attr.substr(0, isOtherUI);
+                    }
+                    for (const attrib of this.metaAttribs) {
+                        if (attrib.name === attr) {
+                            this.selectedAttrib = attrib;
+                            if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI(this.criteria);
+                            break;
+                        }
                     }
                 }
                 return [this.criteria];
             },
-            mountCriteriaByOtherUI() {
-                const isOtherUI = this.criteria.attr.indexOf('.');
+            mountCriteriaByOtherUI(criteria) {
+                const isOtherUI = criteria.attr.indexOf('.');
                 if (isOtherUI === -1) {
                     return;
                 }
-                const ui = this.criteria.attr.substr(0, isOtherUI);
+                const ui = criteria.attr.substr(0, isOtherUI);
 
-                this.$set(this.criteria, 'operator', 'and');
-                this.$set(this.criteria, 'criteria', [{
-                    attr: this.criteria.attr.substr(isOtherUI + 1, this.criteria.attr.length),
-                    oper: this.criteria.oper,
-                    val: this.criteria.val
+                this.$set(criteria, 'operator', 'and');
+                this.$set(criteria, 'criteria', [{
+                    attr: criteria.attr.substr(isOtherUI + 1, criteria.attr.length),
+                    oper: criteria.oper,
+                    val: criteria.val
                 }, {}]);
-                this.$set(this.criteria, 'attr', ui);
-                this.$delete(this.criteria, 'oper');
-                this.$delete(this.criteria, 'val');
+                this.$set(criteria, 'attr', ui);
+                this.$delete(criteria, 'oper');
+                this.$delete(criteria, 'val');
+            },
+            mountCriteriaByOtherUIRecursive(criteria) {
+                for (const localCriteria of criteria) {
+                    const isOtherUI = localCriteria.attr.indexOf('.');
+                    if (isOtherUI === -1) {
+                        return;
+                    }
+                    const ui = localCriteria.attr.substr(0, isOtherUI);
+                    this.$set(criteria, 'attr', ui);
+                    this.$set(localCriteria, 'attr', localCriteria.attr.substr(isOtherUI + 1, localCriteria.attr.length));
+                }
+
             },
             generateHash(item) {
                 if (item.hash) {
