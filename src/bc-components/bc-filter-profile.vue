@@ -60,6 +60,7 @@
                 @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
             ></bc-save-search-modal>
             <bc-save-search-confirm v-if="confirmModal" @cancel="closeConfirmModal" @confirm="handleReplace"></bc-save-search-confirm>
+            <bc-delete-search-confirm v-if="confirmDeleteModal" @cancel="closeDeleteModal" @confirm="confirmDelete"></bc-delete-search-confirm>
         </div>
         <hr/>
     </div>
@@ -69,6 +70,7 @@
 
     import bcSaveSearchModal from './modal/bc-save-search-modal.vue';
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
+    import bcDeleteSearchConfirm from './modal/bc-delete-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
     import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
@@ -81,7 +83,8 @@
             bcService,
             dgtContextMenu,
             bcSaveSearchModal,
-            bcSaveSearchConfirm
+            bcSaveSearchConfirm,
+            bcDeleteSearchConfirm
         },
         props: {
             show: {
@@ -105,6 +108,7 @@
                     id: ''
                 },
                 confirmModal: false,
+                confirmDeleteModal: false,
                 enableDefaultOption: true,
                 options: [
                     { id: 1, label: 'save' },
@@ -235,6 +239,7 @@
                         await bcService.replaceSearchProfiles(profileFound[0], xml, this.newName);
                         this.confirmModal = false;
                         this.showModal = false;
+                        this.selectedProfile.descricao = this.newName;
                         this.newName = '';
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
@@ -299,12 +304,19 @@
                 return this.$emit('error', 'renamedSameName');
             },
             async fireProfileRemoved() {
+                this.confirmDeleteModal = true;
+            },
+            closeDeleteModal() {
+                this.confirmDeleteModal = false;
+            },
+            async confirmDelete() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
                     this.removeFromProfiles(this.selectedProfile);
                     this.newProfile();
                     this.setDefault();
                     this.$emit('success', 'removed');
+                    this.confirmDeleteModal = false;
                     return this.$emit('reload-profiles');
                 } catch (error) {
                     return this.$emit('error', 'removed');
