@@ -232,7 +232,7 @@
                 if (this.newName && profileFound.length) {
                     try {
                         let xml = this.mountXml();
-                        await bcService.replaceSearchProfiles(profileFound[0], xml);
+                        await bcService.replaceSearchProfiles(profileFound[0], xml, this.newName);
                         this.confirmModal = false;
                         this.showModal = false;
                         this.newName = '';

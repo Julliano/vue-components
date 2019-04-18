@@ -18,7 +18,7 @@ export default {
         exclude: 'Excluir',
         actions: 'Ações',
         confirm: 'Confirmação',
-        really: 'Você deseja substituir a pesquisa já existente com o mesmo nome?'
+        really: 'Ya existe un perfil de búsqueda con este nombre. Desea sobrescribirlo?'
     },
     search: {    // Todo tradução
         saveAs: 'Salvar pesquisa como',

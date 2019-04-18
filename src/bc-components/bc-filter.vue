@@ -170,6 +170,13 @@
                 let response = await bcService.getSearchProfiles(this.tipoPesquisa, this.idAplicacao);
                 if (response[0] && response[0].data) {
                     this.profiles = [];
+                    response[0].data.sort((a, b) => {
+                        let nameA = a.descricao.toLowerCase();
+                        let nameB = b.descricao.toLowerCase();
+                        if (nameA < nameB) return -1;
+                        if (nameA > nameB) return 1;
+                        return 0;
+                    });
                     response[0].data.forEach(ui => {
                         this.profiles.push(ui);
                     });
