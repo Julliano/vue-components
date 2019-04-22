@@ -1,7 +1,7 @@
 export default {
     select: 'Selecione',
     profile: 'Perfil',
-    searchProfile: 'Definir consulta',
+    searchProfile: 'Selecione os parâmetros do filtro',
     sources: 'Fontes',
     createSearch: 'Pesquisar',
     cancel: 'Cancelar',
@@ -14,11 +14,11 @@ export default {
         saveAs: 'Salvar como',
         rename: 'Renomear',
         default: 'Definir como padrão',
-        removeDefault: 'Desmarcar opção default',
         exclude: 'Excluir',
         actions: 'Ações',
         confirm: 'Confirmação',
-        really: 'Você deseja substituir a pesquisa já existente com o mesmo nome?'
+        really: 'Já existe um perfil de pesquisa com este nome. Deseja sobrescrevê-lo?',
+        reallyDelete: 'Deseja realmente excluir o perfil de pesquisa selecionado?'
     },
     search: {
         saveAs: 'Salvar pesquisa como',

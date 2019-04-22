@@ -139,11 +139,12 @@ export default {
         };
         return await dispatcher.doPost('persistence', json);
     },
-    async replaceSearchProfiles(obj, xml) {
+    async replaceSearchProfiles(obj, xml, name) {
         let json = {
             cnfg_usua_app_pes: [
                 {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
+                    descricao: name,
                     xml_config: JSON.stringify(xml),
                     data_ultima_alteracao: obj.data_ultima_alteracao
                 }

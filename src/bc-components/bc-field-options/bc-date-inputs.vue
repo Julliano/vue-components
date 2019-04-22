@@ -26,11 +26,11 @@
                 <input id="date1" name="initialDate" type="date" @change="change"
                         class="inp big" v-model="initialDate">
                 <input id="hour1" name="hour1" type="time" @change="change"
-                    class="inp big" v-model="hour1" v-if="tipo === '_data_hora'">
+                    class="inp big" v-model="hour1">
                 <input id="date2" name="finalDate" type="date" @change="change"
                         class="inp big" v-model="finalDate">
                 <input id="hour2" name="hour2" type="time" @change="change"
-                    class="inp big" v-model="hour2" v-if="tipo === '_data_hora'">
+                    class="inp big" v-model="hour2">
             </div>
         </div>
     </div>
@@ -41,14 +41,15 @@
     export default {
         name: 'bc-date-inputs',
         props: {
-            tipo: String
+            tipo: String,
+            val: Array
         },
         data() {
             return {
-                initialDate: '',
-                finalDate: '',
-                hour1: '',
-                hour2: ''
+                initialDate: this.val[0] || '',
+                finalDate: this.val[2] || '',
+                hour1: this.val[1] || '',
+                hour2: this.val[3] || ''
             };
         },
         methods: {

@@ -49,7 +49,7 @@
                     <button v-for="(option, idx) in options" :key="idx" class="btn popover-item"
                             :class="{'disabled-button': checkDisabled(option)}" @click="fireOptionSelected(option)">
                             <i v-if="checkDefault(option)" class="mdi mdi-check"></i>
-                            {{ handleLabel(option) | i18n }}
+                            {{ `profileOptions.${option.label}` | i18n }}
                     </button>
                 </div>
             </dgt-context-menu>
@@ -60,6 +60,7 @@
                 @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
             ></bc-save-search-modal>
             <bc-save-search-confirm v-if="confirmModal" @cancel="closeConfirmModal" @confirm="handleReplace"></bc-save-search-confirm>
+            <bc-delete-search-confirm v-if="confirmDeleteModal" @cancel="closeDeleteModal" @confirm="confirmDelete"></bc-delete-search-confirm>
         </div>
         <hr/>
     </div>
@@ -69,6 +70,7 @@
 
     import bcSaveSearchModal from './modal/bc-save-search-modal.vue';
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
+    import bcDeleteSearchConfirm from './modal/bc-delete-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
     import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
@@ -81,7 +83,8 @@
             bcService,
             dgtContextMenu,
             bcSaveSearchModal,
-            bcSaveSearchConfirm
+            bcSaveSearchConfirm,
+            bcDeleteSearchConfirm
         },
         props: {
             show: {
@@ -105,6 +108,7 @@
                     id: ''
                 },
                 confirmModal: false,
+                confirmDeleteModal: false,
                 enableDefaultOption: true,
                 options: [
                     { id: 1, label: 'save' },
@@ -116,6 +120,11 @@
                 first: true,
                 newName: ''
             };
+        },
+        created() {
+            if (this.profile) {
+                this.$emit('change', this.profile);
+            }
         },
         methods: {
             newProfile() {
@@ -129,15 +138,6 @@
                     xml_config: null
                 };
                 this.$emit('change', this.selectedProfile);
-            },
-            handleLabel(option) {
-                if (option.label === 'default') {
-                    if (this.selectedProfile.flg_default &&
-                            this.selectedProfile.flg_default.value === 'Sim') {
-                        return 'profileOptions.removeDefault';
-                    }
-                }
-                return `profileOptions.${option.label}`;
             },
             setDefault() {
                 if (Object.entries(this.profile).length) {
@@ -232,9 +232,10 @@
                 if (this.newName && profileFound.length) {
                     try {
                         let xml = this.mountXml();
-                        await bcService.replaceSearchProfiles(profileFound[0], xml);
+                        await bcService.replaceSearchProfiles(profileFound[0], xml, this.newName);
                         this.confirmModal = false;
                         this.showModal = false;
+                        this.selectedProfile.descricao = this.newName;
                         this.newName = '';
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
@@ -299,12 +300,19 @@
                 return this.$emit('error', 'renamedSameName');
             },
             async fireProfileRemoved() {
+                this.confirmDeleteModal = true;
+            },
+            closeDeleteModal() {
+                this.confirmDeleteModal = false;
+            },
+            async confirmDelete() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
                     this.removeFromProfiles(this.selectedProfile);
                     this.newProfile();
                     this.setDefault();
                     this.$emit('success', 'removed');
+                    this.confirmDeleteModal = false;
                     return this.$emit('reload-profiles');
                 } catch (error) {
                     return this.$emit('error', 'removed');
