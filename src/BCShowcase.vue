@@ -75,6 +75,58 @@
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
                 profile: {}
+                // teste passando perfil avançado indo por props
+                // profile: {
+                //     aplicacao_id_aplicacao: {
+                //         id_aplicacao: 'aplicacao|bc|140'
+                //     },
+                //     data_ultima_alteracao: '2019-04-10T18:00:55',
+                //     descricao: 'perfil de pesquisa criado na reunião de review',
+                //     flg_default: {
+                //         _id: 'N',
+                //         value: 'Não'
+                //     },
+                //     id_tipo_pesquisa: {
+                //         _id: 'E',
+                //         value: 'Perfil de pesquisa avançado de dados coletados'
+                //     },
+                //     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|326',
+                //     xml_config: {
+                //         jsonView: [
+                //             {
+                //                 ui: 'dc_arquivo',
+                //                 criteria: [
+                //                     {
+                //                         attr: 'conta_servico',
+                //                         hash: 0.28191435511327945,
+                //                         val: [
+                //                             'LLLLLLLL'
+                //                         ],
+                //                         oper: 'EQUAL'
+                //                     },
+                //                     {
+                //                         attr: 'stamp_criacao',
+                //                         hash: 0.4138620115984899
+                //                     },
+                //                     {
+                //                         attr: 'tamanho',
+                //                         hash: 0.14862723589608873,
+                //                         val: [
+                //                             '2222'
+                //                         ],
+                //                         oper: 'GREATER_OR_EQUAL'
+                //                     },
+                //                     {
+                //                         attr: 'nome_original',
+                //                         hash: 0.22015022907149673,
+                //                         oper: 'NO_CONTENT'
+                //                     },
+                //                     {}
+                //                 ]
+                //             }
+                //         ]
+                //     }
+                // }
             };
         },
         created() {

@@ -1,7 +1,7 @@
 export default {
     select: 'Selecione', // Todo tradução
     profile: 'Perfil',
-    searchProfile: 'Definir consulta',
+    searchProfile: 'Seleccione los parámetros del filtro',
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
@@ -14,7 +14,6 @@ export default {
         saveAs: 'Salvar como',
         rename: 'Renomear',
         default: 'Definir como padrão',
-        removeDefault: 'Desmarcar opção default',
         exclude: 'Excluir',
         actions: 'Ações',
         confirm: 'Confirmação',

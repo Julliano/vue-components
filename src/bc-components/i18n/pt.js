@@ -1,7 +1,7 @@
 export default {
     select: 'Selecione',
     profile: 'Perfil',
-    searchProfile: 'Definir consulta',
+    searchProfile: 'Selecione os parâmetros do filtro',
     sources: 'Fontes',
     createSearch: 'Pesquisar',
     cancel: 'Cancelar',
@@ -14,7 +14,6 @@ export default {
         saveAs: 'Salvar como',
         rename: 'Renomear',
         default: 'Definir como padrão',
-        removeDefault: 'Desmarcar opção default',
         exclude: 'Excluir',
         actions: 'Ações',
         confirm: 'Confirmação',

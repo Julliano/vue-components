@@ -49,7 +49,7 @@
                     <button v-for="(option, idx) in options" :key="idx" class="btn popover-item"
                             :class="{'disabled-button': checkDisabled(option)}" @click="fireOptionSelected(option)">
                             <i v-if="checkDefault(option)" class="mdi mdi-check"></i>
-                            {{ handleLabel(option) | i18n }}
+                            {{ `profileOptions.${option.label}` | i18n }}
                     </button>
                 </div>
             </dgt-context-menu>
@@ -121,6 +121,11 @@
                 newName: ''
             };
         },
+        created() {
+            if (this.profile) {
+                this.$emit('change', this.profile);
+            }
+        },
         methods: {
             newProfile() {
                 this.selectedProfile = {
@@ -133,15 +138,6 @@
                     xml_config: null
                 };
                 this.$emit('change', this.selectedProfile);
-            },
-            handleLabel(option) {
-                if (option.label === 'default') {
-                    if (this.selectedProfile.flg_default &&
-                            this.selectedProfile.flg_default.value === 'Sim') {
-                        return 'profileOptions.removeDefault';
-                    }
-                }
-                return `profileOptions.${option.label}`;
             },
             setDefault() {
                 if (Object.entries(this.profile).length) {
