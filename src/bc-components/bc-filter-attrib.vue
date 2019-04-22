@@ -18,7 +18,7 @@
 
 <template>
     <div>
-        <div class="bc-filter-attrib">
+        <div class="bc-filter-attrib" v-if="metaAttribs.length">
             <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
@@ -69,7 +69,8 @@
         props: {
             criteria: null,
             metaAttribs: Array,
-            ui: String
+            ui: String,
+            fatherAttr: String
         },
         data() {
             return {
@@ -106,10 +107,18 @@
                 this.$emit('meta-field-selected', param);
             },
             checkLevel() {
-                if (this.criteria.criteria) {
-                    // this.mountCriteriaByOtherUIRecursive(this.criteria.criteria);
+                let {attr} = {...this.criteria};
+                let selectedAttrib = this.metaAttribs.filter(attrib => {
+                    return attrib.name === attr;
+                });
+                let otherUI = false;
+                if (selectedAttrib[0] && selectedAttrib[0].metaType) {
+                    otherUI = true;
+                }
+
+                if (this.fatherAttr && attr && otherUI) {
+                    attr = this.fatherAttr;
                 } else {
-                    let {attr} = {...this.criteria};
                     if (!Object.entries(this.criteria).length) {
                         return [{}];
                     }
@@ -117,12 +126,12 @@
                     if (isOtherUI !== -1) {
                         attr = this.criteria.attr.substr(0, isOtherUI);
                     }
-                    for (const attrib of this.metaAttribs) {
-                        if (attrib.name === attr) {
-                            this.selectedAttrib = attrib;
-                            if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI(this.criteria);
-                            break;
-                        }
+                }
+                for (const attrib of this.metaAttribs) {
+                    if (attrib.name === attr) {
+                        this.selectedAttrib = attrib;
+                        // if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI(this.criteria);
+                        break;
                     }
                 }
                 return [this.criteria];

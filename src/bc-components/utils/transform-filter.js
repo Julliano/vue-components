@@ -46,24 +46,34 @@ function convertFilterBcToView(bcFilter, returnFilter = [], isRecursive = false)
     return returnFilter;
 }
 
-function createdCriteriaByLevel(criteria, fatherAttr) {
-    const attr = criteria.attr.replace(`${fatherAttr}.`, '');
-    const idx = attr.indexOf('.');
-    if (idx === -1) {
-        return;
-    }
-
-    criteria.attr = attr.substr(0, idx);;
+function createCriteriaOtherUI(criteria, attr, fatherAttr) {
+    criteria.attr = fatherAttr;
     if (!criteria.operator) {
         criteria.operator = 'and';
     }
     criteria.criteria = [{
-        attr: attr.substr(idx + 1, criteria.attr.length),
+        attr,
         oper: criteria.oper,
         val: criteria.val
     }];
     delete criteria.oper;
     delete criteria.val;
+}
+
+function createdCriteriaByLevel(criteria, fatherAttr) {
+    const attr = criteria.attr.replace(`${fatherAttr}.`, '');
+    const idx = attr.indexOf('.');
+    if (idx === -1) {
+        let attrOtherLevel = criteria.attr.replace(`${fatherAttr}.`, '');
+        let otherLevel = attr.indexOf('.');
+        createCriteriaOtherUI(criteria, attrOtherLevel, fatherAttr);
+        if (otherLevel !== -1) {
+            createdCriteriaByLevel(criteria.criteria[0], attr.substr(0, idx));
+        }
+        return;
+    }
+
+    createCriteriaOtherUI(criteria, attr, fatherAttr);
 }
 
 // eslint-disable-next-line complexity
@@ -79,24 +89,15 @@ function bcNestedOperator(father, child) {
     } else {
         for (const criteria of child) {
             const keys = Object.keys(criteria);
-            if (keys.length > 2) {
+            let isListCriteria = criteria.criteria instanceof Array;
+            if (keys.length > 2 && !isListCriteria) {
                 let attr = null;
                 const idx = criteria.attr.indexOf('.');
                 if (idx !== -1) {
                     attr = criteria.attr.substr(0, idx);
                 }
                 if (!attr) continue;
-                if (father) {
-                    // eslint-disable-next-line max-depth
-                    if (father.attr) {
-                        createdCriteriaByLevel(criteria, father.attr);
-                    } else {
-                        father.attr = attr;
-                    }
-                } else {
-                    child.attr = attr;
-                }
-                criteria.attr = criteria.attr.substr(idx + 1, criteria.attr.length);
+                createdCriteriaByLevel(criteria, attr);
                 if (criteria.attr.split('.').length > 1) {
                     bcNestedOperator(father, criteria);
                 }
@@ -134,7 +135,7 @@ export function bcFilterToView(bcFilter) {
 }
 
 // eslint-disable-next-line
-export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
+function convertFilterViewToBC(viewFilter, returnFilter = [], first = true) {
     for (const uiFilter of viewFilter) {
         let blockFilter = {};
         const {operator} = {...uiFilter};
@@ -145,7 +146,7 @@ export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
             blockFilter.filter = uiFilter.criteria;
             blockFilter.ui = uiFilter.ui;
             blockFilter.sources = uiFilter.sources;
-            returnFilter.push(blockFilter);
+            viewFilter.push(blockFilter);
             break;
         } else {
             if (first) {
@@ -157,7 +158,7 @@ export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
                 blockFilter.sources = uiFilter.sources;
                 blockFilter.filter[operator] = uiFilter.criteria;
                 if (blockFilter.filter[operator] instanceof Array) {
-                    viewToBcFilter(blockFilter.filter[operator], returnFilter, false);
+                    convertFilterByView(blockFilter.filter[operator], false);
                 }
             } else {
                 if (uiFilter.criteria) {
@@ -174,7 +175,7 @@ export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
                     }
                 }
                 if (uiFilter[operator] instanceof Array) {
-                    viewToBcFilter(uiFilter[operator], returnFilter, false);
+                    convertFilterByView(uiFilter[operator], false);
                 }
                 continue;
             }
@@ -182,11 +183,73 @@ export function viewToBcFilter(viewFilter, returnFilter = [], first = true) {
         }
 
         if (Object.keys(blockFilter).length && blockFilter.filter[operator]) {
-            returnFilter.push(blockFilter);
+            viewFilter.push(blockFilter);
         }
     }
 
     if (Object.keys(viewFilter).length) {
-        return returnFilter;
+        return viewFilter;
     }
+}
+
+function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueRedulce) {
+    for (let i = 0; i < criterios.length; i++) {
+        let keys = Object.keys(criterios[i]);
+        if (keys.length !== 1) {
+            if (criterios.length === 1) {
+                fatherCriteria.attr = criterios[i].attr;
+                fatherCriteria.oper = criterios[i].oper;
+                fatherCriteria.val = criterios[i].val;
+                delete fatherCriteria[Externaloperator];
+            }
+            continue;
+        }
+        continueRedulce = true;
+        if (keys[0] === Externaloperator) {
+            if (criterios.length === 1) {
+                fatherCriteria[Externaloperator] = criterios[i][keys[0]];
+            } else {
+                if (criterios[i][keys[0]] instanceof Array) {
+                    recursiveRedulse(criterios[i][keys[0]], keys[0], criterios[i]);
+                    continue;
+                } else {
+                    criterios.push(criterios[i][keys[0]]);
+                    criterios.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    };
+
+    return continueRedulce;
+}
+
+function reduceFilter(bcFilter) {
+    for (const uiFilter of bcFilter) {
+        if (Object.keys(uiFilter.filter).length === 1) {
+            let firstOperator = Object.keys(uiFilter.filter);
+            let criterios = uiFilter.filter[firstOperator];
+            let continueRedulce = true;
+            while (continueRedulce) {
+                continueRedulce = false;
+                // eslint-disable-next-line no-loop-func
+                criterios.forEach(function(criteria) {
+                    let keys = Object.keys(criteria);
+                    if (keys.length !== 1) {
+                        return;
+                    }
+                    continueRedulce =
+                        recursiveRedulse(criteria[keys], keys[0], criteria, continueRedulce);
+                });
+            }
+        }
+    }
+    return bcFilter;
+}
+
+// eslint-disable-next-line
+export function viewToBcFilter(viewFilter) {
+    var bcFilter = convertFilterViewToBC(viewFilter);
+    reduceFilter(bcFilter);
+    return bcFilter;
 }
