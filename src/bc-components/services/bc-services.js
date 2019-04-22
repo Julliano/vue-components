@@ -4,9 +4,9 @@ import Dispatcher from '../utils/dispatcher.js';
 /**
  * Criação das instâncias do Axios.
  */
-let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_ID}` :
-    `usuario|bc|${parent.loginClientDTO.loginId}`;
-let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
+let userId = parent.loginClientDTO ? `usuario|bc|${parent.loginClientDTO.loginId}` :
+    `usuario|bc|${process.env.USER_ID}`;
+let sessionId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : process.env.SESSION_ID;
 let tipoPesquisa = '';
 
 Dispatcher.config({
