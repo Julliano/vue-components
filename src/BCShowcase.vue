@@ -32,7 +32,6 @@
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
-<<<<<<< HEAD
                 filter: [
                     {
                         ui: 'dc_agenda',
@@ -72,48 +71,6 @@
                         }
                     }
                 ],
-=======
-                filter: [],
-                // filter: [
-                //     {
-                //         ui: 'dc_agenda',
-                //         sources: [],
-                //         filter: {
-                //             or: [
-                //                 {
-                //                     attr: 'nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João']
-                //                 },
-                //                 {
-                //                     attr: 'alvo.nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João11111111111111111']
-                //                 },
-                //                 {
-                //                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                     oper: 'EQUAL',
-                //                     val: ['4']
-                //                 }
-                //                 // {
-                //                 //     and: [
-                //                 //         {
-                //                 //             attr: 'alvo.nome',
-                //                 //             oper: 'EQUAL',
-                //                 //             val: ['João11111111111111111']
-                //                 //         },
-                //                 //         {
-                //                 //             attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                 //             oper: 'EQUAL',
-                //                 //             val: ['4']
-                //                 //         }
-                //                 //     ]
-                //                 // }
-                //             ]
-                //         }
-                //     }
-                // ],
->>>>>>> ee403b44c26768ef8051445d430f37be9e407a2e
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
                 profile: {}
