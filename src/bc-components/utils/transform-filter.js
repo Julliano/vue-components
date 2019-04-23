@@ -135,7 +135,7 @@ export function bcFilterToView(bcFilter) {
 }
 
 // eslint-disable-next-line
-function convertFilterViewToBC(viewFilter, returnFilter = [], first = true) {
+function convertFilterViewToBC(viewFilter, first = true) {
     for (const uiFilter of viewFilter) {
         let blockFilter = {};
         const {operator} = {...uiFilter};
@@ -158,7 +158,7 @@ function convertFilterViewToBC(viewFilter, returnFilter = [], first = true) {
                 blockFilter.sources = uiFilter.sources;
                 blockFilter.filter[operator] = uiFilter.criteria;
                 if (blockFilter.filter[operator] instanceof Array) {
-                    convertFilterByView(blockFilter.filter[operator], false);
+                    convertFilterViewToBC(blockFilter.filter[operator], false);
                 }
             } else {
                 if (uiFilter.criteria) {
@@ -175,7 +175,7 @@ function convertFilterViewToBC(viewFilter, returnFilter = [], first = true) {
                     }
                 }
                 if (uiFilter[operator] instanceof Array) {
-                    convertFilterByView(uiFilter[operator], false);
+                    convertFilterViewToBC(uiFilter[operator], false);
                 }
                 continue;
             }
