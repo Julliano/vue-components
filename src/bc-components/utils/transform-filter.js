@@ -233,7 +233,7 @@ function reduceFilter(bcFilter) {
             while (continueRedulce) {
                 continueRedulce = false;
                 // eslint-disable-next-line no-loop-func
-                criterios.forEach(function(criteria) {
+                criterios.forEach(criteria => {
                     let keys = Object.keys(criteria);
                     if (keys.length !== 1) {
                         return;

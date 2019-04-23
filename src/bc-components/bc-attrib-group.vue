@@ -51,6 +51,8 @@
                 this.getAttribsFromUI(this.ui);
             }
 
+            this.mountCriteriaByOtherUI();
+
             this.$forceUpdate();
         },
         methods: {
@@ -62,7 +64,6 @@
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
 
-                console.log(this.filter);
                 for (const attrib of this.localMetaAttribs) {
                     if (this.filter.criteria) {
                         if (attrib.name === this.filter.criteria[0].attr) {
@@ -123,26 +124,26 @@
                     this.$set(this.filter, 'operator', 'and');
                     return;
                 }
-                for (const criteria of this.filter.criteria) {
-                    const isOtherUI = criteria.attr.indexOf('.');
-                    if (isOtherUI === -1) {
-                        this.filter.criteria.push({});
-                        continue;
-                    }
-                    const ui = criteria.attr.substr(0, isOtherUI);
+                // for (const criteria of this.filter.criteria) {
+                //     const isOtherUI = criteria.attr.indexOf('.');
+                //     if (isOtherUI === -1) {
+                //         this.filter.criteria.push({});
+                //         continue;
+                //     }
+                //     const ui = criteria.attr.substr(0, isOtherUI);
 
-                    this.$set(criteria, 'operator', 'and');
-                    this.$set(criteria, 'criteria', [{
-                        attr: criteria.attr.substr(isOtherUI + 1,
-                            criteria.attr.length),
-                        oper: criteria.oper,
-                        val: criteria.val
-                    }, {}]);
-                    this.$set(criteria, 'attr', ui);
+                //     this.$set(criteria, 'operator', 'and');
+                //     this.$set(criteria, 'criteria', [{
+                //         attr: criteria.attr.substr(isOtherUI + 1,
+                //             criteria.attr.length),
+                //         oper: criteria.oper,
+                //         val: criteria.val
+                //     }, {}]);
+                //     this.$set(criteria, 'attr', ui);
 
-                    this.$delete(criteria, 'oper');
-                    this.$delete(criteria, 'val');
-                }
+                //     this.$delete(criteria, 'oper');
+                //     this.$delete(criteria, 'val');
+                // }
             },
             generateHash(item) {
                 if (item.hash) {

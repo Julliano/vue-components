@@ -106,6 +106,7 @@
             repassFieldSelected(param) {
                 this.$emit('meta-field-selected', param);
             },
+            // eslint-disable-next-line complexity
             checkLevel() {
                 let {attr} = {...this.criteria};
                 let selectedAttrib = this.metaAttribs.filter(attrib => {
@@ -130,7 +131,7 @@
                 for (const attrib of this.metaAttribs) {
                     if (attrib.name === attr) {
                         this.selectedAttrib = attrib;
-                        // if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI(this.criteria);
+                        if (attrib.type === '_meta_ui') this.mountCriteriaByOtherUI(this.criteria);
                         break;
                     }
                 }
