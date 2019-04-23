@@ -47,10 +47,6 @@
             this.$delete(this.filter, 'operator');
         },
         created() {
-            // if (!this.filter) {
-            //     this.insertEmptyCriteria();
-            // }
-            console.log('criou', this.ui);
             if (this.ui) {
                 this.getAttribsFromUI(this.ui);
             }
@@ -58,9 +54,6 @@
             this.$forceUpdate();
         },
         methods: {
-            // insertEmptyCriteria() {
-            //     this.mountCriteriaByOtherUI();
-            // },
             async getAttribsFromUI(ui) {
                 this.localMetaAttribs = await bcService.getAttribsFromUI(ui);
                 this.localMetaAttribs.sort((e1, e2) => {
@@ -69,10 +62,17 @@
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
 
+                console.log(this.filter);
                 for (const attrib of this.localMetaAttribs) {
-                    if (attrib.name === this.filter.criteria[0].attr) {
-                        this.localAttrib = attrib;
-                        break;
+                    if (this.filter.criteria) {
+                        if (attrib.name === this.filter.criteria[0].attr) {
+                            this.localAttrib = attrib;
+                            break;
+                        }
+                    } else {
+                        if (attrib.name === this.filter.attr) {
+                            this.localAttrib = attrib;
+                        }
                     }
                 }
             },

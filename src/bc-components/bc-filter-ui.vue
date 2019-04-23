@@ -48,6 +48,7 @@
                     @meta-attrib-selected="onMetaAttribSelected($event, criteria)"
                     @meta-attrib-removed="onAttribRemoved(idx)"
                     @new-group="onNewGroup"
+                    :father-attr="uiFilter.attr"
                     :meta-attribs="attribs" :criteria="criteria"
                     :ui="uiFilter.ui" ref="attrib">
                 </bc-filter-attrib>

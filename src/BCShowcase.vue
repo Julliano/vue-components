@@ -32,46 +32,45 @@
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
-                filter: [],
-                // filter: [
-                //     {
-                //         ui: 'dc_agenda',
-                //         sources: [],
-                //         filter: {
-                //             or: [
-                //                 {
-                //                     attr: 'nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João']
-                //                 },
-                //                 {
-                //                     attr: 'alvo.nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João11111111111111111']
-                //                 },
-                //                 {
-                //                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                     oper: 'EQUAL',
-                //                     val: ['4']
-                //                 }
-                //                 // {
-                //                 //     and: [
-                //                 //         {
-                //                 //             attr: 'alvo.nome',
-                //                 //             oper: 'EQUAL',
-                //                 //             val: ['João11111111111111111']
-                //                 //         },
-                //                 //         {
-                //                 //             attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                 //             oper: 'EQUAL',
-                //                 //             val: ['4']
-                //                 //         }
-                //                 //     ]
-                //                 // }
-                //             ]
-                //         }
-                //     }
-                // ],
+                filter: [
+                    {
+                        ui: 'dc_agenda',
+                        sources: [],
+                        filter: {
+                            or: [
+                                {
+                                    attr: 'alvo.nome',
+                                    oper: 'EQUAL',
+                                    val: ['João']
+                                },
+                                {
+                                    attr: 'alvo.nome',
+                                    oper: 'EQUAL',
+                                    val: ['João11111111111111111']
+                                },
+                                {
+                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                    oper: 'EQUAL',
+                                    val: ['4']
+                                },
+                                {
+                                    and: [
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João11111111111111111']
+                                        },
+                                        {
+                                            attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                            oper: 'EQUAL',
+                                            val: ['4']
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
                 profile: {}
