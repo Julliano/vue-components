@@ -143,10 +143,12 @@ function convertFilterViewToBC(viewFilter, first = true) {
             if (uiFilter.attr) {
                 otherUI(uiFilter.attr, uiFilter.criteria);
             }
-            blockFilter.filter = uiFilter.criteria;
-            blockFilter.ui = uiFilter.ui;
-            blockFilter.sources = uiFilter.sources;
-            viewFilter.push(blockFilter);
+            if (uiFilter.ui) {
+                blockFilter.filter = uiFilter.criteria;
+                blockFilter.ui = uiFilter.ui;
+                blockFilter.sources = uiFilter.sources;
+                viewFilter.push(blockFilter);
+            }
             break;
         } else {
             if (first) {
@@ -233,8 +235,11 @@ function reduceFilter(bcFilter) {
             while (continueRedulce) {
                 continueRedulce = false;
                 // eslint-disable-next-line no-loop-func
-                criterios.forEach(criteria => {
+                criterios.forEach((criteria, i) => {
                     let keys = Object.keys(criteria);
+                    if (keys.length === 0) {
+                        criterios.splice(i, 1);
+                    }
                     if (keys.length !== 1) {
                         return;
                     }
