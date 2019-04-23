@@ -39,7 +39,7 @@
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
-    import { bcFilterToView } from './utils/transform-filter.js';
+    import { bcFilterToView, viewToBcFilter } from './utils/transform-filter.js';
     import i18n from './utils/i18n.js';
 
     export default {
@@ -89,6 +89,14 @@
             if (this.uis) {
                 this.createEmptyUi();
             }
+            document.addEventListener('getJson', function() {
+                let teste = JSON.parse(JSON.stringify(this.uis));
+                let xml = {
+                    jsonView: teste,
+                    jsonBc: viewToBcFilter(teste)
+                };
+                this.handleEvent(JSON.stringify(xml), 'json');
+            }.bind(this), false);
         },
         methods: {
             loadData() {
@@ -193,19 +201,5 @@
                 return (new Date()).valueOf();
             }
         }
-        // watch: {
-        //     uis: {
-        //         handler() {
-        //             console.log('oi');
-        //             let xml = {
-        //                 jsonView: this.uis,
-        //                 jsonBc: viewToBcFilter(this.uis)
-        //             };
-        //             // this.bcJson = xml.jsonBc;
-        //             this.handleEvent(JSON.stringify(xml), 'json');
-        //         },
-        //         deep: true
-        //     }
-        // }
     };
 </script>

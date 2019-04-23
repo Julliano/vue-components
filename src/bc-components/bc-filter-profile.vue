@@ -352,12 +352,9 @@
                 let copyJson = JSON.parse(JSON.stringify(this.jsonView));
                 let xml = {
                     jsonView: this.jsonView,
-                    jsonBc: null
+                    jsonBc: viewToBcFilter(copyJson)
                     // jsonBc: this.jsonBc
                 };
-                if (copyJson[0].ui) {
-                    xml.jsonBc = viewToBcFilter(copyJson);
-                }
                 return xml;
             }
         },

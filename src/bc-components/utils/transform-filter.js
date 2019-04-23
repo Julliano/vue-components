@@ -249,7 +249,10 @@ function reduceFilter(bcFilter) {
 
 // eslint-disable-next-line
 export function viewToBcFilter(viewFilter) {
-    var bcFilter = convertFilterViewToBC(viewFilter);
+    let bcFilter = convertFilterViewToBC(viewFilter);
+    bcFilter = bcFilter.filter(each => {
+        return each.filter;
+    });
     reduceFilter(bcFilter);
     return bcFilter;
 }
