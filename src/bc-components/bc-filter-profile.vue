@@ -92,7 +92,8 @@
                 default: true
             },
             profile: Object,
-            json: Array,
+            jsonView: Array,
+            jsonBc: Array,
             profiles: Array,
             tipoPesquisa: String,
             idAplicacao: String
@@ -128,6 +129,7 @@
         },
         methods: {
             newProfile() {
+
                 this.selectedProfile = {
                     aplicacao_id_aplicacao: null,
                     data_ultima_alteracao: null,
@@ -135,7 +137,7 @@
                     flg_default: null,
                     id_cnfg_usua_app_pes: null,
                     id_tipo_pesquisa: null,
-                    xml_config: null
+                    xml_config: {}
                 };
                 this.$emit('change', this.selectedProfile);
             },
@@ -270,7 +272,6 @@
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$forceUpdate();
                         return this.$emit('error', 'saveAs');
                     }
                 }
@@ -348,10 +349,11 @@
                 return true;
             },
             mountXml() {
-                let copyJson = JSON.parse(JSON.stringify(this.json));
+                let copyJson = JSON.parse(JSON.stringify(this.jsonView));
                 let xml = {
-                    jsonView: this.json,
+                    jsonView: this.jsonView,
                     jsonBc: viewToBcFilter(copyJson)
+                    // jsonBc: this.jsonBc
                 };
                 return xml;
             }

@@ -11,14 +11,14 @@
 <template>
     <div class="bc-filter-component margin">
         <bc-filter-profile :profiles="profiles" @change="onProfileSelected" @reload-profiles="getProfiles" :tipo-pesquisa="idTipoPesquisa"
-            :profile="jsonMounted" :json="uis" :id-aplicacao="idAplicacao"
+            :profile="jsonMounted" :json-view="uis" :json-bc="bcJson" :id-aplicacao="idAplicacao"
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
+        </textarea> -->
         <div class="middle-filter">
             <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                             :idx="idx"
@@ -39,7 +39,7 @@
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
-    import {bcFilterToView} from './utils/transform-filter.js';
+    import { bcFilterToView, viewToBcFilter } from './utils/transform-filter.js';
     import i18n from './utils/i18n.js';
 
     export default {
@@ -78,7 +78,9 @@
                     sources: [],
                     hash: Math.random()
                 }],
-                jsonMounted: this.profileSeleted ? this.profileSeleted : this.defaultObj()
+                jsonMounted: Object.entries(this.profileSeleted).length ?
+                    this.profileSeleted : this.defaultObj(),
+                bcJson: []
             };
         },
         async created() {
@@ -87,6 +89,14 @@
             if (this.uis) {
                 this.createEmptyUi();
             }
+            document.addEventListener('getJson', function() {
+                let teste = JSON.parse(JSON.stringify(this.uis));
+                let xml = {
+                    jsonView: teste,
+                    jsonBc: viewToBcFilter(teste)
+                };
+                this.handleEvent(JSON.stringify(xml), 'json');
+            }.bind(this), false);
         },
         methods: {
             loadData() {
@@ -112,12 +122,12 @@
             },
             defaultObj() {
                 return {
-                    aplicacao_id_aplicacao: {},
-                    data_ultima_alteracao: '',
-                    descricao: '',
-                    flg_default: {},
-                    id_cnfg_usua_app_pes: '',
-                    id_tipo_pesquisa: {},
+                    aplicacao_id_aplicacao: null,
+                    data_ultima_alteracao: null,
+                    descricao: null,
+                    flg_default: null,
+                    id_cnfg_usua_app_pes: null,
+                    id_tipo_pesquisa: null,
                     xml_config: {}
                 };
             },
@@ -159,7 +169,7 @@
                 this.filterData.push(value);
             },
             onProfileSelected(obj) {
-                if (!obj.xml_config) {
+                if (!Object.entries(obj.xml_config).length) {
                     this.uis = [];
                     return this.createEmptyUi();
                 }
