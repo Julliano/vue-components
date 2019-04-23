@@ -15,10 +15,10 @@
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
+        </textarea> -->
         <div class="middle-filter">
             <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                             :idx="idx"
@@ -39,7 +39,7 @@
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
-    import { bcFilterToView, viewToBcFilter } from './utils/transform-filter.js';
+    import { bcFilterToView } from './utils/transform-filter.js';
     import i18n from './utils/i18n.js';
 
     export default {
@@ -114,12 +114,12 @@
             },
             defaultObj() {
                 return {
-                    aplicacao_id_aplicacao: {},
-                    data_ultima_alteracao: '',
-                    descricao: '',
-                    flg_default: {},
-                    id_cnfg_usua_app_pes: '',
-                    id_tipo_pesquisa: {},
+                    aplicacao_id_aplicacao: null,
+                    data_ultima_alteracao: null,
+                    descricao: null,
+                    flg_default: null,
+                    id_cnfg_usua_app_pes: null,
+                    id_tipo_pesquisa: null,
                     xml_config: {}
                 };
             },
@@ -192,19 +192,20 @@
             generateHash() {
                 return (new Date()).valueOf();
             }
-        },
-        watch: {
-            uis: {
-                handler() {
-                    let xml = {
-                        jsonView: this.uis,
-                        jsonBc: viewToBcFilter(this.uis)
-                    };
-                    this.bcJson = xml.jsonBc;
-                    this.handleEvent(JSON.stringify(xml), 'json');
-                },
-                deep: true
-            }
         }
+        // watch: {
+        //     uis: {
+        //         handler() {
+        //             console.log('oi');
+        //             let xml = {
+        //                 jsonView: this.uis,
+        //                 jsonBc: viewToBcFilter(this.uis)
+        //             };
+        //             // this.bcJson = xml.jsonBc;
+        //             this.handleEvent(JSON.stringify(xml), 'json');
+        //         },
+        //         deep: true
+        //     }
+        // }
     };
 </script>

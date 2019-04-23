@@ -72,6 +72,7 @@
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
     import bcDeleteSearchConfirm from './modal/bc-delete-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
+    import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
@@ -271,7 +272,6 @@
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$forceUpdate();
                         return this.$emit('error', 'saveAs');
                     }
                 }
@@ -349,10 +349,15 @@
                 return true;
             },
             mountXml() {
+                let copyJson = JSON.parse(JSON.stringify(this.jsonView));
                 let xml = {
                     jsonView: this.jsonView,
-                    jsonBc: this.jsonBc
+                    jsonBc: null
+                    // jsonBc: this.jsonBc
                 };
+                if (copyJson[0].ui) {
+                    xml.jsonBc = viewToBcFilter(copyJson);
+                }
                 return xml;
             }
         },
