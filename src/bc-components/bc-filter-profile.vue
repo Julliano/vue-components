@@ -72,7 +72,6 @@
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
     import bcDeleteSearchConfirm from './modal/bc-delete-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
-    import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
@@ -92,7 +91,8 @@
                 default: true
             },
             profile: Object,
-            json: Array,
+            jsonView: Array,
+            jsonBc: Array,
             profiles: Array,
             tipoPesquisa: String,
             idAplicacao: String
@@ -128,6 +128,7 @@
         },
         methods: {
             newProfile() {
+
                 this.selectedProfile = {
                     aplicacao_id_aplicacao: null,
                     data_ultima_alteracao: null,
@@ -135,7 +136,7 @@
                     flg_default: null,
                     id_cnfg_usua_app_pes: null,
                     id_tipo_pesquisa: null,
-                    xml_config: null
+                    xml_config: {}
                 };
                 this.$emit('change', this.selectedProfile);
             },
@@ -348,10 +349,9 @@
                 return true;
             },
             mountXml() {
-                let copyJson = JSON.parse(JSON.stringify(this.json));
                 let xml = {
-                    jsonView: this.json,
-                    jsonBc: viewToBcFilter(copyJson)
+                    jsonView: this.jsonView,
+                    jsonBc: this.jsonBc
                 };
                 return xml;
             }

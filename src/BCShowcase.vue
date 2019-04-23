@@ -138,6 +138,9 @@
             document.addEventListener('error', function(e) {
                 console.log(e.detail);
             }, false);
+            document.addEventListener('json', function(e) {
+                console.log(e.detail);
+            }, false);
         }
     };
 </script>
