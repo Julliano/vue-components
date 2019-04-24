@@ -57,11 +57,6 @@
                 this.getAttribsFromUI(this.ui);
             }
 
-            // for (let i = 0; i <= this.filter.criteria.length; i++) {
-            //     const criteria = this.filter.criteria[i];
-            //     console.log(criteria);
-            // }
-
             this.mountCriteriaByOtherUI();
 
             this.$forceUpdate();
@@ -131,6 +126,8 @@
                 if (!this.filter.criteria) {
                     this.$set(this.filter, 'criteria', [{}]);
                     this.$set(this.filter, 'operator', 'and');
+                    this.$delete(this.filter, 'oper');
+                    this.$delete(this.filter, 'val');
                     return;
                 }
                 if (!this.filter.criteria instanceof Array) return;
