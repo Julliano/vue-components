@@ -27,6 +27,9 @@
                       {{opt.label}}
                     </option>
                 </select>
+                <button class="btn btn-filter" @click="fireAttribRemoved" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'">
+                    <i class="mdi mdi-close"></i>
+                </button>
                 <button class="btn btn-small btn-filter" v-if="!item.attr" @click="fireNewGroup">{{'newGroup' | i18n}}</button>
                 <bc-filter-operators v-else-if="selectedAttrib && selectedAttrib.type !== '_meta_ui'"
                     :auto-complete="selectedAttrib.autocomplete" :look-up="selectedAttrib.lookup"
@@ -85,6 +88,10 @@
         },
         methods: {
             fireAttribSelected() {
+                if (this.selectedAttrib.type !== '_meta_ui') {
+                    this.$delete(this.criteria, 'criteria');
+                    this.$delete(this.criteria, 'operator');
+                }
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
             },
             fireAttribRemoved() {

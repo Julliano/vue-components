@@ -48,10 +48,6 @@
                 bcFilterAttrib
             };
         },
-        destroyed() {
-            this.$delete(this.filter, 'criteria');
-            this.$delete(this.filter, 'operator');
-        },
         created() {
             if (this.ui) {
                 this.getAttribsFromUI(this.ui);
@@ -105,8 +101,12 @@
 
                 this.$forceUpdate();
             },
-            onAttribRemoved() {
-                console.log('onAttribRemoved');
+            onAttribRemoved(idx) {
+                this.$delete(this.filter.criteria, idx);
+                this.$nextTick(()=>{
+                    this.$refs.attribsGroup.updateGroups();
+                });
+                this.$forceUpdate();
             },
             mountNewAttrib(localAttrib, localCriteria) {
                 if (localAttrib.type !== '_meta_ui') {
