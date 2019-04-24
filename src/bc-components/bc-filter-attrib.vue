@@ -9,7 +9,6 @@
     .options-container {
         display: inline-flex;
         align-items: center;
-        flex-wrap: wrap;
     }
     .meta-ui{
         flex-basis: 100%;
