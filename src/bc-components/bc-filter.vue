@@ -90,10 +90,10 @@
                 this.createEmptyUi();
             }
             document.addEventListener('getJson', function() {
-                let teste = JSON.parse(JSON.stringify(this.uis));
+                let copyUis = JSON.parse(JSON.stringify(this.uis));
                 let xml = {
-                    jsonView: teste,
-                    jsonBc: viewToBcFilter(teste)
+                    jsonView: copyUis,
+                    jsonBc: viewToBcFilter(JSON.parse(JSON.stringify(this.uis)))
                 };
                 this.handleEvent(JSON.stringify(xml), 'json');
             }.bind(this), false);
