@@ -9,7 +9,7 @@
         >
         <component :is="bcFilterAttrib"
             v-for="(localCriteria, idx) in filter.criteria" :key="idx"
-            @meta-attrib-selected="onMetaAttribSelected($event, idx)"
+            @meta-attrib-selected="onMetaAttribSelected($event, localCriteria)"
             @meta-attrib-removed="onAttribRemoved(idx)"
             :meta-attribs="localMetaAttribs"
             :criteria="localCriteria"
@@ -30,7 +30,13 @@
             bcService
         },
         props: {
-            filter: Object,
+            filter: {
+                attr: String,
+                oper: String,
+                val: Array,
+                hash: Number,
+                criteria: Array
+            },
             ui: String,
             selectedAttrib: Object,
             metaAttribs: Array
@@ -50,6 +56,11 @@
             if (this.ui) {
                 this.getAttribsFromUI(this.ui);
             }
+
+            // for (let i = 0; i <= this.filter.criteria.length; i++) {
+            //     const criteria = this.filter.criteria[i];
+            //     console.log(criteria);
+            // }
 
             this.mountCriteriaByOtherUI();
 
@@ -81,8 +92,7 @@
                 this.filter.operator = operator;
                 this.$emit('operator-changed', operator);
             },
-            onMetaAttribSelected(localAttrib, idx) {
-                let localCriteria = this.filter.criteria[idx];
+            onMetaAttribSelected(localAttrib, localCriteria) {
                 if (localAttrib.type === '_meta_ui') {
                     this.$delete(localCriteria, 'attr');
                     this.$delete(localCriteria, 'operator');
@@ -98,8 +108,7 @@
                     this.filter.criteria.push({});
                 }
 
-                // this.localMetaAttribs = [];
-                //this.getAttribsFromUI(localAttrib.metaType);
+                this.$forceUpdate();
             },
             onAttribRemoved() {
                 console.log('onAttribRemoved');
@@ -124,26 +133,14 @@
                     this.$set(this.filter, 'operator', 'and');
                     return;
                 }
-                // for (const criteria of this.filter.criteria) {
-                //     const isOtherUI = criteria.attr.indexOf('.');
-                //     if (isOtherUI === -1) {
-                //         this.filter.criteria.push({});
-                //         continue;
-                //     }
-                //     const ui = criteria.attr.substr(0, isOtherUI);
-
-                //     this.$set(criteria, 'operator', 'and');
-                //     this.$set(criteria, 'criteria', [{
-                //         attr: criteria.attr.substr(isOtherUI + 1,
-                //             criteria.attr.length),
-                //         oper: criteria.oper,
-                //         val: criteria.val
-                //     }, {}]);
-                //     this.$set(criteria, 'attr', ui);
-
-                //     this.$delete(criteria, 'oper');
-                //     this.$delete(criteria, 'val');
-                // }
+                if (!this.filter.criteria instanceof Array) return;
+                const hashEmptyObject = this.filter.criteria.filter(obj => {
+                    return !Object.entries(obj).length;
+                });
+                if (!hashEmptyObject.length) {
+                    this.$set(this.filter, 'criteria', this.filter.criteria);
+                    this.filter.criteria.push({});
+                }
             },
             generateHash(item) {
                 if (item.hash) {

@@ -67,7 +67,13 @@
             bcService
         },
         props: {
-            criteria: null,
+            criteria: {
+                attr: String,
+                oper: String,
+                val: Array,
+                hash: Number,
+                criteria: Array
+            },
             metaAttribs: Array,
             ui: String,
             fatherAttr: String
