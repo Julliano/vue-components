@@ -105,7 +105,7 @@
                     if (criterio.hash) continue;
                     criterio.hash = Math.random();
                 }
-                return criterios;
+                return JSON.parse(JSON.stringify(criterios));
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);

@@ -120,7 +120,9 @@ function otherUI(attr, criterios) {
             delete criterio.attr;
             continue;
         }
-        criterio.attr = `${attr}.${criterio.attr}`;
+        if (criterio.attr) {
+            criterio.attr = `${attr}.${criterio.attr}`;
+        }
     }
 }
 
@@ -196,7 +198,12 @@ function convertFilterViewToBC(viewFilter, first = true) {
 
 function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueRedulce) {
     for (let i = 0; i < criterios.length; i++) {
+        delete criterios[i].hash;
         let keys = Object.keys(criterios[i]);
+        if (keys.length === 0) {
+            criterios.splice(i, 1);
+            continue;
+        }
         if (keys.length !== 1) {
             if (criterios.length === 1) {
                 fatherCriteria.attr = criterios[i].attr;
@@ -236,6 +243,7 @@ function reduceFilter(bcFilter) {
                 continueRedulce = false;
                 // eslint-disable-next-line no-loop-func
                 criterios.forEach((criteria, i) => {
+                    delete criteria.hash;
                     let keys = Object.keys(criteria);
                     if (keys.length === 0) {
                         criterios.splice(i, 1);
