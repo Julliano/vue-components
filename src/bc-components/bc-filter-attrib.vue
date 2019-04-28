@@ -1,3 +1,4 @@
+/* eslint-disable prefer-destructuring */
 <style scoped lang="scss">
     @import "styles/variables";
     @import "styles/buttons";
@@ -135,9 +136,13 @@
                     if (!Object.entries(this.criteria).length) {
                         return [{}];
                     }
-                    const isOtherUI = this.criteria.attr.indexOf('.');
-                    if (isOtherUI !== -1) {
-                        attr = this.criteria.attr.substr(0, isOtherUI);
+                    if (this.criteria.criteria && !this.criteria.attr) {
+                        this.mountOtherUIOrGroup(this.criteria, this.criteria.criteria);
+                    } else {
+                        const isOtherUI = this.criteria.attr.indexOf('.');
+                        if (isOtherUI !== -1) {
+                            attr = this.criteria.attr.substr(0, isOtherUI);
+                        }
                     }
                 }
                 for (const attrib of this.metaAttribs) {
@@ -148,6 +153,81 @@
                     }
                 }
                 return [this.criteria];
+            },
+            // eslint-disable-next-line max-len
+            mountOtherUIOrGroup(fatherCriteria, criterios, isOtherUI = false, lastAttr = null, auxCriteria = []) {
+                if (criterios.length !== 1) {
+                    for (let criteria of criterios) {
+                        if (!criteria.criteria) {
+                            isOtherUI = false;
+                            break;
+                        }
+                        if (criteria.attr) {
+                            if (!lastAttr) {
+                                lastAttr = criteria.attr;
+                                isOtherUI = true;
+                                continue;
+                            }
+
+                            if (lastAttr === criteria.attr) {
+                                isOtherUI = true;
+                                continue;
+                            }
+
+                            isOtherUI = false;
+                            break;
+                        } else {
+                            if (criteria.criteria instanceof Array) {
+                                this.mountOtherUIOrGroup(criteria,
+                                    criteria.criteria, isOtherUI, lastAttr, auxCriteria);
+                            }
+                        }
+                    }
+                } else {
+                    console.log('É um grupo com 1 criterio dentro.');
+                    return;
+                }
+
+                if (isOtherUI) {
+                    auxCriteria = this.mountOtherUIOrGroupCriteria(fatherCriteria,
+                        criterios, auxCriteria);
+                    delete fatherCriteria.criteria;
+                    this.$set(fatherCriteria, 'criteria', auxCriteria);
+                }
+
+                console.log(`Outra UI: ${isOtherUI}`);
+            },
+            mountOtherUIOrGroupCriteria(fatherCriteria, criterios, auxCriteria) {
+                if (criterios instanceof Array) {
+                    for (let criterio of criterios) {
+                        if (criterio.criteria.length === 1) {
+                            if (!fatherCriteria.attr) {
+                                this.$set(fatherCriteria, 'attr', criterio.attr);
+                            }
+                            auxCriteria = auxCriteria.concat(criterio.criteria);
+                        } else {
+                            auxCriteria = this.mountOtherUISubNiveis(criterio, auxCriteria);
+                        }
+                    }
+                }
+                return auxCriteria;
+            },
+            mountOtherUISubNiveis(criteria, auxCriteria) {
+                for (let currentCriteria of criteria.criteria) {
+                    // eslint-disable-next-line prefer-destructuring
+                    let attr = currentCriteria.attr;
+                    const isOtherUI = attr.indexOf('.');
+                    // eslint-disable-next-line max-depth
+                    if (isOtherUI !== -1) {
+                        currentCriteria.attr = attr.substr(isOtherUI + 1, attr.length);
+                        attr = attr.substr(0, isOtherUI);
+
+                        // eslint-disable-next-line prefer-destructuring
+                        this.$set(criteria, 'attr', attr);
+                    }
+                }
+
+                return auxCriteria.concat(criteria);
             },
             mountCriteriaByOtherUI(criteria) {
                 const isOtherUI = criteria.attr.indexOf('.');

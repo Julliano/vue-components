@@ -213,19 +213,26 @@ function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueR
             }
             continue;
         }
-        continueRedulce = true;
         if (keys[0] === Externaloperator) {
+            continueRedulce = true;
             if (criterios.length === 1) {
                 fatherCriteria[Externaloperator] = criterios[i][keys[0]];
             } else {
                 if (criterios[i][keys[0]] instanceof Array) {
-                    recursiveRedulse(criterios[i][keys[0]], keys[0], criterios[i]);
+                    continueRedulce = recursiveRedulse(criterios[i][keys[0]], keys[0],
+                        criterios[i], continueRedulce);
                     continue;
                 } else {
                     criterios.push(criterios[i][keys[0]]);
                     criterios.splice(i, 1);
                     i--;
                 }
+            }
+        } else {
+            if (criterios[i][keys[0]] instanceof Array) {
+                continueRedulce = recursiveRedulse(criterios[i][keys[0]], keys[0],
+                    criterios[i], continueRedulce);
+                continue;
             }
         }
     };
