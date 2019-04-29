@@ -8,13 +8,8 @@
         .options-container {
             display: inline-flex;
             align-items: center;
-            .panel-heading > i{ vertical-align: middle !important; }
-            input {
-                height: 24px !important;
-                padding: 2px;
-                &:not(:first-child) {
-                    margin-left: 5px;
-                }
+            .panel-heading > i{
+                vertical-align: middle !important;
             }
         }
     }
@@ -25,7 +20,7 @@
         <div class="bc-hour-input">
             <div class="options-container">
                 <input id="hour" name="hour" type="time" @change="change"
-                    class="inp big" v-model="hour">
+                    class="inp" v-model="hour">
             </div>
         </div>
     </div>

@@ -8,12 +8,6 @@
         .options-container {
             display: inline-flex;
             align-items: center;
-            input {
-                height: 24px !important;
-                &:not(:first-child) {
-                    margin-left: 5px;
-                }
-            }
         }
     }
 </style>
@@ -23,9 +17,9 @@
         <div class="bc-int-input">
             <div class="options-container">
                 <input id="date" name="finalDate" type="date"
-                    class="inp big" v-model="date">
+                    class="inp" v-model="date">
                 <input id="hour1" name="hour1" type="time"
-                    class="inp big" v-model="hour1">
+                    class="inp margin-left" v-model="hour1">
             </div>
         </div>
     </div>
