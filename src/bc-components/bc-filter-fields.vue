@@ -65,6 +65,9 @@
         computed: {
             // eslint-disable-next-line
             dynamicComponent() {
+                if (this.operator === 'ANY_CONTENT' || this.operator === 'NO_CONTENT') {
+                    return null;
+                }
                 switch (this.tipoAttrib) {
                     case '_texto_delimitado':
                         return this.checkTextField();
