@@ -48,19 +48,10 @@
                 bcFilterAttrib
             };
         },
-        destroyed() {
-            this.$delete(this.filter, 'criteria');
-            this.$delete(this.filter, 'operator');
-        },
         created() {
             if (this.ui) {
                 this.getAttribsFromUI(this.ui);
             }
-
-            // for (let i = 0; i <= this.filter.criteria.length; i++) {
-            //     const criteria = this.filter.criteria[i];
-            //     console.log(criteria);
-            // }
 
             this.mountCriteriaByOtherUI();
 
@@ -110,8 +101,12 @@
 
                 this.$forceUpdate();
             },
-            onAttribRemoved() {
-                console.log('onAttribRemoved');
+            onAttribRemoved(idx) {
+                this.$delete(this.filter.criteria, idx);
+                this.$nextTick(()=>{
+                    this.$refs.attribsGroup.updateGroups();
+                });
+                this.$forceUpdate();
             },
             mountNewAttrib(localAttrib, localCriteria) {
                 if (localAttrib.type !== '_meta_ui') {
@@ -131,6 +126,8 @@
                 if (!this.filter.criteria) {
                     this.$set(this.filter, 'criteria', [{}]);
                     this.$set(this.filter, 'operator', 'and');
+                    this.$delete(this.filter, 'oper');
+                    this.$delete(this.filter, 'val');
                     return;
                 }
                 if (!this.filter.criteria instanceof Array) return;

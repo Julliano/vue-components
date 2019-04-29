@@ -16,6 +16,14 @@
         animation-play-state: paused;
         animation-iteration-count: infinite;
         animation-direction: alternate;
+        display: none;
+
+        &.msg-warn,
+        &.msg-info,
+        &.msg-error,
+        &.msg-success {
+            display: block;
+        }
     }
 </style>
 <template>
