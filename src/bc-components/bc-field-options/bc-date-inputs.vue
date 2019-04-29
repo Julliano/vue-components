@@ -5,13 +5,6 @@
     .bc-int-inputs {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
-        input {
-            height: 24px !important;
-            &:not(:first-child) {
-                margin-left: 5px;
-            }
-        }
     }
     .options-container {
         display: inline-flex;
@@ -24,13 +17,13 @@
         <div class="bc-int-inputs">
             <div class="options-container">
                 <input id="date1" name="initialDate" type="date" @change="change"
-                        class="inp big" v-model="initialDate">
+                        class="inp" v-model="initialDate">
                 <input id="hour1" name="hour1" type="time" @change="change"
-                    class="inp big" v-model="hour1">
+                    class="inp margin-left" v-model="hour1">
                 <input id="date2" name="finalDate" type="date" @change="change"
-                        class="inp big" v-model="finalDate">
+                        class="inp margin-left" v-model="finalDate">
                 <input id="hour2" name="hour2" type="time" @change="change"
-                    class="inp big" v-model="hour2">
+                    class="inp margin-left" v-model="hour2">
             </div>
         </div>
     </div>

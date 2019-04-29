@@ -7,9 +7,6 @@
         flex-direction: column;
         input {
             width: 40px;
-            &:last-child {
-                margin-left: 5px;
-            }
         }
     }
     .options-container {
@@ -23,11 +20,11 @@
         <div class="bc-int-inputs">
             <div class="options-container" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
                 <input class="inp" type="tel" v-mask="'#########'" v-model="field1">
-                <input class="inp" type="tel" v-mask="'#########'" v-model="field2">
+                <input class="inp margin-left" type="tel" v-mask="'#########'" v-model="field2">
             </div>
             <div class="options-container" v-else>
                 <input class="inp" type="number" :step="0.01" v-model="field1">
-                <input class="inp" type="number" :step="0.01" v-model="field2">
+                <input class="inp margin-left" type="number" :step="0.01" v-model="field2">
             </div>
         </div>
     </div>
