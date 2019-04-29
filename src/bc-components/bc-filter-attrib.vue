@@ -108,6 +108,10 @@
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+                this.localAttribs = this.localAttribs.filter(attrib => {
+                    return attrib.type !== '_audio' && attrib.type !== '_coordenada';
+                });
+                console.log(this.localAttribs);
             },
             onMetaOperatorSelected(operator, criteria) {
                 if (!operator) {
