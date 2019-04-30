@@ -28,6 +28,7 @@
                             :show-source-option="uiFilter.ui !== null"
                             @meta-ui-selected="onMetaUISelected($event, uiFilter)"
                             @meta-ui-removed="onMetaUIRemoved(idx)"
+                            ref="filtroUI"
             ></bc-filter-ui>
         </div>
     </div>
@@ -90,6 +91,26 @@
                 this.createEmptyUi();
             }
             document.addEventListener('getJson', function() {
+                let dadosValidos = true;
+                const quantiaFiltros = this.$refs.filtroUI.length;
+                this.$refs.filtroUI.some(componente => {
+                    if ((!componente.uiFilter || !componente.uiFilter.ui) && quantiaFiltros === 1) {
+                        dadosValidos = false;
+                        return true;
+                    }
+                    if (!componente.uiFilter || !componente.uiFilter.ui) {
+                        return;
+                    }
+                    const valido = componente.validaDados();
+                    if (!valido) {
+                        dadosValidos = false;
+                        return true;
+                    }
+                });
+                if (!dadosValidos) {
+                    this.handleEvent('json-error', 'error');
+                    return;
+                }
                 let copyUis = JSON.parse(JSON.stringify(this.uis));
                 let xml = {
                     jsonView: copyUis,
@@ -100,6 +121,9 @@
             }.bind(this), false);
         },
         methods: {
+            validaDados() {
+                console.log('asd');
+            },
             loadData() {
                 let criterios = this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
                 for (const criterio of criterios) {

@@ -99,6 +99,21 @@
             }
         },
         methods: {
+            validaDados() {
+                if (!this.val) {
+                    return false;
+                }
+                if (this.val.length <= 0) {
+                    return false;
+                }
+                for (let valor of this.val) {
+                    if (!valor) {
+                        return false;
+
+                    }
+                }
+                return true;
+            },
             fireFieldSelected(e) {
                 const metaField = this.metaFields[e.target.value];
                 this.field = metaField;
@@ -123,7 +138,7 @@
                 return numberInput;
             },
             checkDataField() {
-                if (this.operator === 'LESS_THAN' || this.operator === 'OUT_OF_RANGE') {
+                if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
                     return dateInputs;
                 } else if (this.operator === 'PERIODO') {
                     return dateCombo;

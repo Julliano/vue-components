@@ -92,6 +92,31 @@
             };
         },
         methods: {
+            validaDados() {
+                if (this.selectedAttrib && this.selectedAttrib.type === '_meta_ui') {
+                    return this.$refs.attribGroup.validaDados();
+                }
+                if (!this.selectedAttrib) {
+                    return false;
+                }
+                if (!this.$refs.operator) {
+                    return true;
+                }
+                if (this.selectedAttrib.type === '_tipo_selecao' && this.criteria.val.length === 1) {
+                    return true;
+                }
+                if (this.selectedAttrib.type === '_tipo_selecao' && this.criteria.val.length <= 0) {
+                    return false;
+                }
+                let dadosValidos = true;
+                this.$refs.operator.some(componente => {
+                    if (!componente.validaDados()) {
+                        dadosValidos = false;
+                        return true;
+                    }
+                });
+                return dadosValidos;
+            },
             fireAttribSelected() {
                 this.$delete(this.criteria, 'criteria');
                 this.$delete(this.criteria, 'operator');

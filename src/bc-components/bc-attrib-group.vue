@@ -61,6 +61,28 @@
             this.$forceUpdate();
         },
         methods: {
+            validaDados() {
+                if (!this.$refs.attrib) {
+                    return true;
+                }
+                let dadosValidos = true;
+                let quantiaAtribSelecionada = 0;
+                this.$refs.attrib.some(componente => {
+                    if (componente.selectedAttrib) {
+                        quantiaAtribSelecionada++;
+                    } else {
+                        return;
+                    }
+                    if (!componente.validaDados()) {
+                        dadosValidos = false;
+                        return true;
+                    }
+                });
+                if (quantiaAtribSelecionada === 0) {
+                    return false;
+                }
+                return dadosValidos;
+            },
             async getAttribsFromUI(ui) {
                 this.localMetaAttribs = await bcService.getAttribsFromUI(ui);
                 this.localMetaAttribs.sort((e1, e2) => {

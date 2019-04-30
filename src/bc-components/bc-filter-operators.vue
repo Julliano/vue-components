@@ -43,6 +43,7 @@
                     :val="criteria.val" :operator="localOperator.name"
                     :autoComplete="autoComplete"
                     :tipo-attrib="tipoAttrib"
+                    ref="filterField"
                 >
                 </bc-filter-fields>
             </div>
@@ -107,6 +108,15 @@
             this.localOperator = this.checkOperator();
         },
         methods: {
+            validaDados() {
+                if (!this.$refs.filterField) {
+                    return false;
+                }
+                if (this.localOperator.name === 'ANY_CONTENT' || this.localOperator.name === 'NO_CONTENT') {
+                    return true;
+                }
+                return this.$refs.filterField.validaDados();
+            },
             checkOperator() {
                 if (this.criteria.oper) {
                     let obj = this.metaOperators.find(ope => {

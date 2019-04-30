@@ -119,6 +119,25 @@
             }
         },
         methods: {
+            validaDados() {
+                if (!this.$refs.attrib) {
+                    return true;
+                }
+                if (this.$refs.attrib.length <= 0) {
+                    return false;
+                }
+                let dadosValidos = true;
+                this.$refs.attrib.some(componente => {
+                    if (!componente.selectedAttrib) {
+                        return;
+                    }
+                    if (!componente.validaDados()) {
+                        dadosValidos = false;
+                        return true;
+                    }
+                });
+                return dadosValidos;
+            },
             insertEmptyCriteria() {
                 if (!this.uiFilter.criteria instanceof Array) return;
                 for (let item of this.uiFilter.criteria) {
