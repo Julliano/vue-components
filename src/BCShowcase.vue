@@ -39,14 +39,14 @@
                         ui: 'dc_agenda',
                         sources: [],
                         filter: {
-                            or: [
+                            OR: [
                                 // {
                                 //     attr: 'nome',
                                 //     oper: 'EQUAL',
                                 //     val: ['João']
                                 // },
                                 {
-                                    and: [
+                                    AND: [
                                         {
                                             attr: 'alvo.nome',
                                             oper: 'EQUAL',
@@ -58,7 +58,7 @@
                                             val: ['João222222222222']
                                         },
                                         {
-                                            or: [
+                                            OR: [
                                                 {
                                                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
                                                     oper: 'EQUAL',
