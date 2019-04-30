@@ -94,7 +94,7 @@
                 this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
                     return attrib.type !== '_audio' && attrib.type !== '_coordenada';
                 });
-                if (this.localCountLevel > 1) {
+                if (this.countLevel > 1) {
                     this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
                         return attrib.type !== '_meta_ui';
                     });
@@ -122,10 +122,10 @@
                     this.$delete(localCriteria, 'attr');
                     this.$delete(localCriteria, 'operator');
                     this.$delete(localCriteria, 'criteria');
-                    this.localCountLevel++;
+                    // this.localCountLevel++;
                     this.$forceUpdate();
                 } else {
-                    this.localCountLevel--;
+                    // this.localCountLevel--;
                 }
                 this.$set(localCriteria, 'attr', localAttrib.name);
                 this.mountNewAttrib(localAttrib, localCriteria);
