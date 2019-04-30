@@ -49,7 +49,7 @@ function convertFilterBcToView(bcFilter, returnFilter = [], isRecursive = false)
 function createCriteriaOtherUI(criteria, attr, fatherAttr) {
     criteria.attr = fatherAttr;
     if (!criteria.operator) {
-        criteria.operator = 'and';
+        criteria.operator = 'AND';
     }
     criteria.criteria = [{
         attr,

@@ -46,8 +46,9 @@
                 class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'"
                 :meta-attribs="metaAttribs"
                 :filter="criteria"
+                :count-level="localCountLevel"
                 :ui="selectedAttrib.metaType"
-                :selectedAttrib = "selectedAttrib"
+                :selected-attrib="selectedAttrib"
                 ref="attribGroup">
             </bc-attrib-group>
         </div>
@@ -79,19 +80,33 @@
             },
             metaAttribs: Array,
             ui: String,
-            fatherAttr: String
+            fatherAttr: String,
+            countLevel: Number
         },
         data() {
             return {
                 localAttribs: null,
-                selectedAttrib: null
+                selectedAttrib: null,
+                localCountLevel: this.countLevel || 0,
+                lastSelectedAttrib: null
             };
         },
         methods: {
             fireAttribSelected() {
-                if (this.selectedAttrib.type !== '_meta_ui') {
-                    this.$delete(this.criteria, 'criteria');
-                    this.$delete(this.criteria, 'operator');
+                this.$delete(this.criteria, 'criteria');
+                this.$delete(this.criteria, 'operator');
+                if (this.selectedAttrib.type === '_meta_ui') {
+                    this.$set(this.criteria, 'operator', 'AND');
+                    this.$set(this.criteria, 'criteria', [{}]);
+                    if (!this.lastSelectedAttrib) {
+                        this.localCountLevel++;
+                    }
+                    this.lastSelectedAttrib = this.selectedAttrib;
+                } else {
+                    this.lastSelectedAttrib = null;
+                    if (this.localCountLevel > 0) {
+                        this.localCountLevel--;
+                    }
                 }
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
             },
@@ -111,6 +126,11 @@
                 this.localAttribs = this.localAttribs.filter(attrib => {
                     return attrib.type !== '_audio' && attrib.type !== '_coordenada';
                 });
+                if (this.localCountLevel > 1) {
+                    this.localAttribs = this.localAttribs.filter(attrib => {
+                        return attrib.type !== '_meta_ui';
+                    });
+                }
                 console.log(this.localAttribs);
             },
             onMetaOperatorSelected(operator, criteria) {
@@ -188,7 +208,6 @@
                         }
                     }
                 } else {
-                    console.log('É um grupo com 1 criterio dentro.');
                     return;
                 }
 
@@ -198,8 +217,6 @@
                     delete fatherCriteria.criteria;
                     this.$set(fatherCriteria, 'criteria', auxCriteria);
                 }
-
-                console.log(`Outra UI: ${isOtherUI}`);
             },
             mountOtherUIOrGroupCriteria(fatherCriteria, criterios, auxCriteria) {
                 if (criterios instanceof Array) {
@@ -240,7 +257,7 @@
                 }
                 const ui = criteria.attr.substr(0, isOtherUI);
 
-                this.$set(criteria, 'operator', 'and');
+                this.$set(criteria, 'operator', 'AND');
                 this.$set(criteria, 'criteria', [{
                     attr: criteria.attr.substr(isOtherUI + 1, criteria.attr.length),
                     oper: criteria.oper,

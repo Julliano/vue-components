@@ -13,6 +13,7 @@
             @meta-attrib-removed="onAttribRemoved(idx)"
             :meta-attribs="localMetaAttribs"
             :criteria="localCriteria"
+            :count-level="localCountLevel"
             :ui="ui" ref="attrib">
         </component>
         </bc-filter-group>
@@ -39,12 +40,14 @@
             },
             ui: String,
             selectedAttrib: Object,
-            metaAttribs: Array
+            metaAttribs: Array,
+            countLevel: Number
         },
         data() {
             return {
                 localMetaAttribs: this.metaAttribs || [],
                 localAttrib: this.selectedAttrib || {},
+                localCountLevel: this.countLevel,
                 bcFilterAttrib
             };
         },
@@ -65,6 +68,15 @@
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+
+                this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
+                    return attrib.type !== '_audio' && attrib.type !== '_coordenada';
+                });
+                if (this.localCountLevel > 1) {
+                    this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
+                        return attrib.type !== '_meta_ui';
+                    });
+                }
 
                 for (const attrib of this.localMetaAttribs) {
                     if (this.filter.criteria) {
@@ -88,7 +100,10 @@
                     this.$delete(localCriteria, 'attr');
                     this.$delete(localCriteria, 'operator');
                     this.$delete(localCriteria, 'criteria');
+                    this.localCountLevel++;
                     this.$forceUpdate();
+                } else {
+                    this.localCountLevel--;
                 }
                 this.$set(localCriteria, 'attr', localAttrib.name);
                 this.mountNewAttrib(localAttrib, localCriteria);
@@ -115,7 +130,7 @@
                 if (!localCriteria.hash) {
                     this.$set(localCriteria, 'hash', Math.random());
                 }
-                this.$set(localCriteria, 'operator', 'and');
+                this.$set(localCriteria, 'operator', 'AND');
                 this.$set(localCriteria, 'criteria', [{}]);
                 this.$set(localCriteria, 'attr', localAttrib.name);
 
@@ -125,7 +140,7 @@
             mountCriteriaByOtherUI() {
                 if (!this.filter.criteria) {
                     this.$set(this.filter, 'criteria', [{}]);
-                    this.$set(this.filter, 'operator', 'and');
+                    this.$set(this.filter, 'operator', 'AND');
                     this.$delete(this.filter, 'oper');
                     this.$delete(this.filter, 'val');
                     return;

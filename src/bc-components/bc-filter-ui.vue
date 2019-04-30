@@ -93,7 +93,7 @@
                 uis: [],
                 newFilter: {},
                 lastMetaUiSelected: null,
-                type: 'and',
+                type: 'AND',
                 ui: null,
                 showAttribGroup: false
             };

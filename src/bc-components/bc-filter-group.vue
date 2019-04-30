@@ -20,14 +20,14 @@
     .container {
         margin-left: $big-space;
 
-        &.and {
+        &.AND {
             border-color: $and-color;
             > :last-child {
                 @include halfBorderLeft($and-color)
             }
         }
 
-        &.or {
+        &.OR {
             border-color: $or-color;
             > :last-child {
                 @include halfBorderLeft($or-color)
@@ -78,8 +78,8 @@
         <bc-switch v-model="type" :disabled="itemCount < 3" @input="onOperatorChanged"></bc-switch>
         <div class="container"
             :class="{
-                'and': type === 'and',
-                'or': type === 'or',
+                'AND': type === 'AND',
+                'OR': type === 'OR',
                 'disabled-switch': itemCount < 3
             }">
             <slot></slot>
@@ -112,14 +112,11 @@
         },
         methods: {
             verifyOperator() {
-                this.type = this.operator ? this.operator : 'and';
+                this.type = this.operator ? this.operator : 'AND';
                 this.onOperatorChanged(this.type);
             },
             updateGroups() {
                 this.itemCount = this.$slots.default.length;
-                if (this.itemCount < 3) {
-                    this.type = 'and';
-                }
             },
             onOperatorChanged(type) {
                 this.type = type;
