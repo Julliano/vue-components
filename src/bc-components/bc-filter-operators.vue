@@ -86,10 +86,6 @@
         computed: {
             dynamicComponentDate() {
                 switch (this.tipoAttrib) {
-                    case '_data':
-                        this.$set(this.criteria, 'oper', 'DATE');
-                        this.show = true;
-                        return null;
                     case '_tipo_selecao':
                         this.show = false;
                         this.$set(this.criteria, 'oper', 'EQUAL');

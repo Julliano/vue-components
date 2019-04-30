@@ -124,10 +124,10 @@
                     this.$delete(localCriteria, 'attr');
                     this.$delete(localCriteria, 'operator');
                     this.$delete(localCriteria, 'criteria');
-                    this.localCountLevel++;
+                    // this.localCountLevel++;
                     this.$forceUpdate();
                 } else {
-                    this.localCountLevel--;
+                    // this.localCountLevel--;
                 }
                 this.$set(localCriteria, 'attr', localAttrib.name);
                 this.mountNewAttrib(localAttrib, localCriteria);

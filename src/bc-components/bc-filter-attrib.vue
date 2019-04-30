@@ -273,12 +273,9 @@
                     // eslint-disable-next-line prefer-destructuring
                     let attr = currentCriteria.attr;
                     const isOtherUI = attr.indexOf('.');
-                    // eslint-disable-next-line max-depth
                     if (isOtherUI !== -1) {
                         currentCriteria.attr = attr.substr(isOtherUI + 1, attr.length);
                         attr = attr.substr(0, isOtherUI);
-
-                        // eslint-disable-next-line prefer-destructuring
                         this.$set(criteria, 'attr', attr);
                     }
                 }
@@ -301,18 +298,6 @@
                 this.$set(criteria, 'attr', ui);
                 this.$delete(criteria, 'oper');
                 this.$delete(criteria, 'val');
-            },
-            mountCriteriaByOtherUIRecursive(criteria) {
-                for (const localCriteria of criteria) {
-                    const isOtherUI = localCriteria.attr.indexOf('.');
-                    if (isOtherUI === -1) {
-                        return;
-                    }
-                    const ui = localCriteria.attr.substr(0, isOtherUI);
-                    this.$set(criteria, 'attr', ui);
-                    this.$set(localCriteria, 'attr', localCriteria.attr.substr(isOtherUI + 1, localCriteria.attr.length));
-                }
-
             },
             generateHash(item) {
                 if (item.hash) {
