@@ -48,6 +48,7 @@
                 :filter="criteria"
                 :count-level="localCountLevel"
                 :ui="selectedAttrib.metaType"
+                :father-attr="teste()"
                 :selected-attrib="selectedAttrib"
                 ref="attribGroup">
             </bc-attrib-group>
@@ -80,7 +81,8 @@
             },
             metaAttribs: Array,
             ui: String,
-            fatherAttr: String,
+            fatherAttr: Object,
+            child: Boolean,
             countLevel: Number
         },
         data() {
@@ -92,6 +94,9 @@
             };
         },
         methods: {
+            teste() {
+                if (this.child) return this.selectedAttrib;
+            },
             validaDados() {
                 if (this.selectedAttrib && this.selectedAttrib.type === '_meta_ui') {
                     return this.$refs.attribGroup.validaDados();
@@ -151,7 +156,7 @@
                 this.localAttribs = this.localAttribs.filter(attrib => {
                     return attrib.type !== '_audio' && attrib.type !== '_coordenada';
                 });
-                if (this.localCountLevel > 1) {
+                if (this.child || (this.fatherAttr && this.fatherAttr.type === '_meta_ui')) {
                     this.localAttribs = this.localAttribs.filter(attrib => {
                         return attrib.type !== '_meta_ui';
                     });
@@ -193,6 +198,11 @@
                             attr = this.criteria.attr.substr(0, isOtherUI);
                         }
                     }
+                }
+                if (this.fatherAttr && this.fatherAttr.type === '_meta_ui') {
+                    this.metaAttribs = this.metaAttribs.filter(attrib => {
+                        return attrib.type !== '_meta_ui';
+                    });
                 }
                 for (const attrib of this.metaAttribs) {
                     if (attrib.name === attr) {
@@ -316,8 +326,14 @@
                 if (Object.entries(this.criteria).length) return;
                 this.selectedAttrib = null;
             },
-            ui() {
-                this.getAttribsFromUI();
+            // ui() {
+            //     this.getAttribsFromUI();
+            // },
+            metaAttribs: {
+                handler() {
+                    this.localAttribs = this.metaAttribs;
+                },
+                deep: true
             }
         }
     };

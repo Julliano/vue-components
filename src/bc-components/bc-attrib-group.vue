@@ -13,6 +13,7 @@
             @meta-attrib-removed="onAttribRemoved(idx)"
             :meta-attribs="localMetaAttribs"
             :criteria="localCriteria"
+            :child="true"
             :count-level="localCountLevel"
             :ui="ui" ref="attrib">
         </component>
@@ -41,6 +42,7 @@
             ui: String,
             selectedAttrib: Object,
             metaAttribs: Array,
+            fatherAttr: Object,
             countLevel: Number
         },
         data() {
@@ -83,8 +85,8 @@
                 }
                 return dadosValidos;
             },
-            async getAttribsFromUI(ui) {
-                this.localMetaAttribs = await bcService.getAttribsFromUI(ui);
+            async getAttribsFromUI() {
+                this.localMetaAttribs = await bcService.getAttribsFromUI(this.ui);
                 this.localMetaAttribs.sort((e1, e2) => {
                     const l1 = e1.label.normalize('NFD');
                     const l2 = e2.label.normalize('NFD');
@@ -94,7 +96,7 @@
                 this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
                     return attrib.type !== '_audio' && attrib.type !== '_coordenada';
                 });
-                if (this.localCountLevel > 1) {
+                if (this.fatherAttr && this.fatherAttr.type === '_meta_ui') {
                     this.localMetaAttribs = this.localMetaAttribs.filter(attrib => {
                         return attrib.type !== '_meta_ui';
                     });
@@ -181,6 +183,11 @@
                     return item.hash;
                 }
                 return item.hash = Math.random();
+            }
+        },
+        watch: {
+            ui() {
+                this.getAttribsFromUI();
             }
         }
     };
