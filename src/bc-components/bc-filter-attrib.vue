@@ -46,9 +46,8 @@
                 class="meta-ui margin-top" v-if="selectedAttrib && selectedAttrib.type === '_meta_ui'"
                 :meta-attribs="metaAttribs"
                 :filter="criteria"
-                :count-level="localCountLevel"
                 :ui="selectedAttrib.metaType"
-                :father-attr="teste()"
+                :father-attr="checkChild()"
                 :selected-attrib="selectedAttrib"
                 ref="attribGroup">
             </bc-attrib-group>
@@ -82,20 +81,18 @@
             metaAttribs: Array,
             ui: String,
             fatherAttr: Object,
-            child: Boolean,
-            countLevel: Number
+            child: Boolean
         },
         data() {
             return {
                 localAttribs: null,
-                selectedAttrib: null,
-                localCountLevel: this.countLevel || 0,
-                lastSelectedAttrib: null
+                selectedAttrib: null
             };
         },
         methods: {
-            teste() {
+            checkChild() {
                 if (this.child) return this.selectedAttrib;
+                return null;
             },
             validaDados() {
                 if (this.selectedAttrib && this.selectedAttrib.type === '_meta_ui') {
@@ -128,15 +125,6 @@
                 if (this.selectedAttrib.type === '_meta_ui') {
                     this.$set(this.criteria, 'operator', 'AND');
                     this.$set(this.criteria, 'criteria', [{}]);
-                    if (!this.lastSelectedAttrib) {
-                        this.localCountLevel++;
-                    }
-                    this.lastSelectedAttrib = this.selectedAttrib;
-                } else {
-                    this.lastSelectedAttrib = null;
-                    if (this.localCountLevel > 0) {
-                        this.localCountLevel--;
-                    }
                 }
                 this.$emit('meta-attrib-selected', this.selectedAttrib);
             },
@@ -161,7 +149,6 @@
                         return attrib.type !== '_meta_ui';
                     });
                 }
-                console.log(this.localAttribs);
             },
             onMetaOperatorSelected(operator, criteria) {
                 if (!operator) {

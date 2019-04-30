@@ -14,7 +14,6 @@
             :meta-attribs="localMetaAttribs"
             :criteria="localCriteria"
             :child="true"
-            :count-level="localCountLevel"
             :ui="ui" ref="attrib">
         </component>
         </bc-filter-group>
@@ -42,14 +41,12 @@
             ui: String,
             selectedAttrib: Object,
             metaAttribs: Array,
-            fatherAttr: Object,
-            countLevel: Number
+            fatherAttr: Object
         },
         data() {
             return {
                 localMetaAttribs: this.metaAttribs || [],
                 localAttrib: this.selectedAttrib || {},
-                localCountLevel: this.countLevel,
                 bcFilterAttrib
             };
         },
@@ -124,10 +121,8 @@
                     this.$delete(localCriteria, 'attr');
                     this.$delete(localCriteria, 'operator');
                     this.$delete(localCriteria, 'criteria');
-                    // this.localCountLevel++;
                     this.$forceUpdate();
                 } else {
-                    // this.localCountLevel--;
                 }
                 this.$set(localCriteria, 'attr', localAttrib.name);
                 this.mountNewAttrib(localAttrib, localCriteria);
