@@ -36,7 +36,12 @@
         props: {
             val: Array,
             lookUp: String,
-            hierarchy: Array
+            hierarchy: Array,
+            child: {
+                type: Boolean,
+                default: false
+            },
+            fatherId: Object
         },
         data() {
             return {
@@ -46,7 +51,8 @@
         },
         async created() {
             // emitir evendo de erro caso de treta
-            if (this.lookUp) {
+            console.log(!this.child && this.lookUp);
+            if (!this.child && this.lookUp) {
                 this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
             }
             this.checkVal();
@@ -67,11 +73,20 @@
                     return this.$emit('change', null);
                 }
                 return this.$emit('change', [this.field.id]);
+            },
+            async fildsFiltereds() {
+                if (this.fatherId) {
+                    this.options = await
+                    bcService.getTipoSelecaoHierarquicoOptions(this.lookUp, this.fatherId.id);
+                }
             }
         },
         watch: {
             field() {
                 this.handleValue();
+            },
+            fatherId() {
+                this.fildsFiltereds();
             }
         }
     };

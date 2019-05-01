@@ -11,10 +11,13 @@
         align-items: center;
         margin-left: 5px;
     }
+    .inline {
+        display: inline-flex;
+    }
 </style>
 
 <template>
-    <div>
+    <div class="inline">
         <div class="bc-meta-selection-field margin-left" v-if="localHierarchy">
             <div class="options-container" v-for="(each, index) in localHierarchy" :key="index">
                 <select class="inp" @change="setHierarchy(index)" v-model="selecteds[index]">
@@ -26,13 +29,16 @@
                 </select>
             </div>
         </div>
+        <meta-selection :hierarchy="hierarchy" :look-up="lookUp"
+                        :val="val" :child="true" :father-id="fatherId()" ref="metaSelector">
+        </meta-selection>
     </div>
 </template>
 
 <script>
 
     import bcService from '../services/bc-services.js';
-    // import metaSelection from './bc-meta-selection.vue';
+    import metaSelection from './bc-meta-selection.vue';
 
     export default {
         name: 'bc-meta-selection-hierarchy',
@@ -40,6 +46,9 @@
             val: Array,
             lookUp: String,
             hierarchy: Array
+        },
+        components: {
+            metaSelection
         },
         data() {
             return {
@@ -64,6 +73,9 @@
                     bcService.getTipoSelecaoHierarquicoOptions(this.localHierarchy[index], id);
                 }
                 this.$set(this.options, index, response);
+            },
+            fatherId() {
+                return this.selecteds[this.hierarchy.length - 1];
             },
             setHierarchy(index) {
                 if (this.localHierarchy[index + 1]) {
