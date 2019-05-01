@@ -2,7 +2,7 @@
     @import "../styles/variables";
     @import "../styles/buttons";
 
-    .bc-text-field {
+    .bc-meta-selection-field {
         display: inline-flex;
         flex-direction: column;
     }
@@ -14,7 +14,7 @@
 
 <template>
     <div>
-        <div class="bc-text-field margin-left">
+        <div class="bc-meta-selection-field margin-left">
             <div class="options-container">
                 <select class="inp" v-model="field">
                     <option :value="null" disabled>Selecione</option>
@@ -35,7 +35,8 @@
         name: 'bc-meta-selection',
         props: {
             val: Array,
-            lookUp: String
+            lookUp: String,
+            hierarchy: Array
         },
         data() {
             return {

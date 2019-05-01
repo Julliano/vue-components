@@ -23,7 +23,7 @@
             <div class="options-container">
                 <component class="date-type" :is="dynamicComponentDate"
                     @data-option-selected="dateOptionSelected"
-                    :val="criteria.val" :lookUp="lookUp"
+                    :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
                     @change="change">
                 </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
@@ -55,6 +55,7 @@
 
     import i18n from './utils/i18n.js';
     import metaSelection from './bc-field-options/bc-meta-selection.vue';
+    import metaSelectionHierarchy from './bc-field-options/bc-meta-selection-hierarchy.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
 
@@ -69,7 +70,8 @@
             autoComplete: Boolean,
             attribName: String,
             criteria: Object,
-            lookUp: String
+            lookUp: String,
+            hierarchy: Array
         },
         components: {
             bcService,
@@ -92,7 +94,8 @@
                         if (!this.criteria.val) {
                             this.$set(this.criteria, 'val', []);
                         }
-                        return metaSelection;
+                        if (!this.hierarchy) return metaSelection;
+                        return metaSelectionHierarchy;
                     default:
                         this.show = true;
                         return null;

@@ -17,7 +17,7 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoAttrib" :val="val" @change="change"></component>
+                <component :is="dynamicComponent" :tipo="tipoAttrib" :hierarchy="hierarchy" :val="val" @change="change"></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -52,7 +52,8 @@
             val: {
                 type: Array,
                 default: () => []
-            }
+            },
+            hierarchy: Array
         },
         data() {
             return {

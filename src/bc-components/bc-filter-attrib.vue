@@ -36,6 +36,7 @@
                     :auto-complete="selectedAttrib.autocomplete" :look-up="selectedAttrib.lookup"
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
                     :attrib-name="selectedAttrib.name" :criteria="item"
+                    :hierarchy="selectedAttrib.hierarchy"
                     @meta-operator-selected="onMetaOperatorSelected($event, item)"
                     @meta-operator-removed="fireAttribRemoved"
                     @data-option-selected="onDataOptionSelected($event, idx)"

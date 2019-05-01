@@ -30,83 +30,84 @@
         // eslint-disable-next-line max-lines-per-function
         data() {
             return {
-                listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica'],
+                listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica', 'dc_historico_local', 'geo_endereco'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
                 jsonBuffer: null,
-                filter: [
-                    {
-                        ui: 'dc_agenda',
-                        sources: [],
-                        filter: {
-                            OR: [
-                                // {
-                                //     attr: 'nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João']
-                                // },
-                                {
-                                    AND: [
-                                        {
-                                            attr: 'alvo.nome',
-                                            oper: 'EQUAL',
-                                            val: ['João111111111']
-                                        },
-                                        {
-                                            attr: 'alvo.nome',
-                                            oper: 'EQUAL',
-                                            val: ['João222222222222']
-                                        },
-                                        {
-                                            OR: [
-                                                {
-                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                                    oper: 'EQUAL',
-                                                    val: ['4']
-                                                },
-                                                {
-                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                                    oper: 'EQUAL',
-                                                    val: ['3']
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    attr: 'alvo.nome',
-                                    oper: 'EQUAL',
-                                    val: ['João111111111']
-                                },
-                                // {
-                                //     attr: 'alvo.nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João']
-                                // }
-                                // {
-                                //     attr: 'alvo.nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João11111111111111111']
-                                // },
-                                {
-                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                    oper: 'EQUAL',
-                                    val: ['4']
-                                },
-                                // {
-                                //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                //     oper: 'EQUAL',
-                                //     val: ['3']
-                                // },
-                                {
-                                    attr: 'nome',
-                                    oper: 'EQUAL',
-                                    val: ['João22222222222222']
-                                }
-                            ]
-                        }
-                    }
-                ],
+                filter: [],
+                // filter: [
+                //     {
+                //         ui: 'dc_agenda',
+                //         sources: [],
+                //         filter: {
+                //             OR: [
+                //                 // {
+                //                 //     attr: 'nome',
+                //                 //     oper: 'EQUAL',
+                //                 //     val: ['João']
+                //                 // },
+                //                 {
+                //                     AND: [
+                //                         {
+                //                             attr: 'alvo.nome',
+                //                             oper: 'EQUAL',
+                //                             val: ['João111111111']
+                //                         },
+                //                         {
+                //                             attr: 'alvo.nome',
+                //                             oper: 'EQUAL',
+                //                             val: ['João222222222222']
+                //                         },
+                //                         {
+                //                             OR: [
+                //                                 {
+                //                                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                //                                     oper: 'EQUAL',
+                //                                     val: ['4']
+                //                                 },
+                //                                 {
+                //                                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                //                                     oper: 'EQUAL',
+                //                                     val: ['3']
+                //                                 }
+                //                             ]
+                //                         }
+                //                     ]
+                //                 },
+                //                 {
+                //                     attr: 'alvo.nome',
+                //                     oper: 'EQUAL',
+                //                     val: ['João111111111']
+                //                 },
+                //                 // {
+                //                 //     attr: 'alvo.nome',
+                //                 //     oper: 'EQUAL',
+                //                 //     val: ['João']
+                //                 // }
+                //                 // {
+                //                 //     attr: 'alvo.nome',
+                //                 //     oper: 'EQUAL',
+                //                 //     val: ['João11111111111111111']
+                //                 // },
+                //                 {
+                //                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                //                     oper: 'EQUAL',
+                //                     val: ['4']
+                //                 },
+                //                 // {
+                //                 //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                //                 //     oper: 'EQUAL',
+                //                 //     val: ['3']
+                //                 // },
+                //                 {
+                //                     attr: 'nome',
+                //                     oper: 'EQUAL',
+                //                     val: ['João22222222222222']
+                //                 }
+                //             ]
+                //         }
+                //     }
+                // ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
                 profile: {}

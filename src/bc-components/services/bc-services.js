@@ -97,11 +97,10 @@ export default {
 
     getTipoSelecaoOptions(tipoSelec) {
         return dispatcher.doGet(`lookup/${tipoSelec}`);
-        // return [
-        //     {id: 'S', value: 'Sim'},
-        //     {id: 'N', value: 'Não'}
-        // ];
-        // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    },
+
+    getTipoSelecaoHierarquicoOptions(tipoSelec, id) {
+        return dispatcher.doGet(`lookup/${tipoSelec}/?filter=${id}`);
     },
 
     async getSearchProfiles(param, idAplicacao) {
