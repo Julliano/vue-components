@@ -80,7 +80,6 @@
                     ui: null,
                     operator: null,
                     criteria: [],
-                    sources: [],
                     hash: Math.random()
                 }],
                 jsonMounted: Object.entries(this.profileSeleted).length ?
@@ -145,8 +144,7 @@
                     {
                         ui: null,
                         criteria: [],
-                        operator: null,
-                        sources: []
+                        operator: null
                     }
                 );
             },
@@ -184,8 +182,7 @@
                         {
                             ui: null,
                             criteria: [],
-                            operator: null,
-                            sources: []
+                            operator: null
                         }
                     );
                 }

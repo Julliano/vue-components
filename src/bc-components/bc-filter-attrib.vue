@@ -144,7 +144,8 @@
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
                 this.localAttribs = this.localAttribs.filter(attrib => {
-                    return attrib.type !== '_audio' && attrib.type !== '_coordenada';
+                    return attrib.type !== '_audio' && attrib.type !== '_coordenada'  &&
+                        attrib.type !== '_arquivo' && attrib.type !== '_imagem';
                 });
                 if (this.child || (this.fatherAttr && this.fatherAttr.type === '_meta_ui')) {
                     this.localAttribs = this.localAttribs.filter(attrib => {
@@ -300,9 +301,6 @@
                 if (Object.entries(this.criteria).length) return;
                 this.selectedAttrib = null;
             },
-            // ui() {
-            //     this.getAttribsFromUI();
-            // },
             metaAttribs: {
                 handler() {
                     this.localAttribs = this.metaAttribs;

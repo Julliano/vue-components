@@ -109,8 +109,9 @@
                 });
             },
             hasSourceSelected() {
-                for (const source of this.getAppliedSources()) {
-                    if (source.type !== BC.type) {
+                for (const sourceId of this.getAppliedSources()) {
+                    const srcItem = this.sources.filter(src => src.id === sourceId);
+                    if (srcItem[0].type !== BC.type) {
                         return true;
                     }
                 }
@@ -138,12 +139,20 @@
             save() {
                 this.$refs.menu.onClickHeader();
                 this.searchInput = '';
-                this.$emit('apply', JSON.parse(JSON.stringify(this.sources.filter((source) => source.checked))));
+                this.checkIfAtLeastOneIsChecked();
+                this.$emit('apply', this.sources.filter((source) => source.checked).map(obj => obj.id));
+            },
+            checkIfAtLeastOneIsChecked() {
+                const checkedSources = this.sources.filter((source) => source.checked);
+                if (checkedSources.length === 0) {
+                    const bc = this.sources.filter((source) => source.id === BC.id);
+                    bc[0].checked = true;
+                }
             },
             getAppliedSources() {
                 const srcs = (this.sourcesSelectedProp || []);
-                if (!this.sourcesSelectedProp) {
-                    srcs.push(BC);
+                if (!this.sourcesSelectedProp || this.sourcesSelectedProp.length === 0) {
+                    srcs.push(BC.id);
                 }
                 return srcs;
             },

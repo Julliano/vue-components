@@ -5,6 +5,7 @@
     .bc-filter-operator {
       display: inline-flex;
       flex-direction: column;
+      margin-left: 5px;
       .options-container {
         display: inline-flex;
         align-items: center;
@@ -21,7 +22,7 @@
                     <component :is="dynamicComponentDate"
                         @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
                         :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
-                        @change="change" ref="metaHierarchy">
+                        @change="change" ref="metaSelection">
                     </component>
                 </keep-alive>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
@@ -38,9 +39,11 @@
                     @meta-field-selected="onMetaFieldSelected($event, idx)"
                     @meta-field-removed="fireOperatorRemoved"
                     @change="change"
+                    @destroy-period="deletePeriod"
                     :val="criteria.val" :operator="localOperator.name"
                     :autoComplete="autoComplete"
                     :tipo-attrib="tipoAttrib"
+                    :period="period"
                     ref="filterField"
                 >
                 </bc-filter-fields>
@@ -80,7 +83,8 @@
                 localOperator: null,
                 metaOperators: [],
                 dateOption: {},
-                show: true
+                show: true,
+                period: []
             };
         },
         computed: {
@@ -135,6 +139,8 @@
                         this.handleDateHour();
                     case '_data_hora':
                         this.handleDateHour();
+                    case '_data':
+                        this.handleDateHour();
                 }
                 if (!this.criteria.val) {
                     this.$set(this.criteria, 'val', []);
@@ -162,7 +168,16 @@
                     if (this.criteria.val && this.criteria.val.length > 1) {
                         this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
                     }
+                    return;
                 }
+
+                if (this.localOperator.name === 'PERIOD') {
+                    this.$set(this.criteria, 'val', []);
+                    this.period = this.localOperator.options;
+                }
+            },
+            deletePeriod() {
+                this.$set(this.criteria, 'val', []);
             },
             async getOperators() {
                 if (!this.attribName) return;
@@ -201,8 +216,12 @@
         watch: {
             attribName() {
                 this.attribChanged();
-                if (this.tipoAttrib === '_tipo_selecao' && this.hierarchy && this.$refs.metaHierarchy) {
-                    this.$refs.metaHierarchy.updateOptions();
+                if (this.tipoAttrib === '_tipo_selecao') {
+                    if (this.hierarchy && this.$refs.metaSelection) {
+                        this.$refs.metaSelection.updateOptions();
+                    } else {
+                        this.$refs.metaSelection && this.$refs.metaSelection.updateOptions(this.lookUp);
+                    }
                 }
             }
         }

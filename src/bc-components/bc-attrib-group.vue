@@ -70,7 +70,7 @@
                     if (componente.selectedAttrib) {
                         quantiaAtribSelecionada++;
                     } else {
-                        return;
+                        return false;
                     }
                     if (!componente.validaDados()) {
                         dadosValidos = false;
