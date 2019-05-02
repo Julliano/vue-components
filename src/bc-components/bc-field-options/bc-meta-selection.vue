@@ -5,7 +5,6 @@
     .bc-meta-selection-field {
       display: inline-flex;
       flex-direction: column;
-      margin-left: 5px;
       .options-container {
         display: inline-flex;
         align-items: center;
@@ -55,11 +54,14 @@
         async created() {
             // emitir evendo de erro caso de treta
             if (!this.child && this.lookUp) {
-                this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
+                await this.getSelectionOptions(this.lookUp);
             }
             this.checkVal();
         },
         methods: {
+            async getSelectionOptions(lookUp) {
+                this.options = await bcService.getTipoSelecaoOptions(lookUp);
+            },
             checkVal() {
                 if (this.val[0]) {
                     let option = this.options.filter(op => {
@@ -69,6 +71,9 @@
                         [this.field] = [...option];
                     }
                 }
+            },
+            async updateOptions(lookUp) {
+                await this.getSelectionOptions(lookUp);
             },
             handleValue() {
                 if (this.field === '') {

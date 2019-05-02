@@ -15,7 +15,7 @@
         <button @click="getJson"> Teste </button>
         <h4>bc-filter</h4>
         <bc-filter :list-uis="listUis" :source-types="sourceTypes" :profile-seleted="profile" :tipo-pesquisa="tipoBusca"
-            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter" :flatLevel="flatLevel"></bc-filter>
+            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter"></bc-filter>
     </div>
 </template>
 

@@ -5,6 +5,7 @@
     .bc-filter-operator {
       display: inline-flex;
       flex-direction: column;
+      margin-left: 5px;
       .options-container {
         display: inline-flex;
         align-items: center;
@@ -19,7 +20,7 @@
                 <component :is="dynamicComponentDate"
                     @data-option-selected="dateOptionSelected"
                     :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
-                    @change="change" ref="metaHierarchy">
+                    @change="change" ref="metaSelection">
                 </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
@@ -209,8 +210,12 @@
         watch: {
             attribName() {
                 this.attribChanged();
-                if (this.tipoAttrib === '_tipo_selecao' && this.hierarchy && this.$refs.metaHierarchy) {
-                    this.$refs.metaHierarchy.updateOptions();
+                if (this.tipoAttrib === '_tipo_selecao') {
+                    if (this.hierarchy && this.$refs.metaSelection) {
+                        this.$refs.metaSelection.updateOptions();
+                    } else {
+                        this.$refs.metaSelection && this.$refs.metaSelection.updateOptions(this.lookUp);
+                    }
                 }
             }
         }
