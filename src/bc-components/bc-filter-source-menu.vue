@@ -138,7 +138,7 @@
             save() {
                 this.$refs.menu.onClickHeader();
                 this.searchInput = '';
-                this.$emit('apply', JSON.parse(JSON.stringify(this.sources.filter((source) => source.checked))));
+                this.$emit('apply', this.sources.filter((source) => source.checked).map(obj => obj.id));
             },
             getAppliedSources() {
                 const srcs = (this.sourcesSelectedProp || []);
