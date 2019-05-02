@@ -155,7 +155,7 @@
                     this.createStars();
                     this.selectedRating = this.currentRating;
                     // informa o component pai que o rating foi alterado;
-                    this.$emit('rating-selected', this.currentRating);
+                    this.$emit('rating-selected', undefined);
                     this.ratingSelected = true;
                 }
             },
