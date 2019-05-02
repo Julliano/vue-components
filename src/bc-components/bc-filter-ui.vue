@@ -180,6 +180,11 @@
                     const l2 = e2.label.normalize('NFD');
                     return l1 < l2 ? -1 : (l1 > l2 ? 1 : 0);
                 });
+
+                this.attribs = this.attribs.filter(attrib => {
+                    return attrib.type !== '_audio' && attrib.type !== '_coordenada' &&
+                        attrib.type !== '_arquivo' && attrib.type !== '_imagem';
+                });
             },
             async fireUISelected(e) {
                 const metaUI = this.uis[e.target.value];

@@ -40,9 +40,11 @@
                     @meta-field-selected="onMetaFieldSelected($event, idx)"
                     @meta-field-removed="fireOperatorRemoved"
                     @change="change"
+                    @destroy-period="deletePeriod"
                     :val="criteria.val" :operator="localOperator.name"
                     :autoComplete="autoComplete"
                     :tipo-attrib="tipoAttrib"
+                    :period="period"
                     ref="filterField"
                 >
                 </bc-filter-fields>
@@ -82,7 +84,8 @@
                 localOperator: null,
                 metaOperators: [],
                 dateOption: {},
-                show: true
+                show: true,
+                period: []
             };
         },
         computed: {
@@ -137,6 +140,8 @@
                         this.handleDateHour();
                     case '_data_hora':
                         this.handleDateHour();
+                    case '_data':
+                        this.handleDateHour();
                 }
                 if (!this.criteria.val) {
                     this.$set(this.criteria, 'val', []);
@@ -161,7 +166,16 @@
                     if (this.criteria.val && this.criteria.val.length > 1) {
                         this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
                     }
+                    return;
                 }
+
+                if (this.localOperator.name === 'PERIOD') {
+                    this.$set(this.criteria, 'val', []);
+                    this.period = this.localOperator.options;
+                }
+            },
+            deletePeriod() {
+                this.$set(this.criteria, 'val', []);
             },
             async getOperators() {
                 if (!this.attribName) return;

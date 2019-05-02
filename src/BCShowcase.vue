@@ -34,7 +34,6 @@
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
                 jsonBuffer: null,
-                flatLevel: true,
                 filter: [
                     {
                         ui: 'dc_agenda',

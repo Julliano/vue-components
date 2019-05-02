@@ -5,7 +5,6 @@
     .bc-date-combo {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
     }
     .options-container {
         display: inline-flex;
@@ -17,11 +16,10 @@
     <div>
         <div class="bc-date-combo">
             <div class="options-container">
-                <select class="inp" @change="change">
-                    <option value="" disabled :selected="dateSelected.id === null">Selecione</option>
-                    <option v-for="(date, idx) in dates" :key="idx" :value="idx"
-                        :selected="dateSelected.id === date.id">
-                            {{date.label}}
+                <select class="inp" v-model="field">
+                    <option :value="null" disabled>{{'select' | i18n}}</option>
+                    <option v-for="period in periods" :key="period" :value="period">
+                            {{period.label}}
                     </option>
                 </select>
             </div>
@@ -30,46 +28,29 @@
 </template>
 
 <script>
-
+    import i18n from '../utils/i18n.js';
     export default {
         name: 'bc-date-combo',
+        mixins: [i18n.mixin],
+        props: {
+            periods: Array
+        },
         data() {
             return {
-                dates: [
-                    {
-                        id: 1,
-                        label: 'Última semana'
-                    },
-                    {
-                        id: 2,
-                        label: 'Últimas 2 semanas'
-                    },
-                    {
-                        id: 3,
-                        label: 'Últimas 3 semanas'
-                    },
-                    {
-                        id: 4,
-                        label: 'Último mês'
-                    },
-                    {
-                        id: 5,
-                        label: 'Últimos 2 meses'
-                    },
-                    {
-                        id: 6,
-                        label: 'Últimos 3 meses'
-                    }
-                ],
-                dateSelected: {
-                    id: ''
-                }
+                field: null
             };
         },
+        destroyed() {
+            this.$emit('destroy-period');
+        },
         methods: {
-            change(e) {
-                this.dateSelected = this.dates[e.target.value];
-                this.$emit('change', [this.dateSelected]);
+            handleValue() {
+                this.$emit('change', [this.field.name]);
+            }
+        },
+        watch: {
+            field() {
+                this.handleValue();
             }
         }
     };

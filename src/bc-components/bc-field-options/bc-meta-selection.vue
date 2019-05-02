@@ -17,7 +17,7 @@
         <div class="bc-meta-selection-field margin-left">
             <div class="options-container">
                 <select class="inp" v-model="field">
-                    <option :value="null" disabled>Selecione</option>
+                    <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">
                             {{date.value}}
                     </option>
@@ -30,9 +30,11 @@
 <script>
 
     import bcService from '../services/bc-services.js';
+    import i18n from '../utils/i18n.js';
 
     export default {
         name: 'bc-meta-selection',
+        mixins: [i18n.mixin],
         props: {
             val: Array,
             lookUp: String,
