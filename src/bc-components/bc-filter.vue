@@ -80,7 +80,6 @@
                     ui: null,
                     operator: null,
                     criteria: [],
-                    sources: [],
                     hash: Math.random()
                 }],
                 jsonMounted: Object.entries(this.profileSeleted).length ?
@@ -103,13 +102,14 @@
                         return true;
                     }
                     if (!componente.uiFilter || !componente.uiFilter.ui) {
-                        return;
+                        return false;
                     }
                     const valido = componente.validaDados();
                     if (!valido) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 if (!dadosValidos) {
                     this.handleEvent('json-error', 'error');
@@ -144,8 +144,7 @@
                     {
                         ui: null,
                         criteria: [],
-                        operator: null,
-                        sources: []
+                        operator: null
                     }
                 );
             },
@@ -183,8 +182,7 @@
                         {
                             ui: null,
                             criteria: [],
-                            operator: null,
-                            sources: []
+                            operator: null
                         }
                     );
                 }

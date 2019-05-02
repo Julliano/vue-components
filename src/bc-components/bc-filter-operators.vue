@@ -3,17 +3,12 @@
     @import "styles/buttons";
 
     .bc-filter-operator {
+      display: inline-flex;
+      flex-direction: column;
+      .options-container {
         display: inline-flex;
-        flex-direction: column;
-        margin-left: 5px;
-        .options-container {
-            display: inline-flex;
-            align-items: center;
-            .date-type {
-                // margin-right: 5px;
-                margin-left: -8px;
-            }
-        }
+        align-items: center;
+      }
     }
 </style>
 
@@ -21,10 +16,10 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <component class="date-type" :is="dynamicComponentDate"
+                <component :is="dynamicComponentDate"
                     @data-option-selected="dateOptionSelected"
                     :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
-                    @change="change">
+                    @change="change" ref="metaHierarchy">
                 </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
@@ -214,6 +209,9 @@
         watch: {
             attribName() {
                 this.attribChanged();
+                if (this.tipoAttrib === '_tipo_selecao' && this.hierarchy && this.$refs.metaHierarchy) {
+                    this.$refs.metaHierarchy.updateOptions();
+                }
             }
         }
     };

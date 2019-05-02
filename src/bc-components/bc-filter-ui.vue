@@ -129,12 +129,13 @@
                 let dadosValidos = true;
                 this.$refs.attrib.some(componente => {
                     if (!componente.selectedAttrib) {
-                        return;
+                        return false;
                     }
                     if (!componente.validaDados()) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 return dadosValidos;
             },
@@ -153,7 +154,7 @@
                 this.uis = await bcService.getLabelUIs(this.logicNameUis);
             },
             applySelectedFilters(sourcesSelected) {
-                this.ui.sourcesSelected = sourcesSelected;
+                this.$set(this.uiFilter, 'sources', sourcesSelected);
                 this.$forceUpdate();
             },
             renameKey(obj, oldName, newName) {

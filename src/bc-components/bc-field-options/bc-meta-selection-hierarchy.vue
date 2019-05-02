@@ -2,23 +2,23 @@
     @import "../styles/variables";
     @import "../styles/buttons";
 
-    .bc-meta-selection-field {
+    .inline {
+      display: inline-flex;
+      .bc-meta-selection-field {
         display: inline;
         flex-direction: column;
-    }
-    .options-container {
-        display: inline-flex;
-        align-items: center;
-        margin-left: 5px;
-    }
-    .inline {
-        display: inline-flex;
+        .options-container {
+          display: inline-flex;
+          align-items: center;
+          margin-left: 5px;
+        }
+      }
     }
 </style>
 
 <template>
     <div class="inline">
-        <div class="bc-meta-selection-field margin-left" v-if="localHierarchy">
+        <div class="bc-meta-selection-field" v-if="localHierarchy">
             <div class="options-container" v-for="(each, index) in localHierarchy" :key="index">
                 <select class="inp" @change="setHierarchy(index)" v-model="selecteds[index]">
                     <option :value="undefined" disabled>Selecione</option>
@@ -29,7 +29,7 @@
                 </select>
             </div>
         </div>
-        <meta-selection :hierarchy="hierarchy" :look-up="lookUp"
+        <meta-selection :hierarchy="hierarchy" :look-up="lookUp" @change="change"
                         :val="val" :child="true" :father-id="fatherId()" ref="metaSelector">
         </meta-selection>
     </div>
@@ -82,21 +82,17 @@
                     this.getOptions(index + 1, this.selecteds[index].id);
                 }
             },
-            checkVal() {
-                if (this.val[0]) {
-                    let option = this.options.filter(op => {
-                        return op.id === this.val[0];
-                    });
-                    if (option) {
-                        [this.field] = [...option];
-                    }
-                }
+            updateOptions() {
+                this.options = [];
+                this.selecteds = [];
+                this.localHierarchy = null;
+                this.$nextTick(() => {
+                    this.localHierarchy = this.hierarchy.slice().reverse();
+                    this.getOptions(0);
+                });
             },
-            handleValue() {
-                if (this.field === '') {
-                    return this.$emit('change', null);
-                }
-                return this.$emit('change', [this.field.id]);
+            change(val) {
+                this.$emit('change', val);
             }
         }
     };
