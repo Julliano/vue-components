@@ -70,12 +70,13 @@
                     if (componente.selectedAttrib) {
                         quantiaAtribSelecionada++;
                     } else {
-                        return;
+                        return false;
                     }
                     if (!componente.validaDados()) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 if (quantiaAtribSelecionada === 0) {
                     return false;
