@@ -103,13 +103,14 @@
                         return true;
                     }
                     if (!componente.uiFilter || !componente.uiFilter.ui) {
-                        return;
+                        return false;
                     }
                     const valido = componente.validaDados();
                     if (!valido) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 if (!dadosValidos) {
                     this.handleEvent('json-error', 'error');

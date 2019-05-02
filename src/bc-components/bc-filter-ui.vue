@@ -129,12 +129,13 @@
                 let dadosValidos = true;
                 this.$refs.attrib.some(componente => {
                     if (!componente.selectedAttrib) {
-                        return;
+                        return false;
                     }
                     if (!componente.validaDados()) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 return dadosValidos;
             },
