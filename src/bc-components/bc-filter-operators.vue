@@ -8,6 +8,7 @@
       .options-container {
         display: inline-flex;
         align-items: center;
+        margin-left: 5px;
       }
     }
 </style>
@@ -16,11 +17,13 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <component :is="dynamicComponentDate"
-                    @data-option-selected="dateOptionSelected"
-                    :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
-                    @change="change" ref="metaHierarchy">
-                </component>
+                <keep-alive>
+                    <component :is="dynamicComponentDate"
+                        @data-option-selected="dateOptionSelected"
+                        :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
+                        @change="change" ref="metaHierarchy">
+                    </component>
+                </keep-alive>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">

@@ -112,7 +112,7 @@
                     }
                 });
                 if (!dadosValidos) {
-                    this.handleEvent('json-error', 'error');
+                    this.handleEvent('jsonError', 'error');
                     return;
                 }
                 let copyUis = JSON.parse(JSON.stringify(this.uis));

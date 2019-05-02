@@ -11,6 +11,9 @@
           display: inline-flex;
           align-items: center;
           margin-left: 5px;
+          &:first-child {
+            margin-left: 0px;
+          }
         }
       }
     }
