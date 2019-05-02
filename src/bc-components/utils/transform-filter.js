@@ -157,6 +157,12 @@ function convertFilterViewToBC(viewFilter, first = true) {
                 if (uiFilter.attr) {
                     otherUI(uiFilter.attr, uiFilter.criteria);
                 }
+                if (uiFilter.criteria.length === 1) {
+                    // eslint-disable-next-line max-depth
+                    if (Object.entries(uiFilter.criteria[0]).length === 0) {
+                        continue;
+                    }
+                }
                 blockFilter.filter = {};
                 blockFilter.ui = uiFilter.ui;
                 blockFilter.sources = uiFilter.sources;
@@ -273,6 +279,9 @@ export function viewToBcFilter(viewFilter) {
     bcFilter = bcFilter.filter(each => {
         return each.filter;
     });
+    if (bcFilter.length === 0) {
+        return null;
+    }
     reduceFilter(bcFilter);
     return bcFilter;
 }
