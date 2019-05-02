@@ -69,7 +69,7 @@
                 }
             },
             handleValue() {
-                if (this.field === '') {
+                if (!this.field || this.field === '') {
                     return this.$emit('change', null);
                 }
                 return this.$emit('change', [this.field.id]);
@@ -83,7 +83,11 @@
             }
         },
         watch: {
-            field() {
+            async field() {
+                if (!this.options.length) {
+                    this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
+                }
+                this.checkVal();
                 this.handleValue();
             },
             fatherId() {

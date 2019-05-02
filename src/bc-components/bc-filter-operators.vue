@@ -19,8 +19,8 @@
             <div class="options-container">
                 <keep-alive>
                     <component :is="dynamicComponentDate"
-                        @data-option-selected="dateOptionSelected"
-                        :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy"
+                        @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
+                        :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
                         @change="change" ref="metaHierarchy">
                     </component>
                 </keep-alive>
@@ -144,6 +144,9 @@
                 }
                 this.$emit('meta-operator-selected', this.localOperator);
                 this.$forceUpdate();
+            },
+            setHierarchy(param) {
+                this.$set(this.criteria, 'hierarchy', param);
             },
             handleInt64() {
                 if (this.localOperator.name === 'OUT_OF_RANGE' || this.localOperator.name === 'RANGE') {
