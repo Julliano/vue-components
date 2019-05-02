@@ -153,7 +153,7 @@
                 this.uis = await bcService.getLabelUIs(this.logicNameUis);
             },
             applySelectedFilters(sourcesSelected) {
-                this.ui.sourcesSelected = sourcesSelected;
+                this.$set(this.uiFilter, 'sources', sourcesSelected);
                 this.$forceUpdate();
             },
             renameKey(obj, oldName, newName) {
