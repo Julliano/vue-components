@@ -66,7 +66,11 @@
                 type: Object,
                 default: {}
             },
-            tipoPesquisa: String
+            tipoPesquisa: String,
+            flatLevel: {
+                type: Boolean,
+                default: false
+            }
         },
         data() {
             return {
@@ -134,7 +138,7 @@
             },
             createEmptyUi() {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
-                if (hasEmptyUI.length) return;
+                if (hasEmptyUI.length || this.flatLevel) return;
                 // adiciona novo grupo de ui
                 this.uis.push(
                     {
@@ -174,6 +178,16 @@
             },
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);
+                if (!this.uis.length) {
+                    this.uis.push(
+                        {
+                            ui: null,
+                            criteria: [],
+                            operator: null,
+                            sources: []
+                        }
+                    );
+                }
                 if (!this.$refs.uiGroup) return;
                 this.$nextTick(()=>{
                     this.$refs.uiGroup.updateGroups();

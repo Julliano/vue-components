@@ -15,7 +15,7 @@
         <button @click="getJson"> Teste </button>
         <h4>bc-filter</h4>
         <bc-filter :list-uis="listUis" :source-types="sourceTypes" :profile-seleted="profile" :tipo-pesquisa="tipoBusca"
-            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter"></bc-filter>
+            :id-aplicacao="idAplicacao" :id-tipo-pesquisa="idTipoPesquisa" :filter="filter" :flatLevel="flatLevel"></bc-filter>
     </div>
 </template>
 
@@ -34,80 +34,80 @@
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
                 jsonBuffer: null,
-                filter: [],
-                // filter: [
-                //     {
-                //         ui: 'dc_agenda',
-                //         sources: [],
-                //         filter: {
-                //             OR: [
-                //                 // {
-                //                 //     attr: 'nome',
-                //                 //     oper: 'EQUAL',
-                //                 //     val: ['João']
-                //                 // },
-                //                 {
-                //                     AND: [
-                //                         {
-                //                             attr: 'alvo.nome',
-                //                             oper: 'EQUAL',
-                //                             val: ['João111111111']
-                //                         },
-                //                         {
-                //                             attr: 'alvo.nome',
-                //                             oper: 'EQUAL',
-                //                             val: ['João222222222222']
-                //                         },
-                //                         {
-                //                             OR: [
-                //                                 {
-                //                                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                                     oper: 'EQUAL',
-                //                                     val: ['4']
-                //                                 },
-                //                                 {
-                //                                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                                     oper: 'EQUAL',
-                //                                     val: ['3']
-                //                                 }
-                //                             ]
-                //                         }
-                //                     ]
-                //                 },
-                //                 {
-                //                     attr: 'alvo.nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João111111111']
-                //                 },
-                //                 // {
-                //                 //     attr: 'alvo.nome',
-                //                 //     oper: 'EQUAL',
-                //                 //     val: ['João']
-                //                 // }
-                //                 // {
-                //                 //     attr: 'alvo.nome',
-                //                 //     oper: 'EQUAL',
-                //                 //     val: ['João11111111111111111']
-                //                 // },
-                //                 {
-                //                     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                     oper: 'EQUAL',
-                //                     val: ['4']
-                //                 },
-                //                 // {
-                //                 //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                //                 //     oper: 'EQUAL',
-                //                 //     val: ['3']
-                //                 // },
-                //                 {
-                //                     attr: 'nome',
-                //                     oper: 'EQUAL',
-                //                     val: ['João22222222222222']
-                //                 }
-                //             ]
-                //         }
-                //     }
-                // ],
+                flatLevel: true,
+                filter: [
+                    {
+                        ui: 'dc_agenda',
+                        sources: [],
+                        filter: {
+                            OR: [
+                                // {
+                                //     attr: 'nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // },
+                                {
+                                    AND: [
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João111111111']
+                                        },
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João222222222222']
+                                        },
+                                        {
+                                            OR: [
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['4']
+                                                },
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['3']
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    attr: 'alvo.nome',
+                                    oper: 'EQUAL',
+                                    val: ['João111111111']
+                                },
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // }
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João11111111111111111']
+                                // },
+                                {
+                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                    oper: 'EQUAL',
+                                    val: ['4']
+                                },
+                                // {
+                                //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                //     oper: 'EQUAL',
+                                //     val: ['3']
+                                // },
+                                {
+                                    attr: 'nome',
+                                    oper: 'EQUAL',
+                                    val: ['João22222222222222']
+                                }
+                            ]
+                        }
+                    }
+                ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
                 profile: {}
