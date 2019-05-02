@@ -15,10 +15,10 @@
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
+        </textarea> -->
         <div class="middle-filter">
             <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                             :idx="idx"
@@ -103,13 +103,14 @@
                         return true;
                     }
                     if (!componente.uiFilter || !componente.uiFilter.ui) {
-                        return;
+                        return false;
                     }
                     const valido = componente.validaDados();
                     if (!valido) {
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 if (!dadosValidos) {
                     this.handleEvent('jsonError', 'error');

@@ -76,6 +76,7 @@
                         dadosValidos = false;
                         return true;
                     }
+                    return false;
                 });
                 if (quantiaAtribSelecionada === 0) {
                     return false;
