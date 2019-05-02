@@ -3,18 +3,19 @@
     @import "../styles/buttons";
 
     .bc-meta-selection-field {
-        display: inline-flex;
-        flex-direction: column;
-    }
-    .options-container {
+      display: inline-flex;
+      flex-direction: column;
+      margin-left: 5px;
+      .options-container {
         display: inline-flex;
         align-items: center;
+      }
     }
 </style>
 
 <template>
     <div>
-        <div class="bc-meta-selection-field margin-left">
+        <div class="bc-meta-selection-field">
             <div class="options-container">
                 <select class="inp" v-model="field">
                     <option :value="null" disabled>Selecione</option>
@@ -51,7 +52,6 @@
         },
         async created() {
             // emitir evendo de erro caso de treta
-            console.log(!this.child && this.lookUp);
             if (!this.child && this.lookUp) {
                 this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
             }
@@ -76,9 +76,10 @@
             },
             async fildsFiltereds() {
                 if (this.fatherId) {
-                    this.options = await
+                    return this.options = await
                     bcService.getTipoSelecaoHierarquicoOptions(this.lookUp, this.fatherId.id);
                 }
+                return this.options = [];
             }
         },
         watch: {
