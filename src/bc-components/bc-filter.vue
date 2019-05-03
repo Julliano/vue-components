@@ -15,10 +15,10 @@
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
+        </textarea> -->
         <div class="middle-filter">
             <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                             :idx="idx"
@@ -112,7 +112,7 @@
                     return false;
                 });
                 if (!dadosValidos) {
-                    this.handleEvent('json-error', 'error');
+                    this.handleEvent('jsonError', 'error');
                     return;
                 }
                 let copyUis = JSON.parse(JSON.stringify(this.uis));
@@ -120,7 +120,6 @@
                     jsonView: copyUis,
                     jsonBc: viewToBcFilter(JSON.parse(JSON.stringify(this.uis)))
                 };
-                console.log(xml);
                 this.handleEvent(JSON.stringify(xml), 'json');
             }.bind(this), false);
         },
@@ -136,9 +135,13 @@
                 }
                 return JSON.parse(JSON.stringify(criterios));
             },
-            createEmptyUi() {
+            createEmptyUi(isMetaUISelected) {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
-                if (hasEmptyUI.length || this.flatLevel) return;
+                if (!isMetaUISelected && this.uis.length < 1) {
+                    if (hasEmptyUI.length && this.flatLevel) return;
+                } else {
+                    if (this.flatLevel) return;
+                }
                 // adiciona novo grupo de ui
                 this.uis.push(
                     {
@@ -173,7 +176,7 @@
                 uiFilter.ui = e.name;
                 uiFilter.criteria = [{}];
                 uiFilter.operator = 'AND';
-                this.createEmptyUi();
+                this.createEmptyUi(true);
             },
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);

@@ -11,6 +11,9 @@
           display: inline-flex;
           align-items: center;
           margin-left: 5px;
+          &:first-child {
+            margin-left: 0px;
+          }
         }
       }
     }
@@ -45,7 +48,11 @@
         props: {
             val: Array,
             lookUp: String,
-            hierarchy: Array
+            hierarchy: Array,
+            selectedHierarchy: {
+                type: Array,
+                default: () => []
+            }
         },
         components: {
             metaSelection
@@ -60,7 +67,13 @@
         async created() {
             // invertendo a ordem do array de hierarquia e fazendo o request do primeiro
             this.localHierarchy = this.hierarchy.slice().reverse();
-            this.getOptions(0);
+            await this.getOptions(0);
+            if (this.selectedHierarchy.length) {
+                this.selecteds = this.selectedHierarchy;
+                this.selecteds.forEach((each, index) => {
+                    this.setHierarchy(index);
+                });
+            }
         },
         methods: {
             async getOptions(index, id) {
@@ -93,6 +106,11 @@
             },
             change(val) {
                 this.$emit('change', val);
+            }
+        },
+        watch: {
+            selecteds() {
+                this.$emit('hierarchy', this.selecteds);
             }
         }
     };

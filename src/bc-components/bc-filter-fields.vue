@@ -17,7 +17,13 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoAttrib" :hierarchy="hierarchy" :val="val" @change="change"></component>
+                <component :is="dynamicComponent" :tipo="tipoAttrib" 
+                           :hierarchy="hierarchy" 
+                           :periods="period" 
+                           :val="val" 
+                           @change="change"
+                           @destroy-period="deletePeriod"
+                ></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
                 </button>
@@ -53,7 +59,8 @@
                 type: Array,
                 default: () => []
             },
-            hierarchy: Array
+            hierarchy: Array,
+            period: Array
         },
         data() {
             return {
@@ -132,6 +139,9 @@
                 }
                 return textField;
             },
+            deletePeriod() {
+                this.$emit('destroy-period');
+            },
             checkNumberField() {
                 if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
                     return numberInputs;
@@ -141,7 +151,7 @@
             checkDataField() {
                 if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
                     return dateInputs;
-                } else if (this.operator === 'PERIODO') {
+                } else if (this.operator === 'PERIOD') {
                     return dateCombo;
                 }
                 return dateInput;
@@ -149,7 +159,7 @@
             checkDataHoraField() {
                 if (this.operator === 'RANGE' || this.operator === 'OUT_OF_RANGE') {
                     return dateInputs;
-                } else if (this.operator === 'PERIODO') {
+                } else if (this.operator === 'PERIOD') {
                     return dateCombo;
                 }
                 return dateInput;
