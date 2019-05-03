@@ -4,22 +4,25 @@
     @import "styles/buttons";
 
     .bc-filter-attrib {
+      display: inline-flex;
+      flex-direction: column;
+      .options-container {
         display: inline-flex;
-        flex-direction: column;
-    }
-    .options-container {
-        display: inline-flex;
-        align-items: center;
-    }
-    .meta-ui{
+        &.hierarchy {
+          align-items: center;
+        }
+      }
+      .meta-ui{
         flex-basis: 100%;
+      }
     }
 </style>
 
 <template>
     <div>
         <div class="bc-filter-attrib" v-if="metaAttribs.length">
-            <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)">
+            <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)"
+                 :class="{'hierarchy': selectedAttrib && !selectedAttrib.hierarchy}">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in localAttribs || metaAttribs" :key="idx"

@@ -1,5 +1,6 @@
 <style scoped lang="scss">
     @import "../styles/variables";
+    @import "../../styles/variables";
     @import "../styles/buttons";
 
     .bc-meta-selection-field {
@@ -8,6 +9,9 @@
       .options-container {
         display: inline-flex;
         align-items: center;
+        &.child {
+          margin-top: $small-space;
+        }
       }
     }
 </style>
@@ -15,7 +19,7 @@
 <template>
     <div>
         <div class="bc-meta-selection-field">
-            <div class="options-container">
+            <div class="options-container" :class="{'child': child}">
                 <select class="inp" v-model="field">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">

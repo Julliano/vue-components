@@ -1,18 +1,20 @@
 <style scoped lang="scss">
+    @import "../../styles/variables";
     @import "../styles/variables";
     @import "../styles/buttons";
+    @import "../styles/inputs";
 
     .inline {
-      display: inline-flex;
+      display: inline-grid;
       .bc-meta-selection-field {
-        display: inline;
+        display: flex;
         flex-direction: column;
         .options-container {
           display: inline-flex;
           align-items: center;
-          margin-left: 5px;
+          margin-top: $small-space;
           &:first-child {
-            margin-left: 0px;
+            margin-top: 0px;
           }
         }
       }
