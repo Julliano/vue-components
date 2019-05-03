@@ -33,78 +33,26 @@
                 listUis: ['dc_arquivo', 'dc_view_arquivo', 'dc_agenda', 'dgt_bc_padrao', 'dgt_bc_unica', 'dc_historico_local', 'geo_endereco'],
                 sourceTypes: ['WEB_SERVICES'],
                 idAplicacao: 'aplicacao|bc|140',
-                jsonBuffer: null,
-                filter: [
-                    {
-                        ui: 'dc_agenda',
-                        sources: [],
-                        filter: {
-                            OR: [
-                                // {
-                                //     attr: 'nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João']
-                                // },
-                                {
-                                    AND: [
-                                        {
-                                            attr: 'alvo.nome',
-                                            oper: 'EQUAL',
-                                            val: ['João111111111']
-                                        },
-                                        {
-                                            attr: 'alvo.nome',
-                                            oper: 'EQUAL',
-                                            val: ['João222222222222']
-                                        },
-                                        {
-                                            OR: [
-                                                {
-                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                                    oper: 'EQUAL',
-                                                    val: ['4']
-                                                },
-                                                {
-                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                                    oper: 'EQUAL',
-                                                    val: ['3']
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                },
-                                {
-                                    attr: 'alvo.nome',
-                                    oper: 'EQUAL',
-                                    val: ['João111111111']
-                                },
-                                // {
-                                //     attr: 'alvo.nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João']
-                                // }
-                                // {
-                                //     attr: 'alvo.nome',
-                                //     oper: 'EQUAL',
-                                //     val: ['João11111111111111111']
-                                // },
-                                {
-                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                    oper: 'EQUAL',
-                                    val: ['4']
-                                },
-                                // {
-                                //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
-                                //     oper: 'EQUAL',
-                                //     val: ['3']
-                                // },
-                                {
-                                    attr: 'nome',
-                                    oper: 'EQUAL',
-                                    val: ['João22222222222222']
-                                }
-                            ]
-                        }
+                idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
+                jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
+                profile: {
+                    aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
+                    data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
+                    descricao: 'Muahaha',
+                    flg_default: {
+                        id: 'N',
+                        value: 'Não'
+                    },
+                    id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
+                    id_tipo_pesquisa: {
+                        id: 'E',
+                        value: 'Perfil de pesquisa avançado de dados coletados'
+                    },
+                    xml_config: {
+                        ui: 'dc_arquivo',
+                        sources: ['fonte'],
+                        operator: null,
+                        criteria: {}
                     }
                 ],
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
