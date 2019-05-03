@@ -120,7 +120,6 @@
                     jsonView: copyUis,
                     jsonBc: viewToBcFilter(JSON.parse(JSON.stringify(this.uis)))
                 };
-                console.log(xml);
                 this.handleEvent(JSON.stringify(xml), 'json');
             }.bind(this), false);
         },
