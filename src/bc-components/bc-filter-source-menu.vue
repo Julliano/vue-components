@@ -159,8 +159,8 @@
             cancel() {
                 outter: for (const source of this.sources || []) {
                     for (const sourceProp of this.getAppliedSources()) {
-                        if (sourceProp.id === source.id) {
-                            source.checked = sourceProp.checked;
+                        if (sourceProp === source.id) {
+                            source.checked = true;
                             continue outter;
                         }
                     }
