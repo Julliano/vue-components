@@ -159,7 +159,11 @@ function convertFilterViewToBC(viewFilter, first = true) {
                 }
                 if (uiFilter.criteria.length === 1) {
                     // eslint-disable-next-line max-depth
-                    if (Object.entries(uiFilter.criteria[0]).length === 0) {
+                    if (!Object.entries(uiFilter.criteria[0]).length) {
+                        blockFilter.filter = null;
+                        blockFilter.ui = uiFilter.ui;
+                        blockFilter.sources = uiFilter.sources;
+                        viewFilter.push(blockFilter);
                         continue;
                     }
                 }
@@ -248,7 +252,7 @@ function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueR
 
 function reduceFilter(bcFilter) {
     for (const uiFilter of bcFilter) {
-        if (Object.keys(uiFilter.filter).length === 1) {
+        if (uiFilter.filter && Object.keys(uiFilter.filter).length === 1) {
             let firstOperator = Object.keys(uiFilter.filter);
             let criterios = uiFilter.filter[firstOperator];
             let continueRedulce = true;
@@ -277,11 +281,8 @@ function reduceFilter(bcFilter) {
 export function viewToBcFilter(viewFilter) {
     let bcFilter = convertFilterViewToBC(viewFilter);
     bcFilter = bcFilter.filter(each => {
-        return each.filter;
+        return 'filter' in each;
     });
-    if (bcFilter.length === 0) {
-        return null;
-    }
     reduceFilter(bcFilter);
     return bcFilter;
 }
