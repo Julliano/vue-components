@@ -18,17 +18,16 @@
     }
 
     .container {
-        margin-left: $normal-space;
-        margin-top: $normal-space;
+        margin-left: $big-space;
 
-        &.and {
+        &.AND {
             border-color: $and-color;
             > :last-child {
                 @include halfBorderLeft($and-color)
             }
         }
 
-        &.or {
+        &.OR {
             border-color: $or-color;
             > :last-child {
                 @include halfBorderLeft($or-color)
@@ -49,7 +48,7 @@
 
         }
 
-        > :before {
+        > :before{
             content: '';
             position: relative;
             bottom: $input-height/2;
@@ -60,16 +59,27 @@
             border-color: inherit;
             height: 50%;
         }
+        > .group {
+            .container {
+                margin-left: $big-space*2;
+                margin-top: $small-space;
+            }
+            .switch {
+                display: inline-block;
+                vertical-align: sub;
+            }
+        }
+
     }
 </style>
 
 <template>
-    <div>
+    <div class="group">
         <bc-switch v-model="type" :disabled="itemCount < 3" @input="onOperatorChanged"></bc-switch>
         <div class="container"
             :class="{
-                'and': type === 'AND',
-                'or': type === 'OR',
+                'AND': type === 'AND',
+                'OR': type === 'OR',
                 'disabled-switch': itemCount < 3
             }">
             <slot></slot>
@@ -86,24 +96,39 @@
             BcSwitch
         },
         props: {
-            profileSelected: Object
+            profileSelected: Object,
+            operator: String,
+            criteriaSize: Number
         },
         data() {
             return {
-                type: 'AND',
+                type: this.operator || '',
                 itemCount: 0
             };
         },
         mounted() {
             this.updateGroups();
+            this.verifyOperator();
         },
         methods: {
+            verifyOperator() {
+                this.type = this.operator ? this.operator : 'AND';
+                this.onOperatorChanged(this.type);
+            },
             updateGroups() {
                 this.itemCount = this.$slots.default.length;
             },
             onOperatorChanged(type) {
                 this.type = type;
-                this.$emit('type-changed', this.type);
+                this.$emit('operator-changed', this.type);
+            }
+        },
+        watch: {
+            criteriaSize(value) {
+                this.itemCount = value;
+            },
+            operator(value) {
+                this.type = value;
             }
         }
     };

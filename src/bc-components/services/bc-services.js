@@ -4,11 +4,10 @@ import Dispatcher from '../utils/dispatcher.js';
 /**
  * Criação das instâncias do Axios.
  */
-let userId = process.env.USER_ID !== undefined ? `usuario|bc|${process.env.USER_ID}` :
-    `usuario|bc|${parent.loginClientDTO.loginId}`;
-let sessionId = process.env.SESSION_ID ? process.env.SESSION_ID : parent.loginClientDTO.sessionId;
-let idAplicacao = 'aplicacao|bc|140';
-let tipoPesquisa = 'Perfil de pesquisa avançado de dados coletados';
+let userId = parent.loginClientDTO ? `usuario|bc|${parent.loginClientDTO.loginId}` :
+    `usuario|bc|${process.env.USER_ID}`;
+let sessionId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : process.env.SESSION_ID;
+let tipoPesquisa = '';
 
 Dispatcher.config({
     baseURL: '/bc/services/',
@@ -25,13 +24,18 @@ let getProfileParams = {
                 AND: [
                     {
                         oper: 'EQUAL',
-                        attr: 'cnfg_usua_app_pes.aplicacao_id_aplicacao.id_aplicacao',
-                        val: [idAplicacao]
+                        attr: 'aplicacao_id_aplicacao.id_aplicacao',
+                        val: []
                     },
                     {
                         oper: 'EQUAL',
-                        attr: 'cnfg_usua_app_pes.usuario_id_pessoa._id',
+                        attr: 'usuario_id_pessoa._id',
                         val: [userId]
+                    },
+                    {
+                        oper: 'EQUAL',
+                        attr: 'id_tipo_pesquisa',
+                        val: [tipoPesquisa]
                     }
                 ]
             }
@@ -55,7 +59,7 @@ let getProfileParams = {
 
 let include = {
     oper: 'EQUAL',
-    attr: 'cnfg_usua_app_pes.flg_default',
+    attr: 'flg_default',
     val: ['S']
 };
 
@@ -65,15 +69,15 @@ export default {
     },
     async getLabelUIs(uis) {
         const locale = this.getLocale();
-        const url = `metadata?loc=${locale}`;
+        const url = `metadata?flags=filterable,visible&loc=${locale}`;
         const allMetaUis = await dispatcher.doGet(url);
-        return !uis ? [] : allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
+        return !uis ? allMetaUis : allMetaUis.filter(metaUi => uis.indexOf(metaUi.name) !== -1);
     },
 
     async getAttribsFromUI(logicName) {
         const locale = this.getLocale();
         // eslint-disable-next-line
-        const url = `metadata/${logicName}/attributes?fields=label,type&flags=filterable,visible&loc=${locale}`;
+        const url = `metadata/${logicName}/attributes?fields=label,autocomplete,type&flags=filterable&loc=${locale}`;
         return await dispatcher.doGet(url);
     },
 
@@ -91,20 +95,25 @@ export default {
         // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
     },
 
-    getTipoSelecaoOptions() {
-        return [{id: 1, name: 'Sem campo'}, {id: 2, name: 'TextCombo'}, {id: 3, name: 'TextField'}];
-        // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    getTipoSelecaoOptions(tipoSelec) {
+        return dispatcher.doGet(`lookup/${tipoSelec}`);
     },
 
-    async getSearchProfiles() {
-        return await dispatcher.doPost('objectQuery', getProfileParams);
+    getTipoSelecaoHierarquicoOptions(tipoSelec, id) {
+        return dispatcher.doGet(`lookup/${tipoSelec}/?filter=${id}`);
+    },
+
+    async getSearchProfiles(param, idAplicacao) {
+        getProfileParams.filter.AND[0].AND[2].val[0] = param;
+        getProfileParams.filter.AND[0].AND[0].val[0] = idAplicacao;
+        return await dispatcher.doPost('query/search', getProfileParams);
     },
 
     async getProfileDirectory() {
         return await dispatcher
             .doGet('access/userDataDirectory');
     },
-    async saveSearchProfiles(obj, param = null, xml = null) {
+    async saveSearchProfiles(obj, param = null, xml = null, idTipoPesquisa = '', idAplicacao) {
         if (param) {
             let response = await this.getProfileDirectory();
             obj.descricao = param.descricao;
@@ -113,7 +122,7 @@ export default {
             obj['_diretorios'] = {
                 add: [response.id]
             };
-            if (tipoPesquisa) obj.id_tipo_pesquisa = 'Perfil de pesquisa avançado de dados coletados';
+            obj.id_tipo_pesquisa = idTipoPesquisa;
             obj.xml_config = JSON.stringify(xml);
             if (!obj.aplicacao_id_aplicacao) {
                 obj.aplicacao_id_aplicacao = {id_aplicacao: idAplicacao};
@@ -129,11 +138,12 @@ export default {
         };
         return await dispatcher.doPost('persistence', json);
     },
-    async replaceSearchProfiles(obj, xml) {
+    async replaceSearchProfiles(obj, xml, name) {
         let json = {
             cnfg_usua_app_pes: [
                 {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
+                    descricao: name,
                     xml_config: JSON.stringify(xml),
                     data_ultima_alteracao: obj.data_ultima_alteracao
                 }
@@ -161,7 +171,7 @@ export default {
                 {
                     id_cnfg_usua_app_pes: obj.id_cnfg_usua_app_pes,
                     descricao: obj.descricao,
-                    data_ultima_alteracao: obj.data_ultima_alteracao,
+                    data_ultima_alteracao: '2019-04-10T18:00:55.443Z',
                     xml_config: JSON.stringify(xml)
                 }
             ]
@@ -173,9 +183,10 @@ export default {
         await dispatcher.doDelete(`delete/cnfg_usua_app_pes/${param.id_cnfg_usua_app_pes}`);
     },
 
-    async setDefaultProfile(param) {
-        await this.getDefaultsAndSetAsNotDefault();
-        if (param.flg_default && param.flg_default.valor === 'Não') {
+    async setDefaultProfile(param, idAplicacao) {
+        await this.getDefaultsAndSetAsNotDefault(idAplicacao);
+        console.log('oi');
+        if (param.flg_default && param.flg_default.value === 'Não') {
             let obj = {
                 cnfg_usua_app_pes: [
                     {
@@ -194,14 +205,15 @@ export default {
         let count = 0;
         let params = JSON.parse(JSON.stringify(getProfileParams));
         params.filter.AND[0].AND.push(include);
-        let response = await dispatcher.doPost('objectQuery', params);
+        // params.filter.AND[0].AND[0].val[0] = param;
+        let response = await dispatcher.doPost('query/search', params);
         let obj = {
             cnfg_usua_app_pes: [
             ]
         };
-        if (response.uis.length) {
-            response.uis.forEach(ui => {
-                if (ui.flg_default.valor === 'Sim') {
+        if (response[0] && response[0].data.length) {
+            response[0].data.forEach(ui => {
+                if (ui.flg_default.value === 'Sim') {
                     obj = this.resetDefaultValue(obj, ui);
                     count += 1;
                 }

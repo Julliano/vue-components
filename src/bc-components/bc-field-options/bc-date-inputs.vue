@@ -5,13 +5,6 @@
     .bc-int-inputs {
         display: inline-flex;
         flex-direction: column;
-        margin-left: 5px;
-        input {
-            height: 24px !important;
-            &:not(:first-child) {
-                margin-left: 5px;
-            }
-        }
     }
     .options-container {
         display: inline-flex;
@@ -24,11 +17,13 @@
         <div class="bc-int-inputs">
             <div class="options-container">
                 <input id="date1" name="initialDate" type="date" @change="change"
-                        class="inp big" v-model="initialDate">
+                        class="inp" v-model="initialDate">
+                <input id="hour1" name="hour1" type="time" @change="change"
+                    class="inp margin-left" v-model="hour1">
                 <input id="date2" name="finalDate" type="date" @change="change"
-                        class="inp big" v-model="finalDate">
-                <input id="hour" name="hour" type="time" @change="change"
-                    class="inp big" v-model="hour" v-if="tipo === '_data_hora'">
+                        class="inp margin-left" v-model="finalDate">
+                <input id="hour2" name="hour2" type="time" @change="change"
+                    class="inp margin-left" v-model="hour2">
             </div>
         </div>
     </div>
@@ -39,18 +34,20 @@
     export default {
         name: 'bc-date-inputs',
         props: {
-            tipo: String
+            tipo: String,
+            val: Array
         },
         data() {
             return {
-                initialDate: '',
-                finalDate: '',
-                hour: ''
+                initialDate: this.val[0] || '',
+                finalDate: this.val[2] || '',
+                hour1: this.val[1] || '',
+                hour2: this.val[3] || ''
             };
         },
         methods: {
             change() {
-                this.$emit('change', [this.initialDate, this.finalDate, this.hour]);
+                this.$emit('change', [this.initialDate, this.finalDate, this.hour1, this.hour2]);
             }
         }
     };

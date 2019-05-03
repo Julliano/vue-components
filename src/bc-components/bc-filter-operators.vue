@@ -3,17 +3,14 @@
     @import "styles/buttons";
 
     .bc-filter-operator {
+      display: inline-flex;
+      flex-direction: column;
+      margin-left: 5px;
+      .options-container {
         display: inline-flex;
-        flex-direction: column;
+        align-items: center;
         margin-left: 5px;
-        .options-container {
-            display: inline-flex;
-            align-items: center;
-            .date-type {
-                margin-right: 5px;
-                margin-left: -5px;
-            }
-        }
+      }
     }
 </style>
 
@@ -21,19 +18,35 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container">
-                <component class="date-type" :is="dynamicComponentDate" @data-option-selected="dateOptionSelected"></component>
-                <select class="inp" @change="fireOperatorSelected" v-if="show">
-                    <option value="" disabled :selected="operator.name === null">{{'select' | i18n}}</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="idx"
-                        :selected="operator.name === opt.name">
-                        {{opt.name}}
+                <keep-alive>
+                    <component :is="dynamicComponentDate"
+                        @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
+                        :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
+                        @change="change" ref="metaSelection">
+                    </component>
+                </keep-alive>
+                <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
+                    <option :value="null" disabled>{{'select' | i18n}}</option>
+                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
+                        {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="operator && !operator.name">
+                    v-if="!localOperator || !show">
                     <i class="mdi mdi-close"></i>
                 </button>
-                <slot name="field"></slot>
+                <bc-filter-fields slot="field" v-else-if="show"
+                    @meta-field-selected="onMetaFieldSelected($event, idx)"
+                    @meta-field-removed="fireOperatorRemoved"
+                    @change="change"
+                    @destroy-period="deletePeriod"
+                    :val="criteria.val" :operator="localOperator.name"
+                    :autoComplete="autoComplete"
+                    :tipo-attrib="tipoAttrib"
+                    :period="period"
+                    ref="filterField"
+                >
+                </bc-filter-fields>
             </div>
         </div>
     </div>
@@ -41,9 +54,10 @@
 
 <script>
 
-    import metadata from './metadata.json';
     import i18n from './utils/i18n.js';
-    import dateOptions from './bc-field-options/bc-date-options.vue';
+    import metaSelection from './bc-field-options/bc-meta-selection.vue';
+    import metaSelectionHierarchy from './bc-field-options/bc-meta-selection-hierarchy.vue';
+    import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
 
     export default {
@@ -53,47 +67,120 @@
             tipoAttrib: {
                 type: String
             },
-            operador: {
-                id: null
-            },
             uiName: String,
-            attribName: String
+            autoComplete: Boolean,
+            attribName: String,
+            criteria: Object,
+            lookUp: String,
+            hierarchy: Array
         },
         components: {
-            bcService
+            bcService,
+            BcFilterFields
         },
         data() {
             return {
-                operator: {
-                    name: null
-                },
+                localOperator: null,
                 metaOperators: [],
                 dateOption: {},
-                show: true
+                show: true,
+                period: []
             };
         },
         computed: {
             dynamicComponentDate() {
                 switch (this.tipoAttrib) {
-                    case '_data':
+                    case '_tipo_selecao':
                         this.show = false;
-                        return dateOptions;
+                        this.$set(this.criteria, 'oper', 'EQUAL');
+                        if (!this.criteria.val) {
+                            this.$set(this.criteria, 'val', []);
+                        }
+                        if (!this.hierarchy) return metaSelection;
+                        return metaSelectionHierarchy;
                     default:
                         this.show = true;
                         return null;
                 }
             }
         },
-        created() {
-            this.getOperators();
+        async created() {
+            await this.getOperators();
+            this.localOperator = this.checkOperator();
         },
         methods: {
-            fireOperatorSelected(e) {
-                this.operator = this.metaOperators[e.target.value];
-                this.$emit('meta-operator-selected', this.operator);
+            validaDados() {
+                if (!this.$refs.filterField) {
+                    return false;
+                }
+                if (this.localOperator.name === 'ANY_CONTENT' || this.localOperator.name === 'NO_CONTENT') {
+                    return true;
+                }
+                return this.$refs.filterField.validaDados();
+            },
+            checkOperator() {
+                if (this.criteria.oper) {
+                    let obj = this.metaOperators.find(ope => {
+                        return ope.name === this.criteria.oper;
+                    });
+                    if (obj) {
+                        return this.localOperator = obj;
+                    }
+                    return null;
+                }
+                return null;
+            },
+            fireOperatorSelected() {
+                switch (this.tipoAttrib) {
+                    case '_inteiro_64':
+                        this.handleInt64();
+                        break;
+                    case '_data_ref':
+                        this.handleDateHour();
+                    case '_data_hora':
+                        this.handleDateHour();
+                    case '_data':
+                        this.handleDateHour();
+                }
+                if (!this.criteria.val) {
+                    this.$set(this.criteria, 'val', []);
+                }
+                if (this.localOperator.name === 'ANY_CONTENT' || this.localOperator.name === 'NO_CONTENT') {
+                    this.$delete(this.criteria, 'val');
+                }
+                this.$emit('meta-operator-selected', this.localOperator);
                 this.$forceUpdate();
             },
+            setHierarchy(param) {
+                this.$set(this.criteria, 'hierarchy', param);
+            },
+            handleInt64() {
+                if (this.localOperator.name === 'OUT_OF_RANGE' || this.localOperator.name === 'RANGE') {
+                    if (this.criteria.val && this.criteria.val.length > 1) {
+                        this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
+                    }
+                } else if (this.criteria.val && this.criteria.val.length > 1) {
+                    this.criteria.val.pop();
+                }
+            },
+            handleDateHour() {
+                if (this.localOperator.name === 'OUT_OF_RANGE' || this.localOperator.name === 'RANGE') {
+                    if (this.criteria.val && this.criteria.val.length > 1) {
+                        this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
+                    }
+                    return;
+                }
+
+                if (this.localOperator.name === 'PERIOD') {
+                    this.$set(this.criteria, 'val', []);
+                    this.period = this.localOperator.options;
+                }
+            },
+            deletePeriod() {
+                this.$set(this.criteria, 'val', []);
+            },
             async getOperators() {
+                if (!this.attribName) return;
                 this.metaOperators = await bcService.getOperators(this.uiName, this.attribName);
                 this.metaOperators.forEach(op => {
                     op.name = op.name.toUpperCase();
@@ -105,12 +192,8 @@
             dateOptionSelected(option) {
                 this.show = true;
                 this.dateOption = option;
-                if (option.id === 2) {
-                    this.metaOperators = metadata.operators['ano'];
-                } else {
-                    this.getOperators();
-                }
-                this.operator = { name: null };
+                this.getOperators();
+                this.localOperator = null;
                 this.$emit('data-option-selected', option);
                 this.$forceUpdate();
             },
@@ -119,14 +202,26 @@
             },
             attribChanged() {
                 this.getOperators();
-                this.operator = { name: null };
+                this.localOperator = null;
+                this.$emit('meta-operator-selected', null);
+            },
+            onMetaFieldSelected(obj, idx) {
+                console.log(obj, idx);
                 this.$forceUpdate();
+            },
+            change(val) {
+                this.criteria.val = val;
             }
         },
         watch: {
-            operador() {
-                if (this.operador) {
-                    this.operator = this.operador;
+            attribName() {
+                this.attribChanged();
+                if (this.tipoAttrib === '_tipo_selecao') {
+                    if (this.hierarchy && this.$refs.metaSelection) {
+                        this.$refs.metaSelection.updateOptions();
+                    } else {
+                        this.$refs.metaSelection && this.$refs.metaSelection.updateOptions(this.lookUp);
+                    }
                 }
             }
         }

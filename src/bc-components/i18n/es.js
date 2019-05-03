@@ -1,7 +1,7 @@
 export default {
     select: 'Selecione', // Todo tradução
     profile: 'Perfil',
-    searchProfile: 'Definir consulta',
+    searchProfile: 'Seleccione los parámetros del filtro',
     sources: 'Fontes', // Todo tradução
     createSearch: 'Consultar',
     cancel: 'Cancelar', // Todo tradução
@@ -14,11 +14,11 @@ export default {
         saveAs: 'Salvar como',
         rename: 'Renomear',
         default: 'Definir como padrão',
-        removeDefault: 'Desmarcar opção default',
         exclude: 'Excluir',
         actions: 'Ações',
         confirm: 'Confirmação',
-        really: 'Você deseja substituir a pesquisa já existente com o mesmo nome?'
+        really: 'Ya existe un perfil de búsqueda con este nombre. Desea sobrescribirlo?',
+        reallyDelete: '¿Desea realmente eliminar el perfil de búsqueda seleccionado?'
     },
     search: {    // Todo tradução
         saveAs: 'Salvar pesquisa como',

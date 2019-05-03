@@ -16,7 +16,7 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field" @change="change">
+                <input class="inp" type="text" v-model="field">
             </div>
         </div>
     </div>
@@ -26,14 +26,25 @@
 
     export default {
         name: 'bc-text-field',
+        props: {
+            val: Array
+        },
         data() {
             return {
-                field: ''
+                field: this.val[0] || ''
             };
         },
         methods: {
-            change() {
-                this.$emit('change', [this.field]);
+            handleValue() {
+                if (this.field === '') {
+                    return this.$emit('change', null);
+                }
+                return this.$emit('change', [this.field]);
+            }
+        },
+        watch: {
+            field() {
+                this.handleValue();
             }
         }
     };

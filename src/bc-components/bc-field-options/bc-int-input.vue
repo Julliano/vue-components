@@ -19,10 +19,10 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input class="inp" type="tel" v-mask="'#########'" @change="change"
+                <input class="inp" type="tel" v-mask="'#########'"
                        v-model="field"
                        v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
-                <input class="inp" type="number" :step="0.01" v-model="field" @change="change" v-else>
+                <input class="inp" type="number" :step="0.01" v-model="field" v-else>
             </div>
         </div>
     </div>
@@ -40,16 +40,25 @@
             VueTheMask
         },
         props: {
-            tipo: String
+            tipo: String,
+            val: Array
         },
         data() {
             return {
-                field: ''
+                field: this.val[0] || ''
             };
         },
         methods: {
-            change() {
-                this.$emit('change', [this.field]);
+            handleValue() {
+                if (this.field === '') {
+                    return this.$emit('change', null);
+                }
+                return this.$emit('change', [this.field]);
+            }
+        },
+        watch: {
+            field() {
+                this.handleValue();
             }
         }
     };

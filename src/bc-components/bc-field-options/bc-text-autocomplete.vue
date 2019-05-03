@@ -58,9 +58,12 @@
 
     export default {
         name: 'bc-text-autocomplete-field',
+        props: {
+            val: Array
+        },
         data() {
             return {
-                field: '',
+                field: this.val[0] || '',
                 data: [],
                 options: [],
                 arrowCounter: -1,
@@ -102,11 +105,17 @@
             },
             arrow(idx) {
                 this.arrowCounter = idx;
+            },
+            handleValue() {
+                if (this.field === '') {
+                    return this.$emit('change', null);
+                }
+                return this.$emit('change', [this.field]);
             }
         },
         watch: {
             field() {
-                this.$emit('change', [this.field]);
+                this.handleValue();
             }
         }
 

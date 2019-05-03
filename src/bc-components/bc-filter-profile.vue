@@ -49,7 +49,7 @@
                     <button v-for="(option, idx) in options" :key="idx" class="btn popover-item"
                             :class="{'disabled-button': checkDisabled(option)}" @click="fireOptionSelected(option)">
                             <i v-if="checkDefault(option)" class="mdi mdi-check"></i>
-                            {{ handleLabel(option) | i18n }}
+                            {{ `profileOptions.${option.label}` | i18n }}
                     </button>
                 </div>
             </dgt-context-menu>
@@ -60,6 +60,7 @@
                 @cancel="closeModal" @confirm="handleConfirm" :default-name="selectedProfile.descricao"
             ></bc-save-search-modal>
             <bc-save-search-confirm v-if="confirmModal" @cancel="closeConfirmModal" @confirm="handleReplace"></bc-save-search-confirm>
+            <bc-delete-search-confirm v-if="confirmDeleteModal" @cancel="closeDeleteModal" @confirm="confirmDelete"></bc-delete-search-confirm>
         </div>
         <hr/>
     </div>
@@ -69,7 +70,9 @@
 
     import bcSaveSearchModal from './modal/bc-save-search-modal.vue';
     import bcSaveSearchConfirm from './modal/bc-save-search-confirm.vue';
+    import bcDeleteSearchConfirm from './modal/bc-delete-search-confirm.vue';
     import dgtContextMenu from '../components/dgt-context-menu.vue';
+    import { viewToBcFilter } from './utils/transform-filter.js';
     import bcService from './services/bc-services.js';
     import i18n from './utils/i18n.js';
 
@@ -80,7 +83,8 @@
             bcService,
             dgtContextMenu,
             bcSaveSearchModal,
-            bcSaveSearchConfirm
+            bcSaveSearchConfirm,
+            bcDeleteSearchConfirm
         },
         props: {
             show: {
@@ -88,9 +92,11 @@
                 default: true
             },
             profile: Object,
-            json: Object,
+            jsonView: Array,
+            jsonBc: Array,
             profiles: Array,
-            tipoPesquisa: String
+            tipoPesquisa: String,
+            idAplicacao: String
         },
         data() {
             return {
@@ -103,6 +109,7 @@
                     id: ''
                 },
                 confirmModal: false,
+                confirmDeleteModal: false,
                 enableDefaultOption: true,
                 options: [
                     { id: 1, label: 'save' },
@@ -115,47 +122,56 @@
                 newName: ''
             };
         },
+        created() {
+            if (this.profile) {
+                this.$emit('change', this.profile);
+            }
+        },
         methods: {
             newProfile() {
-                this.selectedProfile = { id_cnfg_usua_app_pes: null };
+
+                this.selectedProfile = {
+                    aplicacao_id_aplicacao: null,
+                    data_ultima_alteracao: null,
+                    descricao: null,
+                    flg_default: null,
+                    id_cnfg_usua_app_pes: null,
+                    id_tipo_pesquisa: null,
+                    xml_config: {}
+                };
                 this.$emit('change', this.selectedProfile);
             },
-            handleLabel(option) {
-                if (option.label === 'default') {
-                    if (this.selectedProfile.flg_default &&
-                            this.selectedProfile.flg_default.valor === 'Sim') {
-                        return 'profileOptions.removeDefault';
+            setDefault() {
+                if (Object.entries(this.profile).length) {
+                    if (this.profile && this.profile.id_cnfg_usua_app_pes && this.first) {
+                        this.first = false;
+                        this.selectedProfile = this.profile;
+                        return this.$emit('change', this.selectedProfile);
                     }
                 }
-                return `profileOptions.${option.label}`;
+                this.initialState();
+                return this.$forceUpdate();
             },
-            setDefault() {
-                if (this.profile.id_cnfg_usua_app_pes && !this.first) {
-                    if (!this.selectedProfile.descricao) {
-                        let defaultProfile = this.profiles.filter(profile => {
-                            return profile.flg_default.valor === 'Sim';
-                        });
-                        if (defaultProfile.length) {
-                            [this.selectedProfile] = [...defaultProfile];
-                            this.$emit('change', this.selectedProfile);
-                        } else {
-                            if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.valor = 'Não';
-                        }
+            initialState() {
+                if (!this.selectedProfile.descricao) {
+                    let defaultProfile = this.profiles.filter(profile => {
+                        return profile.flg_default.value === 'Sim';
+                    });
+                    if (defaultProfile.length) {
+                        [this.selectedProfile] = [...defaultProfile];
+                        this.$emit('change', this.selectedProfile);
                     } else {
-                        let initialProfile = this.profiles.filter(profile => {
-                            return profile.descricao === this.selectedProfile.descricao;
-                        });
-                        if (initialProfile.length) {
-                            [this.selectedProfile] = [...initialProfile];
-                            this.$emit('change', this.selectedProfile);
-                        }
+                        if (this.selectedProfile.flg_default) this.selectedProfile.flg_default.value = 'Não';
                     }
                 } else {
-                    this.first = false;
-                    this.selectedProfile = this.profile;
-                    this.$emit('change', this.selectedProfile);
+                    let initialProfile = this.profiles.filter(profile => {
+                        return profile.descricao === this.selectedProfile.descricao;
+                    });
+                    if (initialProfile.length) {
+                        [this.selectedProfile] = [...initialProfile];
+                        this.$emit('change', this.selectedProfile);
+                    }
                 }
-                this.$forceUpdate();
             },
             fireProfileSelected(e) {
                 this.selectedProfile = this.profiles[e.target.value];
@@ -165,6 +181,10 @@
                 this.optionSelected = obj;
                 switch (obj.label) {
                     case 'save':
+                        if (!this.selectedProfile.descricao) {
+                            this.modalType = 'saveAs';
+                            return this.showModal = true;
+                        }
                         return this.fireProfileSaved(obj);
                     case 'saveAs':
                         this.modalType = 'saveAs';
@@ -188,14 +208,14 @@
             },
             checkDefault(option) {
                 if (option.label === 'default') {
-                    return this.selectedProfile.flg_default && this.selectedProfile.flg_default.valor === 'Sim';
+                    return this.selectedProfile.flg_default && this.selectedProfile.flg_default.value === 'Sim';
                 }
                 return null;
             },
             checkDisabled(option) {
                 if (option.label === 'default') {
                     if (!this.selectedProfile.descricao) return true;
-                } else if (option.label !== 'saveAs') {
+                } else if (option.label !== 'save') {
                     return !this.selectedProfile.descricao;
                 }
                 return null;
@@ -213,10 +233,11 @@
                 });
                 if (this.newName && profileFound.length) {
                     try {
-                        await bcService.replaceSearchProfiles(profileFound[0], this.json);
+                        let xml = this.mountXml();
+                        await bcService.replaceSearchProfiles(profileFound[0], xml, this.newName);
                         this.confirmModal = false;
                         this.showModal = false;
-                        this.selectedProfile.descricao = name;
+                        this.selectedProfile.descricao = this.newName;
                         this.newName = '';
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
@@ -228,9 +249,10 @@
                 }
                 return null;
             },
-            fireProfileSaved() {
+            async fireProfileSaved() {
                 try {
-                    bcService.editProfile(this.selectedProfile, this.json);
+                    let xml = this.mountXml();
+                    await bcService.editProfile(this.selectedProfile, xml);
                     this.$emit('success', 'save');
                     return this.$emit('reload-profiles');
                 } catch (error) {
@@ -242,14 +264,14 @@
                     this.selectedProfile : this.profile;
                 if (this.checkSameProfileName(name, 'save')) {
                     try {
+                        let xml = this.mountXml();
                         await bcService.saveSearchProfiles(this.selectedProfile,
-                            {descricao: name}, this.json);
+                            {descricao: name}, xml, this.tipoPesquisa, this.idAplicacao);
                         this.showModal = false;
                         this.selectedProfile.descricao = name;
                         this.$emit('success', 'saveAs');
                         return this.$emit('reload-profiles');
                     } catch (error) {
-                        this.$forceUpdate();
                         return this.$emit('error', 'saveAs');
                     }
                 }
@@ -257,7 +279,7 @@
             },
             async fireProfileDefault() {
                 try {
-                    await bcService.setDefaultProfile(this.selectedProfile);
+                    await bcService.setDefaultProfile(this.selectedProfile, this.idAplicacao);
                     this.$emit('success', 'default');
                     return this.$emit('reload-profiles');
                 } catch (error) {
@@ -265,7 +287,7 @@
                 }
             },
             async fireProfileRenamed(name) {
-                if (this.checkSameProfileName(name)) {
+                if (this.checkSameProfileName(name, 'rename', this.selectedProfile.id_cnfg_usua_app_pes)) {
                     try {
                         await bcService.renameSearchProfiles(this.selectedProfile, name);
                         this.showModal = false;
@@ -276,40 +298,72 @@
                         return this.$emit('error', 'renamed');
                     }
                 }
-                return this.$emit('error', 'renamed');
+                return this.$emit('error', 'renamedSameName');
             },
             async fireProfileRemoved() {
+                this.confirmDeleteModal = true;
+            },
+            closeDeleteModal() {
+                this.confirmDeleteModal = false;
+            },
+            async confirmDelete() {
                 try {
                     await bcService.deleteSearchProfiles(this.selectedProfile);
-                    this.selectedProfile = { id_cnfg_usua_app_pes: null };
+                    this.removeFromProfiles(this.selectedProfile);
+                    this.newProfile();
+                    this.setDefault();
                     this.$emit('success', 'removed');
+                    this.confirmDeleteModal = false;
                     return this.$emit('reload-profiles');
                 } catch (error) {
                     return this.$emit('error', 'removed');
                 }
             },
-            checkSameProfileName(name, save) {
+            removeFromProfiles(obj) {
+                this.profiles.map((profile, idx, object) => {
+                    if (profile.id_cnfg_usua_app_pes === obj.id_cnfg_usua_app_pes) {
+                        object.splice(idx, 1);
+                    }
+                });
+            },
+            checkSameProfileName(name, param, id = null) {
                 if (this.profiles.length > 1) {
                     let defaultProfile = this.profiles.filter(profile => {
-                        return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
-                            name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        if (id !== profile.id_cnfg_usua_app_pes) {
+                            return profile.descricao.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase() ===
+                                name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        }
+                        return null;
                     });
                     if (defaultProfile.length) {
-                        if (save) {
+                        if (param === 'save') {
                             this.confirmModal = true;
                             this.newName = name;
+                            return false;
+                        } else if (param === 'rename') {
                             return false;
                         }
                         return false;
                     }
                 }
                 return true;
+            },
+            mountXml() {
+                let copyJson = JSON.parse(JSON.stringify(this.jsonView));
+                let xml = {
+                    jsonView: this.jsonView,
+                    jsonBc: viewToBcFilter(copyJson)
+                    // jsonBc: this.jsonBc
+                };
+                return xml;
             }
         },
         watch: {
             profiles() {
                 if (this.profiles.length) {
-                    this.setDefault();
+                    setTimeout(() => {
+                        this.setDefault();
+                    }, 300);
                 }
             }
         }
