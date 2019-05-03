@@ -136,9 +136,13 @@
                 }
                 return JSON.parse(JSON.stringify(criterios));
             },
-            createEmptyUi() {
+            createEmptyUi(isMetaUISelected) {
                 const hasEmptyUI = this.uis.filter(item => item.ui === null);
-                if (hasEmptyUI.length || this.flatLevel) return;
+                if (!isMetaUISelected && this.uis.length < 1) {
+                    if (hasEmptyUI.length && this.flatLevel) return;
+                } else {
+                    if (this.flatLevel) return;
+                }
                 // adiciona novo grupo de ui
                 this.uis.push(
                     {
@@ -173,7 +177,7 @@
                 uiFilter.ui = e.name;
                 uiFilter.criteria = [{}];
                 uiFilter.operator = 'AND';
-                this.createEmptyUi();
+                this.createEmptyUi(true);
             },
             onMetaUIRemoved(idx) {
                 this.uis.splice(idx, 1);
