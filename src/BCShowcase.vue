@@ -35,81 +35,82 @@
                 idAplicacao: 'aplicacao|bc|140',
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
-                profile: {
-                    aplicacao_id_aplicacao: {id_aplicacao: 'aplicacao|bc|140'},
-                    data_ultima_alteracao: '2019-04-04T23:07:46.806Z',
-                    descricao: 'Muahaha',
-                    flg_default: {
-                        id: 'N',
-                        value: 'Não'
-                    },
-                    id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|160',
-                    id_tipo_pesquisa: {
-                        id: 'E',
-                        value: 'Perfil de pesquisa avançado de dados coletados'
-                    },
-                    xml_config: {
-                        ui: 'dc_arquivo',
-                        sources: ['fonte'],
-                        operator: null,
-                        criteria: {}
-                    }
-                ],
+                profile: {},
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
-                profile: {}
-                // teste passando perfil avançado indo por props
-                // profile: {
-                //     aplicacao_id_aplicacao: {
-                //         id_aplicacao: 'aplicacao|bc|140'
-                //     },
-                //     data_ultima_alteracao: '2019-04-10T18:00:55',
-                //     descricao: 'perfil de pesquisa criado na reunião de review',
-                //     flg_default: {
-                //         _id: 'N',
-                //         value: 'Não'
-                //     },
-                //     id_tipo_pesquisa: {
-                //         _id: 'E',
-                //         value: 'Perfil de pesquisa avançado de dados coletados'
-                //     },
-                //     id_cnfg_usua_app_pes: 'cnfg_usua_app_pes|bc|326',
-                //     xml_config: {
-                //         jsonView: [
-                //             {
-                //                 ui: 'dc_arquivo',
-                //                 criteria: [
-                //                     {
-                //                         attr: 'conta_servico',
-                //                         hash: 0.28191435511327945,
-                //                         val: [
-                //                             'LLLLLLLL'
-                //                         ],
-                //                         oper: 'EQUAL'
-                //                     },
-                //                     {
-                //                         attr: 'stamp_criacao',
-                //                         hash: 0.4138620115984899
-                //                     },
-                //                     {
-                //                         attr: 'tamanho',
-                //                         hash: 0.14862723589608873,
-                //                         val: [
-                //                             '2222'
-                //                         ],
-                //                         oper: 'GREATER_OR_EQUAL'
-                //                     },
-                //                     {
-                //                         attr: 'nome_original',
-                //                         hash: 0.22015022907149673,
-                //                         oper: 'NO_CONTENT'
-                //                     },
-                //                     {}
-                //                 ]
-                //             }
-                //         ]
-                //     }
-                // }
+                filter: [
+                    {
+                        ui: 'dc_agenda',
+                        sources: [],
+                        filter: {
+                            OR: [
+                                // {
+                                //     attr: 'nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // },
+                                {
+                                    AND: [
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João111111111']
+                                        },
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João222222222222']
+                                        },
+                                        {
+                                            OR: [
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['4']
+                                                },
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['3']
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    attr: 'alvo.nome',
+                                    oper: 'EQUAL',
+                                    val: ['João111111111']
+                                },
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // }
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João11111111111111111']
+                                // },
+                                {
+                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                    oper: 'EQUAL',
+                                    val: ['4']
+                                },
+                                // {
+                                //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                //     oper: 'EQUAL',
+                                //     val: ['3']
+                                // },
+                                {
+                                    attr: 'nome',
+                                    oper: 'EQUAL',
+                                    val: ['João22222222222222']
+                                }
+                            ]
+                        }
+                    }
+                ]
             };
         },
         created() {

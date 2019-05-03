@@ -18,10 +18,10 @@
 
 <template>
     <div>
-        <div class="bc-filter-attrib" v-if="metaAttribs.length">
+        <div class="bc-filter-attrib">
             <div class="options-container" v-for="(item, index) in checkLevel()" :key="generateHash(item)">
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
-                    <option :value="null" disabled>{{'select' | i18n}}</option>
+                    <option :value="null" disabled>{{getMessage() | i18n}}</option>
                     <option v-for="(opt, idx) in localAttribs || metaAttribs" :key="idx"
                             :value="opt"
                     >
@@ -94,6 +94,13 @@
             checkChild() {
                 if (this.child) return this.selectedAttrib;
                 return null;
+            },
+            getMessage() {
+                if (this.metaAttribs.length === 0) {
+                    return 'no_attribs_options';
+                }
+
+                return 'select';
             },
             validaDados() {
                 if (this.selectedAttrib && this.selectedAttrib.type === '_meta_ui') {
