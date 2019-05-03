@@ -458,6 +458,7 @@ export default {
             handler() {
                 this.drawGrid = false;
                 this.$nextTick(() => {
+                    this.gridTemplateColumns = this.joinColumnsWidth(this.templateColumns());
                     this.drawGrid = true;
                 });
             },
