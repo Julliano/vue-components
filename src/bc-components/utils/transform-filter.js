@@ -25,6 +25,12 @@ function convertFilterBcToView(bcFilter, returnFilter = [], isRecursive = false)
                 continue;
             }
         } else {
+            if (uiFilter.filter && uiFilter.filter instanceof Array) {
+                if (uiFilter.filter.length === 1) {
+                    // eslint-disable-next-line prefer-destructuring
+                    uiFilter.filter = uiFilter.filter[0];
+                }
+            }
             let mainFilter = Object.keys(uiFilter.filter);
             if (mainFilter.length === 1) {
                 for (const operator of mainFilter) {
@@ -84,6 +90,53 @@ function createdCriteriaByLevel(criteria, fatherAttr) {
     createCriteriaOtherUI(criteria, attr, fatherAttr);
 }
 
+function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
+    let attr = null;
+    let fatherAttr = null;
+    if (criterias instanceof Array) {
+        for (let criteria of criterias) {
+            if (criteria.attr) {
+                // eslint-disable-next-line prefer-destructuring
+                attr =  criteria.attr;
+                let idx = attr.indexOf('.');
+                if (idx !== -1) {
+                    // eslint-disable-next-line max-depth
+                    if (recursiveFather) {
+                        fatherAttr = criteria.attr.substr(0, idx);
+                        attr = criteria.attr.replace(`${fatherAttr}.`, '');
+                        criteria.attr = attr;
+                        idx = attr.indexOf('.');
+                    }
+                    attr = attr.substr(0, idx);
+                    // eslint-disable-next-line max-depth
+                    if (fatherCriteria.attr) {
+                        // eslint-disable-next-line max-depth
+                        if (fatherCriteria.attr === attr) {
+                            criteria.attr = criteria.attr.replace(`${attr}.`, '');
+                            fatherCriteria.criteria.push(criteria);
+                            continue;
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    fatherCriteria.attr = attr;
+                    criteria.attr = criteria.attr.replace(`${attr}.`, '');
+                    fatherCriteria.criteria = [criteria];
+                    // eslint-disable-next-line max-depth
+                    if (recursiveFather) {
+                        recursiveFather.criteria.push(fatherCriteria);
+                    }
+                }
+            } else {
+                verifyOtherUIOrGroup(criteria, criteria.criteria, fatherCriteria);
+            }
+        }
+        return true;
+    }
+    // No futuro se não pode não ser um Array ai deve ser um grupo.
+}
+
 // eslint-disable-next-line complexity
 function bcNestedOperator(father, child) {
     if (!child.length) {
@@ -98,7 +151,7 @@ function bcNestedOperator(father, child) {
         for (const criteria of child) {
             const keys = Object.keys(criteria);
             let isListCriteria = criteria.criteria instanceof Array;
-            if (keys.length > 2 && !isListCriteria) {
+            if ((keys.length > 2 || !keys.includes('criteria')) && !isListCriteria) {
                 let attr = null;
                 const idx = criteria.attr.indexOf('.');
                 if (idx !== -1) {
@@ -110,6 +163,7 @@ function bcNestedOperator(father, child) {
                     bcNestedOperator(father, criteria);
                 }
             } else {
+                verifyOtherUIOrGroup(criteria, criteria.criteria);
                 if (criteria.criteria instanceof Array) {
                     bcNestedOperator(criteria, criteria.criteria);
                 }
@@ -141,6 +195,7 @@ export function bcFilterToView(bcFilter) {
         bcNestedOperator(items, items.criteria);
     }
 
+    console.log(response);
     return response;
 }
 
@@ -292,5 +347,6 @@ export function viewToBcFilter(viewFilter) {
         return 'filter' in each && each.filter !== undefined;
     });
     reduceFilter(bcFilter);
+    console.log(bcFilter);
     return bcFilter;
 }
