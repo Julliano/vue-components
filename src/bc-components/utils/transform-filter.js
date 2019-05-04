@@ -281,7 +281,7 @@ function reduceFilter(bcFilter) {
 export function viewToBcFilter(viewFilter) {
     let bcFilter = convertFilterViewToBC(viewFilter);
     bcFilter = bcFilter.filter(each => {
-        return 'filter' in each;
+        return 'filter' in each && each.filter !== undefined;
     });
     reduceFilter(bcFilter);
     return bcFilter;
