@@ -3,6 +3,14 @@
 function convertFilterBcToView(bcFilter, returnFilter = [], isRecursive = false) {
     for (const uiFilter of bcFilter) {
         let blockFilter = {};
+        if (uiFilter.filter === null && uiFilter.ui) {
+            blockFilter.ui = uiFilter.ui;
+            blockFilter.sources = uiFilter.sources;
+            blockFilter.criteria = [{}];
+            returnFilter.push(blockFilter);
+            return returnFilter;
+        }
+        // eslint-disable-next-line consistent-return
         if (!uiFilter.filter && !isRecursive) return;
         if (isRecursive) {
             let internalOp = Object.keys(uiFilter);
