@@ -10,6 +10,9 @@
         display: inline-flex;
         align-items: center;
         margin-left: 5px;
+        &.hierarchy-delete {
+          align-items: end;
+        }
       }
     }
 </style>
@@ -17,7 +20,7 @@
 <template>
     <div>
         <div class="bc-filter-operator">
-            <div class="options-container">
+            <div class="options-container" :class="{'hierarchy-delete': !show}">
                 <keep-alive>
                     <component :is="dynamicComponentDate"
                         @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"

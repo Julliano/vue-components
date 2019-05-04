@@ -30,6 +30,7 @@
 </template>
 
 <script>
+    import moment from 'moment';
 
     export default {
         name: 'bc-date-inputs',
@@ -37,17 +38,42 @@
             tipo: String,
             val: Array
         },
+        destroyed() {
+            let isoDate1 = null;
+            let date1 = new Date(`${this.initialDate ? this.initialDate : ''}, ${this.hour1 ? this.hour1 : ''}`);
+            if (date1.getTime()) isoDate1 = new Date(date1.getTime() -
+                (date1.getTimezoneOffset() * 60000)).toISOString();
+            this.$emit('change', [isoDate1]);
+        },
         data() {
             return {
-                initialDate: this.val[0] || '',
-                finalDate: this.val[2] || '',
-                hour1: this.val[1] || '',
-                hour2: this.val[3] || ''
+                initialDate: this.checkVal(1, 'date'),
+                finalDate: this.checkVal(2, 'date'),
+                hour1: this.checkVal(1, 'hour'),
+                hour2: this.checkVal(2, 'hour')
             };
         },
         methods: {
+            checkVal(value, type) {
+                if (value && this.val[value - 1]) {
+                    if (type === 'date') {
+                        return moment(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[0];
+                    } else if (type === 'hour') {
+                        return moment.utc(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[1];
+                    }
+                }
+                return '';
+            },
             change() {
-                this.$emit('change', [this.initialDate, this.finalDate, this.hour1, this.hour2]);
+                let isoDate1 = null;
+                let isoDate2 = null;
+                let date1 = new Date(`${this.initialDate ? this.initialDate : ''}, ${this.hour1 ? this.hour1 : ''}`);
+                if (date1.getTime()) isoDate1 = new Date(date1.getTime() -
+                    (date1.getTimezoneOffset() * 60000)).toISOString();
+                let date2 = new Date(`${this.finalDate ? this.finalDate : ''}, ${this.hour2 ? this.hour2 : ''}`);
+                if (date2.getTime()) isoDate2 = new Date(date2.getTime() -
+                    (date2.getTimezoneOffset() * 60000)).toISOString();
+                this.$emit('change', [isoDate1, isoDate2]);
             }
         }
     };

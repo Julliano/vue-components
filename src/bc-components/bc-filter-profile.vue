@@ -7,7 +7,10 @@
     margin: 0px;
   }
   .inline {
-      display: flex;
+    display: flex;
+    .inp {
+      width: 200px;
+    }
   }
   button {
     &.btn-icon {

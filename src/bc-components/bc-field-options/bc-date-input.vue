@@ -26,6 +26,7 @@
 </template>
 
 <script>
+    import moment from 'moment';
 
     export default {
         name: 'bc-date-input',
@@ -35,11 +36,21 @@
         },
         data() {
             return {
-                date: this.val[0] || '',
-                hour1: this.val[1] || ''
+                date: this.checkVal(1, 'date'),
+                hour1: this.checkVal(1, 'hour')
             };
         },
         methods: {
+            checkVal(value, type) {
+                if (value && this.val[value - 1]) {
+                    if (type === 'date') {
+                        return moment(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[0];
+                    } else if (type === 'hour') {
+                        return moment.utc(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[1];
+                    }
+                }
+                return '';
+            },
             handleValue() {
                 let localDate = null;
                 let localHour = null;
@@ -49,7 +60,11 @@
                 if (this.hour1 !== '') {
                     localHour = this.hour1;
                 }
-                return this.$emit('change', [localDate, localHour]);
+                let date = new
+                Date(`${localDate ? localDate : ''}, ${localHour ? localHour : ''}`);
+                let isoDate = new Date(date.getTime() -
+                    (date.getTimezoneOffset() * 60000)).toISOString();
+                return this.$emit('change', [isoDate]);
             }
         },
         watch: {
