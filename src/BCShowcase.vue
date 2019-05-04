@@ -35,10 +35,82 @@
                 idAplicacao: 'aplicacao|bc|140',
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 jsonFilter: {ui: 'dc_arquivo', sources: ['fonte'], operator: null, criteria: {}},
+                profile: {},
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
-                profile: {},
-                filter: []
+                filter: [
+                    {
+                        ui: 'dc_agenda',
+                        sources: [],
+                        filter: {
+                            OR: [
+                                // {
+                                //     attr: 'nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // },
+                                {
+                                    AND: [
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João111111111']
+                                        },
+                                        {
+                                            attr: 'alvo.nome',
+                                            oper: 'EQUAL',
+                                            val: ['João222222222222']
+                                        },
+                                        {
+                                            OR: [
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['4']
+                                                },
+                                                {
+                                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                                    oper: 'EQUAL',
+                                                    val: ['3']
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    attr: 'alvo.nome',
+                                    oper: 'EQUAL',
+                                    val: ['João111111111']
+                                },
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João']
+                                // }
+                                // {
+                                //     attr: 'alvo.nome',
+                                //     oper: 'EQUAL',
+                                //     val: ['João11111111111111111']
+                                // },
+                                {
+                                    attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                    oper: 'EQUAL',
+                                    val: ['4']
+                                },
+                                // {
+                                //     attr: 'alvo.itcp_pto_acesso_sk_alvo.id_tipo_pto_acesso',
+                                //     oper: 'EQUAL',
+                                //     val: ['3']
+                                // },
+                                {
+                                    attr: 'nome',
+                                    oper: 'EQUAL',
+                                    val: ['João22222222222222']
+                                }
+                            ]
+                        }
+                    }
+                ]
             };
         },
         created() {

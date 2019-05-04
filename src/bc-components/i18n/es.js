@@ -1,5 +1,6 @@
 export default {
     select: 'Selecione', // Todo tradução
+    no_attribs_options: 'Não há atributos filtráveis',
     profile: 'Perfil',
     searchProfile: 'Seleccione los parámetros del filtro',
     sources: 'Fontes', // Todo tradução
