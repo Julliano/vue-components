@@ -2,6 +2,7 @@
     @import "../styles/variables";
     @import "../../styles/variables";
     @import "../styles/buttons";
+    @import "../styles/inputs";
 
     .bc-meta-selection-field {
       display: inline-flex;
@@ -20,7 +21,7 @@
     <div>
         <div class="bc-meta-selection-field">
             <div class="options-container" :class="{'child': child}">
-                <select class="inp" v-model="field">
+                <select class="inp" v-model="field" :disabled="!this.options.length">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">
                             {{date.value}}

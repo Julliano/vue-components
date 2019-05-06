@@ -25,7 +25,7 @@
     <div class="inline">
         <div class="bc-meta-selection-field" v-if="localHierarchy">
             <div class="options-container" v-for="(each, index) in localHierarchy" :key="index">
-                <select class="inp" @change="setHierarchy(index)" v-model="selecteds[index]">
+                <select class="inp" @change="setHierarchy(index)" v-model="selecteds[index]" :disabled="checkDisabled(index)">
                     <option :value="undefined" disabled>Selecione</option>
                     <option v-for="(each, idx) in options[index]" v-show="options[index]"
                             :key="idx" :value="each">
@@ -88,6 +88,9 @@
                     bcService.getTipoSelecaoHierarquicoOptions(this.localHierarchy[index], id);
                 }
                 this.$set(this.options, index, response);
+            },
+            checkDisabled(index) {
+                return !this.options[index];
             },
             fatherId() {
                 return this.selecteds[this.hierarchy.length - 1];
