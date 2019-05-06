@@ -92,8 +92,10 @@
             },
             async fildsFiltereds() {
                 if (this.fatherId) {
-                    return this.options = await
+                    this.options = await
                     bcService.getTipoSelecaoHierarquicoOptions(this.lookUp, this.fatherId.id);
+                    this.field = [];
+                    return this.$emit('change', null);
                 }
                 return this.options = [];
             }
