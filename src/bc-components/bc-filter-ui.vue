@@ -151,7 +151,17 @@
                 }
             },
             async loadMetadada() {
-                this.uis = await bcService.getLabelUIs(this.logicNameUis);
+                let response = await bcService.getLabelUIs(this.logicNameUis);
+                if (response[0]) {
+                    response.sort((a, b) => {
+                        let nameA = a.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        let nameB = b.label.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+                        if (nameA < nameB) return -1;
+                        if (nameA > nameB) return 1;
+                        return 0;
+                    });
+                }
+                this.uis = response;
             },
             applySelectedFilters(sourcesSelected) {
                 this.$set(this.uiFilter, 'sources', sourcesSelected);
