@@ -194,8 +194,6 @@ export function bcFilterToView(bcFilter) {
     for (const items of response) {
         bcNestedOperator(items, items.criteria);
     }
-
-    console.log(response);
     return response;
 }
 

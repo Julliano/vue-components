@@ -22,7 +22,7 @@
         <div class="bc-meta-selection-field">
             <div class="options-container" :class="{'child': child}">
                 <select class="inp" v-model="field" :disabled="!this.options.length">
-                    <option :value="null" disabled>{{'select' | i18n}}</option>
+                    <option :value="[]" disabled>{{'select' | i18n}}</option>
                     <option v-for="(date, idx) in options" :key="idx" :value="date">
                             {{date.value}}
                     </option>
@@ -52,7 +52,7 @@
         },
         data() {
             return {
-                field: null,
+                field: [],
                 options: []
             };
         },
@@ -79,10 +79,14 @@
             },
             async updateOptions(lookUp) {
                 await this.getSelectionOptions(lookUp);
+                this.field = [];
             },
             handleValue() {
                 if (!this.field || this.field === '') {
                     return this.$emit('change', null);
+                }
+                if (this.field instanceof Array && !this.field.length) {
+                    return false;
                 }
                 return this.$emit('change', [this.field.id]);
             },
@@ -99,7 +103,6 @@
                 if (!this.options.length) {
                     this.options = await bcService.getTipoSelecaoOptions(this.lookUp);
                 }
-                this.checkVal();
                 this.handleValue();
             },
             fatherId() {
