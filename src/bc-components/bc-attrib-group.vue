@@ -159,9 +159,11 @@
             },
             mountCriteriaByOtherUI() {
                 if (!this.filter.criteria) {
-                    this.$set(this.filter, 'criteria', [{}]);
+                    if (this.filter.oper !== 'ANY_CONTENT' && this.filter.oper !== 'NO_CONTENT') {
+                        this.$set(this.filter, 'criteria', [{}]);
+                        this.$delete(this.filter, 'oper');
+                    }
                     this.$set(this.filter, 'operator', 'AND');
-                    this.$delete(this.filter, 'oper');
                     this.$delete(this.filter, 'val');
                     return;
                 }
