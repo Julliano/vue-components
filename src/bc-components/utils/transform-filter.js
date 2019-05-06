@@ -267,7 +267,7 @@ function convertFilterViewToBC(viewFilter, first = true) {
     }
 }
 
-function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueRedulce) {
+function recursiveReduce(criterios, Externaloperator, fatherCriteria, continueReduce) {
     for (let i = 0; i < criterios.length; i++) {
         delete criterios[i].hash;
         let keys = Object.keys(criterios[i]);
@@ -285,13 +285,13 @@ function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueR
             continue;
         }
         if (keys[0] === Externaloperator) {
-            continueRedulce = true;
+            continueReduce = true;
             if (criterios.length === 1) {
                 fatherCriteria[Externaloperator] = criterios[i][keys[0]];
             } else {
                 if (criterios[i][keys[0]] instanceof Array) {
-                    continueRedulce = recursiveRedulse(criterios[i][keys[0]], keys[0],
-                        criterios[i], continueRedulce);
+                    continueReduce = recursiveReduce(criterios[i][keys[0]], keys[0],
+                        criterios[i], continueReduce);
                     continue;
                 } else {
                     criterios.push(criterios[i][keys[0]]);
@@ -301,14 +301,14 @@ function recursiveRedulse(criterios, Externaloperator, fatherCriteria, continueR
             }
         } else {
             if (criterios[i][keys[0]] instanceof Array) {
-                continueRedulce = recursiveRedulse(criterios[i][keys[0]], keys[0],
-                    criterios[i], continueRedulce);
+                continueReduce = recursiveReduce(criterios[i][keys[0]], keys[0],
+                    criterios[i], continueReduce);
                 continue;
             }
         }
     };
 
-    return continueRedulce;
+    return continueReduce;
 }
 
 function reduceFilter(bcFilter) {
@@ -316,9 +316,9 @@ function reduceFilter(bcFilter) {
         if (uiFilter.filter && Object.keys(uiFilter.filter).length === 1) {
             let firstOperator = Object.keys(uiFilter.filter);
             let criterios = uiFilter.filter[firstOperator];
-            let continueRedulce = true;
-            while (continueRedulce) {
-                continueRedulce = false;
+            let continueReduce = true;
+            while (continueReduce) {
+                continueReduce = false;
                 // eslint-disable-next-line no-loop-func
                 criterios.forEach((criteria, i) => {
                     delete criteria.hash;
@@ -329,8 +329,8 @@ function reduceFilter(bcFilter) {
                     if (keys.length !== 1) {
                         return;
                     }
-                    continueRedulce =
-                        recursiveRedulse(criteria[keys], keys[0], criteria, continueRedulce);
+                    continueReduce =
+                        recursiveReduce(criteria[keys], keys[0], criteria, continueReduce);
                 });
             }
         }
