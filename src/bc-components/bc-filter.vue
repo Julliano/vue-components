@@ -97,11 +97,11 @@
                 return false;
             }
             document.jaRegistrouEventoBC = true;
-            document.addEventListener('getJson', this.funcaoGetJson.bind(this), false);
+            document.addEventListener('getJson', this.funcaoGetJson, false);
             return true;
         },
         async beforeDestroy() {
-            document.removeEventListener('getJson', this.funcaoGetJson.bind(this), false);
+            document.removeEventListener('getJson', this.funcaoGetJson, false);
             document.jaRegistrouEventoBC = false;
         },
         methods: {
