@@ -8,8 +8,6 @@
       margin-left: 5px;
       .options-container {
         display: inline-flex;
-        align-items: center;
-        margin-left: 5px;
         &.hierarchy-delete {
           align-items: end;
         }

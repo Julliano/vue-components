@@ -3,13 +3,13 @@
     @import "styles/buttons";
 
     .bc-filter-field {
+      display: inline-flex;
+      flex-direction: column;
+      margin-left: 5px;
+      .options-container {
         display: inline-flex;
-        flex-direction: column;
-        margin-left: 5px;
-    }
-    .options-container {
-        display: inline-flex;
-        align-items: center;
+        // align-items: center;
+      }
     }
 </style>
 
@@ -17,12 +17,12 @@
     <div>
         <div class="bc-filter-field">
             <div class="options-container">
-                <component :is="dynamicComponent" :tipo="tipoAttrib" 
-                           :hierarchy="hierarchy" 
+                <component :is="dynamicComponent" :tipo="tipoAttrib"
+                           :hierarchy="hierarchy"
                            :periods="period"
                            :attrib-name="attribName"
                            :ui-name="uiName"
-                           :val="val" 
+                           :val="val"
                            @change="change"
                            @destroy-period="deletePeriod"
                 ></component>
