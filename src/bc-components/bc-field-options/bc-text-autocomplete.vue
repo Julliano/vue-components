@@ -14,6 +14,7 @@
                 margin: 0;
                 border: 1px solid #eeeeee;
                 max-height: 120px;
+                min-width: 100%;
                 color: #000;
                 overflow: auto;
                 display: block;
