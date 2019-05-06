@@ -90,9 +90,9 @@ export default {
             .doGet(`metadata/${logicName}/sources?loc=${this.getLocale()}`);
     },
 
-    getAutocompleteFieldoptions() {
-        return [{name: 'teste'}, {name: 'abc'}, {name: 'def'}, {name: 'aab'}, {name: 'bbe'}];
-        // return dispatcher.doGet(`${uiName}/${attribName}/operators?loc=pt`);
+    async getAutocompleteFieldoptions(uiName, attribName, value) {
+        return await dispatcher
+            .doGet(`query/autocomplete/${uiName}/${attribName}?value=${value}`);
     },
 
     getTipoSelecaoOptions(tipoSelec) {

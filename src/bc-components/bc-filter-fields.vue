@@ -19,7 +19,9 @@
             <div class="options-container">
                 <component :is="dynamicComponent" :tipo="tipoAttrib" 
                            :hierarchy="hierarchy" 
-                           :periods="period" 
+                           :periods="period"
+                           :attrib-name="attribName"
+                           :ui-name="uiName"
                            :val="val" 
                            @change="change"
                            @destroy-period="deletePeriod"
@@ -60,7 +62,9 @@
                 default: () => []
             },
             hierarchy: Array,
-            period: Array
+            period: Array,
+            uiName: String,
+            attribName: String
         },
         data() {
             return {

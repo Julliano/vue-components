@@ -13,10 +13,9 @@
                 position: absolute;
                 margin: 0;
                 border: 1px solid #eeeeee;
-                max-height: 100px;
+                max-height: 120px;
                 color: #000;
                 overflow: auto;
-                width: 100%;
                 display: block;
                 z-index: 2;
                 background:  #fff;
@@ -40,12 +39,12 @@
     <div>
         <div class="bc-text-autocomplete-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field" @keyup="filterOptions"
+                <input class="inp" type="text" v-model="field" @blur="onCloseOptions"
                 @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="selected()">
-                <ul v-if="options.length">
-                    <li v-for="(opt, idx) in options" :key="idx"
+                <ul v-if="data.length && show">
+                    <li v-for="(opt, idx) in data" :key="idx"
                     :class="{ 'is-active': idx === arrowCounter }" @mouseover="arrow(idx)"
-                    class="autocomplete-result" @click="selected(idx)"> {{ opt.name }} </li>
+                    class="autocomplete-result" @click="selected(idx)"> {{ opt }} </li>
                 </ul>
             </div>
         </div>
@@ -55,11 +54,14 @@
 <script>
 
     import bcService from '../services/bc-services.js';
+    import {debounceTime} from '../utils/utils.js';
 
     export default {
         name: 'bc-text-autocomplete-field',
         props: {
-            val: Array
+            val: Array,
+            attribName: String,
+            uiName: String
         },
         data() {
             return {
@@ -67,31 +69,23 @@
                 data: [],
                 options: [],
                 arrowCounter: -1,
-                selectedItem: null
+                selectedItem: null,
+                show: true,
+                updateOptions: debounceTime(500, this.debounceOptions)
             };
         },
-        created() {
-            // ajustar request (está retornando dados mocados)
-            this.data = bcService.getAutocompleteFieldoptions();
-        },
         methods: {
-            filterOptions() {
-                if (this.field.trim().length === 0) {
-                    this.options = [];
-                    return null;
-                }
-                return this.options = this.data.filter((obj) => {
-                    return obj.name.toLowerCase().includes(this.field.toLowerCase());
-                });
-            },
             selected(idx) {
                 if (!idx) {
                     idx = this.arrowCounter;
                 }
                 this.selectedItem = this.options[idx];
-                this.field = this.selectedItem.name;
+                this.field = this.selectedItem;
                 this.options = [];
                 this.arrowCounter = -1;
+            },
+            onCloseOptions() {
+                this.show = false;
             },
             onArrowDown() {
                 if (this.arrowCounter < this.options.length - 1) {
@@ -106,11 +100,22 @@
             arrow(idx) {
                 this.arrowCounter = idx;
             },
-            handleValue() {
+            async handleValue() {
+                await this.updateOptions();
                 if (this.field === '') {
                     return this.$emit('change', null);
                 }
                 return this.$emit('change', [this.field]);
+            },
+            async debounceOptions() {
+                if (this.field.length >= 3) {
+                    this.data = await bcService.getAutocompleteFieldoptions(this.uiName,
+                        this.attribName, this.field);
+                    this.show = true;
+                } else {
+                    this.data = [];
+                    this.show = false;
+                }
             }
         },
         watch: {

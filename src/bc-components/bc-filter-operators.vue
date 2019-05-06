@@ -47,6 +47,8 @@
                     :autoComplete="autoComplete"
                     :tipo-attrib="tipoAttrib"
                     :period="period"
+                    :ui-name="uiName"
+                    :attrib-name="attribName"
                     ref="filterField"
                 >
                 </bc-filter-fields>
