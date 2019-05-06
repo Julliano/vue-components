@@ -15,10 +15,10 @@
             @success="handleEvent($event, 'success')" @error="handleEvent($event, 'error')" :show="show">
         </bc-filter-profile>
         <h4> {{ 'searchProfile' | i18n }} </h4>
-        <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
+        <!-- <textarea name="" id="" cols="50" rows="50" style="position: absolute; right:0; top:0;">
             {{JSON.stringify(uis, null,8)}}
 
-        </textarea>
+        </textarea> -->
         <div class="middle-filter">
             <bc-filter-ui v-for="(uiFilter, idx) in uis" :key="uiFilter.hash"
                             :idx="idx"
@@ -97,7 +97,15 @@
                 return false;
             }
             document.jaRegistrouEventoBC = true;
-            document.addEventListener('getJson', function() {
+            document.addEventListener('getJson', this.funcaoGetJson.bind(this), false);
+            return true;
+        },
+        async beforeDestroy() {
+            document.removeEventListener('getJson', this.funcaoGetJson.bind(this), false);
+            document.jaRegistrouEventoBC = false;
+        },
+        methods: {
+            funcaoGetJson() {
                 let dadosValidos = true;
                 const quantiaFiltros = this.$refs.filtroUI.length;
                 this.$refs.filtroUI.some(componente => {
@@ -125,12 +133,6 @@
                     jsonBc: viewToBcFilter(JSON.parse(JSON.stringify(this.uis)))
                 };
                 this.handleEvent(JSON.stringify(xml), 'json');
-            }.bind(this), false);
-            return true;
-        },
-        methods: {
-            validaDados() {
-                console.log('asd');
             },
             loadData() {
                 let criterios = this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
