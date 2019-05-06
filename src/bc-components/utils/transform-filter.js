@@ -116,7 +116,7 @@ function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
                             fatherCriteria.criteria.push(criteria);
                             continue;
                         } else {
-                            return false;
+                            return;
                         }
                     }
 
@@ -132,7 +132,7 @@ function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
                 verifyOtherUIOrGroup(criteria, criteria.criteria, fatherCriteria);
             }
         }
-        return true;
+        return;
     }
     // No futuro se não pode não ser um Array ai deve ser um grupo.
 }
@@ -347,6 +347,5 @@ export function viewToBcFilter(viewFilter) {
         return 'filter' in each && each.filter !== undefined;
     });
     reduceFilter(bcFilter);
-    console.log(bcFilter);
     return bcFilter;
 }
