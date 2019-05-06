@@ -37,6 +37,7 @@
                 <bc-filter-operators v-else-if="selectedAttrib && selectedAttrib.type !== '_meta_ui'"
                     :auto-complete="selectedAttrib.autocomplete" :look-up="selectedAttrib.lookup"
                     :tipo-attrib="selectedAttrib.type" :ui-name="ui"
+                    :attrib-size="selectedAttrib.size"
                     :attrib-name="selectedAttrib.name" :criteria="item"
                     :hierarchy="selectedAttrib.hierarchy"
                     @meta-operator-selected="onMetaOperatorSelected($event, item)"

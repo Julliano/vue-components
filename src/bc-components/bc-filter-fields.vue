@@ -21,6 +21,7 @@
                            :hierarchy="hierarchy" 
                            :periods="period"
                            :attrib-name="attribName"
+                           :attrib-size="attribSize"
                            :ui-name="uiName"
                            :val="val" 
                            @change="change"
@@ -64,7 +65,8 @@
             hierarchy: Array,
             period: Array,
             uiName: String,
-            attribName: String
+            attribName: String,
+            attribSize: Number
         },
         data() {
             return {

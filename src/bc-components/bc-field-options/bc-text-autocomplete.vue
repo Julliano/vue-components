@@ -39,7 +39,7 @@
     <div>
         <div class="bc-text-autocomplete-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field" @blur="onCloseOptions"
+                <input class="inp" type="text" v-model="field" @blur="onCloseOptions" :maxlength="attribSize"
                 @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="selected()">
                 <ul v-if="data.length && show">
                     <li v-for="(opt, idx) in data" :key="idx"
@@ -61,13 +61,13 @@
         props: {
             val: Array,
             attribName: String,
-            uiName: String
+            uiName: String,
+            attribSize: Number
         },
         data() {
             return {
                 field: this.val[0] || '',
                 data: [],
-                options: [],
                 arrowCounter: -1,
                 selectedItem: null,
                 show: true,
@@ -79,16 +79,19 @@
                 if (!idx) {
                     idx = this.arrowCounter;
                 }
-                this.selectedItem = this.options[idx];
+                this.selectedItem = this.data[idx];
                 this.field = this.selectedItem;
-                this.options = [];
+                this.data = [];
                 this.arrowCounter = -1;
             },
             onCloseOptions() {
                 this.show = false;
             },
             onArrowDown() {
-                if (this.arrowCounter < this.options.length - 1) {
+                if (this.data.length && !this.show) {
+                    this.show = true;
+                }
+                if (this.arrowCounter < this.data.length - 1) {
                     this.arrowCounter = this.arrowCounter + 1;
                 }
             },

@@ -45,6 +45,7 @@
                     @destroy-period="deletePeriod"
                     :val="criteria.val" :operator="localOperator.name"
                     :autoComplete="autoComplete"
+                    :attrib-size="attribSize"
                     :tipo-attrib="tipoAttrib"
                     :period="period"
                     :ui-name="uiName"
@@ -77,7 +78,8 @@
             attribName: String,
             criteria: Object,
             lookUp: String,
-            hierarchy: Array
+            hierarchy: Array,
+            attribSize: Number
         },
         components: {
             bcService,

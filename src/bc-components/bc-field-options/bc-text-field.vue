@@ -16,7 +16,7 @@
     <div>
         <div class="bc-text-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field">
+                <input class="inp" :maxlength="attribSize" type="text" v-model="field">
             </div>
         </div>
     </div>
@@ -27,7 +27,8 @@
     export default {
         name: 'bc-text-field',
         props: {
-            val: Array
+            val: Array,
+            attribSize: Number
         },
         data() {
             return {
