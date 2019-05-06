@@ -39,12 +39,12 @@
     <div>
         <div class="bc-text-autocomplete-field">
             <div class="options-container">
-                <input class="inp" type="text" v-model="field" @blur="onCloseOptions" :maxlength="attribSize"
+                <input class="inp" type="text" v-model="field" @blur.prevent="onCloseOptions" :maxlength="attribSize"
                 @keyup.down="onArrowDown" @keyup.up="onArrowUp" @keyup.enter="selected()">
                 <ul v-if="data.length && show">
                     <li v-for="(opt, idx) in data" :key="idx"
                     :class="{ 'is-active': idx === arrowCounter }" @mouseover="arrow(idx)"
-                    class="autocomplete-result" @click="selected(idx)"> {{ opt }} </li>
+                    class="autocomplete-result" @click.stop="selected(idx)"> {{ opt }} </li>
                 </ul>
             </div>
         </div>
@@ -85,7 +85,9 @@
                 this.arrowCounter = -1;
             },
             onCloseOptions() {
-                this.show = false;
+                setTimeout(() => {
+                    this.show = false;
+                }, 150);
             },
             onArrowDown() {
                 if (this.data.length && !this.show) {
