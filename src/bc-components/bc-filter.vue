@@ -93,6 +93,10 @@
             if (this.uis) {
                 this.createEmptyUi();
             }
+            if (document.jaRegistrouEventoBC) {
+                return false;
+            }
+            document.jaRegistrouEventoBC = true;
             document.addEventListener('getJson', function() {
                 let dadosValidos = true;
                 const quantiaFiltros = this.$refs.filtroUI.length;
@@ -122,6 +126,7 @@
                 };
                 this.handleEvent(JSON.stringify(xml), 'json');
             }.bind(this), false);
+            return true;
         },
         methods: {
             validaDados() {
