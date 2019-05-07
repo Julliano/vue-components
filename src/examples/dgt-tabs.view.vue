@@ -44,7 +44,8 @@ let dataTabs = {
         },
         {
             label: 'Filtros impsum',
-            active: true
+            active: true,
+            changed: true
         },
         {
             label: 'Filtros Gerais'
