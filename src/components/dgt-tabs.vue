@@ -40,6 +40,14 @@
                 }
             }
         }
+
+        .dgt-tab-changed {
+            font-weight: 800;
+            &::before {
+                content: '*';
+            }
+        }
+
     }
 </style>
 
@@ -53,6 +61,7 @@
                 @click="changeTab(tab)"
                 @keypress.enter="changeTab(tab)"
                 class="dgt-tab-item"
+                :class="{'dgt-tab-changed': tab.changed}"
                 :title="tab.label"
                 :active="isActive(tab)"
                 :disabled="tab.disabled">
