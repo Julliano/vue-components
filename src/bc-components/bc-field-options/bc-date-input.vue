@@ -1,6 +1,7 @@
 <style scoped lang="scss">
     @import "../styles/variables";
     @import "../styles/buttons";
+    @import "../styles/inputs";
 
     .bc-int-input {
         display: inline-flex;

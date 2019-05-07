@@ -72,6 +72,7 @@
                 arrowCounter: -1,
                 selectedItem: null,
                 show: true,
+                search: false,
                 updateOptions: debounceTime(500, this.debounceOptions)
             };
         },
@@ -82,13 +83,14 @@
                 }
                 this.selectedItem = this.data[idx];
                 this.field = this.selectedItem;
+                this.search = true;
                 this.data = [];
                 this.arrowCounter = -1;
             },
             onCloseOptions() {
                 setTimeout(() => {
                     this.show = false;
-                }, 150);
+                }, 200);
             },
             onArrowDown() {
                 if (this.data.length && !this.show) {
@@ -107,7 +109,11 @@
                 this.arrowCounter = idx;
             },
             async handleValue() {
-                await this.updateOptions();
+                if (!this.search) {
+                    await this.updateOptions();
+                } else {
+                    this.search = false;
+                }
                 if (this.field === '') {
                     return this.$emit('change', null);
                 }

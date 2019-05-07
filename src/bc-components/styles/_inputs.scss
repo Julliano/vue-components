@@ -1,3 +1,11 @@
 .inp{
   width: 150px;
+  &[type='date'] {
+    opacity: 1;
+    width: 125px;
+  }
+  &[type='time'] {
+    width: 70px;
+    min-width: 70px;
+  }
 }

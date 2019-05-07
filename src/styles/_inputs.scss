@@ -9,5 +9,8 @@
   }
   .inp{
     padding-left: 2.8em !important;
+    &[type='date'] {
+        opacity: 1;
+    }
   }
 }
