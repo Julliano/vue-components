@@ -19,8 +19,7 @@
     <div>
         <div class="bc-int-input">
             <div class="options-container">
-                <input class="inp" type="tel" v-mask="'#########'"
-                       v-model="field"
+                <input class="inp" type="number" v-model="field"
                        v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' || tipo === '_hora'">
                 <input class="inp" type="number" :step="0.01" v-model="field" v-else>
             </div>
@@ -30,13 +29,8 @@
 
 <script>
 
-    import VueTheMask from 'vue-the-mask';
-
     export default {
         name: 'bc-int-input',
-        components: {
-            VueTheMask
-        },
         props: {
             tipo: String,
             val: Array

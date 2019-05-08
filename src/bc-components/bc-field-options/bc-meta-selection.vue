@@ -14,13 +14,6 @@
           margin-top: $small-space;
         }
       }
-      select {
-        option {
-          max-width:100px;
-          text-overflow:ellipsis;
-          overflow:hidden;
-        }
-      }
     }
 </style>
 
@@ -28,10 +21,10 @@
     <div>
         <div class="bc-meta-selection-field">
             <div class="options-container" :class="{'child': child}">
-                <select class="inp" v-model="field" :disabled="!this.options.length">
+                <select id="metaSelection" :title="field.value" class="inp" v-model="field" :disabled="!this.options.length">
                     <option :value="[]" disabled>{{'select' | i18n}}</option>
-                    <option v-for="(date, idx) in options" :key="idx" :value="date">
-                            {{date.value}}
+                    <option v-for="(opt, idx) in options" :title="opt.value" :key="idx" :value="opt">
+                            {{opt.text || opt.value}}
                     </option>
                 </select>
             </div>
