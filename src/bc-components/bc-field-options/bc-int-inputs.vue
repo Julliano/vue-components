@@ -18,9 +18,13 @@
 <template>
     <div>
         <div class="bc-int-inputs">
-            <div class="options-container" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64' ||  tipo === '_hora'">
+            <div class="options-container" v-if="tipo === '_inteiro_32' || tipo === '_inteiro_64'">
                 <input class="inp" type="number" v-model="field1">
                 <input class="inp margin-left" type="number" v-model="field2">
+            </div>
+            <div class="options-container" v-else-if="tipo === '_hora'">
+                <input class="inp" type="time" v-model="field1">
+                <input class="inp margin-left" type="time" v-model="field2">
             </div>
             <div class="options-container" v-else>
                 <input class="inp" type="number" :step="0.01" v-model="field1">

@@ -31,7 +31,7 @@
                 </select>
                 <bc-filter-source-menu v-if="showSourceOption" :uiProps="uiFilter.ui" :uniqueId="Math.random()" :source-types="sourceTypes"
                                        @apply="applySelectedFilters" :sourcesSelectedProp="uiFilter.sources"></bc-filter-source-menu>
-                <button class="btn btn-filter-icon" v-if="uiFilter.ui !== null">
+                <button class="btn btn-filter" v-if="uiFilter.ui !== null">
                     <i class="mdi mdi-close" @click="fireUIRemoved"></i>
                 </button>
             </div>

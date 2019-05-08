@@ -19,13 +19,11 @@
     <div>
         <div class="bc-filter-operator">
             <div class="options-container" :class="{'hierarchy-delete': !show}">
-                <keep-alive>
-                    <component :is="dynamicComponentDate"
-                        @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
-                        :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
-                        @change="change" ref="metaSelection">
-                    </component>
-                </keep-alive>
+                <component :is="dynamicComponentDate"
+                    @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
+                    :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
+                    @change="change" ref="metaSelection">
+                </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
