@@ -10,11 +10,6 @@
             display: inline-flex;
             align-items: center;
         }
-        // .inp {
-        //   &[type='time'].seconds {
-        //     width: 95px;
-        //   }
-        // }
     }
 </style>
 
@@ -73,6 +68,7 @@
                         (date.getTimezoneOffset() * 60000)).toISOString();
                     return this.$emit('change', [isoDate]);
                 }
+                return null;
             }
         },
         watch: {
