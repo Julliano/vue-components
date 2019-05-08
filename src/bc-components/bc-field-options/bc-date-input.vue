@@ -10,6 +10,11 @@
             display: inline-flex;
             align-items: center;
         }
+        // .inp {
+        //   &[type='time'].seconds {
+        //     width: 95px;
+        //   }
+        // }
     }
 </style>
 
@@ -20,7 +25,7 @@
                 <input id="date" name="finalDate" type="date"
                     class="inp" v-model="date">
                 <input id="hour1" name="hour1" type="time"
-                    class="inp margin-left" v-model="hour1">
+                    class="inp margin-left seconds" step="1" v-model="hour1">
             </div>
         </div>
     </div>
@@ -61,11 +66,13 @@
                 if (this.hour1 !== '') {
                     localHour = this.hour1;
                 }
-                let date = new
-                Date(`${localDate ? localDate : ''}, ${localHour ? localHour : ''}`);
-                let isoDate = new Date(date.getTime() -
-                    (date.getTimezoneOffset() * 60000)).toISOString();
-                return this.$emit('change', [isoDate]);
+                if (localDate && localHour) {
+                    let date = new
+                    Date(`${localDate ? localDate : ''}, ${localHour ? localHour : ''}`);
+                    let isoDate = new Date(date.getTime() -
+                        (date.getTimezoneOffset() * 60000)).toISOString();
+                    return this.$emit('change', [isoDate]);
+                }
             }
         },
         watch: {

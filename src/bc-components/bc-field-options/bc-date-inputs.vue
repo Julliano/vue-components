@@ -20,11 +20,11 @@
                 <input id="date1" name="initialDate" type="date" @change="change"
                         class="inp" v-model="initialDate">
                 <input id="hour1" name="hour1" type="time" @change="change"
-                    class="inp margin-left" v-model="hour1">
+                    class="inp margin-left seconds" step="1" v-model="hour1">
                 <input id="date2" name="finalDate" type="date" @change="change"
                         class="inp margin-left" v-model="finalDate">
                 <input id="hour2" name="hour2" type="time" @change="change"
-                    class="inp margin-left" v-model="hour2">
+                    class="inp margin-left seconds" step="1" v-model="hour2">
             </div>
         </div>
     </div>
