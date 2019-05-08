@@ -135,7 +135,8 @@
                 this.handleEvent(JSON.stringify(xml), 'json');
             },
             loadData() {
-                let criterios = this.filter ? bcFilterToView(this.filter) : this.emptyFilter;
+                let localFilter = JSON.parse(JSON.stringify(this.filter));
+                let criterios = localFilter ? bcFilterToView(localFilter) : this.emptyFilter;
                 for (const criterio of criterios) {
                     if (criterio.hash) continue;
                     criterio.hash = Math.random();
