@@ -14,6 +14,13 @@
           margin-top: $small-space;
         }
       }
+      select {
+        option {
+          max-width:100px;
+          text-overflow:ellipsis;
+          overflow:hidden;
+        }
+      }
     }
 </style>
 

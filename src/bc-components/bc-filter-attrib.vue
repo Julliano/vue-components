@@ -134,6 +134,8 @@
             fireAttribSelected() {
                 this.$delete(this.criteria, 'criteria');
                 this.$delete(this.criteria, 'operator');
+                this.$delete(this.criteria, 'oper');
+                this.$delete(this.criteria, 'val');
                 if (this.selectedAttrib.type === '_meta_ui') {
                     this.$set(this.criteria, 'operator', 'AND');
                     this.$set(this.criteria, 'criteria', [{}]);
