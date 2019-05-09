@@ -40,7 +40,7 @@
     import BcFilterUi from './bc-filter-ui.vue';
     import BcFilterProfile from './bc-filter-profile.vue';
     import bcService from './services/bc-services.js';
-    import { bcFilterToView, viewToBcFilter } from './utils/transform-filter.js';
+    import { viewToBcFilter } from './utils/transform-filter.js';
     import i18n from './utils/i18n.js';
 
     export default {
@@ -135,8 +135,7 @@
                 this.handleEvent(JSON.stringify(xml), 'json');
             },
             loadData() {
-                let localFilter = JSON.parse(JSON.stringify(this.filter));
-                let criterios = localFilter ? bcFilterToView(localFilter) : this.emptyFilter;
+                let criterios = this.filter ? this.filter : this.emptyFilter;
                 for (const criterio of criterios) {
                     if (criterio.hash) continue;
                     criterio.hash = Math.random();
