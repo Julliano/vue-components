@@ -319,6 +319,5 @@ export function viewToBcFilter(viewFilter) {
         return 'filter' in each && each.filter !== undefined;
     });
     reduceFilter(bcFilter);
-    console.log(JSON.stringify(bcFilter));
     return bcFilter;
 }
