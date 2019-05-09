@@ -106,6 +106,10 @@ function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
                         attr = criteria.attr.replace(`${fatherAttr}.`, '');
                         criteria.attr = attr;
                         idx = attr.indexOf('.');
+                        // eslint-disable-next-line max-depth
+                        if (!recursiveFather.attr) {
+                            recursiveFather.attr = fatherAttr;
+                        }
                     }
                     attr = attr.substr(0, idx);
                     // eslint-disable-next-line max-depth
@@ -315,5 +319,6 @@ export function viewToBcFilter(viewFilter) {
         return 'filter' in each && each.filter !== undefined;
     });
     reduceFilter(bcFilter);
+    console.log(JSON.stringify(bcFilter));
     return bcFilter;
 }
