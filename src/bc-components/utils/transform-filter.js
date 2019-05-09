@@ -113,7 +113,6 @@ function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
                         // eslint-disable-next-line max-depth
                         if (fatherCriteria.attr === attr) {
                             criteria.attr = criteria.attr.replace(`${attr}.`, '');
-                            fatherCriteria.criteria.push(criteria);
                             continue;
                         } else {
                             return;
@@ -122,11 +121,6 @@ function verifyOtherUIOrGroup(fatherCriteria, criterias, recursiveFather) {
 
                     fatherCriteria.attr = attr;
                     criteria.attr = criteria.attr.replace(`${attr}.`, '');
-                    fatherCriteria.criteria = [criteria];
-                    // eslint-disable-next-line max-depth
-                    if (recursiveFather) {
-                        recursiveFather.criteria.push(fatherCriteria);
-                    }
                 }
             } else {
                 verifyOtherUIOrGroup(criteria, criteria.criteria, fatherCriteria);
@@ -267,48 +261,28 @@ function convertFilterViewToBC(viewFilter, first = true) {
     }
 }
 
-function recursiveReduce(criterios, Externaloperator, fatherCriteria, continueReduce) {
+function reduce(criterios, fatherOperator) {
     for (let i = 0; i < criterios.length; i++) {
         delete criterios[i].hash;
         let keys = Object.keys(criterios[i]);
         if (keys.length === 0) {
             criterios.splice(i, 1);
+            i--;
             continue;
         }
-        if (keys.length !== 1) {
-            if (criterios.length === 1) {
-                fatherCriteria.attr = criterios[i].attr;
-                fatherCriteria.oper = criterios[i].oper;
-                fatherCriteria.val = criterios[i].val;
-                delete fatherCriteria[Externaloperator];
-            }
-            continue;
-        }
-        if (keys[0] === Externaloperator) {
-            continueReduce = true;
-            if (criterios.length === 1) {
-                fatherCriteria[Externaloperator] = criterios[i][keys[0]];
-            } else {
-                if (criterios[i][keys[0]] instanceof Array) {
-                    continueReduce = recursiveReduce(criterios[i][keys[0]], keys[0],
-                        criterios[i], continueReduce);
-                    continue;
-                } else {
-                    criterios.push(criterios[i][keys[0]]);
-                    criterios.splice(i, 1);
-                    i--;
+        if (keys.length === 1) {
+            if (keys[0] === fatherOperator[0]) {
+                let subCriterios = criterios[i][keys[0]];
+                for (let y = 0; y < subCriterios.length; y++) {
+                    criterios.splice(i + y, 0, subCriterios[y]);
                 }
-            }
-        } else {
-            if (criterios[i][keys[0]] instanceof Array) {
-                continueReduce = recursiveReduce(criterios[i][keys[0]], keys[0],
-                    criterios[i], continueReduce);
-                continue;
+                criterios.splice(i + subCriterios.length, 1);
+                i--;
+            } else {
+                reduce(criterios[i][keys], keys);
             }
         }
-    };
-
-    return continueReduce;
+    }
 }
 
 function reduceFilter(bcFilter) {
@@ -316,29 +290,12 @@ function reduceFilter(bcFilter) {
         if (uiFilter.filter && Object.keys(uiFilter.filter).length === 1) {
             let firstOperator = Object.keys(uiFilter.filter);
             let criterios = uiFilter.filter[firstOperator];
-            let continueReduce = true;
-            while (continueReduce) {
-                continueReduce = false;
-                // eslint-disable-next-line no-loop-func
-                criterios.forEach((criteria, i) => {
-                    delete criteria.hash;
-                    let keys = Object.keys(criteria);
-                    if (keys.length === 0) {
-                        criterios.splice(i, 1);
-                    }
-                    if (keys.length !== 1) {
-                        return;
-                    }
-                    continueReduce =
-                        recursiveReduce(criteria[keys], keys[0], criteria, continueReduce);
-                });
-            }
+            reduce(criterios, firstOperator);
         }
     }
     return bcFilter;
 }
 
-// eslint-disable-next-line
 export function viewToBcFilter(viewFilter) {
     let bcFilter = convertFilterViewToBC(viewFilter);
     bcFilter = bcFilter.filter(each => {
