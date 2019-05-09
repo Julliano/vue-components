@@ -290,7 +290,20 @@ function reduceFilter(bcFilter) {
         if (uiFilter.filter && Object.keys(uiFilter.filter).length === 1) {
             let firstOperator = Object.keys(uiFilter.filter);
             let criterios = uiFilter.filter[firstOperator];
-            reduce(criterios, firstOperator);
+
+            for (let i in criterios) {
+                delete criterios[i].hash;
+                let keys = Object.keys(criterios[i]);
+                if (keys.length === 0) {
+                    criterios.splice(i, 1);
+                    continue;
+                }
+                if (keys.length !== 1) {
+                    continue;
+                }
+
+                reduce(criterios[i][keys[0]], keys);
+            }
         }
     }
     return bcFilter;
