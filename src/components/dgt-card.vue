@@ -1,6 +1,7 @@
 <style lang="scss" scoped>
 .dgt-card-component {
   width: var(--dgt-card-width, 200px);
+  max-width: var(--dgt-card-width, 200px);
   min-height: var(--dgt-card-height, 55px);
   box-shadow: var(--dgt-card-shadow, 0px 1px 4px 2px #c7c7c7);
   background: var(--dgt-card-background, white);
@@ -27,6 +28,8 @@
     .card-name {
       margin: 0;
       font-weight: normal;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
     .opacity-5 {
       opacity: 0.5;
@@ -40,7 +43,7 @@
         <i v-if="dataProps.class || dataProps.icon" :class="`${dataProps.class}`">{{ dataProps.icon }}</i>
         <img v-if="dataProps.img" :src="dataProps.img"/>
         <div class="text-container">
-            <h4 class="card-name">
+            <h4 class="card-name" :title="dataProps.name">
                 {{ dataProps.name }}
                 <span class="opacity-5" v-if="dataProps.count">
                     ({{ dataProps.count }})
