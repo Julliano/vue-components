@@ -25,7 +25,7 @@
                 <select class="inp" @change="fireAttribSelected(index)" v-model="selectedAttrib">
                     <option :value="null" disabled>{{getMessage() | i18n}}</option>
                     <option v-for="(opt, idx) in localAttribs || metaAttribs" :key="idx"
-                            :value="opt"
+                            :value="opt" :name="opt.name"
                     >
                       {{opt.label}}
                     </option>

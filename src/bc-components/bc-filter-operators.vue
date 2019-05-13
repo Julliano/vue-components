@@ -184,7 +184,8 @@
             },
             async getOperators() {
                 if (!this.attribName) return;
-                this.metaOperators = await bcService.getOperators(this.uiName, this.attribName);
+                this.metaOperators = await bcService.getOperators(this.uiName,
+                    this.attribName, this.tipoAttrib);
                 this.metaOperators.forEach(op => {
                     op.name = op.name.toUpperCase();
                 });
