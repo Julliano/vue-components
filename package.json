@@ -12,7 +12,7 @@
     "build:bcc": "rm -rf dist-bc-component/* && npm run lint  && node node_modules/gulp/bin/gulp.js build-bcc",
     "lint": "eslint --ext .js,.vue src",
     "test-ui": "jest",
-    "test-e2e": "testcafe firefox tests-e2e --app 'npm run dev' --app-init-delay 10000"
+    "test-e2e": "testcafe chrome tests-e2e --app 'npm run dev' --app-init-delay 10000"
   },
   "browserslist": [
     "> 1%",

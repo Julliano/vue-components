@@ -23,7 +23,7 @@
             <div class="options-container" :class="{'child': child}">
                 <select id="metaSelection" :title="field.value" class="inp" v-model="field" :disabled="!this.options.length">
                     <option :value="[]" disabled>{{'select' | i18n}}</option>
-                    <option v-for="(opt, idx) in options" :title="opt.value" :key="idx" :value="opt">
+                    <option v-for="(opt, idx) in options" :title="opt.value" :name="opt.id" :key="idx" :value="opt">
                             {{opt.text || opt.value}}
                     </option>
                 </select>

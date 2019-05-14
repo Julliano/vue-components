@@ -518,6 +518,114 @@ let dc_teste = [
         type: '_data_hora'
     }
 ];
+let dc_teste_2 = [
+    {
+        name: 'conta_servico',
+        label: 'Conta',
+        autocomplete: true,
+        size: 255,
+        type: '_texto_delimitado'
+    },
+    {
+        name: 'categoria',
+        label: 'Categoria do dado coletado',
+        autocomplete: false,
+        size: 18,
+        type: '_tipo_selecao',
+        lookup: 'dc_tipo_categoria'
+    },
+    {
+        name: 'data_criacao',
+        label: 'Data Criação',
+        autocomplete: false,
+        type: '_data_ref'
+    },
+    {
+        name: 'operacao',
+        label: 'Operação',
+        autocomplete: false,
+        type: '_meta_ui',
+        metaType: 'operacao'
+    },
+    {
+        name: 'coordenada',
+        label: 'Coordenadas',
+        autocomplete: false,
+        type: '_coordenada'
+    },
+    {
+        name: 'audio',
+        label: 'Audio',
+        autocomplete: false,
+        type: '_audio'
+    },
+    {
+        name: 'arquivo',
+        label: 'Arquivo',
+        autocomplete: false,
+        type: '_arquivo'
+    },
+    {
+        name: 'imagem',
+        label: 'Imagem',
+        autocomplete: false,
+        type: '_imagem'
+    },
+    {
+        name: 'tamanho',
+        label: 'Tamanho',
+        autocomplete: false,
+        size: 18,
+        type: '_inteiro_64'
+    },
+    {
+        name: 'id_usuario_alteracao_analise',
+        label: 'Usuário Alteração',
+        autocomplete: false,
+        type: '_usuario'
+    },
+    {
+        name: 'flg_armazenar',
+        label: 'Armazenar',
+        autocomplete: false,
+        size: 1,
+        type: '_tipo_selecao',
+        lookup: 'tipo_sim_nao'
+    },
+    {
+        name: 'tags',
+        label: 'Tags',
+        autocomplete: false,
+        type: '_meta_ui',
+        metaType: 'oper_tag'
+    },
+    {
+        name: 'relevancia',
+        label: 'Relevância',
+        autocomplete: false,
+        size: 18,
+        type: '_decimal_64'
+    },
+    {
+        name: 'arquivo',
+        label: 'Arquivo',
+        autocomplete: false,
+        type: '_arquivo'
+    },
+    {
+        name: 'ponto_acesso',
+        label: 'Ponto de Acesso',
+        autocomplete: false,
+        type: '_meta_ui',
+        metaType: 'itcp_pto_acesso'
+    },
+    {
+        name: 'data_inicial',
+        label: 'Data Registro no IntelleTotum',
+        autocomplete: false,
+        type: '_data_hora'
+    }
+];
 let operacao = [
     {
         name: 'nome',
@@ -887,10 +995,15 @@ let filterMok = {
         {
             name: 'dc_teste',
             label: 'Teste Automatizado'
+        },
+        {
+            name: 'dc_teste_2',
+            label: 'Teste Automatizado 2'
         }
     ],
     getAttribsFromUI: {
         dc_teste,
+        dc_teste_2,
         operacao,
         alvo
     },

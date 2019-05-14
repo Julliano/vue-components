@@ -26,7 +26,7 @@
                 </component>
                 <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
-                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt">
+                    <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt" :name="opt.name">
                         {{opt.label}}
                     </option>
                 </select>

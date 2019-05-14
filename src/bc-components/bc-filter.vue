@@ -169,16 +169,6 @@
                     xml_config: {}
                 };
             },
-            onMetaUISelected(metaUI, ui) {
-                ui.id = metaUI.id;
-
-                const emptyUi = this.uis.find((e)=>e.id === null);
-
-                if (!emptyUi) {
-                    // adiciona novo grupo de ui
-                    this.uis.push({id: null, attribs: []});
-                }
-            },
             onMetaUISelected(e, uiFilter) {
                 uiFilter.ui = e.name;
                 uiFilter.criteria = [{}];
