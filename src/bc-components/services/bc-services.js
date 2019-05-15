@@ -8,10 +8,11 @@ import Dispatcher from '../utils/dispatcher.js';
 let userId = parent.loginClientDTO ? `usuario|bc|${parent.loginClientDTO.loginId}` :
     `usuario|bc|${process.env.USER_ID}`;
 let sessionId = parent.loginClientDTO ? parent.loginClientDTO.sessionId : process.env.SESSION_ID;
+// mudar devInstance para true quando for rodar os tests;
 let devInstance = false;
-if (process.env) {
-    devInstance = true;
-}
+// if (process.env) {
+//     devInstance = true;
+// }
 let tipoPesquisa = '';
 
 Dispatcher.config({
