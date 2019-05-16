@@ -18,7 +18,7 @@
             <div class="options-container">
                 <select class="inp" v-model="field">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
-                    <option v-for="period in periods" :key="period" :value="period">
+                    <option v-for="(period, idx) in periods" :key="idx" :value="period">
                             {{period.label}}
                     </option>
                 </select>
