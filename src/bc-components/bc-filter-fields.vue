@@ -8,7 +8,6 @@
       margin-left: 5px;
       .options-container {
         display: inline-flex;
-        // align-items: center;
       }
     }
 </style>
@@ -18,14 +17,18 @@
         <div class="bc-filter-field">
             <div class="options-container">
                 <component :is="dynamicComponent" :tipo="tipoAttrib"
+                           :selected-hierarchy="criteria.hierarchy"
                            :hierarchy="hierarchy"
                            :periods="period"
                            :attrib-name="attribName"
                            :attrib-size="attribSize"
                            :ui-name="uiName"
+                           :lookUp="lookUp"
                            :val="val"
                            @change="change"
+                           @hierarchy="setHierarchy"
                            @destroy-period="deletePeriod"
+                           @data-option-selected="dateOptionSelected"
                 ></component>
                 <button class="btn btn-filter" @click="fireFieldRemoved">
                     <i class="mdi mdi-close"></i>
@@ -40,6 +43,7 @@
     import textField from './bc-field-options/bc-text-field.vue';
     import textAutocompleteField from './bc-field-options/bc-text-autocomplete.vue';
     import metaSelection from './bc-field-options/bc-meta-selection.vue';
+    import metaSelectionHierarchy from './bc-field-options/bc-meta-selection-hierarchy.vue';
     import numberInput from './bc-field-options/bc-int-input.vue';
     import numberInputs from './bc-field-options/bc-int-inputs.vue';
     import dateCombo from './bc-field-options/bc-date-combo.vue';
@@ -62,9 +66,11 @@
                 type: Array,
                 default: () => []
             },
+            criteria: Object,
             hierarchy: Array,
             period: Array,
             uiName: String,
+            lookUp: String,
             attribName: String,
             attribSize: Number
         },
@@ -73,7 +79,8 @@
                 field: {
                     id: null
                 },
-                metaFields: metadata.fields[this.tipoAttrib]
+                metaFields: metadata.fields[this.tipoAttrib],
+                hierarquico: false
             };
         },
         computed: {
@@ -104,7 +111,9 @@
                     case '_data_ref':
                         return this.checkDataHoraField();
                     case '_tipo_selecao':
-                        return metaSelection;
+                        if (!this.hierarchy) return metaSelection;
+                        this.hierarquico = true;
+                        return metaSelectionHierarchy;
                     case 'outros':
                         return textField;
                     default:
@@ -127,6 +136,12 @@
                     }
                 }
                 return true;
+            },
+            setHierarchy(param) {
+                this.$set(this.criteria, 'hierarchy', param);
+            },
+            dateOptionSelected(option) {
+                this.$emit('data-option-selected', option);
             },
             fireFieldSelected(e) {
                 const metaField = this.metaFields[e.target.value];
