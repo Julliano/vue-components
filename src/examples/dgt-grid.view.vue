@@ -232,7 +232,7 @@ const dataDgtGrid = {
     lineSelected: {},
     paginations: {
         page: 1,
-        total: 2
+        total: 1
     },
     headers: {
         checkBox: {
