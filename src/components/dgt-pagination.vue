@@ -204,8 +204,11 @@ export default {
         checkLockPagination(page = this.currentPage) {
             if (page === 1) {
                 this.disabledPaginationPrev = true;
-                this.disabledPaginationNext = false;
-                if (this.totalPages === page) this.disabledPaginationNext = true;
+                if (this.totalPages === page) {
+                    this.disabledPaginationNext = true;
+                } else {
+                    this.disabledPaginationNext = false;
+                }
             } else if (this.totalPages === page) {
                 this.disabledPaginationNext = true;
                 this.disabledPaginationPrev = false;
