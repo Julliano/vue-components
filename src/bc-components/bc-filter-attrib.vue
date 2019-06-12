@@ -115,12 +115,6 @@
                 if (!this.$refs.operator) {
                     return true;
                 }
-                if (this.selectedAttrib.type === '_tipo_selecao' && this.criteria.val.length === 1) {
-                    return true;
-                }
-                if (this.selectedAttrib.type === '_tipo_selecao' && this.criteria.val.length <= 0) {
-                    return false;
-                }
                 let dadosValidos = true;
                 this.$refs.operator.some(componente => {
                     if (!componente.validaDados()) {
