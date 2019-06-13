@@ -45,7 +45,7 @@
             checkVal(value, type) {
                 if (value && this.val[value - 1]) {
                     if (type === 'date') {
-                        return moment(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[0];
+                        return moment.utc(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[0];
                     } else if (type === 'hour') {
                         return moment.utc(this.val[value - 1]).format('YYYY-MM-DD HH:mm').split(' ')[1];
                     }

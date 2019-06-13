@@ -202,12 +202,16 @@ export default {
             }
         },
         checkLockPagination(page = this.currentPage) {
-            if (this.totalPages === page) {
+            if (page === 1) {
+                this.disabledPaginationPrev = true;
+                if (this.totalPages === page) {
+                    this.disabledPaginationNext = true;
+                } else {
+                    this.disabledPaginationNext = false;
+                }
+            } else if (this.totalPages === page) {
                 this.disabledPaginationNext = true;
                 this.disabledPaginationPrev = false;
-            } else if (page === 1) {
-                this.disabledPaginationPrev = true;
-                this.disabledPaginationNext = false;
             } else if (page > 1 && page < this.totalPages) {
                 this.disabledPaginationPrev = false;
                 this.disabledPaginationNext = false;

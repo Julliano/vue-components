@@ -38,7 +38,22 @@
                 profile: {},
                 idTipoPesquisa: 'Perfil de pesquisa avançado de dados coletados',
                 tipoBusca: 'E',
-                filter: []
+                filter: [
+                    {
+                        ui: 'dc_agenda_evento',
+                        operator: 'AND',
+                        criteria: [
+                            {
+                                attr: 'data_inicial',
+                                hash: 0.8748111304464632,
+                                val: ['2019-06-12T02:01:01.000Z'],
+                                oper: 'EQUAL'
+                            },
+                            {}
+                        ],
+                        hash: 0.020271157387549588
+                    }
+                ]
             };
         },
         created() {

@@ -8,9 +8,6 @@
       margin-left: 5px;
       .options-container {
         display: inline-flex;
-        &.hierarchy-delete {
-          align-items: end;
-        }
       }
     }
 </style>
@@ -18,32 +15,32 @@
 <template>
     <div>
         <div class="bc-filter-operator">
-            <div class="options-container" :class="{'hierarchy-delete': !show}">
-                <component :is="dynamicComponentDate"
-                    @data-option-selected="dateOptionSelected" @hierarchy="setHierarchy"
-                    :val="criteria.val" :lookUp="lookUp" :hierarchy="hierarchy" :selected-hierarchy="criteria.hierarchy"
-                    @change="change" ref="metaSelection">
-                </component>
-                <select class="inp" @change="fireOperatorSelected" v-model="localOperator" v-if="show">
+            <div class="options-container">
+                <select class="inp" @change="fireOperatorSelected" v-model="localOperator">
                     <option :value="null" disabled>{{'select' | i18n}}</option>
                     <option v-for="(opt, idx) in metaOperators" :key="idx" :value="opt" :name="opt.name">
                         {{opt.label}}
                     </option>
                 </select>
                 <button class="btn btn-filter" @click="fireOperatorRemoved"
-                    v-if="!localOperator || !show">
+                    v-if="!localOperator">
                     <i class="mdi mdi-close"></i>
                 </button>
-                <bc-filter-fields slot="field" v-else-if="show"
+                <bc-filter-fields slot="field" v-if="localOperator"
                     @meta-field-selected="onMetaFieldSelected($event, idx)"
+                    @data-option-selected="dateOptionSelected"
                     @meta-field-removed="fireOperatorRemoved"
                     @change="change"
                     @destroy-period="deletePeriod"
-                    :val="criteria.val" :operator="localOperator.name"
+                    :val="criteria.val"
+                    :operator="localOperator.name"
                     :autoComplete="autoComplete"
                     :attrib-size="attribSize"
                     :tipo-attrib="tipoAttrib"
+                    :hierarchy="hierarchy"
+                    :criteria="criteria"
                     :period="period"
+                    :lookUp="lookUp"
                     :ui-name="uiName"
                     :attrib-name="attribName"
                     ref="filterField"
@@ -57,8 +54,6 @@
 <script>
 
     import i18n from './utils/i18n.js';
-    import metaSelection from './bc-field-options/bc-meta-selection.vue';
-    import metaSelectionHierarchy from './bc-field-options/bc-meta-selection-hierarchy.vue';
     import BcFilterFields from './bc-filter-fields.vue';
     import bcService from './services/bc-services.js';
 
@@ -86,26 +81,8 @@
                 localOperator: null,
                 metaOperators: [],
                 dateOption: {},
-                show: true,
                 period: []
             };
-        },
-        computed: {
-            dynamicComponentDate() {
-                switch (this.tipoAttrib) {
-                    case '_tipo_selecao':
-                        this.show = false;
-                        this.$set(this.criteria, 'oper', 'EQUAL');
-                        if (!this.criteria.val) {
-                            this.$set(this.criteria, 'val', []);
-                        }
-                        if (!this.hierarchy) return metaSelection;
-                        return metaSelectionHierarchy;
-                    default:
-                        this.show = true;
-                        return null;
-                }
-            }
         },
         async created() {
             await this.getOperators();
@@ -194,7 +171,6 @@
                 this.$emit('meta-operator-removed');
             },
             dateOptionSelected(option) {
-                this.show = true;
                 this.dateOption = option;
                 this.getOperators();
                 this.localOperator = null;

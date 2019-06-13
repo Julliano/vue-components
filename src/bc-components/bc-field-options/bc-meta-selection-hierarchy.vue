@@ -23,7 +23,7 @@
 
 <template>
     <div class="inline">
-        <div class="bc-meta-selection-field" v-if="localHierarchy">
+        <div class="bc-meta-selection-field hierarchy-delete" v-if="localHierarchy">
             <div class="options-container" v-for="(each, index) in localHierarchy" :key="index">
                 <select class="inp" @change="setHierarchy(index)" v-model="selecteds[index]" :disabled="checkDisabled(index)">
                     <option :value="undefined" disabled>Selecione</option>

@@ -86,7 +86,7 @@
 				<div class="row row-header" :draggable="header.draggable"
 				    :sortable="header.sortable" @dragstart="drag($event)">
 					<div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]"
-					    @click="sortBy($event)">
+					    @click="sortBy($event, headerKey)">
 						<span class="name-column" v-if="header.isCustomColumn">
 							<slot :name="`${headerKey}-header`"
 							    :dataProps="dataProps"></slot>
@@ -306,9 +306,9 @@ export default {
                     break;
             }
         },
-        sortBy(event) {
+        sortBy(event, headerKey) {
             const nameColumn = event.target.closest('.header').querySelector('.name-column span');
-            nameColumn && this.emitGeneral('sort-column', nameColumn.textContent);
+            nameColumn && this.emitGeneral('sort-column', nameColumn.textContent, headerKey);
 
             if (this.dataProps.disableOrderColumns) return;
 

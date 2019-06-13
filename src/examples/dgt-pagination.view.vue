@@ -2,7 +2,7 @@
     <dgt-pagination
         :total-registers="totalRegisters"
         :current-page="currentPage"
-        :totalPagesDefault="21"
+        :totalPagesDefault="totalPagesDefault"
         :dictionary="dictionary"
         @paginate="paginate"
         @change-page-size="changePageSize"
@@ -13,7 +13,7 @@
 import dgtPagination from '../components/dgt-pagination.vue';
 
 const dataPagination = {
-    totalPagesDefault: 2,
+    totalPagesDefault: 21,
     totalRegisters: 201,
     currentPage: 1,
     pageSizes: [50, 70, 100],
