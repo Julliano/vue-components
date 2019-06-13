@@ -150,6 +150,11 @@
                     }
                     return;
                 }
+                if (this.localOperator.name !== 'OUT_OF_RANGE' || this.localOperator.name !== 'RANGE') {
+                    if (this.criteria.val && this.criteria.val.length > 1) {
+                        this.$set(this.criteria, 'val', [this.criteria.val.shift()]);
+                    }
+                }
 
                 if (this.localOperator.name === 'PERIOD') {
                     this.$set(this.criteria, 'val', []);

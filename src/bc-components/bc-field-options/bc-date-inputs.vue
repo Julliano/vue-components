@@ -39,13 +39,13 @@
             tipo: String,
             val: Array
         },
-        destroyed() {
-            let isoDate1 = null;
-            let date1 = new Date(`${this.initialDate ? this.initialDate : ''}, ${this.hour1 ? this.hour1 : ''}`);
-            if (date1.getTime()) isoDate1 = new Date(date1.getTime() -
-                (date1.getTimezoneOffset() * 60000)).toISOString();
-            this.$emit('change', [isoDate1]);
-        },
+        // destroyed() {
+        // let isoDate1 = null;
+        // let date1 = new Date(`${this.initialDate ? this.initialDate : ''}, ${this.hour1 ? this.hour1 : ''}`);
+        // if (date1.getTime()) isoDate1 = new Date(date1.getTime() -
+        //     (date1.getTimezoneOffset() * 60000)).toISOString();
+        // this.$emit('change', [isoDate1]);
+        // },
         data() {
             return {
                 initialDate: this.checkVal(1, 'date'),
