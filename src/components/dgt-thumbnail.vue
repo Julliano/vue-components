@@ -10,7 +10,8 @@
             <i class="mdi mdi-play"></i> {{videoDuration}}
         </div>
         <div class="thumb-container" @click.stop="handleClick" @mouseover="showPreview" @mouseout="showStatic">
-            <img class="thumb static" :src="src" v-if="!showGif">
+            <img v-if="backupSrc && !showGif" class="thumb static" :src="src" :onerror="`this.src='${backupSrc}';`">
+            <img v-else-if="!showGif" class="thumb static" :src="src">
         </div>
         <footer class="footer">{{footer}}</footer>
     </section>
@@ -28,6 +29,7 @@
                 default: false
             },
             src: String,
+            backupSrc: String,
             id: String,
             videoDuration: String,
             gif: String,

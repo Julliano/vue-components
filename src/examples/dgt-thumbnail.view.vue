@@ -12,6 +12,7 @@
     width: 100%;
 }
 </style>
+
 <template>
     <div class="mansory">
             <dgt-thumbnail v-for="(thumb, index) in thumbs"
@@ -19,9 +20,10 @@
                            title="Tooltip com detalhes"
                            @checked="handleCheckbox"
                            @click="handleClick"
-                            :src="thumb.src"
-                            :footer="thumb.footer"
-                            :id="thumb.id"
+                           :src="thumb.src"
+                           backupSrc="https://placeimg.com/200/300/animals"
+                           :footer="thumb.footer"
+                           :id="thumb.id"
                            :index="index"
                            :checked="thumb.checked"
                            :selected="thumb.selected"
@@ -31,6 +33,7 @@
             </dgt-thumbnail>
     </div>
 </template>
+
 <script>
     import dgtThumbnail from '../components/dgt-thumbnail.vue';
 
