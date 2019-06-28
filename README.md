@@ -16,18 +16,11 @@ npm run build
 
 # Gerar componentes para distribuição via npm interno
 
--Ir para branch npm-publish: $ git checkout npm-publish
--Remove node_modules: $ rm -rf node_modules/
--Reinstalar node_modules: $ npm install
 -Atualizar branch com master: $ git pull origin master
 -Atualizar versão do projeto no package.json: Ex. 1.0.1 para 1.0.2
+-Gerar novo pacote npm run build:theme
+-Entrar na pasta dos pacotes gerados /dist-component
 -Publicar nova versão: $ npm publish
-    Ps.: Pré-requisitos para publicar e puxar do npm da digitro
-        - npm set registry http://npm.digitro.com.br
-        - npm adduser
-
-
-npm run build-components
 
 wiki teste-cafe
 http://devexpress.github.io/testcafe/documentation/test-api
