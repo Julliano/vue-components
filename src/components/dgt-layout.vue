@@ -10,14 +10,16 @@
     }
   }
 </style>
+
 <template>
-<section class="dgt-resize">
-  <div class="dgt-resize-content">
-    <slot></slot>
-  </div>
-  <div class="horizontal-grip-area" @mousedown="resize" v-if="horizontalResizable"></div>
-</section>
+    <section class="dgt-resize">
+        <div class="dgt-resize-content">
+            <slot></slot>
+        </div>
+        <div class="horizontal-grip-area" @mousedown="resize" v-if="horizontalResizable"></div>
+    </section>
 </template>
+
 <script>
   export default {
       name: 'dgtLayout',

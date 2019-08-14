@@ -16,11 +16,18 @@ npm run build
 
 # Gerar componentes para distribuição via npm interno
 
+-Ir para branch npm-publish: $ git checkout npm-publish
+-Remove node_modules: $ rm -rf node_modules/
+-Reinstalar node_modules: $ npm install
 -Atualizar branch com master: $ git pull origin master
 -Atualizar versão do projeto no package.json: Ex. 1.0.1 para 1.0.2
--Gerar novo pacote npm run build:theme
--Entrar na pasta dos pacotes gerados /dist-component
 -Publicar nova versão: $ npm publish
+    Ps.: Pré-requisitos para publicar e puxar do npm da digitro
+        - npm set registry http://npm.digitro.com.br
+        - npm adduser
+
+
+npm run build-components
 
 wiki teste-cafe
 http://devexpress.github.io/testcafe/documentation/test-api
@@ -38,6 +45,8 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 1. [DgtGrid](##DGTGrid)
 1. [DgtStarRating](##DGTStarRating)
 1. [DgtTagInput](##DGTTagInput)
+1. [DgtTagArea](##DGTTagArea)
+1. [DgtUploadFile](##DGTUploadFile)
 1. [DgtTabs](##DGTTabs)
 1. [DgtPagination](##DGTPagination)
 1. [DgtLayout](##DGTLayout)
@@ -59,27 +68,27 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
         ```html
             <dgt-autocomplete @tag-selected="setTagsAutocomplete" :existing-tags="objTag"   :searchTag="newTag" :minSearch="2" :items="validsTags"></dgt-autocomplete>
-        ```    
-            
+        ```
+
     @tag-selected       (função que irá ser chamada, no component pai, quando uma tag for selecionada no autocomplete);
     @blur               (evento que será disparado on @blur);
     @changed            (evento que será disparado quando algo mudar no input);
     @verified-change    (evento que será disparado quando algo mudar no input e passar pela verificação de valor mínimo para busca)
-    
+
     :existing-tags="objTag" (default = [] / atributo que recebe as tags já atribuidas ao obj, para retirar do autocomplete as tags já selecionadas);
     :searchTag="newTag"     (default = '' / tag que será procurada nas tags do autocomplete);
     :minSearch="2"          (default = 1 / quantidade de caracteres para filtrar resultados);
     :items="validsTags"     (default = [] / atributo que recebe as todas as tags que serão disponibilizadas no complete);
     :showInput="True"       (default = false / define se o autocomplete incluirá um input ou apenas a <ul> e <li>);
-    
-    
+
+
     É possível customizar o componente com algumas variáveis que podem ser passadar como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
 
         ```css
             {
-                --dgt-input-width: 50%; 
-                --dgt-input-padding: 10px; 
-                --dgt-input-border-radius: 0.25rem; 
+                --dgt-input-width: 50%;
+                --dgt-input-padding: 10px;
+                --dgt-input-border-radius: 0.25rem;
                 --dgt-input-border: 5px solid #9e9e9e;
                 --dgt-ul-background: #000;
                 --dgt-ul-width: 50%;
@@ -89,19 +98,19 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-results-color: white;
             }
         ```
-    
+
     Para utilizar essa funcionalidade basta criar uma class com as variáveis desejadas, ex:
 
         ```css
             .custom{
-                --dgt-input-width: 50%; 
-                --dgt-input-padding: 10px; 
-                --dgt-input-border-radius: 0.25rem; 
+                --dgt-input-width: 50%;
+                --dgt-input-padding: 10px;
+                --dgt-input-border-radius: 0.25rem;
                 --dgt-input-border: 5px solid #9e9e9e;
                 --dgt-ul-background: #000;
             }
         ```
-        
+
     e importar o componente passando a classe:
 
         ```html
@@ -124,7 +133,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
     pelo @card-cliked, caso deseje passe a função que será chamada no recebimento desse evento.
     esse função receberá o atributo emit dentro do data passado);
     :data="data" (default: {} / o objeto que populará o card)
-        - o componente suporta a renderização de icones apenas com classe ou que precisam de 
+        - o componente suporta a renderização de icones apenas com classe ou que precisam de
         texto (ex: material-icons), em caso de classe basta passar a classe no atributo 'class'
         do objeto; no caso do texto do icone, basta passa-lo no atributo 'icon' do objeto.
 
@@ -158,7 +167,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-card-icon-margin: auto 0;
             }
         ```
-    
+
     Para utilizar essa funcionalidade basta criar uma class com as variáveis desejadas, ex:
 
         ```css
@@ -168,7 +177,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-card-margin: 10px 12px 10px 0;
             }
         ```
-        
+
     e importar o componente passando a classe:
 
         ```html
@@ -223,7 +232,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 }
             ]
         ```
-    
+
     É possível customizar o componente com algumas variáveis que podem ser passadar como uma class de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
 
         ```css
@@ -234,7 +243,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-list-padding: 2px 0 2px 10px;
             }
         ```
-    
+
     Para utilizar essa funcionalidade basta criar uma class com as variáveis desejadas, ex:
 
         ```css
@@ -243,7 +252,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-list-padding: 20px 0 2px 10px;
             }
         ```
-        
+
     e importar o componente passando a classe:
 
         ```html
@@ -281,7 +290,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
 
     exemplo de formato do array que será passado dentro do array de objetos:
 
-        ```js    
+        ```js
             grid: [
                 {
                     icon: 'calendar_today',
@@ -310,7 +319,7 @@ For detailed explanation on how things work, consult the [docs for vue-loader](h
                 --dgt-grid-padding: 10px;
             }
         ```
-    
+
     Para utilizar essa funcionalidade basta criar uma class com as variáveis desejadas, ex:
 
         ```css
@@ -354,7 +363,7 @@ dgtGrid:
 
 ### Exemplo componente pai:
     ```html
-        <i v-if="slotProps.currentColumn === slotProps.columnSort" 
+        <i v-if="slotProps.currentColumn === slotProps.columnSort"
             :class="`material-icons arrow-sort-${slotProps.sortState === -1 ? 2 : slotProps.sortState}`">
             {{slotProps.data.arrowsSort[slotProps.sortState === -1 ? 2 : slotProps.sortState]}}
         </i>
@@ -562,8 +571,8 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 
     ```css
         {
-            --dgt-delete-tag: yellow;           
-            --dgt-background-tag: #000;         
+            --dgt-delete-tag: yellow;
+            --dgt-background-tag: #000;
             --dgt-background-delete-tag: red;
             --dgt-tag-min-height: 2em;
             --dgt-tag-line-height: 1.5;
@@ -588,6 +597,84 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
         ```html
             <dgt-tag-input class="custom"></dgt-tag-input>
         ```
+
+## DGTTagArea
+
+    dgtTagArea é um componente construido para exibir tags em um espaço específico e disponibilizar um input de filtro além de permitir a remoção de tags.
+
+    Ao instanciar o componente pode-se passar o array que armazenará as tags, o mesmo se comunicará com o component e receberá as alterações realizadas;
+
+    Exemplo de importação customizada do componente:
+
+    ```html
+        <dgt-tag-area :tags="tags" :placeholder="placeholder" :searchInput="searchInput"
+                      :deleteButton="deleteButton" @removed="tagRemoved" class="custom" />
+    ```
+
+    o componente suporta props para os seguintes atributos:
+        - tags: Array,
+        - placeholder: String || 'Filtrar por nome...',
+        - searchInput: Boolean || true,
+        - deleteButton: Boolean || true
+
+    ```js
+        tagRemoved(index) {
+            this.tagProps.tags.splice(index, 1);
+        }
+    ```
+
+    É possível customizar o componente com algumas variáveis que podem ser passadas como uma classe de css (caso não sejam passadas, o componente será renderizado com o style default), são elas:
+
+    ```css
+        {
+            --dgt-area-width: 200px;
+            --dgt-area-height: 100px;
+            --dgt-tag-min-height: 1.6em;
+            --dgt-tag-line-height: 1.4em;
+            --dgt-tag-padding: 0 0.875em 0.1em 0.875em;
+            --dgt-tag-margin: 2px 1px;
+            --dgt-background-tag: #0a61ec;
+            --dgt-font-size: 14px;
+            --dgt-delete-tag: #fff;
+        }
+    ```
+
+    Para utilizar essa funcionalidade basta criar uma classe, ex:
+
+        ```css
+            .custom {
+                --dgt-area-width: 300px;
+                --dgt-area-height: 140px;
+                --dgt-font-size: 12px;
+            }
+        ```
+
+    e importar o componente passando a classe:
+
+        ```html
+            <dgt-tag-area class="custom" />
+        ```
+
+## DGTUploadFile
+
+    dgtUploadFile é um componente construido para customizar o botão de upload default dos browsers, alem de retornar uma lista dos arquivos selecionados para serem exibidos ou manipulados de qualquer forma;
+
+    Ao instanciar o componente não é preciso passar nenhuma propriedade;
+
+    Exemplo de importação customizada do componente:
+
+    ```html
+        <dgt-upload-file @files-changed="newFiles" />
+    ```
+
+    ```js
+        newFiles(filesUploaded) {
+            this.files = [...filesUploaded];
+        }
+    ```
+
+    Este componente não possui estilos customizados;
+
 
 ## DGTTabs
 
@@ -615,7 +702,7 @@ todos os objetos em header serão colunas, cada objeto em data pode ter uma cél
 };
 ```
 
-O exemplo acima mostra todos os atributos que são enxergados pelo componente, podendo ser passado atributos opcionais para serem captados no evento @changed 
+O exemplo acima mostra todos os atributos que são enxergados pelo componente, podendo ser passado atributos opcionais para serem captados no evento @changed
 
 ### HTML equivalente para o objeto acima
 
@@ -630,7 +717,7 @@ O exemplo acima mostra todos os atributos que são enxergados pelo componente, p
              <dgt-tab>Conteúdo tab 2</dgt-tab>
              <dgt-tab>Conteúdo tab 3</dgt-tab>
              <dgt-tab>Conteúdo tab 4</dgt-tab>
-         </dgt-tabs>   
+         </dgt-tabs>
 
 ```
 O atributo 'position' pode receber apenas dois valores:
@@ -761,7 +848,7 @@ O tempo de exibição default do toast é de 3 segundos (3000).
 ## DGTThumbnail
 
 ```
-            <dgt-thumbnail                            
+            <dgt-thumbnail
                            @selected="handleCheckbox"
                            @click="handleClick"
                             :src="String"
@@ -777,14 +864,14 @@ O tempo de exibição default do toast é de 3 segundos (3000).
 
 ```
 A exibição do gif começa após 2 segundos quando posicionado o mouse em cima da imagem.
-Você pode usar um css seu para montar a galeria do jeito que quiser, no exemplo nós usamos o mansory layout que agrupa 
+Você pode usar um css seu para montar a galeria do jeito que quiser, no exemplo nós usamos o mansory layout que agrupa
 as imagens por colunas.
 
 ## DGTCollapse
 
 ```
-<dgt-collapse 
-    @opened="handleOpened" 
+<dgt-collapse
+    @opened="handleOpened"
     @expanded="handleExpanded"
     :opened="Valor default false"
     :expanded="Valor default false"

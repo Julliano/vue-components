@@ -5,7 +5,7 @@
     }
 </style>
 <template>
-    <div class="dgt-collapse collapse" :class="[{'opened': isOpened},{'expanded': isExpanded && isOpened}]">
+    <div class="dgt-collapse collapse" :class="[{'opened': isOpened},{'expanded': isExpanded && isOpened}]" :name="title">
         <header class="collapse-header">
             <span @click="open" @keyup.enter="open" tabindex="0">
                 <i class="mdi mdi-chevron-down" :class="{'mdi-chevron-up':  isOpened}"></i>
@@ -30,6 +30,7 @@
     export default {
         name: 'dgtCollapse',
         props: {
+            title: String,
             opened: {
                 type: Boolean,
                 default: false

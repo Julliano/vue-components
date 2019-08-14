@@ -1,4 +1,4 @@
-<style lang="scss">
+<style lang="scss" scoped>
   .inline {
     display: inline-flex;
     margin-bottom: 10px;

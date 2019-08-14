@@ -1,11 +1,11 @@
-<style lang="scss">
+<style lang="scss" scoped>
   .dgt-resize-view{
     height: 400px;
     display: flex;
   }
   .column-1{
-      flex-basis: 70%;
-      min-width: 300px;
+    flex-basis: 70%;
+    min-width: 300px;
   }
   .column-2{
     flex-grow: 1;

@@ -5,25 +5,38 @@
     margin: 25px 0px 5px;
   }
 }
+hr {
+  margin: 2em 0;
+}
 </style>
 
 <template>
-  <div class="dgt-container light padding">
+    <div class="dgt-container light padding">
         <h3>Dgt-Collapse</h3>
         <dgt-collapse-view></dgt-collapse-view>
+        <hr style="clear: both;">
         <h3>Dgt-Thumbnail</h3>
         <dgt-thumbnail-view></dgt-thumbnail-view>
+        <hr style="clear: both;">
         <h3>Dgt-Switch</h3>
         <dgt-switch-view></dgt-switch-view>
         <h3>Dgt-Toast</h3>
         <dgt-toast-view></dgt-toast-view>
+        <hr style="clear: both;">
         <h3>Dgt-Layout</h3>
         <dgt-layout-view></dgt-layout-view>
+        <hr style="clear: both;">
         <h3>Dgt-Star</h3>
         <dgt-star-view></dgt-star-view>
         <hr style="clear: both;">
         <h3>Dgt-Tag-Input</h3>
         <dgt-tag-input-view></dgt-tag-input-view>
+        <hr style="clear: both;">
+        <h3>Dgt-Tag-Area</h3>
+        <dgt-tag-area-view></dgt-tag-area-view>
+        <hr style="clear: both;">
+        <h3>Dgt-Upload-File</h3>
+        <dgt-upload-file-view></dgt-upload-file-view>
         <hr style="clear: both;">
         <h3>Dgt-Autocomplete</h3>
         <dgt-autocomplete-view></dgt-autocomplete-view>
@@ -55,6 +68,8 @@ import dgtGridView from './examples/dgt-grid.view';
 import dgtCardView from './examples/dgt-card.view';
 import dgtListView from './examples/dgt-list.view';
 import dgtTagInputView from './examples/dgt-tag-input.view';
+import dgtTagAreaView from './examples/dgt-tag-area.view';
+import dgtUploadFileView from './examples/dgt-upload-file.view';
 import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
 import dgtTabsView from './examples/dgt-tabs.view';
@@ -73,7 +88,9 @@ export default {
         dgtGridView,
         dgtCardView,
         dgtListView,
+        dgtTagAreaView,
         dgtTagInputView,
+        dgtUploadFileView,
         dgtAutocompleteView,
         dgtComponentGridView,
         dgtTabsView,

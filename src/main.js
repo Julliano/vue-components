@@ -1,13 +1,13 @@
 import Vue from 'vue';
 import App from './App.vue';
-import BCShowcase from './BCShowcase.vue';
+import ChatShowcase from './ChatShowcase.vue';
 import VueRouter from 'vue-router';
 
 Vue.use(VueRouter);
 
 const routes = [
     {path: '/', component: App},
-    {path: '/bc', component: BCShowcase}
+    {path: '/chat', component: ChatShowcase}
 ];
 const router = new VueRouter({
     routes

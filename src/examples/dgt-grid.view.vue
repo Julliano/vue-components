@@ -1,9 +1,9 @@
 <style lang="scss">
   @import "../styles/variables";
-    .popover{
-      z-index: 100;
-      padding: 0;
-    }
+  .popover{
+    z-index: 100;
+    padding: 0;
+  }
   .dgt-grid-component{
     --dgt-grid-max-width: 100%;
     --dgt-grid-width:  auto;

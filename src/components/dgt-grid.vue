@@ -78,6 +78,57 @@
 <template>
 	<section class="dgt-grid-component component" v-if="drawGrid">
 		<slot name="top-bar" :dataProps="dataProps"></slot>
+        <!-- <table class="dgt-grid">
+            <thead>
+                <tr>
+                    <th class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers"
+                        :key=headerKey :class="`col-${headerIndex}`"
+                        :column-type="headerKey" :id="`col-${headerIndex}`"
+                        @drop.prevent="drop($event)" @dragover="dragover($event)">
+                        <div class="row row-header" :draggable="header.draggable"
+                            :sortable="header.sortable" @dragstart="drag($event)">
+                            <div class="header" :class="['header-'+headerIndex,{'horizontal-center': header.isCustomColumn}]"
+                                @click="sortBy($event, headerKey)">
+                                <span class="name-column" v-if="header.isCustomColumn">
+                                    <slot :name="`${headerKey}-header`"
+                                        :dataProps="dataProps"></slot>
+                                </span>
+                                <span class="name-column" v-else>
+                                    <span>{{header.name}}</span>
+                                    <slot name="icon-order" :dataProps="dataProps"
+                                        :sortState="sortState" :columnSort="sortedColumn"
+                                        :currentColumn="header.name"></slot>
+                                </span>
+                            </div>
+                            <span v-if="header.resizable"
+                                @mousedown.prevent="resizeColumn($event)"
+                                class="span-resize"></span>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="row" v-for="(item, index, key) in filteredData" :key="key">
+                    <td class="row" v-for="(header, headerKey, headerIndex) in dataProps.headers"
+                        :title="getCellValue(item, headerKey)"
+                        :key=headerIndex :class="['row-'+index,  {'horizontal-center':  header['isCustomColumn']}]"
+                        :selected="selectedLine === item"
+                        @mousedown.stop="clickLine($event, item, index)"
+                        :style="`background-color: ${item.lineColor}`">
+                        <template :class="`${headerKey} cel cel-${index}`"
+                            v-if="header['isCustomColumn']">
+                            <slot :name="`${headerKey}-cel${index}`"
+                                :index="`${headerKey} ${key}`" :itemKey="getCellValue(item, headerKey)"
+                                :dataProps="dataProps" :obj="item"></slot>
+                        </template>
+                        <span :class="`${headerKey} cel cel-${index}`"
+                            v-else>
+                            {{getCellValue(item, headerKey)}}
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </!-->
 		<div class="dgt-grid" v-bind:style="{gridTemplateColumns: gridTemplateColumns}">
 			<div class="col" v-for="(header, headerKey, headerIndex) in dataProps.headers"
 			    :key=headerKey :class="`col-${headerIndex}`"
@@ -421,6 +472,9 @@ export default {
             return false;
         },
         getCellValue(object, key) {
+            if (key in object) {
+                return object[key];
+            }
             let path  = key.split('.');
             return path.reduce((xs, x) => (xs && xs[x]) ? xs[x] : null, object);
         },
