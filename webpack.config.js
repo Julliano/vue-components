@@ -73,6 +73,11 @@ module.exports = {
                 options: {
                     name: '[name].[ext]?[hash]'
                 }
+            },
+            {
+                test: /\.mp3$/,
+                loader: 'file-loader',
+                exclude: /node_modules/
             }
         ]
     },
@@ -81,20 +86,6 @@ module.exports = {
             vue$: 'vue/dist/vue.esm.js'
         },
         extensions: ['*', '.js', '.vue', '.json']
-    },
-    devServer: {
-        historyApiFallback: true,
-        noInfo: true,
-        overlay: true,
-        proxy: {
-            '/bc': {
-                target: process.env.BC_API_BASE_URL,
-                secure: false,
-                headers: {
-                    Cookie: `SessionID=${process.env.SESSION_ID}`
-                }
-            }
-        }
     },
     performance: {
         hints: false

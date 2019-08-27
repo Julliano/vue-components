@@ -28,7 +28,7 @@ hr {
 <template>
     <div class="dgt-container light padding">
         <nav>
-            <a v-if="this.$route.path === '/'" href="/#/chat/">Go to Chat</a>
+            <a href="/#/chat/">Go to Chat</a>
         </nav>
         <h3>Dgt-Collapse</h3>
         <dgt-collapse-view></dgt-collapse-view>

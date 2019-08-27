@@ -15,7 +15,7 @@
     <div class="main light padding">
         <div class="dgt-container">
             <nav>
-                <a v-if="this.$route.path !== '/'" href="/">Back to Basics</a>
+                <a href="/">Back to Basics</a>
             </nav>
             <h1 class="text-center"> Components </h1>
             <h3>Adc-Base-Message</h3>

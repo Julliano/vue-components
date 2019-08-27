@@ -62,7 +62,6 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
-    "dgt-vitra": "^1.0.31",
     "vue-router": "^3.0.2",
     "vue-the-mask": "^0.11.1"
   }
