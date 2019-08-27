@@ -1,5 +1,4 @@
 <style lang="scss" scoped>
-  @import '../../styles/_variables.scss';
   .adc-contact-message {
     background-color: white;
     display: flex;

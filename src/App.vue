@@ -1,4 +1,19 @@
 <style lang="scss" scoped>
+.dgt-container {
+    ::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #F5F5F5;
+}
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(85, 85, 85, 0.493);
+}
+
+}
 .showcase {
   margin-left: 20px;
   h3 {
@@ -12,6 +27,9 @@ hr {
 
 <template>
     <div class="dgt-container light padding">
+        <nav>
+            <a v-if="this.$route.path === '/'" href="/#/chat/">Go to Chat</a>
+        </nav>
         <h3>Dgt-Collapse</h3>
         <dgt-collapse-view></dgt-collapse-view>
         <hr style="clear: both;">
@@ -50,6 +68,9 @@ hr {
         <h3>Dgt-Card</h3>
         <dgt-card-view></dgt-card-view>
         <hr style="clear: both;">
+        <h3>Dgt-Infinite-scroll</h3>
+        <dgt-infinite-scroll-view />
+        <hr style="clear: both;">
         <h3>Dgt-List</h3>
         <dgt-list-view></dgt-list-view>
         <hr style="clear: both;">
@@ -67,38 +88,40 @@ import dgtStarView from './examples/dgt-star.view';
 import dgtGridView from './examples/dgt-grid.view';
 import dgtCardView from './examples/dgt-card.view';
 import dgtListView from './examples/dgt-list.view';
-import dgtTagInputView from './examples/dgt-tag-input.view';
+import dgtTabsView from './examples/dgt-tabs.view';
+import dgtToastView from './examples/dgt-toast.view';
+import DgtSwitchView from './examples/dgt-switch.view';
+import dgtLayoutView from './examples/dgt-layout.view';
 import dgtTagAreaView from './examples/dgt-tag-area.view';
+import dgtCollapseView from './examples/dgt-collapse.view';
+import dgtTagInputView from './examples/dgt-tag-input.view';
+import dgtThumbnailView from './examples/dgt-thumbnail.view';
+import dgtPaginationView from './examples/dgt-pagination.view';
 import dgtUploadFileView from './examples/dgt-upload-file.view';
 import dgtAutocompleteView from './examples/dgt-autocomplete.view';
 import dgtComponentGridView from './examples/dgt-component-grid.view';
-import dgtTabsView from './examples/dgt-tabs.view';
-import dgtPaginationView from './examples/dgt-pagination.view';
-import dgtLayoutView from './examples/dgt-layout.view';
-import dgtToastView from './examples/dgt-toast.view';
-import dgtThumbnailView from './examples/dgt-thumbnail.view';
-import DgtSwitchView from './examples/dgt-switch.view';
-import dgtCollapseView from './examples/dgt-collapse.view';
+import dgtInfiniteScrollView from './examples/dgt-infinite-scroll.view.vue';
 
 export default {
     name: 'app',
     components: {
-        DgtSwitchView,
         dgtStarView,
         dgtGridView,
         dgtCardView,
         dgtListView,
+        dgtTabsView,
+        dgtToastView,
+        DgtSwitchView,
+        dgtLayoutView,
         dgtTagAreaView,
         dgtTagInputView,
+        dgtCollapseView,
+        dgtThumbnailView,
         dgtUploadFileView,
+        dgtPaginationView,
         dgtAutocompleteView,
         dgtComponentGridView,
-        dgtTabsView,
-        dgtPaginationView,
-        dgtLayoutView,
-        dgtToastView,
-        dgtThumbnailView,
-        dgtCollapseView
+        dgtInfiniteScrollView
     }
 };
 </script>

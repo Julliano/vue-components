@@ -1,0 +1,31 @@
+{
+  "_from": "dgt-vitra@^1.0.31",
+  "_id": "dgt-vitra@1.0.34",
+  "_inBundle": false,
+  "_integrity": "sha512-to9npda1o9gPzFsCtHuOqB+IDSyOSfrm+NPimjZAkUH7+xfSrZNymZ0JVYyvBSrtuhn4pflUBdn1VUSD7mYG6Q==",
+  "_location": "/dgt-vitra",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "dgt-vitra@^1.0.31",
+    "name": "dgt-vitra",
+    "escapedName": "dgt-vitra",
+    "rawSpec": "^1.0.31",
+    "saveSpec": null,
+    "fetchSpec": "^1.0.31"
+  },
+  "_requiredBy": [
+    "/"
+  ],
+  "_resolved": "http://npm.digitro.com.br/dgt-vitra/-/dgt-vitra-1.0.34.tgz",
+  "_shasum": "c547657337147165b5d906fcd4f34823bce2ae8b",
+  "_spec": "dgt-vitra@^1.0.31",
+  "_where": "/home/ju/Documentos/vue-components",
+  "bundleDependencies": false,
+  "deprecated": false,
+  "description": "Biblioteca de css da Digitro para estilizar botões, inputs, abas e muito mais",
+  "name": "dgt-vitra",
+  "private": false,
+  "version": "1.0.34"
+}

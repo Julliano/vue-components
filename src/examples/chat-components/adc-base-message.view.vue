@@ -29,7 +29,7 @@ span {
 </template>
 
 <script>
-    import adcBaseMessage from '../../components/chat-components/adc-base-message';
+    import adcBaseMessage from '../../chat-components/adc-base-message';
 
     export default {
         name: 'AdcBaseMessageView',

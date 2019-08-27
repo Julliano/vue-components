@@ -8,7 +8,7 @@
 </template>
 
 <script>
-    import adcMediaMessage from '../../components/chat-components/adc-media-message.vue';
+    import adcMediaMessage from '../../chat-components/adc-media-message.vue';
 
     export default {
         name: 'AdcMediaMessageView',

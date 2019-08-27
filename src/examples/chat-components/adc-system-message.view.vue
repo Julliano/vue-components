@@ -12,7 +12,7 @@
 </template>
 
 <script>
-    import adcSystemMessage from '../../components/chat-components/adc-system-message.vue';
+    import adcSystemMessage from '../../chat-components/adc-system-message.vue';
 
     export default {
         name: 'AdcSystemMessageView',

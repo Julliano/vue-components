@@ -3,6 +3,9 @@
     .collapse-footer{
         cursor: pointer;
     }
+    .collapse-content {
+      transition: all .2s;
+    }
 </style>
 <template>
     <div class="dgt-collapse collapse" :class="[{'opened': isOpened},{'expanded': isExpanded && isOpened}]" :name="title">

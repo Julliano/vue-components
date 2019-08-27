@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
   .dgt-resize {
-    display: grid;
-    grid-template-columns: auto 4px;
+    display: var(--dgt-resize-display, grid);
+    grid-template-columns: var(--dgt-layout-grid-template, auto 4px);
     .horizontal-grip-area {
       width: 4px;
       height: 100%;

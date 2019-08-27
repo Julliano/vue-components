@@ -1,11 +1,10 @@
 <style lang="scss" scoped>
-  @import '../../styles/_variables.scss';
   .adc-text-message {
     background-color: white;
     display: flex;
     flex-wrap: nowrap;
     word-break: break-all;
-    padding: var(--adc-text-message-padding, 0.29em);
+    padding-left: var(--adc-text-message-padding-left, 0.29em);
     span {
       padding: var(--adc-text-message-span-padding, 0);
       font-size: var(--adc-text-font-size, 1em);

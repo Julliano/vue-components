@@ -17,7 +17,7 @@ div {
 </template>
 
 <script>
-    import adcContactMessage from '../../components/chat-components/adc-contact-message.vue';
+    import adcContactMessage from '../../chat-components/adc-contact-message.vue';
 
     export default {
         name: 'AdcContactView',

@@ -26,7 +26,7 @@ div {
 </template>
 
 <script>
-    import adcAvatar from '../../components/chat-components/adc-avatar.vue';
+    import adcAvatar from '../../chat-components/adc-avatar.vue';
 
     export default {
         name: 'AdcAvatarView',

@@ -11,7 +11,7 @@ div {
 </template>
 
 <script>
-    import adcTextMessage from '../../components/chat-components/adc-text-message.vue';
+    import adcTextMessage from '../../chat-components/adc-text-message.vue';
 
     export default {
         name: 'AdcAvatarView',
