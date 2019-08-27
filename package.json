@@ -2,7 +2,7 @@
   "name": "dgt-vue-components",
   "description": "Library of Dígitro vue components",
   "version": "1.0.109",
-  "author": "digitro.com.br>",
+  "author": "Julliano Volpato",
   "baseURL": "http://localhost:8080",
   "baseBCURL": "http://localhost:8080/#/bc",
   "baseChat": "http://localhost:8080/#/chat",
