@@ -1,19 +1,4 @@
 <style lang="scss" scoped>
-.dgt-container {
-    ::-webkit-scrollbar-track {
-  border-radius: 10px;
-  background-color: #F5F5F5;
-}
-::-webkit-scrollbar {
-  width: 6px;
-  background-color: #F5F5F5;
-}
-::-webkit-scrollbar-thumb {
-  border-radius: 10px;
-  background-color: rgba(85, 85, 85, 0.493);
-}
-
-}
 .showcase {
   margin-left: 20px;
   h3 {
@@ -27,7 +12,7 @@ hr {
 
 <template>
     <div class="dgt-container light padding">
-        <nav>
+        <nav class="navbar">
             <a href="/#/chat/">Go to Chat</a>
         </nav>
         <h3>Dgt-Collapse</h3>

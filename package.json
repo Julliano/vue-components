@@ -11,6 +11,7 @@
     "prod": "cross-env NODE_ENV=production webpack --progress --hide-modules",
     "build:theme": "rm -rf dist-component/* && npm run lint && node node_modules/gulp/bin/gulp.js build",
     "build:bcc": "rm -rf dist-bc-component/* && npm run lint  && node node_modules/gulp/bin/gulp.js build-bcc",
+    "compile:sass": "node-sass src/sass/main.scss src/styles/style.css",
     "lint": "eslint --ext .js,.vue src",
     "test-ui": "jest",
     "test-e2e": "testcafe chrome tests-e2e --app 'npm run dev' --app-init-delay 10000"
@@ -62,6 +63,7 @@
   "dependencies": {
     "@babel/polyfill": "^7.2.5",
     "axios": "^0.18.0",
+    "scrollmonitor": "^1.2.4",
     "vue-router": "^3.0.2",
     "vue-the-mask": "^0.11.1"
   }

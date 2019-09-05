@@ -28,28 +28,6 @@ const banner =
     ` * (c) 2018-${new Date().getFullYear()} Digitro\n` +
     ' */';
 
-/*
-    const configs = {
-        umd: {
-            output: '.js',
-            format: 'umd'
-        },
-        umdMin: {
-            output: '.min.js',
-            format: 'umd',
-            plugins: [uglify()]
-        },
-        cjs: {
-            output: '.common.js',
-            format: 'cjs'
-        },
-        esm: {
-            output: '.esm.js',
-            format: 'es'
-        }
-    }
-*/
-
 const configs = {
     umd: {
         output: '.js',

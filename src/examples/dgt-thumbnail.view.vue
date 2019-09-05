@@ -43,7 +43,7 @@
             isVideo: true,
             selected: false,
             checked: false,
-            src: 'https://upload.wikimedia.org/wikipedia/commons/5/58/Pinus_echinata_thinned_forest_1.jpg',
+            src: 'https://www.gstatic.com/webp/gallery/1.sm.webp',
             id: '0',
             footer: 'usuariodoalem@bol.com.br'
         },

@@ -31,8 +31,7 @@
         },
         data() {
             return {
-                scrollElement: null,
-                lastScrollHeight: null
+                scrollElement: null
             };
         },
         mounted() {

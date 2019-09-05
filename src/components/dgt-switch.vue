@@ -1,5 +1,5 @@
 <style scoped lang="scss">
-    @import "../styles/variables";
+    @import "../sass/variables";
 
     $unchecked-color: var(--dgt-switch-unchecked-color, $white);
     $checked-color: var(--dgt-switch-checked-color, $primary-color);

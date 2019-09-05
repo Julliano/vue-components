@@ -1,5 +1,5 @@
 <style lang="scss">
-  @import "../styles/variables";
+  @import "../sass/variables";
   .popover{
     z-index: 100;
     padding: 0;

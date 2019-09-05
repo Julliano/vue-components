@@ -1,0 +1,29 @@
+nav.navbar {
+  background-color: #0d47a1bd; }
+  nav.navbar a {
+    color: #fff;
+    font-size: 1.4rem;
+    text-decoration: none; }
+
+.input-search {
+  position: relative; }
+  .input-search .mdi-magnify {
+    position: absolute;
+    left: 0.29em;
+    font-size: 2em; }
+  .input-search .inp {
+    padding-left: 2.8em !important; }
+    .input-search .inp[type='date'] {
+      opacity: 1; }
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #F5F5F5; }
+
+::-webkit-scrollbar {
+  width: 6px;
+  background-color: #F5F5F5; }
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: rgba(85, 85, 85, 0.493); }

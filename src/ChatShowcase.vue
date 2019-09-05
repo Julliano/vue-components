@@ -14,8 +14,8 @@
 <template>
     <div class="main light padding">
         <div class="dgt-container">
-            <nav>
-                <a href="/">Back to Basics</a>
+            <nav class="navbar">
+                <a href="/#/">Back to Basics</a>
             </nav>
             <h1 class="text-center"> Components </h1>
             <h3>Adc-Base-Message</h3>

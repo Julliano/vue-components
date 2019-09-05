@@ -19,9 +19,9 @@
     <dgt-layout class="column-1" :horizontal-resizable="true">
         Coluna 1
     </dgt-layout>
-    <dgt-layout class="column-2">
+    <div class="column-2">
         Coluna 2
-    </dgt-layout>
+    </div>
   </section>
 </template>
 

@@ -1,5 +1,5 @@
 <style lang="scss" scoped>
-    @import '../styles/variables';
+    @import '../sass/variables';
     .dgt-tabs{
         &.vertical-left,
         &.vertical-right {
